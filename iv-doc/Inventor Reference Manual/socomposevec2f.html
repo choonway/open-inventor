@@ -1,0 +1,60 @@
+<html>
+<body>
+SoComposeVec2f
+<dl>
+<dt>NAME
+<dd>SoComposeVec2f -- composes 2D vectors from floating-point values
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoComposeVec2f
+
+<dt>DESCRIPTION
+<dd>This engine takes two floating-point inputs and composes a 2D floating-point vector. The input fields can have multiple values, allowing the engine to compose severalvectors in parallel. One of the inputs may have more values than others. In such cases, the last value of the shorter input will be repeated as necessary.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFFloat x
+<dd>The x component.
+
+<dt>SoMFFloat y
+<dd>The y component.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFVec2f) vector
+<dd>Vector composed of x and y components.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoComposeVec2f</b>()
+<dd>Constructor
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+
+<dl>
+<dt>ComposeVec2f {
+<dd>x 0
+<dd>y 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCompose.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodecomposevec2f.html">SoDecomposeVec2f</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+</dl>
+</body>
+</html>

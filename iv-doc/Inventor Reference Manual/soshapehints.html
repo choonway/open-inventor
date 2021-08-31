@@ -1,0 +1,96 @@
+<html>
+<body>
+SoShapeHints
+<hr>
+<dl>
+<dt>NAME
+<dd>SoShapeHints -- node that provides hints about shapes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoShapeHints
+
+<dt>DESCRIPTION
+<dd>By default, Inventor assumes very little about the shapes it renders. You can use the SoShapeHints node to indicate that vertex-based shapes (those derived fromSoVertexShape) are solid, contain ordered vertices, or contain convex faces.
+
+<dd>These hints allow Inventor to optimize certain rendering features. Optimizations that may be performed include enabling back-face culling and disabling two-sided lighting. For example, if an object is solid and has ordered vertices, Inventor turns on backface culling and turns off two-sided lighting. If the object is not solid but has ordered vertices, it turns off backface culling and turns on two-sided lighting. In allother cases, both backface culling and two-sided lighting are off. Note that if the current drawing style is not filled or any clipping planes are in effect, backface culling will not be performed.
+
+<dd>The SoShapeHints node also affects how default normals are generated. When a node derived from SoVertexShape has to generate default normals, it uses the creaseAngle field to determine which edges should be smooth-shaded and which ones should have a sharp crease. The crease angle is the angle between surface normals on adjacent polygons. For example, a crease angle of .5 radians (the default value) means that an edge between two adjacent polygonal faces will be smooth shaded if the normals to the two faces form an angle that is less than .5 radians(about 30 degrees). Otherwise, it will be faceted.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum vertexOrdering
+<dd>Indicates how the vertices of faces are ordered. CLOCKWISE ordering meansthat the vertices of each face form a clockwise loop around the face, when viewed from the outside (the side toward which the normal points).
+
+<dt>SoSFEnum shapeType
+<dd>Indicates whether the shape is known to enclose a volume (SOLID) or not. If the inside (the side away from the surface normal) of any part of the shape isvisible, the shape is not solid.
+
+<dt>SoSFEnum faceType
+<dd>Indicates whether each face is convex. Because the penalty for non-convex faces is very steep (faces must be triangulated expensively), the defaultassumes all faces are convex. Therefore, shapes with concave faces may not be displayed correctly unless this hint is set to UNKNOWN_FACE_TYPE.
+
+<dt>SoSFFloat creaseAngle
+<dd>Indicates the minimum angle (in radians) between two adjacent face normals required to form a sharp crease at the edge when default normalsare computed and used.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoShapeHints</b>()
+<dd>Creates a shape hints node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoRayPickAction, SoGetBoundingBoxAction
+<dd>Sets the state to contain the hints; sets up optimizations based on the hints.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>ShapeHints {
+<dt>vertexOrdering UNKNOWN_ORDERING
+<dt>shapeType UNKNOWN_SHAPE_TYPE
+<dt>faceType CONVEX
+<dt>creaseAngle 0.5
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoShapeHints.h&gt;
+
+<dl>
+<dt>enum VertexOrdering {
+<dd>SoShapeHints::UNKNOWN_ORDERING Ordering of vertices is unknown
+<dd>SoShapeHints::CLOCKWISE Face vertices are ordered clockwise (from the outside)
+<dd>SoShapeHints::COUNTERCLOCKWISE Face vertices are ordered counterclockwise (from the outside)
+<dt>}
+</dl>
+
+<dl>
+<dt>enum ShapeType {
+<dd>SoShapeHints::UNKNOWN_SHAPE_TYPE Nothing is known about the shape
+<dd>SoShapeHints::SOLID The shape encloses a volume
+<dt>}
+</dl>
+
+<dl>
+<dt>enum FaceType {
+<dd>SoShapeHints::UNKNOWN_FACE_TYPE Nothing is known about faces
+<dd>SoShapeHints::CONVEX All faces are convex
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soclipplane.html">SoClipPlane</a>, <a href="sodrawstyle.html">SoDrawStyle</a>, <a href="sovertexshape.html">SoVertexShape</a>
+</dl>
+</body>
+</html>

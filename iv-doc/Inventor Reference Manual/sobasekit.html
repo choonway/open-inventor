@@ -1,0 +1,175 @@
+<html>
+<body>
+<h2>SoBaseKit</h2>
+<p align=right><a href="index.html">back to contents</a>
+<hr>
+<dl>
+<dt>NAME
+<dd>SoBaseKit -- base class for all node kits
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoBaseKit
+
+<dt>DESCRIPTION
+<p>This is the base class from which all nodekit nodes are derived. Nodekits provide a convenient mechanism for creating groups of scene graph nodes with some largermeaning. When you create a shape node such as an indexed face set, for example, you almost always precede it with a coordinate node. You may also want to add atransform node or specify properties with material, drawing style, material binding, etc. Instead of creating each of these nodes individually and then arranging theminto a subgraph, you can use a nodekit of the appropriate type (in this case, SoShapeKit). Each class of nodekit has a nodekit catalog (SoNodekitCatalog) that describes thenodes in the subgraph, referred to as parts. The catalog has an entry for each part, with information such as the partName, partType, and nullByDefault (if FALSE theconstructor creates it). The catalog also describes the arrangement of parts in the subgraph. (Other information is described below; a complete description is in theSoNodekitCatalog reference page.)
+
+<p>If we regard the scene graph arrangement as a branching tree, then the top node(root) of the arrangement is always the nodekit itself. The leaf nodes are those at the bottom (containing no children). Some leaves of the tree are defined in the catalogto be public parts, while other leaves are private. All non-leaf parts are considered internal to the nodekit structure and are marked private. Public parts are accessible;they may be requested, changed, or set by the programmer with member functions such as getPart(). Private parts are not accessible, so methods such as getPart() willhave no effect on them. For example, if you call getPart() to retrieve a private part, NULL will be returned even when the part exists. Every nodekit reference page has a Parts section describing the function of eachpublic part it adds to those inherited from its parent class. Also, a Catalog Parts section has tables of often-needed information from the catalog (part type, etc.).These tables include all public parts, both new and inherited. Only the public parts of a nodekit are described in the reference pages. Nodekits take care of the rest foryou; they automatically arrange the subgraph, creating and deleting the private parts when necessary. (The SoNodekitCatalog reference page has methods forfinding out the part names and arrangement of all parts, both public and private.)
+
+<p>The nodekit catalog is a template shared by all instances of a class. They use the shared catalog as a guide when creating parts (i.e., constructing actual nodes), but each instance stores its own parts separately. Moreover, nodekits are not SoGroupnodes, and parts are added as hidden children; you can only access parts with the methods of SoBaseKit and its derived classes. Any public part may be retrieved with getPart(), installed with setPart(), orremoved by giving a NULL argument to setPart(). Paths from the nodekit down to a part can be created by createPathToPart(). By default, parts are not created until the user requests or sets them. This keeps thesubgraph uncluttered and efficient for traversal. Additionally, removing a part (setting it to NULL) has the extra effect of removing any internal parts that are nolonger needed.
+
+<p>Since nodekits hide their children, any SoPath containing nodekits will end at thetopmost nodekit. However, since nodekits may be nested within other nodekits, you may wish to cast an (SoPath *) into an (SoNodeKitPath *). The methods ofSoNodeKitPath allow you to view all nodekits that lie on the path (see the reference page for SoNodeKitPath). Public parts in the nodekit catalog fall into three categories:
+<p>[1] regular nodes
+<p>[2] nodekits, or nested nodekits (which may nest recursively). Any node which ispublic in a nested nodekit is accessible to the higher level nodekit(s) that contains it. The description of getPart() below shows how to refer to nested parts by name (e.g.,&quot;appearance.material&quot;). This works for any nodekit method that takes a part name for an argument.
+<p>[3] lists, or list parts. These parts group together children (list elements) of a particulartype or types. As with nested nodekits, you can refer to individual elements using notation described in getPart() (e.g., &quot;childList[0]&quot;, or if the list elements are in turnnodekits, &quot;childList[2].transform&quot;).
+
+<p>When the catalog denotes that a part is a list, the part itself is always a node of typeSoNodeKitListPart. The catalog specifies a set of permissible listItemTypes and a listContainerType for that part. It gives this information to the SoNodeKitListPartwhen it creates it. From then on, the list part will enforce type checking. So even if you retrieve the SoNodeKitListPart with getPart(), you will not be able to addillegal children. (See the SoNodeKitListPart reference page for more information). As an example, the callbackList part of SoBaseKit has an SoSeparator container andallows only SoCallback and SoEventCallback nodes in the list. Children may be added, retrieved, and removed from an SoNodeKitListPart node using methods thatparallel those of SoGroup. However, type-checking is strictly enforced. Note that, although all public parts are leaves in the nodekit catalog, you are free toadd children to them (assuming that they are groups, nodekits, or list parts). A part's status as a leaf in the catalog just means that the nodekit will not manage the part'schildren. For example, SoWrapperKit has a part called contents with a part type of SoSeparator. You can put whatever you want underneath the separator, as long ascontents itself is an SoSeparator.
+
+<p>Thus, a nodekit only controls a section of the scene graph. Above and below thatsection, anything goes. However, when nodekits are nested, they effectively create a larger `known' sectionof the scene graph. For example, the appearance part of the SoSeparatorKit is a leaf node in the SoSeparatorKit catalog. But appearance is in turn an SoAppearanceKit,containing parts such as material and drawStyle. The two nodekits combine to make an even larger template, which the SoSeparatorKit can examine by looking at thecatalogs for both classes. So an SoSeparatorKit can successfully return a part named &quot;material&quot;; first it finds (or creates) the appearance part, then it gets the material bycalling getPart() on the appearance.
+
+<p>When the catalog defines the listItemTypes of a list part to be nodekits, the name-able space expands further. For example, SoSeparatorKit has a part childList which permits only SoSeparatorKits, so each list element can be further searched. Hencethe name &quot;childList[0].childList[1].childList[2].material&quot; is perfectly legal.
+
+<dt>PARTS
+<dl>
+<dt>(SoNodeKitListPart) callbackList
+<dd>This is the only part that the base class SoBaseKit creates. It is a public part that is inherited by all nodekits. It provides an easy way to add callbacks fora nodekit to use during action traversal (e.g. SoHandleEventAction). It is a list part and may contain numerous SoCallback and/or SoEventCallbacknodes.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoBaseKit</b>()
+<dd>Constructor.
+
+<dt>const SoNodekitCatalog *<b>getClassNodekitCatalog</b>() const
+<dd>Returns the SoNodekitCatalog for the class SoBaseKit.
+
+<dt>virtual const SoNodekitCatalog *<b>getNodekitCatalog</b>() const
+<dd>Returns the SoNodekitCatalog for this instance of SoBaseKit. While eachinstance of a given class creates its own distinct set of parts (which are actual nodes), all instances share the same catalog (which describes the parts butcontains no actual node pointers).
+
+<dt>virtual SoNode * <b>getPart</b>(const SbName &partName, SbBool makeIfNeeded)
+<dd>Searches the nodekit catalog (and those of all nested nodekits) for the part named partName. Returns a pointer to the part if a match is found, the part ispublic, and the part has already been built. If no match is found, or if the part is private, NULL is returned. If partName is in the catalog (or that of one of itsnested nodekit parts), but the part has not been built yet, the argument makeIfNeeded determines the course of action. When makeIfNeeded is FALSE,NULL is returned; when makeIfNeeded is TRUE, getPart() will create the part (as well as any necessary intermediary parts), put it in the correct place, and return a pointer to the newly created part.
+
+<p>Elements of list parts and parts within nested nodekits can all be retrievedwith getPart() The full syntax for legal partName arguments is given below.
+<dd>Part name BNF notation:
+<dd>partName = singleName | compoundName
+<dd>compoundName = singleName | compoundName.singleName
+<dd>singleName = singlePartName | singleListElementName
+<dd>singlePartName = the name of any single part in the catalog (including those that are lists or nodekits), or in the recursively nested catalogs of any of its parts.
+<dd>singleListElementName = singleListName[index]
+<dd>singleListName = the name of any single list-type part in the catalog, or in the recursively nested catalogs of any of its parts.
+<dd>index = integer
+
+<p>Examples of valid part names are:
+<dd>&quot;transform&quot;, &quot;appearance.material&quot;, &quot;childList[2].drawStyle&quot;, &quot;foot&quot;,&quot;bird.leftLeg.foot&quot;, &quot;octopus.leg[4].suctionCup[2].material&quot;
+
+<dt>SbString <b>getPartString</b>(const SoBase *part)
+<dd>Given a node or a path to a node, checks if the part exists in the nodekit, in a nested nodekit, or an element of a list part. If so, returns a string describingthe part name; otherwise, returns an empty string (&quot;&quot;).
+
+<dt>virtual SoNodeKitPath *<b>createPathToPart</b>(const SbName &partName, SbBool makeIfNeeded, const SoPath *pathToExtend = NULL)
+
+<dd>Returns a path that begins at this nodekit and ends at partName. Searching for the part is the same as in getPart(). NULL is returned if partName cannotbe found, or if makeIfNeeded is FALSE and the part is not yet built. If the the part is retrieved and the argument pathToExtend is NULL, the path returnedbegins at this and ends at partName. If pathToExtend is not NULL, the path created is a copy of pathToExtend with entries appended all the way down topartName. It is okay for pathToExtend to go beyond the nodekit; extra nodes will be popped off the tail before continuing from this down to partName.
+
+<dt>virtual SbBool <b>setPart</b>(const SbName &partName, SoNode *newPart)
+<dd>Inserts the given node (not a copy) as the new part specified by partName.
+<dd>See getPart() for the syntax of partName. This method adds any extra nodes needed to fit the part into the nodekit's catalog. For example, if you call:
+
+<p>mySepKit-&gt;setPart(&quot;childList[0]&quot;, myNewChild);
+
+<p>the kit may need to create the part childList before it can install myNewChild.Run-time type checking verifies that the node type of newPart matches the type called for by partName. For example, if partName was a material for anSoSeparatorKit, but newPart was an SoTransform node, then the node would not be installed, and FALSE would be returned. If newPart is NULL, then the node specified by partName is removed. If this renders any private parts useless (as occurs when you remove the last child of an SoGroup node), they will also be removed. Hence nodekits do not retain unnecessary nodes.
+
+<p>TRUE is returned on success, and FALSE upon error.
+
+<dt> SbBool <b>set</b>(char *partName, char *parameters)
+<dt>SbBool <b>set</b>(char *nameValuePairs)
+
+<p>These functions allow field values of parts (nodes) to be set. If partName andparameters are used, then a single part is specified by partName; the field values are specified in parameters. The format of paramaters is the InventorFile Format syntax. For example,
+
+<p>mySepKit-&gt;set(&quot;material&quot;, &quot;diffuseColor 1 0 0 shininess 0.6&quot;); sets the part material to the values &quot;diffuseColor 1 0 0 shininess 0.6&quot;. Thevalues used in parameters must of course be appropriate for the node-type to which partName belongs. In this case, the nodekit SoSeparatorKit has a partnamed material which is of type SoMaterial.
+
+<p>The nameValuePairs syntax can be used to set the field values in severaldifferent parts simultaneously. In this case, the argument string, nameValuePairs contains name-value pairs: &quot;partName1 { parameters1 } ...partNameN { parametersN }&quot;.
+
+<p>For example,
+
+<p>mySepKit-&gt;set(&quot;material { diffuseColor 1 1 1 }transform { translation 4 3 .6 }&quot;); mySepKit-&gt;set(&quot;childList[0].material { ambientColor .5 .5 .5 }&quot;);
+
+<dt>static SbBool <b>isSearchingChildren</b>()
+<dt>static void <b>setSearchingChildren</b>(SbBool newVal)
+<dd>Sets and queries if nodekit children are searched during SoSearchActiontraversal. By default, they are not.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>SO_GET_PART(kit, partName, partClass)
+<dd>Calls getPart() with makeIfNeeded set to TRUE, then casts the result to thetype partClass. Note that in the debug library, this macro checks to see if the part is of type partClass, while the regular library does no type checking.
+<dt>SO_CHECK_PART(kit, partName, partClass)
+<dd>Calls getPart(), but with makeIfNeeded set to FALSE, then casts the result to the type partClass. Note that in the debug library, this macro checks to see if the part is of type partClass, while the regular library does no type checking.
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoHandleEventAction
+<dd>Behaves like an SoGroup. Traverses each child in order.
+
+<dt>SoRayPickAction
+<dd>Traverses each child in order. Then, for any pick containing the kit on its path, makes an SoNodeKitDetail as follows: Sets the &quot;detailNodeKit&quot;(retrievable with SoNodeKitDetail::getNodeKit()) to be a pointer to itself. Sets the &quot;detailPart&quot; (retrievable with SoNodeKitDetail::getPart()) to be apointer to the kit's leaf-most part that lies on the pickPath. Sets the &quot;detailPartName&quot; (retrievable with SoNodeKitDetail::getPartName()) to bethe partName of that part, as found in the catalog.
+
+<p>Does not descend into nested nodekits. Each nodekit along the path is the&quot;detailPart&quot; in its parent's detail. However, if the pick path goes through a list part, a pointer to the child is used for the &quot;detailPart&quot;, and&quot;detailPartName&quot; is of the form &quot;listName[i]&quot;.
+
+<dt>SoGetMatrixAction
+<dd>Behaves like an SoGroup. Does nothing unless the kit is in the middle of the path chain the action is being applied to. If so, the children up to andincluding the next node in the chain are traversed.
+
+<dt>SoSearchAction
+<dd>First, searches itself like an SoNode. Then, checks the value of isSearchingChildren(). If TRUE, traverses the children in order. If FALSE, returns.
+
+<dt>SoWriteAction
+<dd>Begins by writing out regular fields, then writes out the parts. A nodekit does not write out its parts the way an SoGroup writes out its children. Instead, it writes each part as an SoSFNode field. First the partName is written, then the node being used for that part. To keep the files terse, nodekits write out as few parts as possible. However, nodekits always write a part if another instance or a path is writing it. If this is not the case, parts are left out according to the following rules:
+<dl>
+<dd>[1] NULL parts only write if the catalog states they are created by default.
+<dd>[2] Empty SoGroup and SoSeparator nodes do not write.
+<dd>[3] Non-leaf parts only write if they have non-default field values.
+<dd>[4] List parts only write if they have children or if the container node hasnon-default field values.
+<dd>[5] Nested nodekit parts only write if they need to write one or more parts,or if they have non-default field values.
+</dl>
+</dl>
+
+<dt>CATALOG PARTS
+
+<table border=1 cellspacing=0>
+<tr><td align=center colspan=4>All parts
+
+<tr><td>Part Name <td>Part Type <td>Default Type <td>NULL by Default
+
+<tr><td>callbackList <td>NodeKitListPart <td>-- <td>yes
+
+</table>
+<table border=1 cellspacing=0>
+<tr><td align=center colspan=3>Extra information for list parts from above table<tr><td>Part Name <td>Container Type <td>Permissible Types
+
+<tr><td>callbackList <td>Separator <td>Callback, EventCallback
+</table>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>BaseKit {
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodekits/SoBaseKit.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soappearancekit.html">SoAppearanceKit</a>, <a href="socamerakit">SoCameraKit</a>, <a href="solightkit.html">SoLightKit</a>, <a href="sonodekit.html">SoNodeKit</a>, <a href="sonodekitdetail.html">SoNodeKitDetail</a>, <a href="sonodekitlistpart.html">SoNodeKitListPart</q>, <a href="sonodekitpath.html">SoNodeKitPath</a>, <a href="sonodekitcatalog.html">SoNodekitCatalog</a>, <a href="soscenekit.html">SoSceneKit</a>, <a href="soseparatorkit.html">SoSeparatorKit</a>, <a href="soshapekit.html">SoShapeKit</a>, <a href="sowrapperkit.html">SoWrapperKit</a>
+</dl>
+</body>
+</html>

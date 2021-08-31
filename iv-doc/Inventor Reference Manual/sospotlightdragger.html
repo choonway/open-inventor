@@ -1,0 +1,230 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="default.css">
+</head>
+<body>
+    SoSpotLightManip
+    <hr />
+    <dl>
+        <dt>NAME</dt>
+        <dd>
+            SoSpotLightDragger -- spotlight shaped dragger that allows you to change position, direction, and width of the beam
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>INHERITS FROM</dt>
+        <dd>
+            SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoInteractionKit &gt; <a href="sodragger.html">SoDragger</a> &gt; SoSpotLightDragger
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>DESCRIPTION</dt>
+        <dd>
+            <p>SoSpotLightDragger is a composite dragger. It is shaped like a beam of light emanating from a sun-like ball. An arrow runs along the axis of the beam and extends past the end of the beam.</p>
+
+            <p>When you click and drag the beam, it opens and closes with an umbrella-like motion. The angle between the center and edge of the beam is stored in the angle field of this dragger; setting the angle field causes the beam to widen or narrow in response. The spotlight dragger does not use a standard dragger class to execute this motion. More details are given later in this section. Dragging the arrow rotates it around the sun, and the beam moves with it. The arrow is an SoRotateSphericalDragger that controls the rotation field. See the reference page for SoDirectionalLightDragger, which works the same way, for details.</p>
+
+            <p>The sun-shape can be dragged to translate all three pieces together through 3-space. Its movement controls the translation field and works exactly as described in the reference pages for SoDirectionalLightDragger and SoPointLightDragger (which goes into more detail).</p>
+
+            <p>Remember: This is not a light source! It just looks like one. If you want to move a light with this dragger, you can do the following: [a] Use an SoSpotLightManip, which is subclassed from SoLight. It creates anSoSpotLightDragger and uses it as the interface to change the location, direction, and cutOffAngle of its light source (see the SoSpotLightManip man page). The manip also edits the material part of this dragger to match the color of light the manip is producing. [b] Connect the angle field of this dragger to the cutOffAngle field of anSoSpotLight with a field-to-field connection.</p>
+
+            <p>See the SoPointLightDragger and SoDirectionalLightDragger man pages for other ways to control light parameters with the rotation and translation fields.</p>
+
+            <p>This class creates its own projector and handles mouse events to do it's own dragging of the beam angle. When the mouse picks a point on the beam, that point is dragged in a circle just like in an SoRotateDiscDragger, but the plane of the disc is re-defined every time a drag is initiated. Imagine placing the metal tip of a compass at the apex of the cone and the pencil tip at the picked point. If you swing an arc through the central axis of the cone, you will be drawing the arc used to drag the beam open and closed. The beam is opened and closed not by rotating, but by scaling. The dragger scales the beam-cone so that the height and radius change to move the picked point along the circle. Then the angle field is calculated from the height and radius. You can change the geometry of parts in any instance of this dragger using setPart(). The default part geometries are defined as resources for this SoSpotLightDragger class. They are detailed below in the DRAGGER RESOURCE section. You can make your program use different default resources for the parts by copying the file /usr/share/data/draggerDefaults/spotLightDragger.iv into your own directory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory.</p>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>FIELDS</dt>
+        <dd>
+            <dl>
+                <dt>SoSFRotation rotation</dt>
+                <dd>Orientation of the rotating part (an arrow by default).</dd>
+
+                <dt>SoSFVec3f</dt>
+                <dd>translationPosition of the dragger.</dd>
+
+                <dt>SoSFFloat angle</dt>
+                <dd>Angle between center and edge of beam.</dd>
+
+                <dt>Fields from class SoDragger:</dt>
+                <dd>isActive</dd>
+
+                <dt>Fields from class SoInteractionKit:</dt>
+                <dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling</dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>PARTS</dt>
+        <dd>
+            <dl>
+                <dt>Parts from class SoBaseKit:</dt>
+                <dd>callbackList</dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>METHODS</dt>
+        <dd>
+            <dl>
+                <dt>SoSpotLightDragger()</dt>
+                <dd>Constructor.</dd>
+
+                <dt>static const SoNodekitCatalog *getClassNodekitCatalog() const</dt>
+                <dd>Returns an SoNodekitCatalog for this class</dd>
+
+                <dt>static SoType getClassTypeId()</dt>
+                <dd>Returns type identifier for this class.</dd>
+
+                <dt>Methods from class SoDragger:</dt>
+                <dd>addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback, addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale</dd>
+
+                <dt>Methods from class SoInteractionKit:</dt>
+                <dd>setPartAsPath</dd>
+
+                <dt>Methods from class SoBaseKit:</dt>
+                <dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren</dd>
+
+                <dt>Methods from class SoNode:</dt>
+                <dd>setOverride, isOverride, copy, affectsState, getByName, getByName</dd>
+
+                <dt>Methods from class SoFieldContainer:</dt>
+                <dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled</dd>
+
+                <dt>Methods from class SoBase:</dt>
+                <dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName</dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>MACROS</dt>
+        <dd>
+            <dl>
+                <dt>Macros from class SoBaseKit:</dt>
+                <dd>SO_GET_PART, SO_CHECK_PART</dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <dl>
+    <dt>CATALOG PARTS</dt>
+    <dd>
+        <table>
+            <tr><th colspan="4" id="t01">All parts</th></tr>
+            <tr>
+                <th>Part Name</th>
+                <th>Part Type</th>
+                <th>Default Type</th>
+                <th>NULL by<br /> Default</th>
+            </tr>
+
+            <tr>
+                <td>callbackList</td>
+                <td>NodeKitListPart</td>
+                <td>--</td>
+                <td>yes</td>
+            </tr>
+
+            <tr>
+                <td>material</td>
+                <td>Material</td>
+                <td>--</td>
+                <td>yes</td>
+            </tr>
+
+            <tr>
+                <td>translator</td>
+                <td>DragPointDragger</td>
+                <td>--</td>
+                <td>yes</td>
+            </tr>
+
+            <tr>
+                <td>rotator</td>
+                <td>RotateSphericalDragger</td>
+                <td>--</td>
+                <td>yes</td>
+            </tr>
+
+            <tr>
+                <td>beamPlacement</td>
+                <td>Translation</td>
+                <td>--</td>
+                <td>yes</td>
+            </tr>
+
+            <tr>
+                <td>beamScale</td>
+                <td>Scale</td>
+                <td>--</td>
+                <td>yes</td>
+            </tr>
+
+            <tr>
+                <td>beam</td>
+                <td>Separator</td>
+                <td>--</td>
+                <td>yes</td>
+            </tr>
+
+            <tr>
+                <td>beamActive</td>
+                <td>Separator</td>
+                <td>--</td>
+                <td>yes</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th colspan="3" id="t01">Extra information for list parts from above table</th>
+            </tr>
+
+            <tr>
+                <th>Part Name</th>
+                <th>Container Type</th>
+                <th>Permissible Types</th>
+            </tr>
+
+            <tr>
+                <td>callbackList</td>
+                <td>Separator</td>
+                <td>Callback, EventCallback</td>
+            </tr>
+        </table>
+    </dd>
+        </dl>
+
+    <dl>
+    <dt>FILE FORMAT/DEFAULTS</dt>
+    <dd>
+        <pre>
+SpotLightDragger {
+    renderCaching AUTO
+    boundingBoxCaching AUTO
+    renderCulling AUTO
+    pickCulling AUTO
+    isActive FALSE
+    rotation 0 0 1 0
+    translation 0 0 0
+    angle 1
+}
+</pre>
+    </dd>
+        </dl>
+    <dl>
+    <dt>INCLUDE FILE</dt>
+    <dd>#include &lt;Inventor/draggers/SoSpotLightDragger.h&gt;</dd>
+        </dl>
+
+    <dl>
+    <dt>SEE ALSO</dt>
+    <dd>SoInteractionKit, SoDragger, SoCenterballDragger, SoDirectionalLightDragger,SoDragPointDragger, SoHandleBoxDragger, SoJackDragger, SoPointLightDragger,SoRotateCylindricalDragger, SoRotateDiscDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger,SoScaleUniformDragger, SoTabBoxDragger, SoTabPlaneDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger, SoTranslate2Dragger</dd>
+    </dl>
+</body>
+</html>

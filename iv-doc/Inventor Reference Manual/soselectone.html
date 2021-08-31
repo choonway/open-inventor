@@ -1,0 +1,59 @@
+<html>
+<body>
+SoSelectOne
+<hr>
+<dt>NAME
+<dd>SoSelectOne -- selects one value from a multiple-value field.
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoSelectOne
+
+<dt>DESCRIPTION
+<dd>This engine selects a single value from a multiple-value field, based on the input field index. The type of the input field can be any subclass of SoMField. The type isspecified when an instance of the class is created. For example, SoSelectOne(SoMFFloat::getClassTypeId()) creates an engine that selects onefloating-point value.
+
+<p>Note that unlike most other engine fields, the input field and output are pointers.Note also that by default input does not contain any values, and no value is output from the engine.
+
+<dt>INPUTS
+<dl>
+<dt>SoSFLong index
+<dd>Index of the value to select from the multiple-value field.
+<dt>&lt;inputType&gt; input
+<dd>The multiple-value field from which the value will be selected.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(&lt;outputType&gt;) output
+<dd>The single value selected.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoSelectOne</b>(SoType inputType)
+<dd>Constructor. The argument specifies the type of the multiple-value inputfield.
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>SelectOne {
+<dd>type &lt;inputType&gt;input []
+<dd>index 0
+<dt>}
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoSelectOne.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>, <a href="soconcatenate.html">SoConcatenate</a>, <a href="sogate.html">SoGate</a>
+</dl>
+</body>
+</html>

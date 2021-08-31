@@ -1,0 +1,87 @@
+<html>
+<body>
+SSooSScceenneeKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSceneKit -- scene nodekit class INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoSceneKit DESCRIPTIONThis nodekit is used to organize camera, (SoCameraKit), light, (SoLightKit), and
+
+object, (SoShapeKit, SoSeparatorKit, and SoWrapperKit) nodekits into a scene. Ascene is composed of a list of cameras, a list of lights, and a list of children. There are three parts created by this nodekit: cameraList, lightList, and childList. The cameraList part is a list part of SoCameraKit nodes. The list itself is anSoNodeKitListPart, and since only one camera can be active at a time, the container of the list part is an SoSwitch node. Use setCameraNumber(), and the scene kit willset the switch to make that camera active.
+
+The lightList part is a list of SoLightKit nodes. The lightList is used to illuminate theobjects contained in the childList part. The childList part contains a set of SoSeparatorKit nodes. You can add any kind ofSoSeparatorKit to this list, including SoShapeKit and SoWrapperKit. Since each SoSeparatorKit in turn contains a childList, this part is used to describe ahierarchical scene. (See the reference page for SoSeparatorKit). All members of childList are lit by the lights in lightList and rendered by the active camera incameraList.
+
+PARTS (SoNodeKitListPart)
+
+cameraListThis part is an SoNodeKitListPart It has a container that is an SoSwitch node. The list may contain only SoCameraKit nodekits. The active child ofthe SoSwitch is the active camera. This part is NULL by default, but is automatically created whenever you add a camera, as withsetPart(&quot;cameraList[0]&quot;, myNewCamera) .
+
+(SoNodeKitListPart) lightList
+
+This part is an SoNodeKitListPart that uses an defines an SoGroup as itscontainer The list may contain only SoLightKit nodekits. Add SoLightKits to this list and they will light the members of the childList of this SoSceneKit.This part is NULL by default, but is automatically created when you add a light.
+
+533<hr>
+
+SSooSScceenneeKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+(SoNodeKitListPart) childList
+
+This part is an SoNodeKitListPart that uses an SoGroup for its container. Thelist may contain only SoSeparatorKit nodekits or nodekits derived from SoSeparatorKit (e.g., SoShapeKit and SoWrapperKit). These childrenrepresent the objects in the scene. This part is NULL by default, but is automatically created whenever you add a child to the childList. Also, whenasked to build a member of the childList, the scenekit will build an SoShapeKit by default. So if the childList part is NULL, and you call:getPart(&quot;childList[0]&quot;, TRUE) . the scene kit will create the childList and add an SoShapeKit as the new element in the list. Parts from class SoBaseKit:
+
+callbackList
+
+METHODS SoSceneKit()
+
+Constructor. static const SoNodekitCatalog *getClassNodekitCatalog() const
+
+Returns an SoNodekitCatalog for the class SoSceneKit. int getCameraNumber()void setCameraNumber(int camNum)
+
+Gets and sets current camera index. This index refers to which child is activein the cameraList part (SoSwitch node).
+
+static SoType getClassTypeId()Returns type identifier for this class. Methods from class SoBaseKit:
+
+getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+534 Open Inventor C++ Reference Pages<hr>
+
+SSooSScceenneeKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+MACROSMacros from class SoBaseKit:
+
+SO_GET_PART, SO_CHECK_PART CATALOG PARTSiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yescameraList NodeKitListPart -- yes lightList NodeKitListPart -- yeschildList NodeKitListPart -- yes iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc cc cc cc c
+
+cc cc cc cc cc c
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separator CameraKitcameraList Switch LightKitlightList Group ShapeKit, SeparatorKitchildList Group
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc
+
+cc
+
+cc cc cc cc
+
+cc cc
+
+cc cc cc cc
+
+FILE FORMAT/DEFAULTSSceneKit {
+
+} INCLUDE FILE#include &lt;Inventor/nodekits/SoSceneKit.h&gt;
+
+SEE ALSOSoAppearanceKit, SoBaseKit, SoCameraKit, SoLightKit, SoNodeKit, SoNodeKitDetail,
+
+SoNodeKitListPart, SoNodeKitPath, SoNodekitCatalog, SoSeparatorKit, SoShapeKit,SoWrapperKit
+</body>
+</html>

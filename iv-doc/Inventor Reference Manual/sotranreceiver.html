@@ -1,0 +1,33 @@
+<html>
+<body>
+SoTranReceiver
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTranReceiver -- interprets database changes for transcription
+
+<dt>INHERITS FROM
+<dd>SoTranReceiver
+
+<dt>DESCRIPTION
+,dd>This class is used for transcribing Inventor data. Transcription is the process of packaging changes to a database and sending them over a &quot;wire&quot; to another database.
+
+<dt>The SoTranReceiver class is used on the receiving side of transcription. It interpretschanges to a Inventor database packaged up by an SoTranSender.
+
+<dt>METHODS
+<dl>
+<dt><b>SoTranReceiver</b>(SoGroup *rootNode)
+<dd>The constructor takes a pointer to an SoGroup instance that is the root node of the scene graph on the receiving end. All changes to the database are made relative to this root.
+<dt>~<b>SoTranReceiver</b>()
+<dd>Destructor.
+
+<dt>SbBool <b>interpret</b>(SoInput *in)
+<dd>Interprets the transcription commands found in the given input stream. Returns FALSE on any error. Note: some errors (such as invalid node references) are recoverable, while others (such as syntax errors) are not.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/misc/SoTranscribe.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soinput.html">SoInput</a>, <a href="sotransender.html">SoTranSender</a>
+</body>
+</html>

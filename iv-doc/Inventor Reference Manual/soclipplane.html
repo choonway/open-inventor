@@ -1,0 +1,66 @@
+<html>
+<body>
+SoClipPlane
+<hr>
+<dl>
+<dt>NAME
+<dd>SoClipPlane -- clipping plane node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoClipPlane
+
+<dt>DESCRIPTION
+<dd>This node clips all subsequent shapes in the scene graph to the half-space defined by the plane field. The half-space is the side of the plane in the direction of the plane normal. For example, if the plane is positioned at the origin and the normal is pointing down the positive X axis, everything in the negative X space will be clipped away.
+
+<dd>Any number of clipping planes may be active simultaneously, although the graphics library may place a limit on this number during rendering. Note that if any clipping planes are active, backface culling (as set up by theSoShapeHints node) will not be performed.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFPlane plane
+<dd>Plane defining half-space.
+
+<dt>SoSFBool on
+<dd>Whether clipping plane is active.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoClipPlane</b>()
+<dd>Creates a clip plane node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoRayPickAction
+<dd>Adds the plane to the current list of clipping planes in the state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>ClipPlane {
+<dd>plane 1 0 0 0
+<dd>on TRUE
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoClipPlane.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socamera.html">SoCamera</a>, <a href="soshapehints.html">SoShapeHints</a>
+</dl>
+
+</body>
+</html>

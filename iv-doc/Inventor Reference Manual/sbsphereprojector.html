@@ -1,0 +1,48 @@
+<html>
+<body>
+SbSphereProjector
+<hr>
+<dl>
+<dt>NAME
+<dd>SbSphereProjector -- sphere projector
+
+<dt>INHERITS FROM
+<dd><a href="sbprojector.html">SbProjector</a> &gt; SbSphereProjector
+
+<dt>DESCRIPTION
+<dd>SbSphereProjector is an abstract base class for projectors that use a sphere in their projection. Sphere projectors are typically used to write interactive 3D manipulators and viewers.
+
+<dt>METHODS
+<dl>
+<dt>SbVec3f projectAndGetRotation(const SbVec2f &amp;point, SbRotation &amp;rot)
+<dd>Apply the projector using the given point, returning the point in three dimensions that it projects to. This also returns in rot a rotation on the surface of the sphere from the last projected point to this one. The passed point should be normalized (i.e. lie in the range [0.0,1.0]), with (0,0) at thelower-left.
+
+<dt>virtual SbRotation getRotation(const SbVec3f &amp;point1, const SbVec3f &amp;point2)
+
+<dd>Get a rotation given two points on this sphere projector. The rotation will be on the surface of the sphere.
+
+<dt>void setSphere(const SbSphere &sph)
+<dt>const SbSphere &getSphere() const
+<dd>Set and get the sphere on which to project points. The default sphere has radius 1.0.
+
+<dt>void setOrientToEye(SbBool orientToEye)
+<dt>SbBool isOrientToEye() const
+<dd>Set and get whether the projector should always be oriented towards the eye.Set to FALSE if the tolerance should be evaluated in working space.
+
+<dt>void setFront(SbBool isFront)
+<dt>SbBool isFront() const
+<dd>SbBool isPointInFront(const SbVec3f &point) const
+<dd>Set and get whether the projector should intersect the half of the sphere that faces the eye. Set to FALSE if the projector should intersect with the rearhalf.
+
+<dt>Methods from class SbProjector:
+<dd>project, setViewVolume, getViewVolume, setWorkingSpace,getWorkingSpace, copy
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/projectors/SbSphereProjector.h&gt;
+
+<dt>SEE ALSO
+<dd>SbCylinderProjector, SbCylinderPlaneProjector, SbCylinderSectionProjector, SbCylinderSheetProjector, SbLineProjector, SbPlaneProjector,SbSpherePlaneProjector, SbSphereSectionProjector, <a href="sbspheresheetprojector.html">SbSphereSheetProjector</a>
+</dl>
+</body>
+</html>

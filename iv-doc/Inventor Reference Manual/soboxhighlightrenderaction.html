@@ -1,0 +1,71 @@
+<html>
+<body>
+<p>SoBoxHighlightRenderAction
+<hr>
+<dl>
+<dt>NAME
+<dd>SoBoxHighlightRenderAction -- a selection highlight style
+
+<dt>INHERITS FROM
+<dd><a href="soaction.html">SoAction</a> &gt; <a href="soglrenderaction.html">SoGLRenderAction</a> &gt; <a href="soboxhighlightrenderaction.html">SoBoxHighlightRenderAction</a>
+
+<dt>DESCRIPTION
+<dd>SoBoxHighlightRenderAction is a render action which renders the specified scene graph, then renders wireframe boxes surrounding each selected object. Selected objects are specified by the first SoSelection node in the scene to which this action is applied. If an SoGetBoundingBoxAction applied to a selected object produces an empty bounding box, no highlight is rendered for that object. A highlight render action can be passed to the <b>setGLRenderAction</b>() method of SoXtRenderArea to have an effect on scene graphs.
+
+<dt>METHODS
+<dl>
+<dt><b>SoBoxHighlightRenderAction</b>()
+<dd>Constructor.
+
+<dt>virtual void <b>apply</b>(SoNode *node)
+<dd>This renders the passed scene graph, and also renders wireframe boxes around selected objects as specified by the first SoSelection node found inthe scene graph.
+
+<dt>void <b>setVisible</b>(SbBool b)
+<dd>This provides a convenient mechansim for turning highlights off or on.
+
+<p>When FALSE is passed, subsequent calls to <b>apply</b>() render the scene graph without rendering highlights. The application is responsible for forcing a redraw of the scene after changing this state. The default visibility is on.
+
+<dt>SbBool <b>isVisible</b>() const
+<dd>Returns whether highlights will be rendered or not.
+
+<dt>void <b>setColor</b>(const SbColor &c)
+<dt>SbColor & <b>getColor</b>()
+<dd>Set and get the color of the highlight. Default is red (1,0,0). Application isresponsible for forcing a redraw of the scene to see the effects of this change.
+
+<dt>void <b>setLinePattern</b>(unsigned short pattern)
+<dt>unsigned short <b>getLinePattern</b>()
+
+<dd>Set and get the line pattern of the highlight. Default is solid, 0xffff. Thepattern of bits in the passed variable specifies the pattern of the line. See SoDrawStyle for a description. Application is responsible for forcing a redraw of the scene to see the effects of this change.
+
+<dt>void <b>setLineWidth</b>(float width)
+<dt>float <b>getLineWidth</b>()
+
+<dd>Set and get the line width of the highlight. Default is 3. Application isresponsible for forcing a redraw of the scene to see the effects of this change.
+
+<dt><b>Methods from class SoGLRenderAction</b>:
+<dd>setViewportRegion, getViewportRegion, setUpdateArea, getUpdateArea,setAbortCallback, setTransparencyType, getTransparencyType, setSmoothing, isSmoothing, setNumPasses, getNumPasses, setPassUpdate,isPassUpdate, setPassCallback, setCacheContext, getCacheContext
+
+<dt><b>Methods from class SoAction</b>:
+<dd>getClassTypeId, getTypeId, isOfType, invalidateState
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/actions/SoBoxHighlightRenderAction.h&gt;
+
+<dt>EXAMPLE
+<dd>Here is an example of how a box highlight can be specified for a particular selection node and render area.
+
+<p><code>
+SoXtRenderArea *myRenderArea;<br>
+SoSelection *mySelection;<br>
+// Set the highlight render<br>
+actionmyRenderArea-&gt;setGLRenderAction(new SoBoxHighlightRenderAction());<br>
+// Automatic redraw on selection changes<br>
+myRenderArea-&gt;redrawOnSelectionChange(mySelection);<br>
+</code>
+
+<dt>SEE ALSO
+<dd><a href="solinehighlightrenderaction.html">SoLineHighlightRenderAction</a>, <a href="soglrenderaction.html">SoGLRenderAction</a>, <a href="soselection.html">SoSelection</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>, <a href="sodrawstyle.html">SoDrawStyle</a>, <a href="sointeraction.html">SoInteraction</a>
+</dl>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<html>
+<body>
+<p>SoUnits
+<hr>
+<dl>
+<dt>NAME
+<dd>SoUnits -- node that scales to convert units of length
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sotransformation.html">SoTransformation</a> &gt; SoUnits
+
+<dt>DESCRIPTION
+<dd>This node defines a uniform 3D scale about the origin relative to the previously defined units. The default units for all data are meters. Adding a units node with thevalue INCHES will have the same effect as adding an SoScale node with the scaleFactor of (.0254, .0254, .0254). Any subsequent SoUnits node will take theprevious units into account. When building a composite object out of a bunch of pieces, it would be a good practice to add an SoUnits node at the beginning of eachof the pieces, under an SoSeparator node, to make sure all the pieces fit together with the same scale.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum units
+<dd>Defines the current unit.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoUnits</b>()
+<dd>Creates a unit conversion node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Accumulates the scale that is the ratio of the size from the previous unit to the current unit into the current transformation.
+
+<dt>SoGetMatrixAction
+<dd>Returns the matrix corresponding to the units scaling.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Units {
+<dd>units METERS
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoUnits.h&gt;
+
+<dl>
+<dt>enum Units {
+<dd>SoUnits::METERS
+<dd>SoUnits::CENTIMETERS
+<dd>SoUnits::MILLIMETERS
+<dd>SoUnits::MICROMETERS
+<dd>SoUnits::MICRONS
+<dd>SoUnits::NANOMETERS
+<dd>SoUnits::ANGSTROMS
+<dd>SoUnits::KILOMETERS
+<dd>SoUnits::FEET
+<dd>SoUnits::INCHES
+<dd>SoUnits::POINTS
+<dd>SoUnits::YARDS
+<dd>SoUnits::MILES
+<dd>SoUnits::NAUTICAL_MILES
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soscale.html">SoScale</a>, <a href="sotransform.html">SoTransform</a>
+</dl>
+</body>
+</html>

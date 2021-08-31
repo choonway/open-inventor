@@ -1,0 +1,95 @@
+<html>
+<body>
+<p>SoGroup
+<hr>
+<dl>
+<dt>NAME
+<dd>SoGroup -- base class for all group nodes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoGroup
+
+<dt>DESCRIPTION
+<dd>This node defines the base class for all group nodes. SoGroup is a node that contains an ordered list of child nodes. The ordering of the child nodes representsthe traversal order for all operations (for example, rendering, picking, and so on). This node is simply a container for the child nodes and does not alter the traversalstate in any way. During traversal, state accumulated for a child is passed on to each successive child and then to the parents of the group (SoGroup does not push orpop traversal state as SoSeparator does).
+
+<dt>METHODS
+<dl>
+<dt><b>SoGroup</b>()
+<dd>Creates an empty group node.
+
+<dt><b>SoGroup</b>(int nChildren)
+<dd>Constructor that takes approximate number of children. Space is allocated for pointers to the children, but the group does not contain any actual childnodes.
+
+<dt>void <b>addChild</b>(SoNode *child)
+<dd>Adds a child as last one in group.
+
+<dt>void <b>insertChild</b>(SoNode *child, int newChildIndex)
+<dd>Adds a child so that it becomes the one with the given index.
+
+<dt>SoNode * <b>getChild</b>(int index) const
+<dd>Returns pointer to child node with the given index.
+
+<dt>int <b>findChild</b>(const SoNode *child) const
+<dd>Finds index of given child within group.
+
+<dt>int <b>getNumChildren</b>() const
+<dd>Returns number of children.
+
+<dt>void <b>removeChild</b>(int index)
+<dd>Removes child with given index from group.
+
+<dt>void <b>removeChild</b>(SoNode *child)
+<dd>Removes first instance of given child from group.
+
+<dt>void <b>removeAllChildren</b>()
+<dd>Removes all children from group.
+
+<dt>void <b>replaceChild</b>(int index, SoNode *newChild)
+<dd>Replaces child with given index with new child.
+
+<dt>void <b>replaceChild</b>(SoNode *oldChild, SoNode *newChild)
+<dd>Replaces first instance of given child with new child.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoHandleEventAction, SoRayPickAction
+<dd>Traverses each child in order.
+
+<dt>SoGetMatrixAction
+<dd>Does nothing unless the group is in the middle of the path chain the action is being applied to. If so, the children up to and including the next node inthe chain are traversed.
+
+<dt>SoSearchAction
+<dd>If searching for group nodes, compares with this group. Otherwise, continues to search children.
+
+<dt>SoWriteAction
+<dd>Writes out the group node. This method also deals with any field data associated with the group node. As a result, this method is used for mostsubclasses of SoGroup as well.
+
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Group {
+<dt>}
+</dl>
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoGroup.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soarray.html">SoArray</a>, <a href="solevelofdetail.html">SoLevelOfDetail</a>, <a href="somultiplecopy.html">SoMultipleCopy</a>, <a href="sopathswitch.html">SoPathSwitch</a>, <a href="soseparator.html">SoSeparator</a>, <a href="soswitch.html">SoSwitch</a>
+</dl>
+</body>
+</html>

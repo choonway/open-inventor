@@ -1,0 +1,65 @@
+<html>
+<body>
+SoLightModel
+<hr>
+<dl>
+<dt>NAME
+<dd>SoLightModel -- node that defines the lighting model to use when rendering
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoLightModel
+
+<dt>DESCRIPTION
+<dd>This node defines the lighting model to be used when rendering subsequent shapes. The lighting model is specified in the model field. When the default model (Phong lighting) is used, light sources are required in a scene for objects to be easily visible.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum model
+<dd>Lighting model to use
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoLightModel</b>()
+<dd>Creates a light model node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction
+<dd>Sets the current lighting model in the state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>LightModel {
+<dd>model PHONG
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoLightModel.h&gt;
+
+<dl>
+<dt>enum Model {
+<dd>SoLightModel::BASE_COLOR Use only the base (diffuse) object color
+<dd>SoLightModel::PHONG Use Phong lighting model
+</dl>}
+
+<dt>SEE ALSO
+<dd><a href="sobasecolor.html">SoBaseColor</a>, <a href="soenvironment.html">SoEnvironment</a>, <a href="solight.html">SoLight</a>, <a href="somaterial.html">SoMaterial</a>
+
+</body>
+</html>

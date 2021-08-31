@@ -1,0 +1,113 @@
+<html>
+<body>
+<h2>SoTranslate2Dragger</h2>
+<p align=right><a href="index.html">back to contents</a>
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTranslate2Dragger -- object you can translate within a plane by dragging with the mouse
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sobasekit.html">SoBaseKit</a> &gt; <a href="sointeractionkit.html">SoInteractionKit</a> &gt; <a href="sodragger.html">SoDragger</a> &gt; SoTranslate2Dragger
+
+<dt>DESCRIPTION
+<dd>SoTranslate2Dragger is a simple dragger that translates in two dimensions when dragged with the mouse. It moves within the x-y plane of its local space, determined by its location in the scene graph. Transformation nodes placed before it will affect both the dragger and the direction of motion. Pressing the &lt;Shift&gt; key allows you to constrain motion to either the x axis or the yaxis. The direction is determined by your initial mouse gesture after pressing the key. Releasing the key removes the constraint. This node has a translation field which always reflects its position in local space. Ifyou set the field, the dragger will move accordingly. You can also connect fields of other nodes or engines from this one to make them follow the dragger's motion. This dragger contains six parts, translator, translatorActive, feedback, feedbackActive,xAxisFeedback, and yAxisFeedback. The last two parts are only displayed during motion, and only when their direction of motion is enabled. (Pressing the &lt;Shift&gt;key and then dragging disables one of the two directions.)
+
+<p>Each of these is set by default from a resource described in the Dragger Resourcessection of the online reference page for this class. You can change the parts in any instance of this dragger using setPart(). You can make your program use different default resources for the parts by copying the file /usr/share/data/draggerDefaults/translate2Dragger.iv into your own directory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFVec3f translation
+<dd>Position of the dragger.
+
+<dt>Fields from class SoDragger:
+<dd>isActive
+
+<dt>Fields from class SoInteractionKit:
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+</dl>
+
+<dt>PARTS
+<dl>
+<dt>Parts from class SoBaseKit:
+<dd>callbackList
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoTranslate2Dragger</b>()
+<dd>Constructor.
+
+<dt>static const <b>SoNodekitCatalog</b> *getClassNodekitCatalog() const
+<dd>Returns an SoNodekitCatalog for this class
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoDragger</b>:
+<dd>addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback, addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+<dt><b>Methods from class SoInteractionKit</b>:
+<dd>setPartAsPath
+
+<dt><b>Methods from class SoBaseKit</b>:
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+<dd>SO_GET_PART, SO_CHECK_PART
+</dl>
+
+<dt>CATALOG PARTS
+<table border=1 cellspacing=0>
+<tr><td colspan=4 align=center>All parts
+
+<tr><td>Part Name <td>Part Type <td>Default Type <td>NULL by Default
+
+<tr><td>callbackList <td>NodeKitListPart <td>-- <td>yes
+
+<tr><td>translator <td>Separator <td>-- <td>yes
+<tr><td>translatorActive <td>Separator <td>-- <td>yes
+<tr><td>feedback <td>Separator <td>-- <td>yes 
+<tr><td>feedbackActive <td>Separator <td>-- <td>yes
+<tr><td>xAxisFeedback <td>Separator <td>-- <td>yes
+<tr><td>yAxisFeedback <td>Separator <td>-- <td>yes
+</table>
+
+<table border=1 cellspacing=0>
+<tr><td colspan=3>Extra information for list parts from above table
+<tr><td>Part Name <td>Container Type <td>Permissible Types
+<tr><td>callbackList <td>Separator <td>Callback, EventCallback
+</table>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Translate2Dragger {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO
+<dd>isActive FALSE
+<dd>translation 0 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/draggers/SoTranslate2Dragger.h&gt;
+
+<dt>SEE ALSO
+<dd>SoInteractionKit, SoDragger, SoCenterballDragger, SoDirectionalLightDragger, SoDragPointDragger, SoHandleBoxDragger, SoJackDragger, SoPointLightDragger,SoRotateCylindricalDragger, SoRotateDiscDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger,SoScaleUniformDragger, SoSpotLightDragger, SoTabBoxDragger, SoTabPlaneDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger
+</dl>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<html>
+<body>
+SSooXXttDDiirreeccttiioonnaallLLiigghhttEEddiittoorrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoXtDirectionalLightEditor -- component for editing directional lights INHERITS FROMSoXtComponent &gt; SoXtDirectionalLightEditor DESCRIPTIONThis class is used to edit an SoDirectionalLight node (color, intensity, and direction
+
+are changed). In addition to directly editing directional light nodes, the editor canalso be used with callbacks which will be called whenever the light is changed. The component consists of a render area and a value slider in the main window, withcontrols to display a color picker. In the render area there appears a sphere representing the world, and a directional light manipulator representing thedirection of the light. Picking on the manipulator and moving the mouse provides direct manipulation of the light direction. The color picker is used to edit the color,and the value slider edits the intensity.
+
+The editor can currently be attached to only one light at a time. Attaching to twodifferent lights will automatically detach the first one before attaching the second. METHODS SoXtDirectionalLightEditor(Widget parent = NULL, const char
+
+*name = NULL, SbBool buildInsideParent = TRUE)~SoXtDirectionalLightEditor() Constructor and destructor. void attach(SoPath *pathToLight)void detach()
+
+Attach/detach the editor to/from a directional light. When attached,changes made in the editor directly affect the attached light.
+
+SbBool isAttached()Returns TRUE if the editor is attached. void addLightChangedCallback(SoXtDirectionalLightEditorCB *f,void *userData = NULL) void removeLightChangedCallback(SoXtDirectionalLightEditorCB*f, void *userData = NULL)
+
+Additional way of using the directional light editor, by registering a callbackand setting the light.
+
+721<hr>
+
+SSooXXttDDiirreeccttiioonnaallLLiigghhttEEddiittoorrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+void setLight(const SoDirectionalLight &newLight)const SoDirectionalLight &
+
+getLight() constSet new light values, and get the current light values.
+
+Methods from class SoXtComponent:
+
+show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle,
+
+getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+
+INCLUDE FILE#include &lt;Inventor/Xt/SoXtDirectionalLightEditor.h&gt;
+
+typedef void SoXtDirectionalLightEditorCB(void *userData, const SoDirectionalLight*light) SEE ALSOSoXtComponent, SoDirectionalLight
+</body>
+</html>

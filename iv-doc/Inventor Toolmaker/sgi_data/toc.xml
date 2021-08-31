@@ -1,0 +1,904 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<toc>
+<book href="index.html" id="id5364247">
+<title>The Inventor Toolmaker</title>
+<bookinfo href="front.html">
+<title>Front Matter</title>
+</bookinfo>
+<preface href="pr01.html" id="id5418744">
+<title>About This Book</title>
+<section href="pr01.html#id5364596" id="id5364596">
+<title>What This Book Contains</title>
+</section>
+<section href="pr01.html#id5362629" id="id5362629">
+<title>What You Should Know 
+Before Reading This Book</title>
+</section>
+<section href="pr01.html#id5362671" id="id5362671">
+<title>Conventions Used in This Book</title>
+</section>
+<section href="pr01.html#id5362731" id="id5362731">
+<title>Key to Scene Graph Diagrams</title>
+<figure href="pr01.html#id5362742" id="id5362742">
+<title>Figure 1. Scene Graph Symbols</title>
+</figure>
+</section>
+<section href="pr01.html#id5362762" id="id5362762">
+<title>Suggestions for Further Reading</title>
+</section>
+</preface>
+<preface href="pr02.html" id="id5362923">
+<title>Acknowledgments</title>
+</preface>
+<chapter href="ch01.html" id="id5362994">
+<title>Chapter 1. Key Concepts</title>
+<section href="ch01.html#id5363079" id="id5363079">
+<title>Adding Nodes and Actions to Inventor</title>
+<figure href="ch01.html#id5363320" id="id5363320">
+<title>Figure 1-1. Summary of SoEXTENDER Classes</title>
+</figure>
+<figure href="ch01.html#id5363396" id="id5363396">
+<title>Figure 1-2. Method List</title>
+</figure>
+</section>
+<section href="ch01.html#id5363582" id="id5363582">
+<title>Actions, State, and Elements</title>
+<section href="ch01.html#id5363651" id="id5363651">
+<title>Enabling Elements</title>
+</section>
+<section href="ch01.html#id5363874" id="id5363874">
+<title>Setting Elements in the State</title>
+<figure href="ch01.html#id5364058" id="id5364058">
+<title>Figure 1-3. Nodes, Actions, Elements, and State</title>
+</figure>
+</section>
+<section href="ch01.html#id5364076" id="id5364076">
+<title>Getting Elements in the State</title>
+</section>
+<section href="ch01.html#id5435529" id="id5435529">
+<title>State Elements</title>
+</section>
+</section>
+<section href="ch01.html#id5436945" id="id5436945">
+<title>Elements and Actions</title>
+<table href="ch01.html#id5436965" id="id5436965">
+<title>Table 1-1.  Elements Enabled for Each Action</title>
+</table>
+</section>
+<section href="ch01.html#id5443375" id="id5443375">
+<title>Caching</title>
+</section>
+<section href="ch01.html#id5443544" id="id5443544">
+<title>Runtime Types</title>
+</section>
+<section href="ch01.html#id5443769" id="id5443769">
+<title>Extender Macros</title>
+</section>
+</chapter>
+<chapter href="ch02.html" id="id5443825">
+<title>Chapter 2. Creating a Node</title>
+<section href="ch02.html#id5444012" id="id5444012">
+<title>Overview</title>
+</section>
+<section href="ch02.html#id5444406" id="id5444406">
+<title>Initializing the Node Class</title>
+<section href="ch02.html#id5444436" id="id5444436">
+<title>Enabling Elements in the State</title>
+</section>
+<section href="ch02.html#id5444556" id="id5444556">
+<title>Inheritance within the Element Stack</title>
+</section>
+</section>
+<section href="ch02.html#id5444645" id="id5444645">
+<title>Defining the Constructor</title>
+<section href="ch02.html#id5444747" id="id5444747">
+<title>Setting Up the Node's Fields</title>
+</section>
+<section href="ch02.html#id5444796" id="id5444796">
+<title>Defining Enumerated Values for a Field</title>
+</section>
+</section>
+<section href="ch02.html#id5444860" id="id5444860">
+<title>Implementing Actions</title>
+<section href="ch02.html#id5444976" id="id5444976">
+<title>The doAction() Method</title>
+</section>
+<section href="ch02.html#id5445219" id="id5445219">
+<title>Changing and Examining State Elements</title>
+</section>
+<section href="ch02.html#id5445436" id="id5445436">
+<title>Element Bundles</title>
+</section>
+</section>
+<section href="ch02.html#id5445615" id="id5445615">
+<title>Creating a Property Node</title>
+<example href="ch02.html#id5445745" id="id5445745">
+<title>Example 2-1. Glow.h</title>
+</example>
+<example href="ch02.html#id5362393" id="id5362393">
+<title>Example 2-2. Glow.c++</title>
+</example>
+</section>
+<section href="ch02.html#id5362441" id="id5362441">
+<title>Creating a Shape Node</title>
+<section href="ch02.html#id5446273" id="id5446273">
+<title>Generating Primitives</title>
+<section href="ch02.html#id5446411" id="id5446411">
+<title>SoPrimitiveVertex</title>
+</section>
+<section href="ch02.html#id5446701" id="id5446701">
+<title>Creating Details</title>
+</section>
+</section>
+<section href="ch02.html#id5446828" id="id5446828">
+<title>Rendering</title>
+</section>
+<section href="ch02.html#id5446911" id="id5446911">
+<title>Picking</title>
+</section>
+<section href="ch02.html#id5447193" id="id5447193">
+<title>Getting a Bounding Box</title>
+</section>
+<section href="ch02.html#id5448593" id="id5448593">
+<title>Pyramid Node</title>
+<example href="ch02.html#id5448752" id="id5448752">
+<title>Example 2-3. Pyramid.h</title>
+</example>
+<example href="ch02.html#id5448855" id="id5448855">
+<title>Example 2-4. Pyramid.c++</title>
+</example>
+</section>
+</section>
+<section href="ch02.html#id5449283" id="id5449283">
+<title>Creating a Group Node</title>
+<section href="ch02.html#id5449443" id="id5449443">
+<title>Child List</title>
+</section>
+<section href="ch02.html#id5449575" id="id5449575">
+<title>Hidden Children</title>
+</section>
+<section href="ch02.html#id5449732" id="id5449732">
+<title>Using the Path Code</title>
+<figure href="ch02.html#id5449853" id="id5449853">
+<title>Figure 2-1. Using the Path Code for Groups</title>
+</figure>
+</section>
+<section href="ch02.html#id5450108" id="id5450108">
+<title>What Happens If an Action Is Terminated?</title>
+</section>
+<section href="ch02.html#id5450195" id="id5450195">
+<title>Alternate Node</title>
+<example href="ch02.html#id5450213" id="id5450213">
+<title>Example 2-5. Alternate.h  </title>
+</example>
+<example href="ch02.html#id5450282" id="id5450282">
+<title>Example 2-6. Alternate.c++</title>
+</example>
+</section>
+</section>
+<section href="ch02.html#id5450503" id="id5450503">
+<title>Using New Node Classes</title>
+<example href="ch02.html#id5450732" id="id5450732">
+<title>Example 2-7. NewNodes.c++</title>
+</example>
+<example href="ch02.html#id5450774" id="id5450774">
+<title>Example 2-8. newNodes.iv</title>
+</example>
+</section>
+<section href="ch02.html#id5450839" id="id5450839">
+<title>Creating an Abstract Node Class</title>
+</section>
+<section href="ch02.html#id5450948" id="id5450948">
+<title>The copy() Method</title>
+</section>
+<section href="ch02.html#id5451071" id="id5451071">
+<title>The affectsState() Method</title>
+</section>
+<section href="ch02.html#id5451181" id="id5451181">
+<title>Uncacheable Nodes</title>
+</section>
+<section href="ch02.html#id5451318" id="id5451318">
+<title>Creating an Alternate Representation</title>
+</section>
+<section href="ch02.html#id5451415" id="id5451415">
+<title>Generating Default Normals</title>
+</section>
+</chapter>
+<chapter href="ch03.html" id="id5451559">
+<title>Chapter 3. Creating a Field</title>
+<section href="ch03.html#id5451627" id="id5451627">
+<title>Overview</title>
+</section>
+<section href="ch03.html#id5451901" id="id5451901">
+<title>Initializing the Field Class</title>
+</section>
+<section href="ch03.html#id5451938" id="id5451938">
+<title>Creating a Single-Value Field</title>
+<example href="ch03.html#id5452062" id="id5452062">
+<title>Example 3-1. SFDouble.h</title>
+</example>
+<example href="ch03.html#id5452293" id="id5452293">
+<title>Example 3-2. SFDouble.c++</title>
+</example>
+</section>
+<section href="ch03.html#id5452368" id="id5452368">
+<title>Creating a Multiple-Value Field</title>
+<example href="ch03.html#id5452484" id="id5452484">
+<title>Example 3-3. MFDouble.h </title>
+</example>
+<example href="ch03.html#id5452690" id="id5452690">
+<title>Example 3-4. MFDouble.c++</title>
+</example>
+</section>
+</chapter>
+<chapter href="ch04.html" id="id5452775">
+<title>Chapter 4. Creating an Action</title>
+<section href="ch04.html#id5452812" id="id5452812">
+<title>Overview</title>
+</section>
+<section href="ch04.html#id5453114" id="id5453114">
+<title>Initializing the Action Class</title>
+<section href="ch04.html#id5453203" id="id5453203">
+<title>Enabling Elements in the State</title>
+</section>
+<section href="ch04.html#id5453261" id="id5453261">
+<title>Registering Static Methods</title>
+</section>
+</section>
+<section href="ch04.html#id5453325" id="id5453325">
+<title>Defining the Constructor</title>
+</section>
+<section href="ch04.html#id5453379" id="id5453379">
+<title>Defining the Destructor</title>
+</section>
+<section href="ch04.html#id5453412" id="id5453412">
+<title>Traversal Behavior</title>
+</section>
+<section href="ch04.html#id5453584" id="id5453584">
+<title>Implementing Static Methods</title>
+</section>
+<section href="ch04.html#id5453854" id="id5453854">
+<title>Creating a New Action</title>
+<example href="ch04.html#id5453966" id="id5453966">
+<title>Example 4-1. GetVolumeAction.h</title>
+</example>
+<example href="ch04.html#id5454075" id="id5454075">
+<title>Example 4-2. GetVolumeAction.c++</title>
+</example>
+</section>
+<section href="ch04.html#id5454371" id="id5454371">
+<title>Using New Action Classes</title>
+<example href="ch04.html#id5454402" id="id5454402">
+<title>Example 4-3. PrintVolume.c++ </title>
+</example>
+</section>
+</chapter>
+<chapter href="ch05.html" id="id5454441">
+<title>Chapter 5. Creating an Element</title>
+<section href="ch05.html#id5454523" id="id5454523">
+<title>Overview</title>
+</section>
+<section href="ch05.html#id5454877" id="id5454877">
+<title>Deriving a Class from an Existing Element</title>
+<figure href="ch05.html#id5455070" id="id5455070">
+<title>Figure 5-1. Element Class Tree (Part 1 of 2)</title>
+</figure>
+<figure href="ch05.html#id5455089" id="id5455089">
+<title>Figure 5-2. Element Class Tree (Part 2 of 2)</title>
+</figure>
+</section>
+<section href="ch05.html#id5455214" id="id5455214">
+<title>The initClass() Method</title>
+</section>
+<section href="ch05.html#id5455287" id="id5455287">
+<title>Destructor</title>
+</section>
+<section href="ch05.html#id5455422" id="id5455422">
+<title>The init() Method</title>
+</section>
+<section href="ch05.html#id5455459" id="id5455459">
+<title>The set() and get() Methods</title>
+</section>
+<section href="ch05.html#id5455498" id="id5455498">
+<title>The print() Method</title>
+</section>
+<section href="ch05.html#id5455586" id="id5455586">
+<title>Additional Methods</title>
+</section>
+<section href="ch05.html#id5455993" id="id5455993">
+<title>Special Considerations for Caching</title>
+<section href="ch05.html#id5456176" id="id5456176">
+<title>SoFloatElement and SoLongElement</title>
+</section>
+<section href="ch05.html#id5456229" id="id5456229">
+<title>SoReplacedElement</title>
+</section>
+<section href="ch05.html#id5456362" id="id5456362">
+<title>SoAccumulatedElement</title>
+</section>
+</section>
+<section href="ch05.html#id5456496" id="id5456496">
+<title>Special Behavior for Derived Elements</title>
+</section>
+<section href="ch05.html#id5456945" id="id5456945">
+<title>Pushing and Popping Elements</title>
+</section>
+<section href="ch05.html#id5457200" id="id5457200">
+<title>Creating a New Element</title>
+<example href="ch05.html#id5457296" id="id5457296">
+<title>Example 5-1. TemperatureElement.h  </title>
+</example>
+<example href="ch05.html#id5457362" id="id5457362">
+<title>Example 5-2. TemperatureElement.c++</title>
+</example>
+</section>
+</chapter>
+<chapter href="ch06.html" id="id5457419">
+<title>Chapter 6. Creating an Engine</title>
+<section href="ch06.html#id5457566" id="id5457566">
+<title>Overview</title>
+</section>
+<section href="ch06.html#id5457886" id="id5457886">
+<title>Defining Inputs and Outputs</title>
+</section>
+<section href="ch06.html#id5457930" id="id5457930">
+<title>Initializing the Engine Class</title>
+</section>
+<section href="ch06.html#id5458046" id="id5458046">
+<title>Defining the Constructor</title>
+</section>
+<section href="ch06.html#id5458104" id="id5458104">
+<title>Implementing an evaluate() Method</title>
+</section>
+<section href="ch06.html#id5458181" id="id5458181">
+<title>Creating a Simple Engine</title>
+<example href="ch06.html#id5458251" id="id5458251">
+<title>Example 6-1. MultFloatVec3f.h</title>
+</example>
+<example href="ch06.html#id5458303" id="id5458303">
+<title>Example 6-2. MultFloatVec3f.c++</title>
+</example>
+</section>
+<section href="ch06.html#id5458393" id="id5458393">
+<title>Dealing with Multiple-Value Fields</title>
+<section href="ch06.html#id5458415" id="id5458415">
+<title>Creating an Engine with Multiple Inputs</title>
+<figure href="ch06.html#id5458605" id="id5458605">
+<title>Figure 6-1. Replicating Values in Fields with Fewer Values</title>
+</figure>
+<example href="ch06.html#id5458632" id="id5458632">
+<title>Example 6-3. SoComposeVec2f.h </title>
+</example>
+<example href="ch06.html#id5458700" id="id5458700">
+<title>Example 6-4. SoComposeVec2f.c++</title>
+</example>
+</section>
+<section href="ch06.html#id5458792" id="id5458792">
+<title>Creating an Engine with Multiple Outputs</title>
+<example href="ch06.html#id5458844" id="id5458844">
+<title>Example 6-5. SoDecomposeVec2f.h</title>
+</example>
+<example href="ch06.html#id5458890" id="id5458890">
+<title>Example 6-6. SoDecomposeVec2f.c++</title>
+</example>
+</section>
+</section>
+<section href="ch06.html#id5458963" id="id5458963">
+<title>Notification and Evaluation</title>
+<figure href="ch06.html#id5459184" id="id5459184">
+<title>Figure 6-2. A Simple Engine Network</title>
+</figure>
+<section href="ch06.html#id5459367" id="id5459367">
+<title>What Inventor Does behind the Scenes</title>
+<table href="ch06.html#id5459540" id="id5459540">
+<title>Table 6-1. Sequence for Notification and Evaluation</title>
+</table>
+</section>
+<section href="ch06.html#id5459674" id="id5459674">
+<title>Blocking Notification</title>
+</section>
+<section href="ch06.html#id5459972" id="id5459972">
+<title>Creating a  Fan-in Engine</title>
+<example href="ch06.html#id5460042" id="id5460042">
+<title>Example 6-7. FanIn.h</title>
+</example>
+<example href="ch06.html#id5460118" id="id5460118">
+<title>Example 6-8. FanIn.c++</title>
+</example>
+</section>
+<section href="ch06.html#id5460193" id="id5460193">
+<title>Creating a Second-Ticker Engine</title>
+<example href="ch06.html#id5460319" id="id5460319">
+<title>Example 6-9. Ticker.h</title>
+</example>
+<example href="ch06.html#id5460371" id="id5460371">
+<title>Example 6-10. Ticker.c++</title>
+</example>
+</section>
+</section>
+<section href="ch06.html#id5460500" id="id5460500">
+<title>Creating a New Field Converter</title>
+<section href="ch06.html#id5460585" id="id5460585">
+<title>Overview</title>
+</section>
+<section href="ch06.html#id5460676" id="id5460676">
+<title>Initializing the Field Converter Class</title>
+</section>
+<section href="ch06.html#id5460717" id="id5460717">
+<title>The evaluate() Method</title>
+</section>
+<section href="ch06.html#id5460795" id="id5460795">
+<title>The getInput() and getOutput() Methods</title>
+</section>
+<section href="ch06.html#id5460869" id="id5460869">
+<title>Sample Field Converter</title>
+<example href="ch06.html#id5460906" id="id5460906">
+<title>Example 6-11. ConvertSFShortToSFFloat.h</title>
+</example>
+<example href="ch06.html#id5460990" id="id5460990">
+<title>Example 6-12. ConvertSFShortToSFFloat.c++</title>
+</example>
+</section>
+</section>
+</chapter>
+<chapter href="ch07.html" id="id5461085">
+<title>Chapter 7. Creating a Node Kit</title>
+<section href="ch07.html#id5461181" id="id5461181">
+<title>Overview</title>
+</section>
+<section href="ch07.html#id5461676" id="id5461676">
+<title>Defining and Naming Catalog Entries</title>
+</section>
+<section href="ch07.html#id5461737" id="id5461737">
+<title>Initializing the Node-Kit Class</title>
+</section>
+<section href="ch07.html#id5461803" id="id5461803">
+<title>Defining the Constructor</title>
+</section>
+<section href="ch07.html#id5462063" id="id5462063">
+<title>About Parts</title>
+<section href="ch07.html#id5462095" id="id5462095">
+<title>Anatomy of a Part</title>
+<figure href="ch07.html#id5463172" id="id5463172">
+<title>Figure 7-1. Hypothetical PublicSpherePrivateSphereKit</title>
+</figure>
+</section>
+<section href="ch07.html#id5463217" id="id5463217">
+<title>Case Study: The Parts of SoSeparatorKit</title>
+<figure href="ch07.html#id5463424" id="id5463424">
+<title>Figure 7-2. Catalog Diagram for SoSeparatorKit</title>
+</figure>
+<table href="ch07.html#id5463486" id="id5463486">
+<title>Table 7-1. Type Parameters of SoSeparatorKit Parts</title>
+</table>
+<table href="ch07.html#id5463810" id="id5463810">
+<title>Table 7-2. Catalog Layout Parameters of SoSeparatorKit Parts</title>
+</table>
+<table href="ch07.html#id5464192" id="id5464192">
+<title>Table 7-3. Behavior Parameters of SoSeparatorKit Parts</title>
+</table>
+</section>
+</section>
+<section href="ch07.html#id5464712" id="id5464712">
+<title>Defining a Node-Kit Part</title>
+<section href="ch07.html#id5464789" id="id5464789">
+<title>Adding a Catalog Entry</title>
+<figure href="ch07.html#id5464870" id="id5464870">
+<title>Figure 7-3. Right Sibling Names Before Adding the &#8220;middle&#8221; Part</title>
+</figure>
+<figure href="ch07.html#id5464890" id="id5464890">
+<title>Figure 7-4. Right Sibling Names After Adding the &#8220;middle&#8221; Part</title>
+</figure>
+</section>
+<section href="ch07.html#id5464956" id="id5464956">
+<title>Adding a List Entry</title>
+</section>
+<section href="ch07.html#id5465180" id="id5465180">
+<title>Adding an Entry of Abstract Type</title>
+</section>
+</section>
+<section href="ch07.html#id5465251" id="id5465251">
+<title>Changing a Defined Part</title>
+<section href="ch07.html#id5465361" id="id5465361">
+<title>Changing the Type of a Part</title>
+</section>
+<section href="ch07.html#id5465500" id="id5465500">
+<title>Adding a Type to a List Entry</title>
+</section>
+</section>
+<section href="ch07.html#id5465554" id="id5465554">
+<title>Writing Information About Parts</title>
+</section>
+<section href="ch07.html#id5465599" id="id5465599">
+<title>SoAppearanceKit</title>
+<figure href="ch07.html#id5465692" id="id5465692">
+<title>Figure 7-5. Catalog Diagram for SoAppearanceKit</title>
+</figure>
+<example href="ch07.html#id5465772" id="id5465772">
+<title>Example 7-1. SoAppearanceKit.h</title>
+</example>
+<example href="ch07.html#id5465832" id="id5465832">
+<title>Example 7-2. SoAppearanceKit.c++</title>
+</example>
+</section>
+<section href="ch07.html#id5465929" id="id5465929">
+<title>PyramidKit</title>
+<example href="ch07.html#id5466072" id="id5466072">
+<title>Example 7-3. PyramidKit.h</title>
+</example>
+<example href="ch07.html#id5466105" id="id5466105">
+<title>Example 7-4. PyramidKit.c++</title>
+</example>
+</section>
+<section href="ch07.html#id5466136" id="id5466136">
+<title>JumpingJackKit</title>
+<figure href="ch07.html#id5466224" id="id5466224">
+<title>Figure 7-6. Catalog Diagram for JumpingJackKit</title>
+</figure>
+<example href="ch07.html#id5466269" id="id5466269">
+<title>Example 7-5. JumpingJackKit.h</title>
+</example>
+<example href="ch07.html#id5466434" id="id5466434">
+<title>Example 7-6.  JumpingJackKit.c++</title>
+</example>
+<example href="ch07.html#id5466626" id="id5466626">
+<title>Example 7-7. JumpingJackTest.c++</title>
+</example>
+</section>
+</chapter>
+<chapter href="ch08.html" id="id5466668">
+<title>Chapter 8. Creating Draggers and Manipulators</title>
+<section href="ch08.html#id5466965" id="id5466965">
+<title>Creating a Simple Dragger</title>
+<section href="ch08.html#id5467057" id="id5467057">
+<title>Overview</title>
+<figure href="ch08.html#id5467174" id="id5467174">
+<title>Figure 8-1. Structure of SoDragger</title>
+</figure>
+</section>
+<section href="ch08.html#id5467744" id="id5467744">
+<title>Designing the Parts</title>
+<section href="ch08.html#id5467889" id="id5467889">
+<title>Creating the Default Geometry File</title>
+<example href="ch08.html#id5467936" id="id5467936">
+<title>Example 8-1. translateRadialDragger.iv</title>
+</example>
+<figure href="ch08.html#id5467975" id="id5467975">
+<title>Figure 8-2. Structure of TranslateRadialDragger</title>
+</figure>
+</section>
+<section href="ch08.html#id5468075" id="id5468075">
+<title>Creating the Compiled-in Default Geometry</title>
+</section>
+</section>
+<section href="ch08.html#id5468348" id="id5468348">
+<title>Initializing the Dragger Class</title>
+</section>
+<section href="ch08.html#id5468428" id="id5468428">
+<title>Constructor</title>
+<section href="ch08.html#id5468600" id="id5468600">
+<title>Defining New Dragger Catalog Entries</title>
+</section>
+<section href="ch08.html#id5468633" id="id5468633">
+<title>Putting Default Parts into the Global Dictionary</title>
+</section>
+<section href="ch08.html#id5468722" id="id5468722">
+<title>Creating the Field</title>
+</section>
+<section href="ch08.html#id5468745" id="id5468745">
+<title>Creating the Parts</title>
+</section>
+<section href="ch08.html#id5468858" id="id5468858">
+<title>Setting the Switches</title>
+</section>
+<section href="ch08.html#id5468909" id="id5468909">
+<title>Creating the Projector</title>
+</section>
+<section href="ch08.html#id5469027" id="id5469027">
+<title>Defining the Callback Functions</title>
+</section>
+<section href="ch08.html#id5469124" id="id5469124">
+<title>Adding a Value-Changed Callback</title>
+</section>
+<section href="ch08.html#id5469190" id="id5469190">
+<title>Adding a Field Sensor</title>
+</section>
+</section>
+<section href="ch08.html#id5469240" id="id5469240">
+<title>Destructor</title>
+<figure href="ch08.html#id5469278" id="id5469278">
+<title>Figure 8-3. Maintaining Consistency Between the Field and the Motion Matrix</title>
+</figure>
+</section>
+<section href="ch08.html#id5469300" id="id5469300">
+<title>Dragging Callback Functions</title>
+<section href="ch08.html#id5469393" id="id5469393">
+<title>Begin Dragging</title>
+</section>
+<section href="ch08.html#id5469721" id="id5469721">
+<title>Continue Dragging</title>
+</section>
+<section href="ch08.html#id5469848" id="id5469848">
+<title>Finish Dragging</title>
+</section>
+</section>
+<section href="ch08.html#id5469901" id="id5469901">
+<title>Value-Changed Callback</title>
+</section>
+<section href="ch08.html#id5469962" id="id5469962">
+<title>Field Sensor</title>
+</section>
+<section href="ch08.html#id5470050" id="id5470050">
+<title>The setUpConnections() Method</title>
+<example href="ch08.html#id5470183" id="id5470183">
+<title>Example 8-2. TranslateRadialDragger.h</title>
+</example>
+<example href="ch08.html#id5470370" id="id5470370">
+<title>Example 8-3. TranslateRadialDragger.c++</title>
+</example>
+</section>
+</section>
+<section href="ch08.html#id5470648" id="id5470648">
+<title>Creating a Compound Dragger</title>
+<section href="ch08.html#id5470840" id="id5470840">
+<title>SoAntiSquish Node</title>
+</section>
+<section href="ch08.html#id5471017" id="id5471017">
+<title>SoSurroundScale Node</title>
+</section>
+<section href="ch08.html#id5471262" id="id5471262">
+<title>Defining the Parts</title>
+<figure href="ch08.html#id5471493" id="id5471493">
+<title>Figure 8-4. Using an SoSurroundScale Node in a Transform Manipulator</title>
+</figure>
+<example href="ch08.html#id5471594" id="id5471594">
+<title>Example 8-4. rotTransDragger.iv</title>
+</example>
+<example href="ch08.html#id5471707" id="id5471707">
+<title>Example 8-5. RotTransDragger.h</title>
+</example>
+<figure href="ch08.html#id5471787" id="id5471787">
+<title>Figure 8-5. Structure of the RotTransDragger </title>
+</figure>
+</section>
+<section href="ch08.html#id5471891" id="id5471891">
+<title>Initializing the Compound Dragger</title>
+</section>
+<section href="ch08.html#id5471928" id="id5471928">
+<title>Constructor</title>
+<section href="ch08.html#id5472048" id="id5472048">
+<title>Steps a through e</title>
+</section>
+<section href="ch08.html#id5472254" id="id5472254">
+<title>Step f:  Creating the Parts</title>
+</section>
+<section href="ch08.html#id5472377" id="id5472377">
+<title>Steps g through i</title>
+</section>
+<section href="ch08.html#id5472388" id="id5472388">
+<title>Step j:  Value-Changed Callback Function</title>
+</section>
+<section href="ch08.html#id5472507" id="id5472507">
+<title>Step k:  Field Sensors</title>
+</section>
+<section href="ch08.html#id5472628" id="id5472628">
+<title>Step l:  Setting Up Connections</title>
+</section>
+</section>
+<section href="ch08.html#id5472908" id="id5472908">
+<title>Destructor</title>
+</section>
+<section href="ch08.html#id5472926" id="id5472926">
+<title>Callback Functions</title>
+<example href="ch08.html#id5473100" id="id5473100">
+<title>Example 8-6. RotTransDragger.c++</title>
+</example>
+</section>
+</section>
+<section href="ch08.html#id5473660" id="id5473660">
+<title>Creating a Manipulator</title>
+<section href="ch08.html#id5474017" id="id5474017">
+<title>Deriving a Class from SoTransformManip</title>
+<example href="ch08.html#id5474049" id="id5474049">
+<title>Example 8-7. RotTransManip.h</title>
+</example>
+<example href="ch08.html#id5474083" id="id5474083">
+<title>Example 8-8. RotTransManip.c++</title>
+</example>
+</section>
+<section href="ch08.html#id5474134" id="id5474134">
+<title>Overview</title>
+</section>
+<section href="ch08.html#id5474417" id="id5474417">
+<title>Implementing Actions for the Manipulator</title>
+</section>
+<section href="ch08.html#id5474642" id="id5474642">
+<title>Deriving a Class from SoCoordinate3</title>
+<example href="ch08.html#id5474776" id="id5474776">
+<title>Example 8-9. Coord3Manip.h</title>
+</example>
+<example href="ch08.html#id5474909" id="id5474909">
+<title>Example 8-10.   Coord3Manip.c++</title>
+</example>
+</section>
+</section>
+</chapter>
+<chapter href="ch09.html" id="id5475280">
+<title>Chapter 9. Creating a Selection Highlight Style</title>
+<section href="ch09.html#id5475339" id="id5475339">
+<title>Built-in Highlighting</title>
+</section>
+<section href="ch09.html#id5475427" id="id5475427">
+<title>Overview</title>
+</section>
+<section href="ch09.html#id5475668" id="id5475668">
+<title>The apply() Method</title>
+<figure href="ch09.html#id5475880" id="id5475880">
+<title>Figure 9-1. Highlight Path</title>
+</figure>
+</section>
+<section href="ch09.html#id5475965" id="id5475965">
+<title>Creating a Highlight in the Overlay Planes</title>
+<example href="ch09.html#id5476118" id="id5476118">
+<title>Example 9-1. OverlayHighlightRenderAction.h</title>
+</example>
+<example href="ch09.html#id5476177" id="id5476177">
+<title>Example 9-2. OverlayHL.c++</title>
+</example>
+<example href="ch09.html#id5476481" id="id5476481">
+<title>Example 9-3. Main Program Using OverlayHighlightRenderAction</title>
+</example>
+</section>
+<section href="ch09.html#id5476556" id="id5476556">
+<title>Rendering Only Selected Objects</title>
+<example href="ch09.html#id5476572" id="id5476572">
+<title>Example 9-4. ShowSelectionRA.h</title>
+</example>
+<example href="ch09.html#id5476617" id="id5476617">
+<title>Example 9-5. ShowSelectionRA.c++</title>
+</example>
+<example href="ch09.html#id5476756" id="id5476756">
+<title>Example 9-6. Main Program for ShowSelectionRenderAction</title>
+</example>
+</section>
+</chapter>
+<chapter href="ch10.html" id="id5476832">
+<title>Chapter 10. Creating a Component</title>
+<section href="ch10.html#id5476920" id="id5476920">
+<title>Creating a New Component</title>
+<section href="ch10.html#id5476949" id="id5476949">
+<title>Overview</title>
+</section>
+<section href="ch10.html#id5477220" id="id5477220">
+<title>Defining the Constructor</title>
+<section href="ch10.html#id5477294" id="id5477294">
+<title>Defining Public and Protected Constructors</title>
+</section>
+<section href="ch10.html#id5477778" id="id5477778">
+<title>The buildWidget() Method</title>
+</section>
+</section>
+<section href="ch10.html#id5477911" id="id5477911">
+<title>The show() and hide() Methods</title>
+</section>
+<section href="ch10.html#id5478006" id="id5478006">
+<title>Visibility-Changed Callback Function</title>
+</section>
+<section href="ch10.html#id5478102" id="id5478102">
+<title>Creating a Simple Component</title>
+<example href="ch10.html#id5478158" id="id5478158">
+<title>Example 10-1. SceneTumble.h</title>
+</example>
+<example href="ch10.html#id5478239" id="id5478239">
+<title>Example 10-2. SceneTumble.c++</title>
+</example>
+</section>
+</section>
+<section href="ch10.html#id5478450" id="id5478450">
+<title>Creating a New Viewer</title>
+<section href="ch10.html#id5478832" id="id5478832">
+<title>Overview</title>
+</section>
+<section href="ch10.html#id5479235" id="id5479235">
+<title>Defining the Constructor</title>
+</section>
+<section href="ch10.html#id5479323" id="id5479323">
+<title>Defining the Event-Processing Routines</title>
+</section>
+<section href="ch10.html#id5479643" id="id5479643">
+<title>Implementing the Seek Function</title>
+</section>
+<section href="ch10.html#id5480224" id="id5480224">
+<title>Using the Cursor for Feedback</title>
+<example href="ch10.html#id5361097" id="id5361097">
+<title>Example 10-3. SimpleViewer.h </title>
+</example>
+<example href="ch10.html#id5480655" id="id5480655">
+<title>Example 10-4. SimpleViewer.c++</title>
+</example>
+</section>
+<section href="ch10.html#id5480934" id="id5480934">
+<title>Using the SoXtFullViewer Trim Decoration</title>
+</section>
+<section href="ch10.html#id5481296" id="id5481296">
+<title>Adding Push Buttons</title>
+</section>
+<section href="ch10.html#id5481522" id="id5481522">
+<title>Changing the Preference Sheet</title>
+</section>
+<section href="ch10.html#id5481982" id="id5481982">
+<title>Changing the Pop-up Menu</title>
+</section>
+<section href="ch10.html#id5482152" id="id5482152">
+<title>Changing the Decoration Layout</title>
+<example href="ch10.html#id5482425" id="id5482425">
+<title>Example 10-5. Building the Viewer Decoration in SoXtFullViewer</title>
+</example>
+</section>
+</section>
+<section href="ch10.html#id5482546" id="id5482546">
+<title>Creating a Constrained Viewer</title>
+</section>
+</chapter>
+<chapter href="ch11.html" id="id5482975">
+<title>Chapter 11. Creating an Event and Device</title>
+<section href="ch11.html#id5483144" id="id5483144">
+<title>Creating an Event</title>
+<section href="ch11.html#id5483180" id="id5483180">
+<title>Overview</title>
+</section>
+<section href="ch11.html#id5483383" id="id5483383">
+<title>Translating Events</title>
+</section>
+<section href="ch11.html#id5483573" id="id5483573">
+<title>Creating a Dial Event</title>
+<example href="ch11.html#id5483848" id="id5483848">
+<title>Example 11-1. DialEvent.h</title>
+</example>
+<example href="ch11.html#id5483942" id="id5483942">
+<title>Example 11-2. DialEvent.c++</title>
+</example>
+</section>
+</section>
+<section href="ch11.html#id5483982" id="id5483982">
+<title>Dispatching Events</title>
+<section href="ch11.html#id5484076" id="id5484076">
+<title>Translating an Event</title>
+<figure href="ch11.html#id5484265" id="id5484265">
+<title>Figure 11-1. Sequence for Translating an Event</title>
+</figure>
+</section>
+<section href="ch11.html#id5484404" id="id5484404">
+<title>SoXt Main Loop</title>
+<example href="ch11.html#id5484438" id="id5484438">
+<title>Example 11-3. SoXtMainLoop</title>
+</example>
+</section>
+</section>
+<section href="ch11.html#id5484532" id="id5484532">
+<title>Creating a Device</title>
+<section href="ch11.html#id5484566" id="id5484566">
+<title>Overview</title>
+</section>
+<section href="ch11.html#id5484716" id="id5484716">
+<title>Constructor</title>
+</section>
+<section href="ch11.html#id5484834" id="id5484834">
+<title>Enable Method</title>
+</section>
+<section href="ch11.html#id5484944" id="id5484944">
+<title>Translate Event Method</title>
+<example href="ch11.html#id5480493" id="id5480493">
+<title>Example 11-4. DialNButton.h</title>
+</example>
+<example href="ch11.html#id5480547" id="id5480547">
+<title>Example 11-5. DialNButton.c++</title>
+</example>
+</section>
+</section>
+</chapter>
+<index href="ix01.html" id="ix">
+<title>Index</title>
+</index>
+</book>
+</toc>

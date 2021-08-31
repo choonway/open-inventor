@@ -1,0 +1,68 @@
+<html>
+<body>
+<p>SoLevelOfDetail
+<hr>
+<dl>
+<dt>NAME
+<dd>SoLevelOfDetail -- level-of-detail switching group node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sogroup.html">SoGroup</a> &gt; SoLevelOfDetail
+
+<dt>DESCRIPTION
+<dd>This group node is used to allow applications to switch between various representations of objects automatically. The children of this node typically represent the same object or objects at varying levels of detail, from highest detail to lowest. The size of the objects when projected into the viewport is used todetermine which version to use (i.e., which child to traverse).
+
+<p>The size is computed as the area of the screen rectangle enclosing the projection ofthe 3D bounding box that encloses all of the children. When rendering, this size is compared to the values in the screenArea field. If the size is greater than the firstvalue, child 0 is traversed. If it is smaller than the first, but greater than the second, child 1 is traversed, and so on. If there are fewer children than are required by thisrule, the last child is traversed. The screenArea field contains just 0 by default, so the first child is always traversed. The size calculation takes the current complexity into account. If the complexity is 0 or is of type BOUNDING_BOX, the last child is always traversed. If the complexity is less than .5, the computed size is scaled down appropriately to use (possibly) a lessdetailed representation. If the complexity is greater than .5, the size is scaled up. At complexity 1, the first child is always used.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFFloat screenArea
+<dd>Areas to use for comparison
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoLevelOfDetail</b>()
+<dd>Creates a level-of-detail node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoGroup</b>:
+<dd>addChild, insertChild, getChild, findChild, getNumChildren, removeChild,removeChild, removeAllChildren, replaceChild, replaceChild
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoRayPickAction, SoCallbackAction
+<dd>Only the child with the appropriate level of detail is traversed.
+
+<dt>SoGetBoundingBoxAction
+<dd>The box that encloses all children is computed. (This is the box that is needed to compute the projected size.) others All implemented as for SoGroup, except that SoLevelOfDetail saves/restores state (like SoSeparator) when applying any action.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>LevelOfDetail {
+<dd>screenArea 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoLevelOfDetail.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socomplexity.html">SoComplexity</a>, <a href="soswitch.html">SoSwitch</a>, <a href="soseparator.html">SoSeparator</a>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<html>
+<body>
+SoXtConstrainedViewer
+<hr>
+<dl>
+<dt>
+NAME
+<dd>SoXtConstrainedViewer -- base viewer class which adds camera constraints given a world up direction
+
+<dt>INHERITS FROM
+<dd><a href="soxtcomponent.html">SoXtComponent</a> &gt; <a href="soxtglwidget.html">SoXtGLWidget</a> &gt; <a href="soxtrenderarea.html">SoXtRenderArea</a> &gt; <a href="soxtviewer.html">SoXtViewer</a> &gt; <a href="soxtfullviewer.html">SoXtFullViewer</a> &gt; SoXtConstrainedViewer
+
+<dt>DESCRIPTION
+<dd>This is a base class for the SoXtWalkViewer and SoXtFlyViewer component viewers. This class adds methods and convenience routines available to subclasses toconstrain the camera given a world up direction. This prevents the camera from looking upside down. By default the +Y direction is used.
+
+<dt>METHODS
+<dl>
+<dt>void <b>setUpDirection</b>(const SbVec3f &newUpDirection)
+<dt>SbVec3f <b>getUpDirection</b>()
+<dd>Specifies the upward direction of the viewer. This up direction is used by the viewers to constrain the camera when tilting up/down, and also used whenrotating the camera right/left. The default is the +Y (0,1,0) direction.
+
+<dt><b>Methods from class SoXtFullViewer</b>:
+<dd>setDecoration, isDecoration, setPopupMenuEnabled, isPopupMenuEnabled,getAppPushButtonParent, addAppPushButton, insertAppPushButton, removeAppPushButton, findAppPushButton, lengthAppPushButton,getRenderAreaWidget
+
+<dt><b>Methods from class SoXtViewer</b>:
+<dd>setCamera, getCamera, setCameraType, getCameraType, viewAll,saveHomePosition, resetToHomePosition, setHeadlight, isHeadlight, getHeadlight, setDrawStyle, getDrawStyle, setBufferingType,getBufferingType, setViewing, isViewing, setAutoClipping, isAutoClipping, setStereoViewing, isStereoViewing, setStereoOffset, getStereoOffset,setDetailSeek, isDetailSeek, setSeekTime, getSeekTime, addStartCallback, addFinishCallback, re moveStartCallback, removeFinishCallback, copyView,pasteView
+
+<dt><b>Methods from class SoXtRenderArea</b>:
+<dd>setSceneGraph, getSceneGraph, setOverlaySceneGraph,getOverlaySceneGraph, registerDevice, unregisterDevice, setBackgroundColor, getBackgroundColor, setBackgroundIndex,getBackgroundIndex, setOverlayBackgroundIndex, getOverlayBackgroundIndex, setColorMap, setOverlayColorMap,setViewportRegion, getViewportRegion, setTransparencyType, getTransparencyType, setAntialiasing, getAntialiasing, setClearBeforeRender, isClearBeforeRender, setClearBe foreOverlayRender,isClearBeforeOverlayRender, setAutoRedraw, isAutoRedraw, setRedrawPriority, getRedrawPriority, getDefaultRedrawPriority, render,renderOverlay, scheduleRedraw, scheduleOverlayRedraw, redrawOnSelectionChange, redrawOverlayOnSelectionChange,setEventCallback, setGLRenderAction, getGLRenderAction, setOverlayGLRenderAction, getOverlayGLRenderAction, setSceneManager,getSceneManager, setOverlaySceneManager, getOverlaySceneManager
+
+<dt><b>Methods from class SoXtGLWidget</b>:
+<dd>setBorder, isBorder, setDoubleBuffer, isDoubleBuffer, getNormalWindow,getOverlayWindow, getNormalContext, getOverlayContext, getNormalWidget, getOverlayWidget, setNormalVisual, getNormalVisual,setOverlayVisual, getOverlayVisual
+
+<dt><b>Methods from class SoXtComponent</b>:
+<dd>show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle, getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/viewers/SoXtConstrainedViewer.h&gt; 
+
+<dt>SEE ALSO
+<dd><a href="soxtfullviewer.html">SoXtFullViewer</a>, <a href="soxtviewer.html">SoXtViewer</a>, <a href="soxtcomponent.html">SoXtComponent</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>, <a href="soxtwalkviewer.html">SoXtWalkViewer</a>, <a href="soxtflyviewer.html">SoXtFlyViewer</a>
+
+</body>
+</html>

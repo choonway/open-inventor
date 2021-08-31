@@ -1,0 +1,2 @@
+
+/* SoWinEnterScope.h (empty) */

@@ -1,0 +1,45 @@
+<html>
+<body>
+SSbbVVeecc22ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SbVec2f -- 2D vector class INHERITS FROMSbVec2f DESCRIPTION2D vector class used to store 2D vectors and points. This class is used throughout
+
+Inventor for arguments and return values. METHODS SbVec2f()
+
+Default constructor.
+
+SbVec2f(const float v[2])SbVec2f(float x, float y) Constructor given vector components. float dot(const SbVec2f &v) constReturns dot (inner) product of vector and another vector.
+
+SbBool equals(const SbVec2f v, float tolerance) constEquality comparison within given tolerance -- the square of the length of
+
+the maximum distance between the two vectors. const float * getValue() constvoid getValue(float &x, float &y) const
+
+Returns vector components. float length() constReturns geometric length of vector.
+
+void negate()Negates each component of vector in place. float normalize()Changes vector to be unit length. SbVec2f & setValue(const float v[2])SbVec2f & setValue(float x, float y)
+
+Sets the vector components.
+
+67<hr>
+
+SSbbVVeecc22ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+float & operator [ ](int i)const float & operator [ ](int i)
+
+Accesses indexed component of vector. SbVec2f & operator *=(float d)SbVec2f & operator /=(float d)
+
+Component-wise scalar multiplication and division operators. SbVec2f & operator +=(const SbVec2f &u)SbVec2f & operator -=(const SbVec2f &u)
+
+Component-wise vector addition and subtraction operators. SbVec2f operator -() constNondestructive unary negation -- returns a new vector.
+
+SbVec2f operator *(const SbVec2f &v, float d)SbVec2f operator *(float d, const SbVec2f &v) SbVec2f operator /(const SbVec2f &v, float d)Component-wise binary scalar multiplication and division operators.
+
+SbVec2f operator +(const SbVec2f &v1, const SbVec2f &v2)SbVec2f operator -(const SbVec2f &v1, const SbVec2f &v2)
+
+Component-wise binary vector addition and subtraction operators. int operator ==(const SbVec2f &v1, const SbVec2f &v2)int operator !=(const SbVec2f &v1, const SbVec2f &v2)
+
+Equality comparison operators.
+
+INCLUDE FILE#include &lt;Inventor/SbLinear.h&gt;
+
+SEE ALSOSbVec3f, SbVec4f, SbVec2s, SbRotation
+</body>
+</html>

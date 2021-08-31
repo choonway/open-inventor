@@ -1,0 +1,86 @@
+<html>
+<body>
+SoDB
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDB -- scene graph database class
+
+<dt>INHERITS FROM
+<dd>SoDB
+
+<dt>DESCRIPTION
+<dd>The SoDB class holds all scene graphs, each representing a 3D scene used by an application. A scene graph is a collection of SoNode objects which come in severalvarieties (see SoNode). Application programs must initialize the database by calling SoDB::init() before calling any other database routines and before constructing anynodes, paths, functions, or actions. Note that SoDB::init() is called by SoInteraction::init(), SoNodeKit::init(), and SoXt::init(), so if you are calling anyof these methods, you do not need to call SoDB::init() directly. All methods on this class are static. Typical program database initialization and scene reading is as follows:
+
+<dl>
+<dd>#include &lt;Inventor/SoDB.h&gt;
+<dd>#include &lt;Inventor/SoInput.h&gt;
+<dd>#include &lt;Inventor/nodes/SoSeparator.h&gt;
+<dd>SoSeparator *rootSep;SoInput in;
+<dd>SoDB::init();
+<dd>rootSep = SoDB::readAll(&amp;in);
+<dd> if (rootSep == NULL) printf(&quot;Error on read...\n&quot;);
+<dd>...
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>static void <b>init</b>()
+<dd>Initializes the database. This must be called before calling any other database routines, including the construction of any nodes, paths, engines, or actions.
+
+<dt>static const char * <b>getVersion</b>()
+<dd>Returns a character string identifying the version of the Inventor library in use.
+
+<dt>static SbBool <b>read</b>(SoInput *in, SoNode *&amp;rootNode)
+<dt>static SbBool <b>read</b>(SoInput *in, SoPath *&amp;path)
+<dd>Reads a graph from the file specified by the given SoInput, returning a pointer to the resulting root node in rootNode, or a pointer to the resulting path in path. The programmer is responsible for determining which routine to use, based on the contents of the input. These routines return FALSE if any error occurred during reading. If the passed SoInput was used to open a file and the name of the filecontains a directory, SoDB automatically adds the directory to the end of the current directory search path in the SoInput. This means that nestedfiles named in SoFile nodes may be found relative to that directory. The directory is removed from the search path when reading is complete.
+
+<dt>static SoSeparator * <b>readAll</b>(SoInput *in)
+<dd>Reads all graphs from the file specified by the given SoInput. If there is onlyone graph in the file and its root is an SoSeparator, a pointer to the root is returned. In all other cases, this creates an SoSeparator, adds the root nodesof all graphs read as children of it, and returns a pointer to it. This returns NULL on error. This processes directory paths in the same way as the otherreading routines.
+
+<dt>static SbBool <b>isValidHeader</b>(const char *testString)
+<dd>This returns TRUE if the given character string is a valid Inventor file header, either ASCII or binary. Some trivial tests that can be made on the stringbefore calling this are: it must begin with a &quot;#&quot;; it should be no more than 80 characters; it ends at a newline. Characters after the first newline (if any) inthe passed string are ignored. The valid ASCII header for Inventor 2.0 is: &quot;#Inventor V2.0 ascii&quot;, and the valid binary header is &quot;#Inventor V2.0binary&quot;. Corresponding version 1.0 headers are also considered valid.
+
+<dt>static SoField * <b>createGlobalField</b>(const SbName &amp;name, SoType type)
+<dd>The database maintains a namespace for global fields, making sure that there is at most one instance of a global field with any given name in thedatabase. This routine is used to create new global fields. If there is no global field with the given name, it will create a new global field with thegiven name and type. If there is already a global field with the given name and type, it will return it. If there is already a global field with the givenname but a different type, this returns NULL.
+
+<p>All global fields must be derived from SoField; typically the result of thisroutine is cast into the appropriate type;
+
+<dl>
+<dt>for example:
+<dd>SoSFLong *longField =(SoSFLong *) SoDB::createGlobalField(&quot;Frame&quot;, SoSFLong::getClassTypeId());
+</dl>
+
+<dt>static SoField * <b>getGlobalField</b>(const SbName &amp;name)
+<dd>Returns the global field with the given name, or NULL if there is none. The type of the field may be checked using the SoField::isOfType(),SoField::getClassTypeId(), and SoField::getTypeId() methods.
+
+<dt>static void <b>renameGlobalField</b>(const SbName &amp;oldName, const SbName&amp;newName)
+<dd>Renames the global field named oldName. Renaming a global field to anempty name (&quot;&quot;) deletes it. If there is already a global field with the new name, that field will be deleted (the getGlobalField method can be used toguard against this).
+
+<dt>static void <b>setRealTimeInterval</b>(const SbTime &amp;deltaT)
+<dd>The database automatically creates one global field when SoDB::init() is called. The realTime global field, which is of type SoSFTime, can beconnected to engines and nodes for real-time animation. The database will automatically update the realTime global field 60 times per second, using atimer sensor. Typically, there will be a node sensor on the root of the scene graph which schedules a redraw whenever the scene graph changes; byupdating the realTime global field periodically, scene graphs that are connected to realTime (and are therefore animating) will be redrawn. Therate at which the database updates realTime can be controlled with this routine. Passing in a zero time will disable automatic update of realTime.Note also that if there are no enabled connections from the realTime field to any other field, the sensor is automatically disabled.
+
+<dt>static const SbTime &amp;<b>getRealTimeInterval</b>()
+<dd>Returns how often the database is updating realTime.
+
+<dt>static void <b>setDelaySensorTimeout</b>(const SbTime &amp;t)
+<dd>This sets the timeout value for sensors that are delay queue sensors (one-shot sensors, data sensors). Delay queue sensors are triggered whenever there isidle time. If a long period of time elapses without any idle time (as when there are continuous events to process), these sensors may not be triggered.
+
+<p>Setting this timeout value ensures that if the specified length of time elapseswithout any idle time, the delay queue sensors will be processed anyway.
+
+<dt>static const SbTime &amp;<b>getDelaySensorTimeout</b>()
+<dd>Returns the current delay queue timeout value.
+
+<dt>static int <b>doSelect</b>(int nfds, fd_set *readfds, fd_set *writefds, fd_set*exceptfds, struct timeval *userTimeOut)
+<dd>In order to keep timer and idle sensors running as expected, it is necessary that an Inventor application not block waiting for input. If the Inventor application uses the Xt utility library, this can be handled automatically. However, if the application is using its own event loop, this function is provided as a wrapper around select(2) that will handle Inventor tasks if necessary instead of blocking.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoDB.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sobase.html">SoBase</a>, <a href="sonode.html">SoNode</a>, <a href="soengine.html">SoEngine</a>, <a href="sofield.html">SoField</a>, <a href="soinput.html">SoInput</a>, <a href="sofile.html">SoFile</a>, <a href="sopath.html">SoPath</a>, <a href="sooneshotsensor.html">SoOneShotSensor</a>, <a href="sodatasensor.html">SoDataSensor</a>, <a href="soxt.html">SoXt</a>
+</dl>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+Description
+===========
+This is a windows port of the original open-sourced OpenInventor version released
+by SGI. (see http://oss.sgi.com/projects/inventor )
+This port was done at end of August 2000.
+I recently (November 2000) imported some CVS changes from oss.sgi.com.
+
+OS: 
+    Windows family 95/98/Me/NT/2000 (tested!)
+    SGI IRIX (tested version: 6.5 [6.5.6f and 6.5.9f])
+    Linux (this modified version is untested, but should work) 
+
+Compiler: 
+    Windows: Microsoft Visual Studio C++ 6.0 (SP4 highly recommended!)
+    SGI Irix: MIPSpro Compilers: Version 7.3.1m (older versions should be ok)
+    Linux: gcc (untested)
+
+Additional Library (not included):
+    Qt (THE cross-platform C++ GUI framework) http://www.trolltech.com/
+    Windows: Educational and evaluation versions are for FREE!
+             There is also a windows version of the GUI binding library for Inventor
+             called SoWin. Unfortunately this lib was not in a state that I would call
+             'working'. Therefore I decided to use SoQt. You may want to try to use SoWin.
+             see http://www.coin3d.org/
+    Unix: just get the source, configure, compile and install it. don't forget
+          to set the environment variables (e.g. QTDIR and LD_LIBRARY_PATH)
+    
+Used libs and programs (included in the misc directory. only neccessary for WINDOWS!):
+make-3.79-3 (needed to compile the freetype library)
+freetype2-beta8 (to decode fonts)
+libFL (to wrap libFL calls from the original SGI implementation)
+ft2demos (just to test the freetype lib. not needed by inventor)
+jpeg-6b (to use jpeg files as textures)
+SoQt (to render inventor scene-graphs and handle events, sensors ....)
+SGI OpenSource Inventor (thanks SGI for releasing it as open-source!)
+
+Installation instructions
+=========================
+Windows
+=======
+Get the Qt Library from http://www.trolltech.com/ (it's possible to get a free version!)
+Unzip this package. (use an unzipper. e.g. winzip: http://www.winzip.com/ )
+Open a command prompt and cd into the created inventor directory.
+Call vcvars32.bat and include the path to the qt dir into the following
+environment variables: lib, include and path. QTDIR is automatically set
+by qt setup. If not, set it to the base directory of qt.
+This port uses the freetype library and a libFL wrapper to decode fonts.
+Copy a font file of your choice to a file named Utopia-Regular in your windows system
+directory (the example below assumes c:\winnt\fonts. You may want to set 
+the environment variable FL_FONT_PATH to a different directory).
+Finally call build_all.bat.
+
+An example session (assuming that qtlib is installed in c:\program files\qtlib):
+C:\inventor>vcvars32
+Setting environment for using Microsoft Visual C++ tools.
+C:\inventor>set include=%include%;c:\program files\qtlib\include
+C:\inventor>set lib=%lib%;c:\program files\qtlib\lib
+C:\inventor>set path=%path%;c:\program files\qtlib\bin
+C:\inventor>copy c:\winnt\fonts\times.ttf c:\winnt\fonts\Utopia-Regular
+C:\inventor>build_all
+
+If compiling fails you probably forgot to call vcvars32.bat or to set the
+environment variables!
+
+IRIX
+====
+Get the Qt Library from http://www.trolltech.com/ (It's free for Unix/X11)
+and install it. Set the required environment variables.
+Unzip this package. (use an unzipper. e.g. info-zip. http://freeware.sgi.com/ )
+cd into the inventor directory.
+Set the OIVHOME and IVROOT variables.
+Both default to: unzip_directory/inventor/install
+Be sure that QTDIR is set.
+set LD_LIBRARY_PATH and LD_LIBRARYN32_PATH
+
+example (assuming /usr/local was your unzip directory):
+OIVHOME=/usr/local/inventor/install
+IVROOT=$OIVHOME
+export OIVHOME IVROOT
+LD_LIBRARY_PATH=$OIVHOME/lib:$QTDIR/lib:$LD_LIBRARY_PATH
+LD_LIBRARYN32_PATH=$OIVHOME/lib:$QTDIR/lib:$LD_LIBRARYN32_PATH
+export LD_LIBRARY_PATH LD_LIBRARYN32_PATH
+
+Execute ./build_all
+SoQt is preconfigured for standard IRIX and Qt installations.
+If compiling of SoQt fails execute the following commands:
+cd inventor/build/SoQt
+gmake distclean
+CC=cc CXX=CC ./configure --without-coin --with-inventor=yes --prefix=$OIVHOME/install
+--disable-debug --with-qt=$QTDIR
+gmake
+
+If you don't have gmake you can grab a pre-compiled version from http://freeware.sgi.com/
+
+
+Usage:
+======
+Windows: I have included a sample file in SoGuiExamples/components.
+These are samples from SoQt and are useful to test things. You may have to modify the
+Visual Studio project file settings to reflect your directory structure.
+Irix: Be sure to set the environment variables and that this compiled version
+of OpenInventor and SoQt is used.
+Windows+Irix: I recommend that you use the files in inventor/install/lib and
+              inventor/install/include to compile applications.
+The source for the tools of OpenInventor has been included but not project files or modified
+versions of makefiles. It's not too complicated to setup your own project files and compile
+the tools and examples.
+ 
+CREDITS:
+
+Port and many fixes to SoQt: 
+============================
+Gerd Hesina
+Institute of Computer Graphics
+Vienna University of Technology, Austria
+e-mail: hesina@cg.tuwien.ac.at
+
+SoQt:
+Systems in Motion: http://www.coin3d.org/
+You can also get SoWin from there.
+
+libFL wrapper:
+Ang Bodhi bodhi@pacific.net.sg
+lib is located at: http://www.geocities.com/angbodhi/download/libFL-src2.tgz
+
+
+freetype2, jpeg-6b and make: see the specific readme files
+
+Have fun,
+Gerd, the inventor nerd
+
+P.s:
+If you find some 'strange' looking modifications in the code:
+Ignore them. These are maybe tweaks to get maximum performance for DIV.
+Huh, whats that?
+DIV is short for Distributed OpenInventor.
+see http://www.cg.tuwien.ac.at/research/vr/div/
+or http://www.cg.tuwien.ac.at/research/vr/studierstube/multidim/
+I will make an opensource version available in the near future.
+Please don't ask me for an old version.

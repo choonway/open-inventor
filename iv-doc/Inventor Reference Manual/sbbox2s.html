@@ -1,0 +1,67 @@
+<html>
+<body>
+<p>SbBox2s
+<hr>
+<dl>
+<dt>NAME
+<dd>SbBox2s -- 2D box class
+
+<dt>INHERITS FROM
+<dd>SbBox2s
+
+<dt>DESCRIPTION
+<dd>2D box which has planes parallel to the major axes and is specified by two points(specified with short integers) on a diagonal. This class is part of the standardInventor datatype classes and is used as input and output to geometry operations.
+
+<dt>METHODS
+
+<dl>
+<dt><b>SbBox2s</b>()
+<dt><b>SbBox2s</b>(short xmin, short ymin, short xmax, short ymax)
+<dt><b>SbBox2s</b>(const SbVec2s &_min, const SbVec2s &_max)
+<dt>void ~<b>SbBox2s</b>()
+<dd>Constructors and destructor for a 2D integer box. xmin, ymin, xmax, and ymax are the bounds of the box. min and max are the corners of the diagonalthat define the box.
+
+<dt>const SbVec2s & <b>getMin</b>() const
+<dt>const SbVec2s & <b>getMax</b>() const
+<dd>Returns the minimum and maximum points of the box.
+
+<dt>void <b>extendBy</b>(const SbVec2s &point)void extendBy(const SbBox2s &box)
+<dd>Extends this box (if necessary) to contain the specified point or other box.
+<dt>SbBool <b>intersect</b>(const SbVec2s &point) const
+<dt>SbBool <b>intersect</b>(const SbBox2s &box) const
+<dd>Returns TRUE if the specified point or box intersects this box.
+
+<dt>void <b>setBounds</b>(short xmin, short ymin, short xmax, short ymax)
+<dt>void <b>setBounds</b>(const SbVec2s &_min, const SbVec2s &_max)
+<dd>Sets the corners of the box.
+
+<dt>void <b>getBounds</b>(short &xmin, short &ymin, short &xmax, short&ymax) const
+<dt>void <b>getBounds</b>(SbVec2s &_min, SbVec2s &_max) const
+<dd>Gets the corners of the box.
+
+<dt>void <b>getOrigin</b>(short &originX, short &originY) const
+<dd>Returns origin (minimum point) of box.
+
+<dt>void <b>getSize</b>(short &sizeX, short &sizeY) const
+<dd>Returns box size.
+
+<dt>float <b>getAspectRatio</b>() const
+<dd>Returns aspect ratio (ratio of width to height) of box.
+
+<dt>void <b>makeEmpty</b>()
+<dd>Makes an empty box.
+
+<dt>int operator <b>==</b>(const SbBox2s &b1, const SbBox2s &b2)
+<dt>int operator <b>!=</b>(const SbBox2s &b1, const SbBox2s &b2)
+<dd>Equality comparisons.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbBox.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbbox3f.html">SbBox3f</a>, <a href="sbxfbox3f.html">SbXfBox3f</a>, <a href="sbbox2f.html">SbBox2f</a>, <a href="sbvec3f.html">SbVec3f</a>, <a href="sbvec2f.html">SbVec2f</a>, <a href="sbvec2s.html">SbVec2s</a>, <a href="sbmatrix.html">SbMatrix</a>
+
+</dl>
+</body>
+</html>

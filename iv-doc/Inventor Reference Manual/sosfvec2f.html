@@ -1,0 +1,25 @@
+<html>
+<body>
+SSooSSFFVVeecc22ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSFVec2f -- Field containing a two-dimensional vector INHERITS FROMSoField &gt; SoSField &gt; SoSFVec2f DESCRIPTIONField containing a two-dimensional vector.
+
+SoSFVec2fs are written to file as a pair of floating point values separated bywhitespace. METHODSvoid setValue(float x, float y)
+
+void setValue(const float xy[2])Sets the field to the given value.
+
+static SoType getClassTypeId()virtual void getTypeId() const
+
+Returns the type for this class or a particular object of this class. const SbVec2f & getValue() constReturns this field's value.
+
+const SbVec2f & operator =(const SbVec2f & newValue)void setValue(const SbVec2f & newValue)
+
+Sets this field to newValue. int operator ==(const SoSFVec2f &f) constint operator !=(const SoSFVec2f &f) const
+
+Returns TRUE if f is of the same type and has the same value as this field. Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer INCLUDE FILE#include &lt;Inventor/fields/SoSFVec2f.h&gt;
+
+SEE ALSOSoField, SoSField, SoMFVec2f
+</body>
+</html>

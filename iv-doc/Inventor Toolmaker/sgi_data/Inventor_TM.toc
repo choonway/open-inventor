@@ -1,0 +1,307 @@
+# defaults |
+0|The Inventor Toolmaker|sgi_html/index.html
+1|Front Matter|sgi_html/front.html
+1|About This Book|sgi_html/pr01.html
+2|What This Book Contains|sgi_html/pr01.html#id5364596
+2|What You Should Know Before Reading This Book|sgi_html/pr01.html#id5362629
+2|Conventions Used in This Book|sgi_html/pr01.html#id5362671
+2|Key to Scene Graph Diagrams|sgi_html/pr01.html#id5362731
+2|Suggestions for Further Reading|sgi_html/pr01.html#id5362762
+1|Acknowledgments|sgi_html/pr02.html
+1|Chapter 1. Key Concepts|sgi_html/ch01.html
+2|Adding Nodes and Actions to Inventor|sgi_html/ch01.html#id5363079
+2|Actions, State, and Elements|sgi_html/ch01.html#id5363582
+3|Enabling Elements|sgi_html/ch01.html#id5363651
+3|Setting Elements in the State|sgi_html/ch01.html#id5363874
+3|Getting Elements in the State|sgi_html/ch01.html#id5364076
+3|State Elements|sgi_html/ch01.html#id5435529
+2|Elements and Actions|sgi_html/ch01.html#id5436945
+2|Caching|sgi_html/ch01.html#id5443375
+2|Runtime Types|sgi_html/ch01.html#id5443544
+2|Extender Macros|sgi_html/ch01.html#id5443769
+1|Chapter 2. Creating a Node|sgi_html/ch02.html
+2|Overview|sgi_html/ch02.html#id5444012
+2|Initializing the Node Class|sgi_html/ch02.html#id5444406
+3|Enabling Elements in the State|sgi_html/ch02.html#id5444436
+3|Inheritance within the Element Stack|sgi_html/ch02.html#id5444556
+2|Defining the Constructor|sgi_html/ch02.html#id5444645
+3|Setting Up the Node's Fields|sgi_html/ch02.html#id5444747
+3|Defining Enumerated Values for a Field|sgi_html/ch02.html#id5444796
+2|Implementing Actions|sgi_html/ch02.html#id5444860
+3|The doAction() Method|sgi_html/ch02.html#id5444976
+3|Changing and Examining State Elements|sgi_html/ch02.html#id5445219
+3|Element Bundles|sgi_html/ch02.html#id5445436
+2|Creating a Property Node|sgi_html/ch02.html#id5445615
+2|Creating a Shape Node|sgi_html/ch02.html#id5362441
+3|Generating Primitives|sgi_html/ch02.html#id5446273
+4|SoPrimitiveVertex|sgi_html/ch02.html#id5446411
+4|Creating Details|sgi_html/ch02.html#id5446701
+3|Rendering|sgi_html/ch02.html#id5446828
+3|Picking|sgi_html/ch02.html#id5446911
+3|Getting a Bounding Box|sgi_html/ch02.html#id5447193
+3|Pyramid Node|sgi_html/ch02.html#id5448593
+2|Creating a Group Node|sgi_html/ch02.html#id5449283
+3|Child List|sgi_html/ch02.html#id5449443
+3|Hidden Children|sgi_html/ch02.html#id5449575
+3|Using the Path Code|sgi_html/ch02.html#id5449732
+3|What Happens If an Action Is Terminated?|sgi_html/ch02.html#id5450108
+3|Alternate Node|sgi_html/ch02.html#id5450195
+2|Using New Node Classes|sgi_html/ch02.html#id5450503
+2|Creating an Abstract Node Class|sgi_html/ch02.html#id5450839
+2|The copy() Method|sgi_html/ch02.html#id5450948
+2|The affectsState() Method|sgi_html/ch02.html#id5451071
+2|Uncacheable Nodes|sgi_html/ch02.html#id5451181
+2|Creating an Alternate Representation|sgi_html/ch02.html#id5451318
+2|Generating Default Normals|sgi_html/ch02.html#id5451415
+1|Chapter 3. Creating a Field|sgi_html/ch03.html
+2|Overview|sgi_html/ch03.html#id5451627
+2|Initializing the Field Class|sgi_html/ch03.html#id5451901
+2|Creating a Single-Value Field|sgi_html/ch03.html#id5451938
+2|Creating a Multiple-Value Field|sgi_html/ch03.html#id5452368
+1|Chapter 4. Creating an Action|sgi_html/ch04.html
+2|Overview|sgi_html/ch04.html#id5452812
+2|Initializing the Action Class|sgi_html/ch04.html#id5453114
+3|Enabling Elements in the State|sgi_html/ch04.html#id5453203
+3|Registering Static Methods|sgi_html/ch04.html#id5453261
+2|Defining the Constructor|sgi_html/ch04.html#id5453325
+2|Defining the Destructor|sgi_html/ch04.html#id5453379
+2|Traversal Behavior|sgi_html/ch04.html#id5453412
+2|Implementing Static Methods|sgi_html/ch04.html#id5453584
+2|Creating a New Action|sgi_html/ch04.html#id5453854
+2|Using New Action Classes|sgi_html/ch04.html#id5454371
+1|Chapter 5. Creating an Element|sgi_html/ch05.html
+2|Overview|sgi_html/ch05.html#id5454523
+2|Deriving a Class from an Existing Element|sgi_html/ch05.html#id5454877
+2|The initClass() Method|sgi_html/ch05.html#id5455214
+2|Destructor|sgi_html/ch05.html#id5455287
+2|The init() Method|sgi_html/ch05.html#id5455422
+2|The set() and get() Methods|sgi_html/ch05.html#id5455459
+2|The print() Method|sgi_html/ch05.html#id5455498
+2|Additional Methods|sgi_html/ch05.html#id5455586
+2|Special Considerations for Caching|sgi_html/ch05.html#id5455993
+3|SoFloatElement and SoLongElement|sgi_html/ch05.html#id5456176
+3|SoReplacedElement|sgi_html/ch05.html#id5456229
+3|SoAccumulatedElement|sgi_html/ch05.html#id5456362
+2|Special Behavior for Derived Elements|sgi_html/ch05.html#id5456496
+2|Pushing and Popping Elements|sgi_html/ch05.html#id5456945
+2|Creating a New Element|sgi_html/ch05.html#id5457200
+1|Chapter 6. Creating an Engine|sgi_html/ch06.html
+2|Overview|sgi_html/ch06.html#id5457566
+2|Defining Inputs and Outputs|sgi_html/ch06.html#id5457886
+2|Initializing the Engine Class|sgi_html/ch06.html#id5457930
+2|Defining the Constructor|sgi_html/ch06.html#id5458046
+2|Implementing an evaluate() Method|sgi_html/ch06.html#id5458104
+2|Creating a Simple Engine|sgi_html/ch06.html#id5458181
+2|Dealing with Multiple-Value Fields|sgi_html/ch06.html#id5458393
+3|Creating an Engine with Multiple Inputs|sgi_html/ch06.html#id5458415
+3|Creating an Engine with Multiple Outputs|sgi_html/ch06.html#id5458792
+2|Notification and Evaluation|sgi_html/ch06.html#id5458963
+3|What Inventor Does behind the Scenes|sgi_html/ch06.html#id5459367
+3|Blocking Notification|sgi_html/ch06.html#id5459674
+3|Creating a Fan-in Engine|sgi_html/ch06.html#id5459972
+3|Creating a Second-Ticker Engine|sgi_html/ch06.html#id5460193
+2|Creating a New Field Converter|sgi_html/ch06.html#id5460500
+3|Overview|sgi_html/ch06.html#id5460585
+3|Initializing the Field Converter Class|sgi_html/ch06.html#id5460676
+3|The evaluate() Method|sgi_html/ch06.html#id5460717
+3|The getInput() and getOutput() Methods|sgi_html/ch06.html#id5460795
+3|Sample Field Converter|sgi_html/ch06.html#id5460869
+1|Chapter 7. Creating a Node Kit|sgi_html/ch07.html
+2|Overview|sgi_html/ch07.html#id5461181
+2|Defining and Naming Catalog Entries|sgi_html/ch07.html#id5461676
+2|Initializing the Node-Kit Class|sgi_html/ch07.html#id5461737
+2|Defining the Constructor|sgi_html/ch07.html#id5461803
+2|About Parts|sgi_html/ch07.html#id5462063
+3|Anatomy of a Part|sgi_html/ch07.html#id5462095
+3|Case Study: The Parts of SoSeparatorKit|sgi_html/ch07.html#id5463217
+2|Defining a Node-Kit Part|sgi_html/ch07.html#id5464712
+3|Adding a Catalog Entry|sgi_html/ch07.html#id5464789
+3|Adding a List Entry|sgi_html/ch07.html#id5464956
+3|Adding an Entry of Abstract Type|sgi_html/ch07.html#id5465180
+2|Changing a Defined Part|sgi_html/ch07.html#id5465251
+3|Changing the Type of a Part|sgi_html/ch07.html#id5465361
+3|Adding a Type to a List Entry|sgi_html/ch07.html#id5465500
+2|Writing Information About Parts|sgi_html/ch07.html#id5465554
+2|SoAppearanceKit|sgi_html/ch07.html#id5465599
+2|PyramidKit|sgi_html/ch07.html#id5465929
+2|JumpingJackKit|sgi_html/ch07.html#id5466136
+1|Chapter 8. Creating Draggers and Manipulators|sgi_html/ch08.html
+2|Creating a Simple Dragger|sgi_html/ch08.html#id5466965
+3|Overview|sgi_html/ch08.html#id5467057
+3|Designing the Parts|sgi_html/ch08.html#id5467744
+4|Creating the Default Geometry File|sgi_html/ch08.html#id5467889
+4|Creating the Compiled-in Default Geometry|sgi_html/ch08.html#id5468075
+3|Initializing the Dragger Class|sgi_html/ch08.html#id5468348
+3|Constructor|sgi_html/ch08.html#id5468428
+4|Defining New Dragger Catalog Entries|sgi_html/ch08.html#id5468600
+4|Putting Default Parts into the Global Dictionary|sgi_html/ch08.html#id5468633
+4|Creating the Field|sgi_html/ch08.html#id5468722
+4|Creating the Parts|sgi_html/ch08.html#id5468745
+4|Setting the Switches|sgi_html/ch08.html#id5468858
+4|Creating the Projector|sgi_html/ch08.html#id5468909
+4|Defining the Callback Functions|sgi_html/ch08.html#id5469027
+4|Adding a Value-Changed Callback|sgi_html/ch08.html#id5469124
+4|Adding a Field Sensor|sgi_html/ch08.html#id5469190
+3|Destructor|sgi_html/ch08.html#id5469240
+3|Dragging Callback Functions|sgi_html/ch08.html#id5469300
+4|Begin Dragging|sgi_html/ch08.html#id5469393
+4|Continue Dragging|sgi_html/ch08.html#id5469721
+4|Finish Dragging|sgi_html/ch08.html#id5469848
+3|Value-Changed Callback|sgi_html/ch08.html#id5469901
+3|Field Sensor|sgi_html/ch08.html#id5469962
+3|The setUpConnections() Method|sgi_html/ch08.html#id5470050
+2|Creating a Compound Dragger|sgi_html/ch08.html#id5470648
+3|SoAntiSquish Node|sgi_html/ch08.html#id5470840
+3|SoSurroundScale Node|sgi_html/ch08.html#id5471017
+3|Defining the Parts|sgi_html/ch08.html#id5471262
+3|Initializing the Compound Dragger|sgi_html/ch08.html#id5471891
+3|Constructor|sgi_html/ch08.html#id5471928
+4|Steps a through e|sgi_html/ch08.html#id5472048
+4|Step f: Creating the Parts|sgi_html/ch08.html#id5472254
+4|Steps g through i|sgi_html/ch08.html#id5472377
+4|Step j: Value-Changed Callback Function|sgi_html/ch08.html#id5472388
+4|Step k: Field Sensors|sgi_html/ch08.html#id5472507
+4|Step l: Setting Up Connections|sgi_html/ch08.html#id5472628
+3|Destructor|sgi_html/ch08.html#id5472908
+3|Callback Functions|sgi_html/ch08.html#id5472926
+2|Creating a Manipulator|sgi_html/ch08.html#id5473660
+3|Deriving a Class from SoTransformManip|sgi_html/ch08.html#id5474017
+3|Overview|sgi_html/ch08.html#id5474134
+3|Implementing Actions for the Manipulator|sgi_html/ch08.html#id5474417
+3|Deriving a Class from SoCoordinate3|sgi_html/ch08.html#id5474642
+1|Chapter 9. Creating a Selection Highlight Style|sgi_html/ch09.html
+2|Built-in Highlighting|sgi_html/ch09.html#id5475339
+2|Overview|sgi_html/ch09.html#id5475427
+2|The apply() Method|sgi_html/ch09.html#id5475668
+2|Creating a Highlight in the Overlay Planes|sgi_html/ch09.html#id5475965
+2|Rendering Only Selected Objects|sgi_html/ch09.html#id5476556
+1|Chapter 10. Creating a Component|sgi_html/ch10.html
+2|Creating a New Component|sgi_html/ch10.html#id5476920
+3|Overview|sgi_html/ch10.html#id5476949
+3|Defining the Constructor|sgi_html/ch10.html#id5477220
+4|Defining Public and Protected Constructors|sgi_html/ch10.html#id5477294
+4|The buildWidget() Method|sgi_html/ch10.html#id5477778
+3|The show() and hide() Methods|sgi_html/ch10.html#id5477911
+3|Visibility-Changed Callback Function|sgi_html/ch10.html#id5478006
+3|Creating a Simple Component|sgi_html/ch10.html#id5478102
+2|Creating a New Viewer|sgi_html/ch10.html#id5478450
+3|Overview|sgi_html/ch10.html#id5478832
+3|Defining the Constructor|sgi_html/ch10.html#id5479235
+3|Defining the Event-Processing Routines|sgi_html/ch10.html#id5479323
+3|Implementing the Seek Function|sgi_html/ch10.html#id5479643
+3|Using the Cursor for Feedback|sgi_html/ch10.html#id5480224
+3|Using the SoXtFullViewer Trim Decoration|sgi_html/ch10.html#id5480934
+3|Adding Push Buttons|sgi_html/ch10.html#id5481296
+3|Changing the Preference Sheet|sgi_html/ch10.html#id5481522
+3|Changing the Pop-up Menu|sgi_html/ch10.html#id5481982
+3|Changing the Decoration Layout|sgi_html/ch10.html#id5482152
+2|Creating a Constrained Viewer|sgi_html/ch10.html#id5482546
+1|Chapter 11. Creating an Event and Device|sgi_html/ch11.html
+2|Creating an Event|sgi_html/ch11.html#id5483144
+3|Overview|sgi_html/ch11.html#id5483180
+3|Translating Events|sgi_html/ch11.html#id5483383
+3|Creating a Dial Event|sgi_html/ch11.html#id5483573
+2|Dispatching Events|sgi_html/ch11.html#id5483982
+3|Translating an Event|sgi_html/ch11.html#id5484076
+3|SoXt Main Loop|sgi_html/ch11.html#id5484404
+2|Creating a Device|sgi_html/ch11.html#id5484532
+3|Overview|sgi_html/ch11.html#id5484566
+3|Constructor|sgi_html/ch11.html#id5484716
+3|Enable Method|sgi_html/ch11.html#id5484834
+3|Translate Event Method|sgi_html/ch11.html#id5484944
+1|Index|sgi_html/ix01.html
+# figures |
+3|Figure 1. Scene Graph Symbols|sgi_html/pr01.html#id5362742
+3|Figure 1-1. Summary of SoEXTENDER Classes|sgi_html/ch01.html#id5363320
+3|Figure 1-2. Method List|sgi_html/ch01.html#id5363396
+4|Figure 1-3. Nodes, Actions, Elements, and State|sgi_html/ch01.html#id5364058
+4|Figure 2-1. Using the Path Code for Groups|sgi_html/ch02.html#id5449853
+3|Figure 5-1. Element Class Tree (Part 1 of 2)|sgi_html/ch05.html#id5455070
+3|Figure 5-2. Element Class Tree (Part 2 of 2)|sgi_html/ch05.html#id5455089
+4|Figure 6-1. Replicating Values in Fields with Fewer Values|sgi_html/ch06.html#id5458605
+3|Figure 6-2. A Simple Engine Network|sgi_html/ch06.html#id5459184
+4|Figure 7-1. Hypothetical PublicSpherePrivateSphereKit|sgi_html/ch07.html#id5463172
+4|Figure 7-2. Catalog Diagram for SoSeparatorKit|sgi_html/ch07.html#id5463424
+4|Figure 7-3. Right Sibling Names Before Adding the &#8220;middle&#8221; Part|sgi_html/ch07.html#id5464870
+4|Figure 7-4. Right Sibling Names After Adding the &#8220;middle&#8221; Part|sgi_html/ch07.html#id5464890
+3|Figure 7-5. Catalog Diagram for SoAppearanceKit|sgi_html/ch07.html#id5465692
+3|Figure 7-6. Catalog Diagram for JumpingJackKit|sgi_html/ch07.html#id5466224
+4|Figure 8-1. Structure of SoDragger|sgi_html/ch08.html#id5467174
+5|Figure 8-2. Structure of TranslateRadialDragger|sgi_html/ch08.html#id5467975
+4|Figure 8-3. Maintaining Consistency Between the Field and the Motion Matrix|sgi_html/ch08.html#id5469278
+4|Figure 8-4. Using an SoSurroundScale Node in a Transform Manipulator|sgi_html/ch08.html#id5471493
+4|Figure 8-5. Structure of the RotTransDragger|sgi_html/ch08.html#id5471787
+3|Figure 9-1. Highlight Path|sgi_html/ch09.html#id5475880
+4|Figure 11-1. Sequence for Translating an Event|sgi_html/ch11.html#id5484265
+# tables |
+3|Table 1-1. Elements Enabled for Each Action|sgi_html/ch01.html#id5436965
+4|Table 6-1. Sequence for Notification and Evaluation|sgi_html/ch06.html#id5459540
+4|Table 7-1. Type Parameters of SoSeparatorKit Parts|sgi_html/ch07.html#id5463486
+4|Table 7-2. Catalog Layout Parameters of SoSeparatorKit Parts|sgi_html/ch07.html#id5463810
+4|Table 7-3. Behavior Parameters of SoSeparatorKit Parts|sgi_html/ch07.html#id5464192
+# examples |
+3|Example 2-1. Glow.h|sgi_html/ch02.html#id5445745
+3|Example 2-2. Glow.c++|sgi_html/ch02.html#id5362393
+4|Example 2-3. Pyramid.h|sgi_html/ch02.html#id5448752
+4|Example 2-4. Pyramid.c++|sgi_html/ch02.html#id5448855
+4|Example 2-5. Alternate.h|sgi_html/ch02.html#id5450213
+4|Example 2-6. Alternate.c++|sgi_html/ch02.html#id5450282
+3|Example 2-7. NewNodes.c++|sgi_html/ch02.html#id5450732
+3|Example 2-8. newNodes.iv|sgi_html/ch02.html#id5450774
+3|Example 3-1. SFDouble.h|sgi_html/ch03.html#id5452062
+3|Example 3-2. SFDouble.c++|sgi_html/ch03.html#id5452293
+3|Example 3-3. MFDouble.h|sgi_html/ch03.html#id5452484
+3|Example 3-4. MFDouble.c++|sgi_html/ch03.html#id5452690
+3|Example 4-1. GetVolumeAction.h|sgi_html/ch04.html#id5453966
+3|Example 4-2. GetVolumeAction.c++|sgi_html/ch04.html#id5454075
+3|Example 4-3. PrintVolume.c++|sgi_html/ch04.html#id5454402
+3|Example 5-1. TemperatureElement.h|sgi_html/ch05.html#id5457296
+3|Example 5-2. TemperatureElement.c++|sgi_html/ch05.html#id5457362
+3|Example 6-1. MultFloatVec3f.h|sgi_html/ch06.html#id5458251
+3|Example 6-2. MultFloatVec3f.c++|sgi_html/ch06.html#id5458303
+4|Example 6-3. SoComposeVec2f.h|sgi_html/ch06.html#id5458632
+4|Example 6-4. SoComposeVec2f.c++|sgi_html/ch06.html#id5458700
+4|Example 6-5. SoDecomposeVec2f.h|sgi_html/ch06.html#id5458844
+4|Example 6-6. SoDecomposeVec2f.c++|sgi_html/ch06.html#id5458890
+4|Example 6-7. FanIn.h|sgi_html/ch06.html#id5460042
+4|Example 6-8. FanIn.c++|sgi_html/ch06.html#id5460118
+4|Example 6-9. Ticker.h|sgi_html/ch06.html#id5460319
+4|Example 6-10. Ticker.c++|sgi_html/ch06.html#id5460371
+4|Example 6-11. ConvertSFShortToSFFloat.h|sgi_html/ch06.html#id5460906
+4|Example 6-12. ConvertSFShortToSFFloat.c++|sgi_html/ch06.html#id5460990
+3|Example 7-1. SoAppearanceKit.h|sgi_html/ch07.html#id5465772
+3|Example 7-2. SoAppearanceKit.c++|sgi_html/ch07.html#id5465832
+3|Example 7-3. PyramidKit.h|sgi_html/ch07.html#id5466072
+3|Example 7-4. PyramidKit.c++|sgi_html/ch07.html#id5466105
+3|Example 7-5. JumpingJackKit.h|sgi_html/ch07.html#id5466269
+3|Example 7-6. JumpingJackKit.c++|sgi_html/ch07.html#id5466434
+3|Example 7-7. JumpingJackTest.c++|sgi_html/ch07.html#id5466626
+5|Example 8-1. translateRadialDragger.iv|sgi_html/ch08.html#id5467936
+4|Example 8-2. TranslateRadialDragger.h|sgi_html/ch08.html#id5470183
+4|Example 8-3. TranslateRadialDragger.c++|sgi_html/ch08.html#id5470370
+4|Example 8-4. rotTransDragger.iv|sgi_html/ch08.html#id5471594
+4|Example 8-5. RotTransDragger.h|sgi_html/ch08.html#id5471707
+4|Example 8-6. RotTransDragger.c++|sgi_html/ch08.html#id5473100
+4|Example 8-7. RotTransManip.h|sgi_html/ch08.html#id5474049
+4|Example 8-8. RotTransManip.c++|sgi_html/ch08.html#id5474083
+4|Example 8-9. Coord3Manip.h|sgi_html/ch08.html#id5474776
+4|Example 8-10. Coord3Manip.c++|sgi_html/ch08.html#id5474909
+3|Example 9-1. OverlayHighlightRenderAction.h|sgi_html/ch09.html#id5476118
+3|Example 9-2. OverlayHL.c++|sgi_html/ch09.html#id5476177
+3|Example 9-3. Main Program Using OverlayHighlightRenderAction|sgi_html/ch09.html#id5476481
+3|Example 9-4. ShowSelectionRA.h|sgi_html/ch09.html#id5476572
+3|Example 9-5. ShowSelectionRA.c++|sgi_html/ch09.html#id5476617
+3|Example 9-6. Main Program for ShowSelectionRenderAction|sgi_html/ch09.html#id5476756
+4|Example 10-1. SceneTumble.h|sgi_html/ch10.html#id5478158
+4|Example 10-2. SceneTumble.c++|sgi_html/ch10.html#id5478239
+4|Example 10-3. SimpleViewer.h|sgi_html/ch10.html#id5361097
+4|Example 10-4. SimpleViewer.c++|sgi_html/ch10.html#id5480655
+4|Example 10-5. Building the Viewer Decoration in SoXtFullViewer|sgi_html/ch10.html#id5482425
+4|Example 11-1. DialEvent.h|sgi_html/ch11.html#id5483848
+4|Example 11-2. DialEvent.c++|sgi_html/ch11.html#id5483942
+4|Example 11-3. SoXtMainLoop|sgi_html/ch11.html#id5484438
+4|Example 11-4. DialNButton.h|sgi_html/ch11.html#id5480493
+4|Example 11-5. DialNButton.c++|sgi_html/ch11.html#id5480547
+# procedures |
+# helpids |
+

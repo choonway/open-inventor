@@ -1,0 +1,67 @@
+<html>
+<body>
+SSooMMFFVVeecc22ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoMFVec2f -- multiple-value field containing any number of two-dimensional
+
+vectors INHERITS FROMSoField &gt; SoMField &gt; SoMFVec2f
+
+DESCRIPTIONA multiple-value field that contains any number of two-dimensional vectors.
+
+SoMFVec2fs are written to file as one or more pairs of floating point valuesseparated by whitespace. When more than one value is present, all of the values are enclosed in square brackets and separated by commas; for example:
+
+[ 0 0, 1.2 3.4, 98.6 -4e1 ]
+
+METHODSvoid setValues(int start, int num, const float xy[ ][2])
+
+Sets num values starting at index start to the given floating point values.There must be num*2 values in the passed array.
+
+void set1Value(int index, float x, float y)void set1Value(int index, const float xy[2])
+
+Set the index'th value to the given floating point values. void setValue(float x, float y)void setValue(const float xy[2])
+
+Sets the field to contain the given value and only the given value (if thearray had multiple values before, they are deleted).
+
+static SoType getClassTypeId()virtual void getTypeId() const
+
+Returns the type for this class or a particular object of this class. const SbVec2f & operator [ ](int i) constReturns the i'th value of the field. Indexing past the end of the field (passing
+
+in i greater than getNum()) will return garbage. const SbVec2f * getValues(int start) constReturns a pointer into the array of values in the field, starting at index start.
+
+The values are read-only; see the startEditing()/finishEditing() methods fora way of modifying values in place.
+
+401<hr>
+
+SSooMMFFVVeecc22ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+int find(const SbVec2f & targetValue, SbBool addIfNotFound =FALSE)
+
+Finds the given value in the array and returns the index of that value in thearray. If the value is not found, -1 is returned. If addIfNotFound is set, then targetValue is added to the end of the array (but -1 is still returned). void setValues(int start, int num, const SbVec2f *newValues)Sets num values starting at index start to the values in newValues. The array
+
+will be automatically be made larger to accomodate the new values, ifnecessary.
+
+void set1Value(int index, const SbVec2f & newValue)Sets the index'th value in the array to newValue. The array will be
+
+automatically expanded, if necessary. const SbVec2f & operator =(const SbVec2f & newValue)void setValue(const SbVec2f & newValue)
+
+Sets the first value in the array to newValue, and deletes the second andsubsequent values.
+
+int operator ==(const SoMFVec2f &f) constint operator !=(const SoMFVec2f &f) const
+
+Returns TRUE if all of the values of this field equal (do not equal) those ofthe given field. If the fields are different types FALSE will always be returned (even if one field is an SoMFFloat with one value of 1.0 and the other is anSoMFInt with a value of 1, for example).
+
+SbVec2f * startEditing()void finishEditing()
+
+startEditing() returns a pointer to the internally-maintained array that canbe modified. The values in the array may be changed, but values cannot be added or removed. It is illegal to call any other editing methods betweenstartEditing() and finishEditing() (e.g. set1Value(), setValue(), etc).
+
+Fields, engines or sensors connected to this field and sensors are not notifiedthat this field has changed until finishEditing() is called. Calling finishEditing() always sets the isDefault() flag to FALSE and informsengines and sensors that the field changed, even if none of the values actually were changed. Methods from class SoMField:
+
+getNum, setNum, deleteValues, insertSpace, set1, get1
+
+402 Open Inventor C++ Reference Pages<hr>
+
+SSooMMFFVVeecc22ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer INCLUDE FILE#include &lt;Inventor/fields/SoMFVec2f.h&gt;
+</body>
+</html>

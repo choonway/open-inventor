@@ -1,0 +1,68 @@
+<html>
+<body>
+SoTransformVec3f
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTransformVec3f -- transforms a 3D vector by a 4x4 matrix
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoTransformVec3f
+
+<dt>DESCRIPTION
+<dd>This engine takes as input a three dimensional floating-point vector and a transformation matrix. The vector is assumed to be a row vector. The engine multiplies the vector by the matrix and returns the result in the outputpoint. The output direction contains the result when the matrix multiplication assumes the vector is a direction, and therefore ignores the translation part of thematrix. The output normalDirection contains the normalized direction
+
+<dt>INPUTS
+<dl>
+<dt>SoMFVec3f vector
+<dd>Input row vector.
+
+<dt>SoMFMatrix matrix
+<dd>Input transformation matrix.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFVec3f) point
+<dd>Vector transformed by matrix.
+
+<dt>(SoMFVec3f) direction
+<dd>Vector transformed by matrix, ignoring translation.
+
+<dt>(SoMFVec3f) normalDirection
+<dd>Normalized direction.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoTransformVec3f</b>()
+
+<dt><b>Constructor Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>TransformVec3f {
+<dd>vector 0 0 0
+<dd>matrix 
+<dd>1 0 0 0
+<dd>0 1 0 0
+<dd>0 0 1 0
+<dd>0 0 0 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoTransformVec3f.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>
+</body>
+</html>

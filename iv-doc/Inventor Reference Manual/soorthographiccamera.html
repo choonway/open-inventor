@@ -1,0 +1,76 @@
+<html>
+<body>
+SoOrthographicCamera
+<hr>
+<dl>
+<dt>NAME
+<dd>SoOrthographicCamera -- orthographic camera node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="socamera.html">SoCamera</a> &gt; SoOrthographicCamera
+
+<dt>DESCRIPTION
+<dd>An orthographic camera defines a parallel projection from a viewpoint. This camera does not diminish objects with distance, as an SoPerspectiveCamera does. The viewing volume for an orthographic camera is a rectangular parallelepiped (a box).
+
+<p>By default, the camera is located at (0,0,1) and looks along the negative z-axis; theposition and orientation fields can be used to change these values. The height field defines the total height of the viewing volume; this and the aspectRatio fielddetermine its width.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFFloat height
+<dd>Height of the viewing volume.
+
+<dt>Fields from class SoCamera:
+<dd>viewportMapping, position, orientation, aspectRatio, nearDistance,farDistance, focalDistance
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoOrthographicCamera</b>()
+<dd>Creates an orthographic camera node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoCamera</b>:
+<dd>pointAt, scaleHeight, getViewVolume, viewAll, viewAll, getViewportBounds
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoHandleEventAction, SoRayPickAction
+<dd>Sets the viewport and camera information in the state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>OrthographicCamera {
+<dd>viewportMapping ADJUST_CAMERA
+<dd>position 0 0 1
+<dd>orientation 0 0 1 0
+<dd>aspectRatio 1
+<dd>nearDistance 1
+<dd>farDistance 10
+<dd>focalDistance 5
+<dd>height 2
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoOrthographicCamera.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbviewvolume.html">SbViewVolume</a>, <a href="soperspectivecamera.html">SoPerspectiveCamera</a>
+</dl>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<html>
+<body>
+SoCamera
+<hr>
+<dl>
+<dt>NAME
+<dd>SoCamera -- abstract base class for camera nodes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoCamera
+
+<dt>DESCRIPTION
+<dd>This is the abstract base class for all camera nodes. It defines the common methodsand fields that all cameras have. Cameras are used to view a scene. When a camerais encountered during rendering, it sets the projection and viewing matrices and viewport appropriately; it does not draw geometry. Cameras should be placed before any shape nodes or light nodes in a scene graph; otherwise, those shapes or lights cannot be rendered properly. Cameras are affected by the current transformation, soyou can position a camera by placing a transformation node before it in the scene graph . The default position and orientation of a camera is at (0,0,1) looking alongthe negative z-axis.
+
+<p>You can also use a node kit to create a camera; see the reference page forSoCameraKit.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum viewportMapping
+<dd>Defines how to map the rendered image into the current viewport, when theaspect ratio of the camera differs from that of the viewport.
+
+<dt>SoSFVec3f position
+<dd>The location of the camera viewpoint.
+
+<dt><a href="sosfrotation.html">SoSFRotation</a> orientation
+<dd>The orientation of the camera viewpoint, defined as a rotation of the viewing direction from its default (0,0,-1) vector.
+
+<dt>SoSFFloat aspectRatio
+<dd>The ratio of camera viewing width to height. This value must be greater than 0.0. There are several standard camera aspect ratios defined inSoCamera.h.
+
+<dt>SoSFFloat nearDistance
+<dt>SoSFFloat farDistance
+<dd>The distance from the camera viewpoint to the near and far clipping planes.
+
+<dt>SoSFFloat focalDistance
+<dd>The distance from the viewpoint to the point of focus. This is typically ignored during rendering, but may be used by some viewers to define a point of interest.
+
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>void <b>pointAt</b>(const SbVec3f &targetPoint)
+<dd>Sets the orientation of the camera so that it points toward the given targetpoint while keeping the &quot;up&quot; direction of the camera parallel to the positive y-axis. If this is not possible, it uses the positive z-axis as &quot;up.&quot;
+
+<dt>virtual void <b>scaleHeight</b>(float scaleFactor)
+<dd>Scales the height of the camera. Perspective cameras scale their heightAngle fields, and orthographic cameras scale their height fields.
+
+<dt>virtual <b>SbViewVolumegetViewVolume</b>(float useAspectRatio = 0.0) const
+<dd>Returns a view volume structure, based on the camera's viewing parameters.If the useAspectRatio argument is not 0.0 (the default), the camera uses that ratio instead of the one it has.
+
+<dt>void <b>viewAll</b>(SoNode *sceneRoot, const SbViewportRegion&vpRegion, float slack = 1.0)
+<dt>void <b>viewAll</b>(SoPath *path, const SbViewportRegion &vpRegion,float slack = 1.0)
+<dd>Sets the camera to view the scene rooted by the given node or defined by thegiven path. The near and far clipping planes will be positioned slack bounding sphere radii away from the bounding box's center. A value of 1.0 will make the clipping planes the tightest around the bounding sphere.
+
+<dt>SbViewportRegion <b>getViewportBounds</b>(const SbViewportRegion &region) const
+<dd>Returns the viewport region this camera would use to render into the givenviewport region, accounting for cropping.
+
+<dt>static SoType <b>getClassTypeId</b>
+<dd>()Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dd>This is an abstract class. See the reference page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoCamera.h&gt;
+
+<dd>#define SO_ASPECT_SQUARE 1.00
+<dd>#define SO_ASPECT_VIDEO 1.333333333
+<dd>#define SO_ASPECT_35mm_ACADEMY 1.371
+<dd>#define SO_ASPECT_16mm 1.369
+<dd>#define SO_ASPECT_35mm_FULL 1.33333
+<dd>#define SO_ASPECT_70mm 2.287
+<dd>#define SO_ASPECT_CINEMASCOPE 2.35
+<dd>#define SO_ASPECT_HDTV 1.777777777
+<dd>#define SO_ASPECT_PANAVISION 2.361
+<dd>#define SO_ASPECT_35mm 1.5
+<dd>#define SO_ASPECT_VISTAVISION 2.301
+
+<dl>
+<dt>enum ViewportMapping {
+<dd>SoCamera::CROP_VIEWPORT_FILL_FRAME Crops the viewport within the current window, so that theaspect ratio matches that of the camera. As the window size changes, the aspect ratio remains unchanged. The cropped region is drawn as a filled gray area.
+
+<dd>SoCamera::CROP_VIEWPORT_LINE_FRAME Crops the viewport, but draws a thin frame around the viewport
+
+<dd>SoCamera::CROP_VIEWPORT_NO_FRAME Crops the viewport, but gives no visual feedback as to the viewport dimensions within the window
+
+<dd>SoCamera::ADJUST_CAMERA Adjusts the camera aspect ratio and height to make it fit withinthe given window. (The camera's fields are not affected,just the values sent to the graphics library.)
+
+<dd>SoCamera::LEAVE_ALONE Do nothing. Camera image may become stretched out ofproportion
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soorthographiccamera.html">SoOrthographicCamera</a>, <a href="soperspectivecamera.html">SoPerspectiveCamera</a>, <a href="socamerakit.html">SoCameraKit</a>
+</dl>
+
+</body>
+</html>

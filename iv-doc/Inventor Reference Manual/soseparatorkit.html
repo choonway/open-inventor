@@ -1,0 +1,111 @@
+<html>
+<body>
+SSooSSeeppaarraattoorrKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSeparatorKit -- separator nodekit class INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoSeparatorKit DESCRIPTIONA nodekit that is used for creating nodekit hierarchies. SoSeparatorKit contains a
+
+transform part, a childList part, and a few others in its catalog. The transform part (anSoTransform node) affects all of the children in the childList. Each of these children must be an SoSeparatorKit or from a class that is derived fromSoSeparatorKit (e.g., SoShapeKit and SoWrapperKit). Since all members of the childList are in turn SoSeparatorKits, and each contains a transform, these nestedlists allow you to create a hierarchy of motion, in which each transform affects an entire subgraph of nodekits. The other parts added to the catalog for the SoSeparatorKit are pickStyle, appearance,units and texture2Transform. Furthermore, since SoSeparator is derived from SoBaseKit, it inherits an the callbackList part. This is a list of SoCallback and/orSoEventCallback nodes which enable the SoSeparatorKit to perform special callbacks whenever an is applied to it. By creating the pickStyle part, a user can alter the pick style for the entire nodekithierarchy. The appearance part is an SoAppearanceKit nodekit. Note that all parts contained in the SoAppearanceKit catalog can be accessed as if they were part ofthe SoSeparatorKit. For example:
+
+myMtl = mySepKit-&gt;getPart(&quot;material&quot;,TRUE) and
+
+mySepKit-&gt;setPart(&quot;material&quot;,myMtl) See SoBaseKit for further explanation. FIELDS SoSFEnum renderCaching
+
+Set render caching mode. Default is AUTO. SoSFEnum boundingBoxCachingSet bounding box caching mode. Default is ON. Setting this value to AUTO
+
+is equivalent to ON -- automatic culling is not implemented.
+
+553<hr>
+
+SSooSSeeppaarraattoorrKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+SoSFEnum renderCullingSet render culling mode. Default is OFF. Setting this value to AUTO is
+
+equivalent to ON -- automatic culling is not implemented. SoSFEnum pickCullingSet pick culling mode. Default is AUTO.
+
+PARTS (SoPickStyle) pickStyle
+
+An SoPickStyle property node that can be used to set the picking style of itschildren. This part is NULL by default, but is created automatically if necessary. (SoAppearanceKit) appearance
+
+An SoAppearanceKit nodekit which can be used to set the appearanceproperties of its children. This part is NULL by default, but is created automatically if necessary. (SoUnits) unitsAn SoUnits node which can be used to set the types of units, (e.g., feet), of
+
+its children. This part is NULL by default, but is created automatically ifnecessary.
+
+(SoTransform) transformAn SoTransform node which can be used to set the overall position,
+
+orientation, and scale of its children. This part is NULL by default, but iscreated automatically if necessary.
+
+(SoTexture2Transform)texture2Transform
+
+An SoTexture2Transform node which can be used to apply atransformation to any textures used by its children. This part is NULL by default, but is created automatically if necessary. (SoNodeKitListPart) childList
+
+This part contains the children nodekits of this SoSeparatorKit. This part isa list part and can have multiple children. This part is NULL by default, but is created automatically when the first child is added to the childList. Also,when asked to build a member of the childList, the separatorKit will build an SoShapeKit by default. So if the childList part is NULL, and you call:getPart(&quot;childList[0]&quot;, TRUE), the separator kit will create the childList and add an SoShapeKit as the new element in the list.
+
+554 Open Inventor C++ Reference Pages<hr>
+
+SSooSSeeppaarraattoorrKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh Parts from class SoBaseKit:
+
+callbackList
+
+METHODS SoSeparatorKit()
+
+Constructor. static const SoNodekitCatalog *getClassNodekitCatalog() const
+
+Returns an SoNodekitCatalog for the class SoSeparatorKit. static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoBaseKit:
+
+getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+MACROSMacros from class SoBaseKit:
+
+SO_GET_PART, SO_CHECK_PART
+
+555<hr>
+
+SSooSSeeppaarraattoorrKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh CATALOG PARTSiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yespickStyle PickStyle -- yes appearance AppearanceKit -- yesunits Units -- yes transform Transform -- yestexture2Transform Texture2Transform -- yes childList NodeKitListPart -- yesiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc cc cc cc
+
+cc cc
+
+cc cc cc cc cc
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separator ShapeKit, SeparatorKitchildList Separatoriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc
+
+cc cc
+
+cc cc
+
+FILE FORMAT/DEFAULTSSeparatorKit {
+
+renderCaching AUTOboundingBoxCaching AUTO renderCulling AUTOpickCulling AUTO } INCLUDE FILE#include &lt;Inventor/nodekits/SoSeparatorKit.h&gt;
+
+enum CacheEnabled {SoSeparatorKit::OFF Never build or use a cache
+
+SoSeparatorKit::ON Always try to build a cacheSoSeparatorKit::AUTO Automatic caching }
+
+SEE ALSOSoAppearanceKit, SoBaseKit, SoCameraKit, SoLightKit, SoNodeKit, SoNodeKitDetail,
+
+SoNodeKitListPart, SoNodeKitPath, SoNodekitCatalog, SoSceneKit, SoShapeKit,SoWrapperKit
+</body>
+</html>

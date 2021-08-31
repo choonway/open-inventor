@@ -1,0 +1,103 @@
+<html>
+<body>
+SoPointLightDragger
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPointLightDragger -- sun-shaped icon you can translate in 3D by dragging with the mouse
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoInteractionKit &gt; SoDragger &gt; SoPointLightDragger
+
+<dt>DESCRIPTION
+<dd>SoPointLightDragger is a dragger that looks like a point light source, can be translated in three directions, and has a translation field that always reflects its position in local space. The point light dragger also has a special material part which can be used to make it take on the color of a light source. Remember: This is not a light source! It just looks like one. If you want to move alight with this dragger, you can either:
+
+<p>[a] Use an SoPointLightManip, which is subclassed from SoLight. It creates one ofthese draggers and uses it as the interface to change the location of its light source (see the SoPointLightManip reference page). The manipulator also edits thematerial part of this dragger to match the color of light the manipulator is producing. [b] Use a field-to-field connection to connect the location of a light source from thisdragger's translation field.
+
+<p>This dragger contains an SoDragPointDragger, which you drag through 3-spaceusing an integrated set of linear and planar draggers. (For detailed information on how to use SoDragPointDragger, see its reference page.) The point light dragger setsthe planar translation parts of this dragPoint dragger with a new default that looks like a shining sun emanating rays of light (okay, so use your imagination). By changing the material part you can change the color of the sun shape, becausethe default part contains no SoMaterial nodes. This fact enables the SoPointLightManip (not the dragger, the manipulator) to color its dragger tomatch the color of the light it is emanating. Recall that a point light manip is derived from SoLight and creates a point light dragger to provide an interface andgeometrical presence on screen. The manipulator also has a color field; when the light color changes, it changes the material part of its dragger so that they match. You can change the parts in any instance of this dragger using setPart(). The default part geometries are defined as resources for this SoPointLightDraggerclass. They are detailed in the Dragger Resources section of the online reference page for this class. You can make your program use different default resources for theparts by copying the file /usr/share/data/draggerDefaults/pointLightDragger.iv into your own directory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFVec3f translation
+<dd>Position of the dragger.
+
+<dt>Fields from class SoDragger:
+<dd>isActive
+
+Fields from class SoInteractionKit:
+
+renderCaching, boundingBoxCaching, renderCulling, pickCulling
+
+PARTS Parts from class SoBaseKit:
+
+callbackList METHODS SoPointLightDragger()
+
+Constructor. static const SoNodekitCatalog *getClassNodekitCatalog() const
+
+Returns an SoNodekitCatalog for this class static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoDragger:
+
+addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback,
+
+addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+Methods from class SoInteractionKit:
+
+setPartAsPath
+
+Methods from class SoBaseKit:
+
+getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+479<hr>
+
+SSooPPooiinnttLLiigghhttDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+MACROSMacros from class SoBaseKit:
+
+SO_GET_PART, SO_CHECK_PART CATALOG PARTSiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yesmaterial Material -- yes translator DragPointDragger -- yesiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc c
+
+cc cc
+
+cc cc c
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separatoriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiccc cc cc
+
+cc cc
+
+cc c
+
+FILE FORMAT/DEFAULTSPointLightDragger {
+
+renderCaching AUTOboundingBoxCaching AUTO renderCulling AUTOpickCulling AUTO isActive FALSEtranslation 0 0 0 } INCLUDE FILE#include &lt;Inventor/draggers/SoPointLightDragger.h&gt;
+
+480 Open Inventor C++ Reference Pages<hr>
+
+SSooPPooiinnttLLiigghhttDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh SEE ALSOSoInteractionKit, SoDragger, SoCenterballDragger, SoDirectionalLightDragger,
+
+SoDragPointDragger, SoHandleBoxDragger, SoJackDragger,SoRotateCylindricalDragger, SoRotateDiscDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger,SoScaleUniformDragger, SoSpotLightDragger, SoTabBoxDragger, SoTabPlaneDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger,SoTranslate2Dragger
+</body>
+</html>

@@ -1,0 +1,51 @@
+<html>
+<body>
+SSooTTaabbBBooxxMMaanniipphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoTabBoxManip -- transform node with 3D Interface for editing scale and
+
+translation INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoTransformation &gt; SoTransform &gt;
+
+SoTransformManip &gt; SoTabBoxManip DESCRIPTIONSoTabBoxManip is derived from SoTransform (by way of SoTransformManip).
+
+When its fields change, nodes following it in the scene graph scale, and/or translate. As a subclass of SoTransformManip, this manip also has a 3D interface to edit someof its fields. In this case, the interface edits the scaleFactor and translation fields.
+
+A manipulator differs from a dragger. When you move a dragger, no other nodes areaffected. When you move an SoTransformManip, other nodes move along with it. (See the reference page for SoTransformManip.) The interface for an SoTabBoxManip is exactly the same as that of theSoTabBoxDragger. To find out more about the interface, see the reference page for SoTabBoxDragger. To find out how the manipulator uses a dragger to provide itsinterface, see the reference page for SoTransformManip.
+
+On screen, this manip will surround the objects influenced by its motion. This isbecause it turns on the surroundScale part of the dragger (See the reference page for SoSurroundScale) FIELDS Fields from class SoTransform:
+
+translation, rotation, scaleFactor, scaleOrientation, center METHODS SoTabBoxManip()
+
+Constructor. static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoTransformManip:
+
+getDragger, replaceNode, replaceManip
+
+622 Open Inventor C++ Reference Pages<hr>
+
+SSooTTaabbBBooxxMMaanniipphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh Methods from class SoTransform:
+
+pointAt, getScaleSpaceMatrix, getRotationSpaceMatrix,getTranslationSpaceMatrix, multLeft, multRight, combineLeft,
+
+combineRight, setMatrix, recenter Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+FILE FORMAT/DEFAULTSTabBoxManip {
+
+translation 0 0 0rotation 0 0 1 0 scaleFactor 1 1 1scaleOrientation 0 0 1 0 center 0 0 0}
+
+INCLUDE FILE#include &lt;Inventor/manips/SoTabBoxManip.h&gt;
+
+SEE ALSOSoCenterballManip, SoHandleBoxManip, SoJackManip, SoTabBoxDragger,
+
+SoTrackballManip, SoTransformBoxManip, SoTransform, SoTransformManip
+</body>
+</html>

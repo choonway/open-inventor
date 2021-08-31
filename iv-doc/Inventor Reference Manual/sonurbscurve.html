@@ -1,0 +1,75 @@
+<html>
+<body>
+SoNurbsCurve
+<hr>
+<dl>
+<dt>NAME
+<dd>SoNurbsCurve -- NURBS curve shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; SoNurbsCurve
+
+<dt>DESCRIPTION
+<dd>This class represents a NURBS curve, based on the knot vector and the control points that you specify. The knotVector field specifies a floating-point array of values; thevalues are the coordinates of the knot points in the curve, and you must enter them in non-decreasing order. The curve will use the first numControlPoints values inthe current coordinates as control points.
+
+<p>If you specify n knots, you can specify up to n-8 control points. The number ofknots minus the number of control points is known as the order of the curve. A NURBS curve can have an order of up to 8. The control points of the curve are transformed by the current transformation matrix. The curve is drawn with the current lighting model and drawing style (drawing style FILLED is treated as LINES). The coordinates, normals, and texturecoordinates of a NURBS curve are generated, so you cannot bind explicit normals or texture coordinates to a NURBS curve. The approximation of the curve by line segments is affected by the currentcomplexity value.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFLong numControlPoints
+<dd>Number of control points.
+
+<dt>SoMFFloat knotVector
+<dd>The knot vector.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoNurbsCurve</b>()
+<dd>Creates a NURBS curve node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws the curve based on the current coordinates, material, and so on.
+
+<dt>SoRayPickAction
+<dd>Picks the curve based on the current coordinates and transformation.
+
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses all control points of the curve with the current transformation applied to them. Sets the center to theaverage of the control points.
+
+<dt>SoCallbackAction
+<dd>If any line segment callbacks are registered with the action, they will be invoked for each successive segment approximating the curve.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>NurbsCurve {
+<dd>numControlPoints 0
+<dd>knotVector 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoNurbsCurve.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soindexednurbscurve.html">SoIndexedNurbsCurve</a>, <a href="sonurbssurface.html">SoNurbsSurface</a>
+</dl>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<html>
+<body>
+SoAlarmSensor
+<hr>
+<dl>
+<dt>NAME
+<dd>SoAlarmSensor -- triggers a callback once sometime in the future
+<dt>INHERITS FROM
+<dd><a href="sosensor.html">SoSensor</a> &gt; <a href="sotimerqueuesensor.html">SoTimerQueueSensor</a> &gt; <a href="soalarmsensor.html">SoAlarmSensor</a>
+
+<dt>DESCRIPTION
+<dd>This type of sensor can be used to schedule a one-time callback for some time in the future. The sensor is not guaranteed to be called at exactly that time, but will be called sometime after the specified time.
+
+<dt>METHODS
+<dl>
+<dt><b>SoAlarmSensor</b>()
+<dt><b>SoAlarmSensor</b>(SoSensorCB *func, void *data)
+<dd>Creation methods. The second method takes the callback function and data to be called when the sensor is triggered.
+
+<dt>~<b>SoAlarmSensor</b>()
+<dd>Destroys the sensor, freeing up any memory associated with it after unscheduling it.
+
+<dt>void <b>setTime</b>(const SbTime &absTime)
+<dd>Sets the sensor to go off at the specified time. You must also call schedule() for the sensor to be triggered. If the sensor is already scheduled, it must be unscheduled and then rescheduled for the change in the trigger time to take effect.
+
+<dt>void <b>setTimeFromNow</b>(const SbTime &relTime)
+<dd>Sets the sensor to go off the given amount of time from now. You must also call schedule() for the sensor to be triggered. If the sensor is already scheduled, it must be unscheduled and then rescheduled for the change in the trigger time to take effect.
+
+<dt>const SbTime & <b>getTime</b>() const
+<dd>Returns the time at which the sensor is set to be triggered. This is similar to the getTriggerTime method, but returns the time even if the sensor has not yet been scheduled.
+
+<dt><b>Methods from class SoTimerQueueSensor</b>:
+<dd>getTriggerTime, schedule, unschedule, isScheduled
+
+<dt><b>Methods from class SoSensor</b>:
+<dd>setFunction, getFunction, setData, getData
+</dl>
+
+<dt>INCLUDE FILE#
+<dd>include &lt;Inventor/sensors/SoAlarmSensor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sooneshotsensor.html">SoOneShotSensor</a>, <a href="sotimersensor.html">SoTimerSensor</a>, <a href="sotimerqueuesensor.html">SoTimerQueueSensor</a>, <a href="sbtime.html">SbTime</a>
+</dl>
+
+</body>
+</html>

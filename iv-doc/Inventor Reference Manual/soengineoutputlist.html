@@ -1,0 +1,29 @@
+<html>
+<body>
+SSooEEnnggiinneeOOuuttppuuttLLiisstthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoEngineOutputList -- maintains a list of pointers to engine outputs INHERITS FROMSbPList &gt; SoEngineOutputList DESCRIPTIONThis subclass of SbPlist holds lists of pointers to SoEngineOutputs. It updates
+
+reference counts to engine outputs in the list whenever adding or removingpointers.
+
+METHODS SoEngineOutputList()
+
+Constructor.
+
+SoEngineOutputList(int size)Constructor that pre-allocates storage for size pointers.
+
+SoEngineOutputList(const SoEngineOutputList &l)Constructor that copies the contents of another list. ~SoEngineOutputList()Destructor. void append(SoEngineOutput *engineOutput)Adds an engine output to the end of the list. void insert(SoEngineOutput *engineOutput, int addBefore)Inserts the given engine output in the list before the element of the given
+
+index. void set(int i, SoEngineOutput *engineOutput)Sets an element of a list.
+
+SoEngineOutput * operator [ ](int i) const
+
+Accesses an element of a list. Methods from class SbPList:
+
+find, remove, getLength, truncate, copy, operator =, operator ==, operator !=
+
+233<hr>
+
+SSooEEnnggiinneeOOuuttppuuttLLiisstthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh INCLUDE FILE#include &lt;Inventor/SoLists.h&gt;
+
+SEE ALSOSoEngineOutput
+</body>
+</html>

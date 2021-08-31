@@ -1,0 +1,50 @@
+<html>
+<body>
+<p>SoVertexShape
+</hr>
+<dl>
+<dt>NAME
+<dd>SoVertexShape -- abstract base class for all vertex-based shape nodes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; SoVertexShape
+
+<dt>DESCRIPTION
+<dd>This node is the abstract base class for all vertex-based shape (geometry) nodes.
+
+<p>There are no public fields; it is used only as a repository for convenience functionsfor subclasses and to provide a type identifier to make it easy to determine whether a shape is vertex-based. All subclasses of this node draw objects constructed from vertices located at thecurrent coordinates. The coordinates of the shape are transformed by the current transformation matrix and are drawn with the current light model and drawingstyle.
+
+<p>Subclasses that construct polygons from vertices may not render or pick correctly if any of their polygons are self-intersecting or non-planar. All vertex shape subclasses use the bounding box of the shape to determine defaultt exture coordinates. The longest dimension of the bounding box defines the S coordinates, and the next longest defines the T coordinates. The value of the Scoordinate ranges from 0 to 1, from one end of the bounding box to the other. The T coordinate ranges between 0 and the ratio of the second greatest dimension of thebounding box to the greatest dimension.
+
+<p>When a vertex-based shape is picked with an SoRayPickAction, a detail is always returned. If the shape is composed of faces (such as SoFaceSet or SoTriangleStripSet), an SoFaceDetail is returned. If the shape is composed of line segments (such as SoLineSet), an SoLineDetail is returned. If the shape is composed of points (such as SoPointSet), an SoPointDetail is returned. Note that the type ofdetail returned is not affected by the current drawing style.
+
+<p>Similarly, each class of vertex-based shape invokes appropriate callbacks if those callbacks are registered with the SoCallbackAction. Shapes made of faces invoke triangle callbacks for each generated triangle. (Faces may be triangulated to createthese triangles.) Shapes made of line segments invoke line segment callbacks for each segment, and shapes made of points invoke point callbacks. Two subclasses, SoIndexedShape and SoNonIndexedShape, are base classes for vertex-based shapes that do or no not index into the current set of coordinates.
+
+<dt>METHODS
+<dl>
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dd>This is an abstract class. See the reference page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoVertexShape.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soindexedshape.html">SoIndexedShape</a>, <a href="sononindexedshape.html">SoNonIndexedShape</a>
+</dl>
+
+</body>
+</html>

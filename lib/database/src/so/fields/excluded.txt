@@ -1,0 +1,8 @@
+SoFields.cxx
+SoMFLong.cxx
+SoMFULong.cxx
+SoSFLong.cxx
+SoSFULong.cxx
+
+# maybe for future
+SoSFSize_T.cxx

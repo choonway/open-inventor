@@ -1,0 +1,66 @@
+<html>
+<body>
+SoFile
+<hr>
+<dl>
+<dt>NAME
+<dd>SoFile -- node that reads children from a named file
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoFile
+
+<dt>DESCRIPTION
+<dd>This node represents a subgraph that was read from a named input file. When an SoFile node is written out, just the field containing the name of the file is written; no children are written out. When an SoFile is encountered during reading, reading continues from the named file, and all nodes read from the file are added as hidden children of the file node.
+<dd>Whenever the name field changes, any existing children are removed and the contents of the new file is read in. The file node remembers what directory the last file was read from and will read the new file from the same directory after checking the standard list of directories (see SoInput), assuming the field isn't set to an absolute path name. The children of an SoFile node are hidden; there is no way of accessing or editing them. If you wish to edit the contents of an SoFile node, you can modify the contents of the named file and then &quot;touch&quot; the name field (see SoField). Alternatively, you can use the copyChildren() method to get a editable copy of the file node's children. Note that this does not affect the original file on disk, however.
+
+<dtFIELDS
+<dl>
+<dt>SoSFString name
+<dd>Name of file from which to read children.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoFile</b>()
+<dd>Creates a file node with default settings.
+
+<dt>SoGroup * <b>copyChildren</b>() const
+<dd>Returns a new SoGroup containing copies of all of the file node's children.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoGetMatrixAction, SoHandleEventAction
+<dd>Traverses its children just as SoGroup does.
+
+<dt>SoRayPickAction
+<dd>Traverses its hidden children, but, if intersections are found, generates paths that end at the SoFile node. SoWriteActionWrites just the name field and no children.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>File {
+<dd>name &quot;&lt;Undefined file&gt;&quot;
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoFile.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soinput.html">SoInput</a>, <a href="sopath.html">SoPath</a>
+</dl>
+</body>
+</html>

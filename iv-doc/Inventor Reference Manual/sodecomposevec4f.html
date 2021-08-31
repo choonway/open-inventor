@@ -1,0 +1,41 @@
+<html>
+<body>
+SSooDDeeccoommppoosseeVVeecc44ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoDecomposeVec4f -- decomposes 4D vectors into floating-point values INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoDecomposeVec4f DESCRIPTIONThis engine takes as input a 4D vector, and decomposes it into four single floatingpoint values. The input can have multiple values, allowing the engine to decompose severalvectors in parallel.
+
+INPUTS SoMFVec4f vector
+
+Vector to be decomposed.
+
+OUTPUTS(SoMFFloat) x
+
+First component of the vector. (SoMFFloat) ySecond component of the vector.
+
+(SoMFFloat) zThird component of the vector. (SoMFFloat) wFourth component of the vector.
+
+METHODS SoDecomposeVec4f()
+
+Constructor Methods from class SoEngine:
+
+getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+199<hr>
+
+SSooDDeeccoommppoosseeVVeecc44ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh FILE FORMAT/DEFAULTSDecomposeVec4f {
+
+vector 0 0 0 0}
+
+INCLUDE FILE#include &lt;Inventor/engines/SoCompose.h&gt;
+
+SEE ALSOSoComposeVec4f, SoEngineOutput
+
+200 Open Inventor C++ Reference Pages<hr>
+</body>
+</html>

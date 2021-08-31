@@ -1,0 +1,93 @@
+<html>
+<body>
+SbVec3f
+<hr>
+<dl>
+<dt>NAME
+<dd>SbVec3f -- 3D vector class
+
+<dt>INHERITS FROM
+<dd>SbVec3f
+
+<dt>DESCRIPTION
+<dd>3D vector class used to store 3D vectors and points. This class is used throughout Inventor for arguments and return values.
+
+<dt>METHODS
+<dl>
+<dt><b>SbVec3f</b>()
+<dd>Default constructor.
+
+<dt><b>SbVec3f</b>(const float v[3])SbVec3f(float x, float y, float z)
+<dd>Constructor given vector components.
+
+<dt><b>SbVec3f</b>(SbPlane &p0, SbPlane &p1, SbPlane &p2)
+<dd>Constructor given 3 planes.
+
+<dt>SbVec3f <b>cross</b>(const SbVec3f &v) const
+<dd>Returns right-handed cross product of vector and another vector.
+
+<dt>float <b>dot</b>(const SbVec3f &v) const
+<dd>Returns dot (inner) product of vector and another vector.
+
+<dt>SbBool <b>equals</b>(const SbVec3f v, float tolerance) const
+<dd>Equality comparison within given tolerance -- the square of the length of the maximum distance between the two vectors.
+
+<dt>SbVec3f <b>getClosestAxis</b>() const
+<dd>Returns principal axis that is closest (based on maximum dot product) to this vector.
+
+<dt>const float * <b>getValue</b>() const
+<dt>void <b>getValue</b>(float &x, float &y, float &z) const
+<dd>Returns vector components.
+
+<dt>float <b>length</b>() const
+<dd>Returns geometric length of vector.
+
+<dt>void <b>negate</b>()
+<dd>Negates each component of vector in place.
+
+<dt>float <b>normalize</b>()
+<dd>Changes vector to be unit length, returning the length before normalization. 
+<dt>SbVec3f & <b>setValue</b>(const float v[3])
+<dt>SbVec3f & <b>setValue</b>(float x, float y, float z)
+<dd>Sets the vector components.
+
+<dt>SbVec3f & <b>setValue</b>(const SbVec3f &barycentic, const SbVec3f &v0, constSbVec3f &v1, const SbVec3f &v2)
+<dd>Sets value of vector as the weighted average of 3 other vectors.
+
+<dt>float & <b>operator [ ]</b>(int i) const
+<dt>float & <b>operator [ ]</b>(int i)
+<dd>Accesses indexed component of vector.
+
+<dt>SbVec3f & <b>operator *=</b>(float d)
+<dt>SbVec3f & <b>operator /=</b>(float d)
+<dd>Component-wise scalar multiplication and division operators.
+
+<dt>SbVec3f & <b>operator +=</b>(const SbVec3f &u)
+<dd>SbVec3f & <b>operator -=</b>(const SbVec3f &u)
+<dd>Component-wise vector addition and subtraction operators.
+
+<dt>SbVec3f <b>operator -</b>() const
+<dd>Nondestructive unary negation -- returns a new vector.
+
+<dt>SbVec3f <b>operator *</b>(const SbVec3f &v, float d)
+<dt>SbVec3f <b>operator *</b>(float d, const SbVec3f &v)
+<dt>SbVec3f <b>operator /</b>(const SbVec3f &v, float d)
+<dd>Component-wise binary scalar multiplication and division operators.
+
+<dt>SbVec3f <b>operator +</b>(const SbVec3f &v1, const SbVec3f &v2)
+<dt>SbVec3f <b>operator -</b>(const SbVec3f &v1, const SbVec3f &v2)
+<dd>Component-wise binary vector addition and subtraction operators.
+
+<dt>int <b>operator ==</b>(const SbVec3f &v1, const SbVec3f &v2)
+<dt>int <b>operator !=</b>(const SbVec3f &v1, const SbVec3f &v2)
+
+<dd>Equality comparison operators.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbLinear.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbvec2f.html">SbVec2f</a>, <a href="sbvec4f.html">SbVec4f</a>, <a href="sbvec2s.html">SbVec2s</a>, <a href="sbrotation.html">SbRotation</a>
+</body>
+</html>

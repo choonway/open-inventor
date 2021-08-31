@@ -1,0 +1,37 @@
+<html>
+<body>
+<p>SoConeDetail
+<hr>
+<dl>
+<dt>NAME
+<dd>SoConeDetail -- stores detail information about the SoCone node
+
+<dt>INHERITS FROM
+<dd><a href="sodetail.html">SoDetail</a> &gt; SoConeDetail
+
+<dt>DESCRIPTION
+<dd>This class contains detail information about a point on a cone. It contains the part of the cone that was hit (sides or bottom).
+
+<dt>METHODS
+<dl>
+<dt><b>SoConeDetail</b>()
+<dt>virtual ~<b>SoConeDetail</b>()
+<dd>Constructor and destructor.
+
+<dt>int <b>getPart</b>() const
+<dd>Returns the part in the detail. The returned value is one of the SoCone part flags.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoDetail</b>:
+<dd>copy, getTypeId, isOfType
+</dl>
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/details/SoConeDetail.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socone.html">SoCone</a>, <a href="sodetail.html">SoDetail</a>, <a href="sopickedpoint.html">SoPickedPoint</a>, <a href="soprimitivevertex.html">SoPrimitiveVertex</a>
+
+</body>
+</html>

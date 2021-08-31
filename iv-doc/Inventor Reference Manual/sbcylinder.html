@@ -1,0 +1,45 @@
+<html>
+<body>
+SbCylinder
+<hr>
+<dl>
+<dt>NAME
+<dd>SbCylinder -- class for representing a cylinder
+
+<dt>INHERITS FROM
+<dd>SbCylinder
+
+<dt>DESCRIPTION
+<dd>This class defines a simple cylinder datatype. It is used by the Inventor toolkit for arguments or return values.
+
+<dt>METHODS
+<dl>
+<dt><b>SbCylinder</b>()
+<dt><b>SbCylinder</b>(const SbLine &a, float r)
+<dd>Constructors. One takes an axis and radius.
+
+<dt>void <b>setValue</b>(const SbLine &a, float r)
+<dd>Change the axis and radius.
+
+<dt>void <b>setAxis</b>(const SbLine &a)
+<dt>void <b>setRadius</b>(float r)
+<dd>Set just the axis or radius.
+
+<dt>const SbLine & <b>getAxis</b>() const
+<dd>float <b>getRadius</b>() const
+<dd>Return the axis and radius.
+
+<dt>SbBool <b>intersect</b>(const SbLine &l, SbVec3f &intersection) const
+<dt>SbBool <b>intersect</b>(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const
+<dd>Intersect line and cylinder, returning TRUE if there is an intersection.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbLinear.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbvec3f.html">SbVec3f</a>, <a href="sbline.html">SbLine</a>, <a href="sbplane.html">SbPlane</a>, <a href="sbsphere.html">SbSphere</a>, <a href="socylinder.html">SoCylinder</a>
+</dl>
+
+</body>
+</html>

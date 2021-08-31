@@ -1,0 +1,38 @@
+<html>
+<body>
+SoEngineOutput
+<hr>
+<dl>
+<dt>NAME
+<dd>SoEngineOutput -- class for all engine outputs
+
+<dt>INHERITS FROM
+<dd>SoEngineOutput
+
+<dt>DESCRIPTION
+<dd>SoEngineOuput is the class for all engine output fields. There is no public constructor routine for this class. Only the engine classes create instances of SoEngineOutput.
+<dd>Each engine creates one or more engine outputs. The type of the output is documented in the engine reference pages. There is also an SoEngineOutput method for querying the connection type. The application can at any time enable or disable the engine outputs. By default theengine outputs are enabled.
+
+<dt>METHODS
+<dl>
+<dt>SoType <b>getConnectionType</b>() const
+<dd>Returns the type of field this output can connect to.
+
+<dt>int <b>getForwardConnections</b>(SoFieldList &list) const
+<dd>Returns the number of fields this output is writing to, and adds pointers to those fields to the given list.
+
+<dt>void <b>enable</b>(SbBool flag)
+<dd>Enables or disables all connections from this ouptut. If the connections are disabled, values will not be output along them. By default, outputs are enabled.
+
+<dt>SbBool <b>isEnabled</b>() const
+<dd>Returns TRUE if this output is currently enabled. SoEngine* getContainer() constReturns containing engine.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoEngine.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soengine.html">SoEngine</a>
+</dl>
+</body>
+</html>

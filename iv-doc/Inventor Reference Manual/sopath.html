@@ -1,0 +1,106 @@
+<html>
+<body>
+<p>SoPath
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPath -- path that points to a list of hierarchical nodes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; SoPath
+
+<dt>DESCRIPTION
+<dd>A path represents a scene graph or subgraph. It contains a list of pointers to nodes forming a chain from some root to some descendent. Each node in the chain is a child of the previous node. Paths are used to refer to some object in a scene graph precisely and unambiguously, even if there are many instances of the object. Therefore, paths are returned by both the SoRayPickAction and SoSearchAction.
+
+<p>When an action is applied to a path, only the nodes in the subgraph defined by thepath are traversed. These include: the nodes in the path chain, all nodes (if any) below the last node in the path, and all nodes whose effects are inherited by any of these nodes.
+
+<p>SoPath attempts to maintain consistency of paths even when the structure of the scene graph changes. For example, removing a child from its parent when both are in a path chain cuts the path chain at that point, leaving the top part intact. Removing the node to the left of a node in a path adjusts the index for that node. Replacing a child of a node when both the parent and the child are in the chain replaces the child in the chain with the new child, truncating the path below the new child. Note that only public children of nodes are accessible from an SoPath. Nodes like nodekits that limit access to their children may provide other ways to get more information, such as by using the SoNodeKitPath class.
+
+<dt>METHODS
+<dl>
+<dt><b>SoPath</b>()
+<dd>Constructs an empty path.
+
+<dt><b>SoPath</b>(int approxLength)
+<dd>Constructs a path with a hint to length (number of nodes in chain).
+
+<dt><b>SoPath</b>(SoNode *node)
+<dd>Constructs a path and sets the head node to the given node.
+
+<dt>void <b>setHead</b>(SoNode *node)
+<dd>Sets head node (first node in chain). The head node must be set before the <b>append</b>() or <b>push</b>() methods may be called.
+
+<dt>void <b>append</b>(int childIndex)
+<dd>Adds node to end of chain; the node is the childIndex'th child of the current tail node.
+
+<dt>void <b>append</b>(SoNode *childNode)
+<dd>Adds node to end of chain; uses the first occurrence of childNode as child of current tail node. If the path is empty, this is equivalent to <b>setHead</b>(childNode).
+
+<dt>void <b>append</b>(const SoPath *fromPath)
+<dd>Adds all nodes in fromPath's chain to end of chain; the head node of from Path must be the same as or a child of the current tail node.
+
+<dt>void <b>push</b>(int childIndex)
+<dt>void <b>pop</b>()
+<dd>These allow a path to be treated as a stack; they push a node at the end of the chain and pop the last node off.
+
+<dt>SoNode * <b>getHead</b>() const
+<dt>SoNode * <b>getTail</b>() const
+<dd>These return the first and last nodes in a path chain.
+
+<dt>SoNode * <b>getNode</b>(int i) const
+<dt>int <b>getIndex</b>(int i) const
+
+<dd>These return a pointer to the i'th node or the index of the i'th node (within its parent) in the chain. Calling getNode(0) is equivalent to calling <b>getHead</b>().
+
+<dt>SoNode * <b>getNodeFromTail</b>(int i) const
+<dt>int <b>getIndexFromTail</b>(int i) const
+<dd>These return a pointer to the i'th node or the index of the i'th node (withinits parent) in the chain, counting backward from the tail node. Passing 0 for i returns the tail node or its index.
+
+<dt>int <b>getLength</b>() const
+<dd>Returns length of path chain (number of nodes).
+
+<dt>void <b>truncate</b>(int start)
+<dd>Truncates the path chain, removing all nodes from index start on. Calling truncate(0) empties the path entirely.
+
+<dt>SbBool <b>containsNode</b>(const SoNode *node) const
+<dd>Returns TRUE if the node is found anywhere in the path chain.
+
+<dt>SbBool <b>containsPath</b>(const SoPath *path) const
+<dd>Returns TRUE if the nodes in the chain in the passed path are contained (in consecutive order) in this path chain.
+
+<dt>int <b>findFork</b>(const SoPath *path) const
+<dd>If the two paths have different head nodes, this returns -1. Otherwise, it returns the path chain index of the last node (starting at the head) that is the same for both paths.
+
+<dt>SoPath * <b>copy</b>(int startFromNodeIndex = 0, int numNodes = 0) const
+<dd>Creates and returns a new path that is a copy of some or all of this path.
+
+<p>Copying starts at the given index (default is 0, which is the head node). A numNodes of 0 (the default) means copy all nodes from the starting index to the end. Returns NULL on error.
+
+<dt>friend int <b>operator ==</b>(const SoPath &p1, const SoPath &p2)
+<dd>Returns TRUE if all node pointers in the two path chains are identical.
+
+<dt>static SoPath * <b>getByName</b>(const SbName &name)
+<dt>static int <b>getByName</b>(const SbName &name, SoPathList &list)
+<dd>These methods lookup and return paths with a given name. Paths are namedby calling their setName() method (defined by the SoBase class). The first form returns the last path that was given that name, either by setName() orby reading in a named path from a file. If there is no path with the given name, NULL will be returned. The second form appends all paths with the given name to the given path list and returns the number of paths that were added. If there are no paths with the given name, zero will be returned andnothing will be added to the list.
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getClassTypeId, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>SoPath {
+<dd>[head node][number of remaining indices] [index]... [index]
+<dt>}
+
+<p>Note that the indices in a written path are adjusted based on the nodes that are actually written to a file. Since nodes in the graph that have no effect on the path (such as some separator nodes) are not written, the siblings of such nodes must undergo index adjustment when written. The actual nodes in the graph remain unchanged.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoPath.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sonode.html">SoNode</a>, <a href="soraypickaction.html">SoRayPickAction</a>, <a href="sosearchaction.html">SoSearchAction</a>, <a href="sonodekitpath.html">SoNodeKitPath</a>
+</dl>
+
+</body>
+</html>

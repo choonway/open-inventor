@@ -1,0 +1,63 @@
+<html>
+<body>
+SoMatrixTransform
+<hr>
+<dl>
+<dt>NAME
+<dd>SoMatrixTransform -- node that specifies a 3D geometric transformation as a matrix
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoTransformation &gt; SoMatrixTransform
+
+<dt>DESCRIPTION
+<dd>This node defines a geometric 3D transformation with a single SbMatrix. Note that some matrices (such as singular ones) may result in errors in bounding boxes,picking, and lighting.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFMatrix matrix
+<dd>Transformation matrix.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoMatrixTransform()
+<dd>Creates a matrix transformation node with default settings.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Concatenates matrix given in the matrix field with the current transformation matrix.
+<dt>SoGetMatrixAction
+<dd>Returns transformation matrix specified in the matrix field.
+</dl>
+
+
+<dt>FILE FORMAT/DEFAULTS
+
+<dd>MatrixTransform<br>
+{matrix 1 0 0 0<br>
+0 1 0 0<br>
+0 0 1 0<br>
+0 0 0 1 }
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoMatrixTransform.h&gt;
+
+<dt>SEE ALSO
+<dd>SoTransform, SoMultipleCopy
+</dl>
+</body>
+</html>

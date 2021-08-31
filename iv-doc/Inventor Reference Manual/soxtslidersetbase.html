@@ -1,0 +1,17 @@
+<html>
+<body>
+SSooXXttSSlliiddeerrSSeettBBaasseehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoXtSliderSetBase -- abstract base class for Motif-only slider components INHERITS FROMSoXtComponent &gt; SoXtSliderSetBase DESCRIPTIONThis class is used as a base class for all editors which use Motif sliders to edit fields in
+
+an Inventor scene graph node. This class is not meant to be instanced byprogrammers who want to use an editor in a program. It should only be used as a base class when designing new editors. SoXtSliderSetBase is derived from SoXtComponent, but adds three concepts. First,there is a node to edit. Second, there are subcomponents. When an SoXtSliderSetBase is shown or hidden, so are its subcomponents. (As an example,an SoXtTransformSliderSet is composed of many subcomponents). Third, an SoXtSliderSetBase has a layout size, which is used to lay out the subcomponents. METHODSvirtual void setNode(SoNode *newNode)
+
+Sets a new node as the node to be modified by this editor component. SoNode * getNode() constReturns a pointer to the node currently being modified by this editor
+
+component. Methods from class SoXtComponent:
+
+show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle,
+
+getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+
+INCLUDE FILE#include &lt;Inventor/Xt/SoXtSliderSetBase.h&gt; SEE ALSOSoXtComponent, SoXtSliderSet
+</body>
+</html>

@@ -1,0 +1,62 @@
+<html>
+<body>
+SoInterpolateRotation
+<hr>
+<dl>
+<dt>NAME
+<dd>SoInterpolateRotation -- interpolates rotation values
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoInterpolate &gt; SoInterpolateRotation
+
+<dt>DESCRIPTION
+<dd>This engine linearly interpolates between two rotation values, based on the alpha input value. The alpha value should be between 0.0 and 1.0. The input fields can have multiple rotations, allowing the engine to interpolateseveral objects in parallel. One of the inputs may have more values than the other. In that case, the last value of the shorter input will be repeated as necessary.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFRotation input0
+<dt>SoMFRotation input1
+<dd>The engine linearly interpolates from input0 to input1.
+
+<dt>Inputs from class SoInterpolate:
+<dd>alpha
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>Outputs from class SoInterpolate:
+<dd>output
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoInterpolateRotation</b>()
+<dd>Constructor.
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>InterpolateRotation {
+<dd>alpha 0
+<dd>input0 0 0 1 0
+<dd>input1 0 0 1 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoInterpolate.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>, <a href="sointerpolatefloat.html">SoInterpolateFloat</a>, <a href="sointerpolatevec2f.html">SoInterpolateVec2f</a>, <a href="sointerpolatevec3f.html">SoInterpolateVec3f</a>, <a href="sointerpolatevec4f.html">SoInterpolateVec4f</a>
+</dl>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<html>
+<body>
+SoIndexedShape
+<hr>
+<dl>
+<dt>NAME
+<dd>SoIndexedShape -- abstract base class for all indexed vertex-based shapes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; <a href="sovertexshape.html">SoVertexShape</a> &gt; SoIndexedShape
+
+<dt>DESCRIPTION
+<dd>This node is the abstract base class for all vertex-based shapes that are constructed from indices, including SoIndexedFaceSet, SoIndexedTriangleStripSet, and SoIndexedLineSet. SoIndexedShape defines fields that are used in all of its subclasses. All subclasses of SoNonIndexedShape construct objects by using the currentcoordinates as the object's vertices. The coordIndex field defined by this class contains the indices into the current coordinates of the vertices of the shape. These indices are also used for materials, normals, or texture coordinates when the appropriate binding is PER_VERTEX_INDEXED. Material and normal bindings are interpreted as follows for each subclass:
+
+<dl>
+<dt>OVERALL One material for the entire shape.
+<dt>PER_PART Specific to the subclass.
+<dt>PER_PART_INDEXED Same as PER_PART, using indices from the materialIndex or normalIndex field.
+<dt>PER_FACE Specific to the subclass.PER_FACE_INDEXEDSame as PER_FACE, using indices from the materialIndex or normalIndex field.
+<dt>PER_VERTEX One material per vertex.
+<dt>PER_VERTEX_INDEXED One material per vertex, using indices from thematerialIndex or normalIndex field.
+<dt>DEFAULT Same as OVERALL for materials, or PER_VERTEX_INDEXED for normals.
+</dl>
+
+<p>When any _INDEXED binding is used for materials or normals, the materialIndexor normalIndex field is used to determine the indices for the materials or normals. If this field contains a single value of -1 (the default), the coordinate indices fromthe coordIndex field are used as well for materials or normals. When the binding is PER_VERTEX_INDEXED, indices in these fields that correspond to negative indicesin coordIndex are skipped; for other index bindings all the values in the fields are used, in order.
+
+<p>When the normal binding is DEFAULT and there aren't enough normals in thecurrent state to be applied to each vertex, default normals are created. The creaseAngle field of the SoShapeHints node guides this process. Explicit texture coordinates (as defined by SoTextureCoordinate2) may be boundto vertices of an indexed shape consecutively (if the texture coordinate binding is PER_VERTEX) or by using the indices in the textureCoordIndex field (if thebinding is PER_VERTEX_INDEXED). As with all vertex-based shapes, if there is a current texture but no texture coordinates are specified, a default texture coordinatemapping is calculated using the bounding box of the shape.
+
+<p>Be sure that the indices contained in the coordIndex, materialIndex,normalIndex, and textureCoordIndex fields are valid with respect to the current state, or errors will occur.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFLong coordIndex
+<dd>The indices of the coordinates that the shape uses as its vertices. Thecoordinates connect to form faces, lines, or other shapes. Each subclass defines special negative indices to use to indicate separation between faces,lines, and so on.
+
+<dt>SoMFLong materialIndex
+<dt>SoMFLong normalIndex
+<dt>SoMFLong textureCoordIndex
+<dd>The indices of the materials, normals, and texture coordinates that are used for the shape. These fields are used only when the appropriate binding isone of the _INDEXED bindings. By default, the values of these fields indicate that the coordinate indices should be used for materials, normals, or texturecoordinates as well.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dd>This is an abstract class. See the reference page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoIndexedShape.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soindexedfaceset.html">SoIndexedFaceSet</a>, <a href="soindexedlineset.html">SoIndexedLineSet</a>, <a href="soindexedtrianglestripset.html">SoIndexedTriangleStripSet</a>, <a href="somaterialbinding.html">SoMaterialBinding</a>, <a href="sononindexedshape.html">SoNonIndexedShape</a>, <a href ="sonormalbinding.html">SoNormalBinding</a>, <a href="soshapehints.html">SoShapeHints</a>, <a href="sotexturecoordinatebindibg.html">SoTextureCoordinateBinding</a>
+</dl>
+
+</body>
+</html>

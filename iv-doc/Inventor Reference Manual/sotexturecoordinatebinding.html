@@ -1,0 +1,50 @@
+<html>
+<body>
+SSooTTeexxttuurreeCCoooorrddiinnaatteeBBiinnddiinngghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoTextureCoordinateBinding -- node that specifies how texture coordinates are
+
+bound to shapes INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoTextureCoordinateBinding
+
+DESCRIPTIONThis node specifies how the current texture coordinates are bound to vertex-based
+
+shapes that follow in the scene graph. The DEFAULT binding causes each shape todefine its own default coordinates. These default coordinates typically cause a texture to be mapped across the whole surface of a shape. FIELDS SoSFEnum value
+
+Specifies how to bind texture coordinates to shapes.
+
+METHODS SoTextureCoordinateBinding()
+
+Creates a texture coordinate binding node with default settings. static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+ACTION BEHAVIORSoGLRenderAction, SoCallbackAction
+
+Sets the current texture coordinate binding type.
+
+FILE FORMAT/DEFAULTSTextureCoordinateBinding {
+
+value DEFAULT}
+
+643<hr>
+
+SSooTTeexxttuurreeCCoooorrddiinnaatteeBBiinnddiinngghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh INCLUDE FILE#include &lt;Inventor/nodes/SoTextureCoordinateBinding.h&gt;
+
+enum Binding {SoTextureCoordinateBinding::DEFAULT
+
+Shape defines texture coordinatesSoTextureCoordinateBinding::PER_VERTEX Current texture coordinates are applied sequentially to verticesof shape SoTextureCoordinateBinding::PER_VERTEX_INDEXEDCurrent texture coordinates are indexed per vertex }
+
+SEE ALSOSoMaterialBinding, SoNormalBinding, SoTexture2, SoTexture2Transform,
+
+SoTextureCoordinate2, SoTextureCoordinateFunction, SoVertexShape
+
+</body>
+</html>

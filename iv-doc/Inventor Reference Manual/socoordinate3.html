@@ -1,0 +1,59 @@
+<html>
+<body>
+SoCoordinate3
+<hr>
+<dl>
+<dt>NAME
+<dd>SoCoordinate3 -- coordinate point node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoCoordinate3
+
+<dt>DESCRIPTION
+<dd>This node defines a set of 3D coordinates to be used by subsequent vertex-based shape nodes (those derived from SoVertexShape) or shape nodes that use them as control points (such as NURBS curves and surfaces). This node does not produce a visible result during rendering; it simply replaces the current coordinates in therendering state for subsequent nodes to use.
+
+<dt>FIELDS
+<dl>
+<dt><a href="somfvec3f.html">SoMFVec3f</a> point
+<dd>Coordinate point(s).
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoCoordinate3</b>()
+<dd>Creates a coordinate node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Sets coordinates in current traversal state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Coordinate3 {
+<dd>point 0 0 0
+<dt}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoCoordinate3.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socoordinate4.html">SoCoordinate4</a>, <a href="sovertexshape.html">SoVertexShape</a>
+
+</body>
+</html>

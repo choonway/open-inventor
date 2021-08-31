@@ -1,0 +1,23 @@
+<html>
+<body>
+SSooNNooddeekkiittCCaattaalloogghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoNodekitCatalog -- nodekit catalog class INHERITS FROMSoNodekitCatalog DESCRIPTIONThis class describes the parts and structure of a nodekit. Each class of nodekit has
+
+one SoNodekitCatalog (a static variable for the class). Internally, the catalogcontains one entry for each &quot;part&quot; in the nodekit's structure. Users can query the catalog for information about each entry in the catalog. This information can beobtained either by part name (an SbName unique for the part within the catalog) or by part number (an index into an array of parts). Note that, although the catalog for a nodekit class may contain many entries, eachinstance of that class is not initially created with all of these parts intact. Rather, each instance of the class has its own parts list which keeps track of which parts theuser has created. The nodekit uses the catalog as a guide in creating new nodes as its descendants; the standard addChild(), removeChild() and other SoGroup methodsare protected, so that users must create descendants indirectly by asking the nodekit to get and/or set the different &quot;parts&quot; in the catalog. The first entry in any SoNodekitCatalog corresponds to the nodekit itself. ItspartName is &quot;this&quot; and its partNumber is 0. All other parts in the catalog are described relative to &quot;this.&quot; METHODSstatic void initClass()
+
+Initializes this object. int getNumEntries() constReturns number of entries in the catalog.
+
+int getPartNumber(const SbName &theName) constGiven the name of a part, returns its part number in the catalog. const SbName & getName(int thePartNumber) constGiven the part number of a part, returns its name in the catalog.
+
+SSooNNooddeekkiittCCaattaalloogghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh SoType getType(int thePartNumber) constSoType getType(const SbName &theName) const SoType getDefaultType(int thePartNumber) constSoType getDefaultType(const SbName &theName) const SbBool isNullByDefault(int thePartNumber) constSbBool isNullByDefault(const SbName &theName) const SbBool isLeaf(int thePartNumber) constSbBool isLeaf(const SbName &theName) const const SbName & getParentName(int thePartNumber) constconst SbName & getParentName(const SbName &theName) const int getParentPartNumber(int thePartNumber) constint getParentPartNumber(const SbName &theName) const const SbName & getRightSiblingName(int thePartNumber) constconst SbName & getRightSiblingName(const SbName &theName) const int getRightSiblingPartNumber(int thePartNumber) constint getRightSiblingPartNumber(const SbName &theName) const SbBool isList(int thePartNumber) constSbBool isList(const SbName &theName) const SoType getListContainerType(int thePartNumber) constSoType getListContainerType(const SbName &theName) const const SoTypeList & getListItemTypes(int thePartNumber) const const SoTypeList & getListItemTypes(const SbName &theName) const SbBool isPublic(int thePartNumber) constSbBool isPublic(const SbName &theName) const
+
+A full set of methods for finding out all parameters in the catalog, giveneither the part name or the part number.
+
+INCLUDE FILE#include &lt;Inventor/nodekits/SoNodekitCatalog.h&gt;
+
+#define SO_CATALOG_NAME_NOT_FOUND -1#define SO_CATALOG_THIS_PART_NUM 0
+
+SEE ALSOSoAppearanceKit, SoBaseKit, SoCameraKit, SoLightKit, SoNodeKit, SoNodeKitDetail,
+
+SoNodeKitListPart, SoNodeKitPath, SoSceneKit, SoSeparatorKit, SoShapeKit,SoWrapperKit
+</body>
+</html>

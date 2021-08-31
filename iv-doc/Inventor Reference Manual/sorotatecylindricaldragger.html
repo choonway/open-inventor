@@ -1,0 +1,116 @@
+<html>
+<body>
+SoRotateCylindricalDragger
+<dl>
+<dt>NAME
+<dd>SoRotateCylindricalDragger -- object you rotate along a cylindrical surface by dragging with the mouse
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoInteractionKit &gt; SoDragger &gt; SoRotateCylindricalDragger 
+
+<dt>DESCRIPTION
+<dd>SoRotateCylindricalDragger is a simple dragger that rotates about the y axis of its local space. The feel of the rotation is as if you were spinning a cylinder about itsaxis of rotation. The local space is determined by its location in the scene graph. Transformation nodes placed before it will affect both the dragger and the directionof motion.
+
+<p>This node has a rotation field which always reflects its orientation in local space. Ifyou set the field, the dragger will rotate accordingly. You can also connect fields of other nodes or engines from this one to make them follow the dragger's orientation. This dragger contains four parts, rotator, rotatorActive, feedback, and feedbackActive. Each of these is set by default from a resource described in the Dragger Resourcessection of the online reference page for this class. You can change the parts in any instance of this dragger using setPart(). You can make your program use different default resources for the parts by copyingthe file /usr/share/data/draggerDefaults/rotateCylindricalDragger.iv into your own directory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFRotation rotation
+<dd>Orientation of the dragger.
+
+<dt>Fields from class SoDragger:
+<dd>isActive
+
+<dt>Fields from class SoInteractionKit:
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+</dl>
+
+<dt>PARTS
+<dl>
+<dt>Parts from class SoBaseKit:
+<dd>callbackList
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoRotateCylindricalDragger()
+<dd>Constructor.
+
+<dt>void setProjector(SbCylinderProjector *p)
+<dt>const SbCylinderProjector *getProjector() const
+
+<dd>Set and get a different cylinder projector. See the SbCylinderProjector man pages to find out how each kind affects the feel of your dragger's motion. The default uses an SbCylinderPlaneProjector.
+
+<p>Passing in NULL will cause this default type of projector to be used. Anyprojector you pass in will be deleted by this dragger when this dragger is deleted. Note that the axis and radius of the cylinder are determined by thedragger, based on the y-axis in local space and how far the initial mouse click occured from the center of rotation. static const SoNodekitCatalog *getClassNodekitCatalog() const
+
+<p>Returns an SoNodekitCatalog for this class static
+
+<dt>SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoDragger:
+<dd>addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback,
+
+addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+<dt>Methods from class SoInteractionKit:
+<dd>setPartAsPath
+
+<dt>Methods from class SoBaseKit:
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+
+SO_GET_PART, SO_CHECK_PART CATALOG PARTSiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yesrotator Separator -- yes rotatorActive Separator -- yesfeedback Separator -- yes feedbackActive Separator -- yesiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc cc c
+
+cc cc cc cc cc c
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separatoriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiccc cc cc
+
+cc cc
+
+cc c
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>RotateCylindricalDragger {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO
+<dd>isActive FALSE
+<dd>rotation 0 0 1 0 
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/draggers/SoRotateCylindricalDragger.h&gt;
+
+<dt>SEE ALSO
+<dd>SoInteractionKit, SoDragger, SoCenterballDragger, SoDirectionalLightDragger,
+SoDragPointDragger, SoHandleBoxDragger, SoJackDragger, SoPointLightDragger,SoRotateDiscDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger, SoScaleUniformDragger, SoSpotLightDragger,SoTabBoxDragger, SoTabPlaneDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger, SoTranslate2Dragger
+</body>
+</html>

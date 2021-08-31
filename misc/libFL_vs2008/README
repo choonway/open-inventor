@@ -1,0 +1,25 @@
+Compilation Instruction
+-----------------------
+
+1. Build and install libfreetype.a using freetype2-beta4.tgz
+
+2. Build libFL.a wrapper for libfreetype.a
+
+    $ cd $IV_ROOT/libFL
+    $ tar zxvf libFL-src2.tgz
+    $ cd src2
+    $ make
+
+3. Link libInventor.so against new libFL.a and /usr/local/lib/libfreetype.a 
+
+4. Set FL_FONT_PATH to a directory where TrueType fonts are available.
+
+    $ export FL_FONT_PATH=/usr/share/data/fonts
+
+5. Make symbolic link of TrueType font file to Inventor's font name
+
+    $ cd /usr/share/data/fonts
+    $ ln -s times.ttf Times-Roman
+    $ ln -s arial.ttf Helvetica
+    $ ln -s cour.ttf Utopia-Regular
+

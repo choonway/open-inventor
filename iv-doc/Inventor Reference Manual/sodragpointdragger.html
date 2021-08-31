@@ -1,0 +1,220 @@
+<html>
+<body>
+SoDragPointDragger
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDragPointDragger -- object you can translate in 3D by dragging with the mouse
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sobasekit.html">SoBaseKit</a> &gt; <a href="sointeractionkit.html">SoInteractionKit</a> &gt; <a href="sodragger.html">SoDragger</a> &gt; SoDragPointDragger
+
+<dt>DESCRIPTION
+<dd>SoDragPointDragger is a compound dragger that translates in all three dimensions when dragged with the mouse. It is made up of six smaller draggers, which it displays two at a time. Each pair has one plane dragger and one line dragger. The line dragger is oriented perpendicular to the plane, so together the plane/line pair lets you move through all of 3-space. DragPoint has a total of three such pairs, oriented along the x, y, and z axes of itslocal space. You can cycle through the three pairs by hitting the &lt;Alt&gt; key with the cursor over the dragger. (You need not press the mouse button.) The line draggers are SoTranslate1Draggers and the plane draggers areSoTranslate2Draggers. So you can use the &lt;Shift&gt; key to constrain the motion of a plane dragger along one of the two axes within the plane, as described in the SoTranslate2Draggers man page.
+
+<dd>DragPoint adds extra feedback parts to provide a more intuitive idea of where you are placed in three-space. There are three feedback planes and three feedback axes; each corresponds to one of the plane or line draggers, but spans a much greater distance. When you drag along a line, that line's larger feedback axis is displayed, and remains anchored in space while the dragger slides along it. This helps establish the motion of the dragger relative to the rest of the scene. Similarly, when you drag within a plane, the larger (but transparent) feedback plane establishes a ground plane for you to move upon. The location of the dragger within the plane is pinpointed by two intersecting axes that always cross below the cursor and extend to the edges of the plane. When you move dragPoint to the edge of the feedback plane (or line), the feedback will jump to a new location in that direction, so that the dragger never leaves the feedback behind.
+
+<dd>The primary directions of motion are given by the local space of the dragger. Transforms earlier in the scene will affect the dragger, its children, and the orientation of its directions of motion. This node has a translation field which always reflects its position in local space.Setting the field moves the dragger to that point. You can also connect fields of other nodes or engines from this one to make them follow the dragger's motion.
+<dd>Although the child draggers each have their own resources defining default part geometries, the dragPoint dragger overrides these with a new set of resources. It also defines resources for the feedback parts that it adds. These are detailed in theDragger Resources section of the online reference page for this class. You can change the parts in any instance of this dragger using setPart(). You can make your program use different default resources for the parts by copying the file /usr/share/data/draggerDefaults/dragPointDragger.iv into your own directory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFVec3f translation
+<dd>Position of the dragger.
+
+<dt>Fields from class SoDragger:
+<dd>isActive
+
+<dt>Fields from class SoInteractionKit:
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+</dl>
+
+<dt>PARTS
+<dl>
+<dt>Parts from class SoBaseKit:
+<dd>callbackList
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoDragPointDragger</b>()
+<dd>Constructor.
+
+<dt>void <b>setJumpLimit</b>(float limit)
+<dd>float <b>getJumpLimit</b>() const
+
+Set and get the point at which the feedback axes will jump to a newposition. For example, if set to .1 (the default), the feedback axes will jump when the dragger gets within 10% of the end of the axis. void showNextDraggerSet()The dragPoint dragger contains three pairs of draggers, each containing a plane dragger and a line dragger (see the Description above). The draggerstarts with the (y-line/xz-plane) pair displayed. Calling this method will cycle next through the (z-line/xy-plane), then the (x-line/yz-plane).
+
+<dt>static const SoNodekitCatalog *<b>getClassNodekitCatalog</b>() const
+<dd>Returns an SoNodekitCatalog for this class
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoDragger</b>:
+<dd>addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback, addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+<dt><b>Methods from class SoInteractionKit</b>:
+<dd>setPartAsPath
+
+<dt><b>Methods from class SoBaseKit</b>:
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dt>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+<dd>SO_GET_PART, SO_CHECK_PART
+</dl>
+
+<dt>CATALOG PARTS
+
+<table border=1>
+<tr><th colspan=4>All parts
+</tr>
+<tr><th>Part Name
+<th>Part Type
+<th>Default Type
+<th>NULL by Default
+</tr>
+
+<tr>
+<td>callbackList
+<td>NodeKitListPart
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>xTranslator
+<td>Translate1Dragger
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>xyTranslator
+<td>Translate2Dragger
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>xzTranslator
+<td>Translate2Dragger
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>zTranslator
+<td>Translate1Dragger
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>yzTranslator
+<td>Translate2Dragger
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>yTranslator
+<td>Translate1Dragger
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>xFeedback
+<td>Separator
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>yFeedback
+<td>Separator
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>zFeedback
+<td>Separator
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>yzFeedback
+<td>Separator
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>xzFeedback
+<td>Separator
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>xyFeedback
+<td>Separator
+<td>--
+<td>yes
+</tr>
+</table>
+
+<table border=1>
+<tr>
+<th colspan=3>Extra information for list parts from above table
+</tr>
+
+<tr>
+<th>Part Name
+<th>Container Type
+<th>Permissible Types
+</tr>
+
+<tr>
+<td>callbackList
+<td>Separator
+<td>Callback, EventCallback
+</tr>
+</table>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>DragPointDragger {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO
+<dd>isActive FALSE
+<dd>translation 0 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/draggers/SoDragPointDragger.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sointeractionkit.html">SoInteractionKit</a>, <a href="sodragger.html">SoDragger</a>, <a href="socenterballdragger.html">SoCenterballDragger</a>, <a href="sodragpointdragger.html">SoDragPointDragger</a>, <a href="sohandleboxdragger.html">SoHandleBoxDragger</a>, <a href="sojackdragger.html">SoJackDragger</a>, <a href="sopointlightdragger.html">SoPointLightDragger</a>, <a href="sorotatecylindricaldragger.html">SoRotateCylindricalDragger</a>, <a href="sorotatediscdragger.html">SoRotateDiscDragger</a>, <a href="sorotatesphericaldragger.html">SoRotateSphericalDragger</a>, <a href="soscale1dragger.html">SoScale1Dragger</a>, <a href="soscale2dragger.html">SoScale2Dragger</a>, <a href="soscale2uniformdragger.html">SoScale2UniformDragger</a>, <a href="soscaleuniformdragger.html">SoScaleUniformDragger</a>, <a href="sospotlightdragger.html">SoSpotLightDragger</a>, <a href="sotabboxdragger.html">SoTabBoxDragger</a>, <a href="sotabplanedragger.html">SoTabPlaneDragger</a>, <a href="sotrackballdragger.html">SoTrackballDragger</a>, <a href="sotransformboxdragger.html">SoTransformBoxDragger</a>, <a href="sotranslate1dragger.html">SoTranslate1Dragger</a>, <a href="sotranslate2dragger.html">SoTranslate2Dragger</a>
+</dl>
+
+</body>
+</html>

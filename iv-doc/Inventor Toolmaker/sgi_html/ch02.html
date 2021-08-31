@@ -1,0 +1,1386 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Chapter 2. Creating a Node</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"><meta name="generator" content="SGI XSL DocBook Customization Stylesheets V1.0"><link rel="home" href="index.html" title="The Inventor Toolmaker"><link rel="up" href="index.html" title="The Inventor Toolmaker"><link rel="previous" href="ch01.html" title="Chapter 1. Key Concepts"><link rel="next" href="ch03.html" title="Chapter 3. Creating a Field"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. Creating a Node</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr></table><hr></div><!--CONTENT_BEGIN--><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="id5443825"></a>Chapter 2. Creating a <a name="id71684"></a>Node</h2></div></div>
+<p>This chapter explains how you can create new subclasses of <a name="idch021"></a><span class="bold"><b>SoNode</b></span>. It discusses enabling elements in the state, constructing a node, and implementing actions for it. Chapter 1 provides important background material on these concepts, and this chapter assumes you are familiar with the material presented there.</p>
+<p>The first part of this chapter offers an overview of the steps required to create a new node. When necessary, additional sections explain key concepts in further detail and list the relevant macros. Next, the chapter examples show how to create three new node classes:  </p>
+<div class="itemizedlist"><ul type="disc"><li><p>A property node class called <span class="bold"><b>Glow</b></span></p>
+</li>
+<li><p>A shape node class called <span class="bold"><b>Pyramid</b></span></p>
+</li>
+<li><p>A group node class called <span class="bold"><b>Alternate</b></span></p>
+</li>
+</ul></div><p>Sections at the end of the chapter discuss the following:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>Using new node classes</p>
+</li>
+<li><p>Creating abstract classes</p>
+</li>
+<li><p>The <span class="bold"><b>copy()</b></span> method</p>
+</li>
+<li><p>The <span class="bold"><b>affectsState()</b></span> method</p>
+</li>
+<li><p>Creating nodes that cannot be cached</p>
+</li>
+<li><p>Creating an alternate representation for a new node class</p>
+</li>
+</ul></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5444012"></a>Overview</h2></div></div>
+<p>The file SoSubNode.h contains the macros for defining new node classes. The SO_NODE_HEADER() macro declares type identifier and naming variables and methods that all node classes must support. The SO_NODE_SOURCE() macro defines the static variables and methods declared in the SO_NODE_HEADER() macro. Other macros useful in creating new node classes are mentioned in the following sections.<a name="idch022"></a><a name="idch023"></a><a name="idch024"></a><a name="idch025"></a></p>
+<p>Creating a new node requires these steps:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new node class and determine what class it is derived from.</p>
+</li>
+<li><p>Define and name each field in the node.</p>
+</li>
+<li><p>Define an <span class="bold"><b>initClass()</b></span> method to initialize the type information and to ensure that the required elements are enabled in the state (see <a href="ch02.html#id37504">&#8220;Initializing the Node Class&#8221;</a>).</p>
+</li>
+<li><p>Define a constructor (see <a href="ch02.html#id29936">&#8220;Defining the Constructor&#8221;</a>).</p>
+</li>
+<li><p>Implement the actions supported by the node (see <a href="ch02.html#id22243">&#8220;Implementing Actions&#8221;</a>).</p>
+<p>a.  For a property node, you usually need to implement the<br>
+     <span class="bold"><b>GLRender()</b></span> and <span class="bold"><b>callback()</b></span> methods <br>
+     (see <a href="ch02.html#id56912">&#8220;Creating a Property Node&#8221;</a>). You may also need to<br>
+     implement <span class="bold"><b>getBoundingBox()</b></span>, <span class="bold"><b>getMatrix()</b></span>, and other methods. </p>
+<p>b.  For a shape node, you need to implement the <span class="bold"><b>generate-<br>
+    Primitives()</b></span> method for the <span class="bold"><b>SoCallbackAction</b></span> as well as the<br>
+ <span class="bold"><b>   getBoundingBox()</b></span> method. You may want to implement a specific<br>
+     <span class="bold"><b>GLRender()</b></span> or <span class="bold"><b>rayPick()</b></span> method as well <br>
+     (see <a href="ch02.html#id37823">&#8220;Creating a Shape Node&#8221;</a>). For vertex-based shapes,<br>
+     you may need to implement a <span class="bold"><b>generateDefaultNormals()</b></span> method<br>
+     (see <a href="ch02.html#id20949">&#8220;Generating Default Normals&#8221;</a>).</p>
+<p>c.  For a group node, you need to implement all actions to ensure that<br>
+     the children are traversed <br>
+     (see <a href="ch02.html#id29107">&#8220;Creating a Group Node&#8221;</a>).</p>
+</li>
+<li><p>Implement a <span class="bold"><b>copy()</b></span> method if the node contains any non-field instance data (see <a href="ch02.html#id25188">&#8220;The copy() Method&#8221;</a>).</p>
+</li>
+<li><p>Implement an <span class="bold"><b>affectsState()</b></span> method if it cannot be inherited from the parent class (see <a href="ch02.html#id37360">&#8220;The affectsState() Method&#8221;</a>).</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5444406"></a><a name="id37504"></a>Initializing the Node Class</h2></div></div>
+<p>As discussed in Chapter 1, the <a name="idch026"></a><span class="bold"><b>initClass()</b></span> method sets up the type identifier and file format name information for the class. The initialization macro for nodes, SO_NODE_INIT_CLASS(), does most of the work for you. One additional task for you as the node writer is to enable each of the elements in the state for each action the node supports. The following subsections provide additional information about enabling elements in the state.<a name="idch027"></a></p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5444436"></a>Enabling Elements in the State</h3></div></div>
+<p>In the <a name="idch028"></a><span class="bold"><b>initClass()</b></span> method, use the SO_ENABLE() macro (defined in SoAction.h) to enable the elements required by your node in the state. To use a simple example, <a name="idch029"></a><a name="idch0210"></a><a name="idch0211"></a><span class="bold"><b>SoDrawStyle</b></span> enables these elements in the <span class="bold"><b>SoGLRenderAction</b></span>:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_ENABLE(SoGLRenderAction, SoGLDrawStyleElement);
+SO_ENABLE(SoGLRenderAction, SoGLLinePatternElement);
+SO_ENABLE(SoGLRenderAction, SoGLLineWidthElement);
+SO_ENABLE(SoGLRenderAction, SoGLPointSizeElement);
+</pre></td></tr></table><p><span class="bold"><b>SoDrawStyle</b></span> also implements the <span class="bold"><b>SoCallbackAction</b></span>. It enables these elements in the <span class="bold"><b>SoCallbackAction</b></span>:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_ENABLE(SoCallbackAction, SoDrawStyleElement);
+SO_ENABLE(SoCallbackAction, SoLinePatternElement);
+SO_ENABLE(SoCallbackAction, SoLineWidthElement);
+SO_ENABLE(SoCallbackAction, SoPointSizeElement);
+</pre></td></tr></table><br><div class="tip"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/tip.png"></td><td align="left" valign="top"><b>Tip: </b>If you know that the element is already enabled by another node or action, you can skip this step. (See Table 1-1.)
+</td></tr></table><hr noshade="noshade"></div><p>Now that these elements have been enabled, their values can be set and inquired. (The debugging version of Inventor generates an error if you try to access or set an element that has not been enabled.)<a name="idch0212"></a></p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5444556"></a>Inheritance within the Element Stack</h3></div></div>
+<p>The previous example using <a name="idch0213"></a><span class="bold"><b>SoDrawStyle</b></span> elements brings up another feature of the element stack: Some elements have corresponding GL versions that are derived from them. The <span class="bold"><b>SoGL</b></span> version of an element typically sends its value to OpenGL when it is set. As you might guess, <a name="idch0214"></a><span class="bold"><b>SoGLDrawStyleElement</b></span> is derived from <span class="bold"><b>SoDrawStyleElement</b></span>, and <span class="bold"><b>SoGLLinePatternElement</b></span> is derived from <span class="bold"><b>SoLinePatternElement</b></span>. The parent element class and its derived class <i>share</i> the same stack index. </p>
+<p>If you try to enable two classes that share a stack index (for example, <span class="bold"><b>SoGLDrawStyleElement</b></span> and <span class="bold"><b>SoDrawStyleElement</b></span>), only the more derived class is actually enabled (in this case, <span class="bold"><b>SoGLDrawStyleElement</b></span>). However, you can always use the base class static method to set or get the value for either the parent or the derived class. (You cannot, however, enable only the parent version and then try to treat it as the derived GL version.)</p>
+</div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5444645"></a><a name="id29936"></a>Defining the Constructor</h2></div></div>
+<p>The constructor defines the fields for the node and sets up their default values. If the fields contain enumerated values, their names and values are defined in the constructor as well. Use the SO_NODE_CONSTRUCTOR() macro to perform the basic work.<a name="idch0215"></a><a name="idch0216"></a></p>
+<p>The SO_NODE_IS_FIRST_INSTANCE() macro returns a Boolean value that can be tested in constructors. If your class requires considerable overhead when it is initialized, you may want to perform this work only once when the first instance of the class is created. For example, the <a name="idch0217"></a><span class="bold"><b>SoCube</b></span> class sets up the coordinates and normals of the cube faces during construction of its first instance. (You could put this code in the <a name="idch0218"></a><span class="bold"><b>initClass()</b></span> method, but putting it in the constructor guarantees that someone is actually using your node class first.)</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5444747"></a>Setting Up the Node's Fields</h3></div></div>
+<p>The SO_NODE_ADD_FIELD() macro defines the fields in the node and sets up their default values. The first parameter is the name of the field. The second parameter is the default field value, in parentheses. Using <a name="idch0219"></a><a name="idch0220"></a><span class="bold"><b>SoDrawStyle</b></span> as an example:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_NODE_ADD_FIELD(style, (SoDrawStyleElement::getDefault()));
+SO_NODE_ADD_FIELD(lineWidth,
+                 (SoLineWidthElement::getDefault()));
+SO_NODE_ADD_FIELD(linePattern,
+                 (SoLinePatternElement::getDefault()));
+</pre></td></tr></table><p>To add a field with a vector value, the syntax is as follows:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_NODE_ADD_FIELD(translation, (0.0, 0.0, 0.0));
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5444796"></a>Defining Enumerated Values for a Field</h3></div></div>
+<p>In the preceding example, the <a name="idch0221"></a><span class="bold"><b>style</b></span> field contains an enumerated value: FILLED, LINES, POINTS, or INVISIBLE. Use the SO_NODE_DEFINE_-<br>
+ENUM_VALUE() macro to define the enumerated values. The first parameter is the type of the enumerated value. The second parameter is its value, as shown here:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_NODE_DEFINE_ENUM_VALUE(Style, FILLED);
+SO_NODE_DEFINE_ENUM_VALUE(Style, LINES);
+SO_NODE_DEFINE_ENUM_VALUE(Style, POINTS);
+SO_NODE_DEFINE_ENUM_VALUE(Style, INVISIBLE);
+</pre></td></tr></table><p>Then, to specify that these enumerated values can be used in the <a name="idch0222"></a><span class="bold"><b>style</b></span> field of the <span class="bold"><b>SoDrawStyle</b></span> node, use the SO_NODE_SET_SF_ENUM_TYPE() macro:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_NODE_SET_SF_ENUM_TYPE(style, Style);
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5444860"></a><a name="id22243"></a>Implementing Actions</h2></div></div>
+<p>Your next task is to implement each of the actions your new node supports. The <a name="idch0223"></a><span class="bold"><b>SoDrawStyle</b></span> node, as you have already seen, supports two actions, the <span class="bold"><b>SoGLRenderAction</b></span> and the <span class="bold"><b>SoCallbackAction</b></span>, in addition to the <span class="bold"><b>SoSearchAction</b></span> and the <span class="bold"><b>SoWriteAction</b></span>, which it inherits from <span class="bold"><b>SoNode</b></span>.</p>
+<div class="tip"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/tip.png"></td><td align="left" valign="top"><b>Tip: </b>Do not apply a new action within another action (because caching will not function properly). Also, if you are creating a new node, do not modify the node (for example, call <span class="bold"><b>setValue()</b></span> on a field) within an action method. 
+</td></tr></table><hr noshade="noshade"></div><br><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5444976"></a><a name="id39747"></a>The doAction() Method</h3></div></div>
+<p>For the GL render action, the <a name="idch0224"></a><span class="bold"><b>SoDrawStyle</b></span> node changes the values of four elements in the state based on the value of the corresponding fields. For example, if its <span class="bold"><b>style</b></span> field has a value of INVISIBLE, it changes the value of the <span class="bold"><b>SoGLDrawStyleElement</b></span> in the state to INVISIBLE. The corresponding code to set the element's value is</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+if (! style.isIgnored())
+   SoDrawStyleElement::set(state, this,
+                           (SoDrawStyleElement::Style)
+                           style.getValue());
+</pre></td></tr></table><p>For the callback action, the <span class="bold"><b>SoDrawStyle</b></span> node does the same thing: it sets the value of the element based on the value of the corresponding field in the node. </p>
+<p>Since the two actions perform exactly the same tasks, this common code is put into a separate method that can be called by both the GL render and the callback actions. By convention, this shared method used by property nodes is called <span class="bold"><b>doAction()</b></span> (which is a virtual method on <span class="bold"><b>SoNode</b></span>). The code for the draw-style node's callback action is </p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+SoDrawStyle::callback(SoCallbackAction *action)
+(
+   doAction(action);
+}
+</pre></td></tr></table><p>The code for the draw-style node's GL render action is also simple (and familiar):</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+SoDrawStyle::GLRender(SoGLRenderAction *action)
+(
+   doAction(action);
+}
+</pre></td></tr></table><p>To complete the story, here is the complete code for the draw-style node's <span class="bold"><b>doAction()</b></span> method:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+SoDrawStyle::doAction(SoAction *action)
+{
+   SoState   *state = action-&gt;getState();
+   
+   if (! style.isIgnored())
+      SoDrawStyleElement::set(state, this,
+                              (SoDrawStyleElement::Style)
+                              style.getValue());
+   if (! lineWidth.isIgnored())
+       SoLineWidthElement::set(state, this,
+                               lineWidth.getValue());
+   if (! linePattern.isIgnored())
+       SoLinePatternElement::set(state, this,
+                                 linePattern.getValue());
+   if (! pointSize.isIgnored())
+       SoPointSizeElement::set(state, this,
+                               pointSize.getValue());
+}
+</pre></td></tr></table><p>The advantage of this scheme becomes apparent when you consider extending the set of actions (see Chapter 4). You can define a new action class and implement a static method for <span class="bold"><b>SoNode</b></span> that calls <span class="bold"><b>doAction()</b></span>. Then all properties that implement <span class="bold"><b>doAction()</b></span> will perform the appropriate operation without needing any static methods for them.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5445219"></a>Changing and Examining State Elements</h3></div></div>
+<p>As discussed in Chapter 1, each element class provides methods for setting and inquiring its value. The static <a name="idch0225"></a><span class="bold"><b>set()</b></span> method usually has three parameters, as shown in the previous section:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>The state from which to retrieve the element (which the element obtains from the given action)</p>
+</li>
+<li><p>A pointer to the node that is changing the element's value (used for caching purposes and for checking the Override flag)<a name="idch0226"></a><a name="idch0227"></a></p>
+</li>
+<li><p>The new value for the element</p>
+</li>
+</ul></div><p>Most element classes also define a static <a name="idch0228"></a><span class="bold"><b>get()</b></span> method that returns the current value stored in an element instance. For example, to obtain the current draw style:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+style = SoDrawStyleElement::get(action-&gt;getState());
+</pre></td></tr></table><p>Elements that have multiple values may define a different sequence of <span class="bold"><b>get()</b></span> methods. For example, the material color elements and coordinate element can contain many values. In these cases, the element class defines three methods:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>getInstance()</b></span> </span></td><td width="10"> </td><td><p>returns the top instance of the element in the state as a <span class="bold"><b>const</b></span> pointer <a name="idch0229"></a></p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>getNum()</b></span> </span></td><td width="10"> </td><td><p>returns the number of values in the element</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>get(</b></span><i>n</i><span class="bold"><b>)</b></span> </span></td><td width="10"> </td><td><p>returns the <i>n</i>th value in the element <a name="idch0230"></a></p>
+
+</td></tr></table></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5445436"></a>Element Bundles</h3></div></div>
+<p>Elements are designed to be small and specific, for two reasons. The first reason is that it should be possible for a node to change one aspect of the state without having to change any of the rest, including related elements. For example, the <a name="idch0231"></a><span class="bold"><b>SoBaseColor</b></span> node changes only the <span class="bold"><b>SoDiffuseColorElement</b></span> without affecting any other material elements. The second reason has to do with caching. It is easy to determine when any element's value has changed, since (typically) the whole element changes at once. Therefore, determining which nodes affect a cache is a straightforward task.<a name="idch0232"></a></p>
+<p>However, some elements are related to each other, and it's good to deal with them together for convenience and efficiency. Classes called <i>bundles<a name="idch0233"></a></i> provide simple interfaces to collections of related elements. </p>
+<p>Supported Inventor bundle classes are</p>
+<div class="itemizedlist"><ul type="disc"><li><p>SoMaterialBundle<a name="idch0234"></a></p>
+</li>
+<li><p>SoNormalBundle<a name="idch0235"></a></p>
+</li>
+<li><p>SoTextureCoordinateBundle<a name="idch0236"></a></p>
+</li>
+</ul></div><p>The <span class="bold"><b>SoMaterialBundle</b></span> class accesses all elements having to do with surface materials. Methods on the bundle allow shapes to step easily through sequential materials and to send the current material to OpenGL. The <span class="bold"><b>SoNormalBundle</b></span> allows you to step easily through sequential normals and provides routines for generating default normals. The <span class="bold"><b>SoTextureCoordinateBundle</b></span> allows you to step through texture coordinates and provides methods for generating texture coordinates if the shape is using <span class="bold"><b>SoTextureCoordinatePlane</b></span> or <span class="bold"><b>SoTextureCoordinateEnvironment</b></span>.</p>
+</div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5445615"></a><a name="id56912"></a>Creating a Property Node</h2></div></div>
+<p>The easiest way to learn how to add a node class is by example. The first example creates a new property node called <a name="idch0237"></a><span class="bold"><b>Glow<a name="idch0238"></a></b></span>, which modifies the emissive color of the current material to make objects appear to glow. It has a field called <span class="bold"><b>color</b></span>, which is the color of the glow, and a float field called <span class="bold"><b>brightness</b></span>, ranging from 0 to 1, indicating how much the object should glow.</p>
+<p>For this class, we need to implement actions that deal with materials:  <a name="idch0239"></a><span class="bold"><b>GLRender()</b></span> and <span class="bold"><b>callback()</b></span>. We will use <span class="bold"><b>doAction()</b></span> (see <a href="ch02.html#id39747">&#8220;The doAction() Method&#8221;</a>), since it performs the same operation for both actions. The <span class="bold"><b>doAction()</b></span> method for the <span class="bold"><b>Glow</b></span> class updates the emissive color element based on the values of the <span class="bold"><b>color</b></span> and <span class="bold"><b>brightness</b></span> fields of the node.</p>
+<p>The class header for our new node is shown in Example 2-1.<a name="idch0240"></a></p>
+<div class="example"><p><a name="id5445745"></a><b>Example 2-1. <a name="idch0241"></a>Glow.h</b></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout"><tt>#include &lt;Inventor/SbColor.h&gt;
+#include &lt;Inventor/fields/SoSFColor.h&gt;
+#include &lt;Inventor/fields/SoSFFloat.h&gt;
+#include &lt;Inventor/nodes/SoSubNode.h&gt;</tt>
+<tt>class Glow : public SoNode {</tt>
+<tt>   SO_NODE_HEADER(Glow);</tt>
+<tt> public:
+   // Fields:
+   SoSFColor      color;       // Color of glow
+   SoSFFloat      brightness;  // Amount of glow (0-1)</tt>
+<tt>   // Initializes this class for use in scene graphs. This
+   // should be called after database initialization and before
+   // any instance of this node is constructed.
+   static void    initClass();</tt>
+<tt>   // Constructor
+   Glow();</tt>
+<tt> protected:
+   // These implement supported actions. The only actions that
+   // deal with materials are the callback and GL render
+   // actions. We will inherit all other action methods from
+   // SoNode.
+   virtual void   GLRender(SoGLRenderAction *action);
+   virtual void   callback(SoCallbackAction *action);</tt>
+<tt>   // This implements generic traversal of Glow node, used in
+   // both of the above methods.
+   virtual void   doAction(SoAction *action);
+</tt>
+<tt> private:
+   // Destructor. Private to keep people from trying to delete
+   // nodes, rather than using the reference count mechanism.
+   virtual ~Glow();</tt>
+<tt>   // Holds emissive color. A pointer to this is stored in the
+   // state.
+   SbColor         emissiveColor;
+};</tt>
+</pre></td></tr></table><br></div><p>The <a name="idch0242"></a><span class="bold"><b>Glow</b></span> node is representative of most property nodes in that it is concerned solely with editing the current traversal state, regardless of the action being performed. The use of the element in the example is also typical; most elements have simple <span class="bold"><b>set()</b></span> methods to store values.</p>
+<p>The source code for the <span class="bold"><b>Glow</b></span> class is shown in Example 2-2.</p>
+<div class="example"><p><a name="id5362393"></a><b>Example 2-2. Glow.c++</b></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout"><tt>#include &lt;Inventor/actions/SoCallbackAction.h&gt;
+#include &lt;Inventor/actions/SoGLRenderAction.h&gt;
+#include &lt;Inventor/bundles/SoMaterialBundle.h&gt;
+</tt><tt>#include &lt;Inventor/elements/SoEmissiveColorElemen</tt>t.h&gt;
+#include &quot;Glow.h&quot;
+SO_NODE_SOURCE(Glow);
+// Initializes the Glow class. This is a one-time thing that is
+// done after database initialization and before any instance of
+// this class is constructed.
+void
+Glow::initClass()
+{
+   // Initialize type id variables. The arguments to the macro
+   // are: the name of the node class, the class this is derived
+   // from, and the name registered with the type of the parent
+   // class.
+   SO_NODE_INIT_CLASS(Glow, SoNode, &quot;Node&quot;);
+}
+// Constructor
+Glow::Glow()
+{
+   // Do standard constructor tasks
+   SO_NODE_CONSTRUCTOR(Glow);
+
+   // Add &quot;color&quot; field to the field data. The default value for
+   // this field is R=G=B=1, which is white.
+   SO_NODE_ADD_FIELD(color, (1.0, 1.0, 1.0));
+   // Add &quot;brightness&quot; field to the field data. The default
+   // value for this field is 0.
+   SO_NODE_ADD_FIELD(brightness, (0.0));
+}
+// Destructor
+Glow::~Glow()
+{
+}
+// Implements GL render action.
+void
+Glow::GLRender(SoGLRenderAction *action)
+{
+   // Set the elements in the state correctly. Note that we
+   // prefix the call to doAction() with the class name. This
+   // avoids problems if someone derives a new class from the
+   // Glow node and inherits the GLRender() method; Glow's
+   // doAction() will still be called in that case.
+   Glow::doAction(action);
+   // For efficiency, Inventor nodes make sure that the first
+   // defined material is always in GL, so shapes do not have to
+   // send the first material each time. (This keeps caches from
+   // being dependent on material values in many cases.) The
+   // SoMaterialBundle class allows us to do this easily.
+   SoMaterialBundle  mb(action);
+   mb.forceSend(0);
+}
+// Implements callback action.
+void
+Glow::callback(SoCallbackAction *action)
+{
+   // Set the elements in the state correctly.
+   Glow::doAction(action);
+}
+
+// Typical action implementation - it sets the correct element
+// in the action's traversal state. We assume that the element
+// has been enabled.
+void
+Glow::doAction(SoAction *action)
+{
+   // Make sure the &quot;brightness&quot; field is not ignored. If it is,
+   // then we don't need to change anything in the state.
+   if (! brightness.isIgnored()) {
+     // Define the emissive color as the product of the
+     // &quot;brightness&quot; and &quot;color&quot; fields. &quot;emissiveColor&quot; is an
+     // instance variable. Since material elements contain
+     // pointers to the actual values, we need to store the
+     // value in the instance. (We could have defined the
+     // fields to contain multiple values, in which case we
+     // would have to store an array of emissive colors.)
+     emissiveColor = color.getValue() * brightness.getValue();
+
+     // Set the value of the emissive color element to our one
+     // new emissive color. &quot;this&quot; is passed in to let the
+     // caching mechanism know who set this element and to
+     // handle overriding. (Note that this call will have no
+     // effect if another node with a TRUE Override flag set
+     // the element previously.)
+     SoEmissiveColorElement::set(action-&gt;getState(), this,
+                                 1, &amp;emissiveColor);
+   }
+}
+</pre></td></tr></table><br></div><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5362441"></a><a name="id37823"></a>Creating a Shape Node</h2></div></div>
+<p>This next example is more complicated than the property-node example, because shape nodes need to access more of the state and implement different behaviors for different actions. For example, a shape needs to draw geometry during rendering, return intersection information during picking, and compute its extent when getting a bounding box.<a name="idch0243"></a></p>
+<p>All shapes need to define at least two methods:  <a name="idch0244"></a><span class="bold"><b>generatePrimitives()</b></span> and <span class="bold"><b>getBoundingBox()<a name="idch0245"></a></b></span>.  When you define the <span class="bold"><b>generatePrimitives()</b></span> method for your new class, you can inherit the <a name="idch0246"></a><span class="bold"><b>GLRender()</b></span> and <a name="idch0247"></a><span class="bold"><b>rayPick()</b></span> methods from the base class, <span class="bold"><b>SoShape</b></span>, because they use the generated primitives. This feature saves time at the prototyping stage, since you need to implement only the <a name="idch0248"></a><span class="bold"><b>generatePrimitives()</b></span> method, and rendering and picking are provided at no extra cost. When you are ready for fine-tuning, you can redefine these two methods to improve performance.</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5446273"></a>Generating Primitives</h3></div></div>
+<p>When it is traversed to generate primitives for the <a name="idch0249"></a><a name="idch0250"></a><span class="bold"><b>SoCallbackAction</b></span>, each shape generates triangles, line segments, or points. The information for each vertex of the triangle, line segment, or point is stored in an instance of <a name="idch0251"></a><a name="idch0252"></a><a name="idch0253"></a><span class="bold"><b>SoPrimitiveVertex</b></span>. The shape fills in the information for each vertex. Then, for each primitive generated (that is, triangle, line segment, or point), an appropriate callback function is invoked by a method on <a name="idch0254"></a><span class="bold"><b>SoShape</b></span>. For example, if the shape generates triangles, the triangle callback function is invoked for every triangle generated. Filled shapes, such as <a name="idch0255"></a><a name="idch0256"></a><span class="bold"><b>SoCone</b></span> and <span class="bold"><b>SoQuadMesh</b></span>, generate triangles (regardless of draw style), line shapes (such as <span class="bold"><b>SoLineSet</b></span> and <span class="bold"><b>SoIndexedLineSet</b></span>) generate line segments, and point shapes (such as <span class="bold"><b>SoPointSet</b></span>) generate points.</p>
+<div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5446411"></a>SoPrimitiveVertex</h4></div></div>
+<p>The <a name="idch0257"></a><span class="bold"><b>SoPrimitiveVertex</b></span> contains all information for that vertex:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>Point (coordinates, in object space)</p>
+</li>
+<li><p>Normal</p>
+</li>
+<li><p>Texture coordinates</p>
+</li>
+<li><p>Material index</p>
+</li>
+<li><p>A pointer to an instance of an <a name="idch0258"></a><span class="bold"><b>SoDetail</b></span> subclass (may be NULL)</p>
+</li>
+</ul></div><p>The shape's <a name="idch0259"></a><span class="bold"><b>generatePrimitives()</b></span> method sets each of these values.</p>
+<p>The appropriate callback function can be invoked either automatically or explicitly. If you want explicit control over when the callback function is invoked, you can use the following methods provided by the <a name="idch0260"></a><span class="bold"><b>SoShape</b></span> class:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>invokeTriangleCallbacks()<a name="idch0261"></a></p>
+</li>
+<li><p>invokeLineSegmentCallbacks()<a name="idch0262"></a></p>
+</li>
+<li><p>invokePointCallbacks()<a name="idch0263"></a></p>
+</li>
+</ul></div><p>To take advantage of the automatic mechanism, use these three methods, provided by the <span class="bold"><b>SoShape</b></span> base class as a convenience:</p>
+<div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><b>beginShape</b></span>(<i>action</i>, <i>shapeType</i>) <a name="idch0264"></a></p>
+</li>
+<li><p><span class="bold"><b>shapeVertex(</b></span><i>&amp;vertex</i>) <a name="idch0265"></a></p>
+</li>
+<li><p><span class="bold"><b>endShape() <a name="idch0266"></a></b></span></p>
+</li>
+</ul></div><p>The <a name="idch0267"></a><i>shapeType</i> parameter is TRIANGLE_FAN, TRIANGLE_STRIP, TRIANGLES, or POLYGON. For example, if you choose TRIANGLE_FAN, this method performs the necessary triangulation and invokes the appropriate callbacks for each successive triangle of the shape. This mechanism is similar to OpenGL's geometry calls.</p>
+</div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5446701"></a>Creating Details</h4></div></div>
+<p>You may want your shape to store additional information in an <a name="idch0268"></a><span class="bold"><b>SoDetail</b></span>&#8212;for example, what part of the shape each vertex belongs to. In this case, you can use an existing subclass of <span class="bold"><b>SoDetail</b></span> (see <a name="idch0269"></a><i>The Inventor Mentor,</i> Chapter 9), or you can create a new <span class="bold"><b>SoDetail</b></span> subclass to hold the appropriate information. By default, the pointer to the detail in <span class="bold"><b>SoPrimitiveVertex</b></span> is NULL.</p>
+<p>If you decide to store information in an <span class="bold"><b>SoDetail</b></span>, you create an instance of the subclass and store a pointer to it in the <span class="bold"><b>SoPrimitiveVertex</b></span> by calling <span class="bold"><b>setDetail()<a name="idch0270"></a></b></span>. </p>
+</div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5446828"></a>Rendering</h3></div></div>
+<p>For rendering, you may be able to inherit the <a name="idch0271"></a><a name="idch0272"></a><span class="bold"><b>GLRender()</b></span> method from the <span class="bold"><b>SoShape</b></span> class. In this case, you define a <span class="bold"><b>generatePrimitives()</b></span> method as described in the previous sections. Each primitive will be generated and then rendered separately. </p>
+<p>In other cases, you may want to write your own render method for the new shape class, especially if it would be more efficient to send the vertex information to OpenGL in some other form, such as triangle strips. The Pyramid node created later in this chapter implements its own <a name="idch0273"></a><span class="bold"><b>GLRender()</b></span> method. Before rendering, the shape should test whether it needs to be rendered. You can use the <span class="bold"><b>SoShape::shouldGLRender()<a name="idch0274"></a></b></span> method, which checks for INVISIBLE draw style, BOUNDING_BOX complexity, delayed transparency, and render abort.</p>
+<p>Inventor takes care of sending the draw-style value to OpenGL (where it is handled by <span class="bold"><b>glPolygonMode()</b></span>). This means that filled shapes will be drawn automatically as lines or points if the draw style indicates such. Note that if your object is composed of lines, but the draw style is POINTS, you need to handle that case explicitly. You need to check whether the draw-style element in the state is points or lines and render the shape accordingly.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5446911"></a>Picking</h3></div></div>
+<p>For picking, you may also be able to inherit the <a name="idch0275"></a><a name="idch0276"></a><span class="bold"><b>rayPick()</b></span> method from the <span class="bold"><b>SoShape</b></span> class. In this case, you define a <a name="idch0277"></a><span class="bold"><b>generatePrimitives()</b></span> method, and the parent class <span class="bold"><b>rayPick()</b></span> method tests the picking ray against each primitive that has been generated. If it intersects the primitive, it creates an <span class="bold"><b>SoPickedPoint<a name="idch0278"></a></b></span>. <span class="bold"><b>SoShape</b></span> provides three virtual methods for creating details:</p>
+<div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><b>createTriangleDetail<a name="idch0279"></a></b></span>()</p>
+</li>
+<li><p><span class="bold"><b>createLineDetail()<a name="idch0280"></a></b></span></p>
+</li>
+<li><p><span class="bold"><b>createPointDetail()<a name="idch0281"></a></b></span></p>
+</li>
+</ul></div><p>The default methods return NULL, but your shape can override this to set up and return a detail instance.</p>
+<p>The Pyramid node created later in this chapter inherits the <span class="bold"><b>rayPick()</b></span> method from <span class="bold"><b>SoShape</b></span> in this manner.</p>
+<p>For some shapes, such as spheres and cylinders, it is more efficient to check whether the picking ray intersects the object without tessellating the object into primitives. In such cases, you can implement your own <span class="bold"><b>rayPick()</b></span> method and use the <span class="bold"><b>SoShape::shouldRayPick()<a name="idch0282"></a></b></span> method, which first checks to see if the object is pickable.</p>
+<p>The following excerpt from the <span class="bold"><b>SoSphere</b></span> class shows how to implement your own <span class="bold"><b>rayPick()</b></span> method:<a name="idch0283"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+SoSphere::rayPick(SoRayPickAction *action)
+{
+   SbVec3f             enterPoint, exitPoint, normal;
+   SbVec4f             texCoord(0.0, 0.0, 0.0, 1.0);
+   SoPickedPoint       *pp;
+
+   // First see if the object is pickable.
+   if (! shouldRayPick(action))
+       return;
+
+   // Compute the picking ray in our current object space.
+   computeObjectSpaceRay(action);
+
+   // Create SbSphere with correct radius, centered at zero.
+   float       rad = (radius.isIgnored() ? 1.0 :
+                       radius.getValue());
+   SbSphere    sph(SbVec3f(0., 0., 0.), rad);
+
+   // Intersect with pick ray. If found, set up picked point(s).
+   if (sph.intersect(action-&gt;getLine(), enterPoint, exitPoint)) {
+      if (action-&gt;isBetweenPlanes(enterPoint) &amp;&amp;
+          (pp = action-&gt;addIntersection(enterPoint)) != NULL) {
+
+         normal = enterPoint;
+         normal.normalize();
+         pp-&gt;setObjectNormal(normal);
+         // This macro computes the s and t texture coordinates
+         // for the shape.
+         COMPUTE_S_T(enterPoint, texCoord[0], texCoord[1]);
+         pp-&gt;setObjectTextureCoords(texCoord);
+      }
+
+      if (action-&gt;isBetweenPlanes(exitPoint) &amp;&amp;
+          (pp = action-&gt;addIntersection(exitPoint)) != NULL) {
+
+         normal = exitPoint;
+         normal.normalize();
+         pp-&gt;setObjectNormal(normal);
+         COMPUTE_S_T(exitPoint, texCoord[0], texCoord[1]);
+         texCoord[2] = texCoord[3] = 0.0;
+         pp-&gt;setObjectTextureCoords(texCoord);
+      }
+   }
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5447193"></a>Getting a Bounding Box</h3></div></div>
+<p><span class="bold"><b>SoShape<a name="idch0284"></a></b></span> provides a <a name="idch0285"></a><span class="bold"><b>getBoundingBox()</b></span> method that your new shape class can inherit. This method calls a virtual <a name="idch0286"></a><span class="bold"><b>computeBBox()</b></span> method, which you need to define. (The <span class="bold"><b>computeBBox()</b></span> method is also used during rendering when bounding-box complexity is specified.)</p>
+<p>If you are deriving a class from <a name="idch0287"></a><span class="bold"><b>SoNonIndexedShape</b></span>, you can use the <span class="bold"><b>computeCoordBBox()<a name="idch0288"></a></b></span> method within your <span class="bold"><b>computeBBox()</b></span> routine. This method computes the bounding box by looking at the specified number of vertices, starting at <span class="bold"><b>startIndex</b></span>.  It uses the minimum and maximum coordinate values to form the diagonal for the bounding box and uses the average of the vertices as the center of the object.</p>
+<p>If you are deriving a class from <a name="idch0289"></a><span class="bold"><b>SoIndexedShape</b></span>, you can inherit <span class="bold"><b>computeBBox()</b></span> from the base <span class="bold"><b>SoIndexedShape</b></span> class. This method uses all nonnegative indices in the coordinates list to find the minimum and maximum coordinate values. It uses the average of the coordinate values as the center of the object.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5448593"></a>Pyramid Node</h3></div></div>
+<p>This example creates a <a name="idch0290"></a><span class="bold"><b>Pyramid<a name="idch0291"></a></b></span> node, which has a square base at y = -1 and its apex at (0.0, 1.0, 0.0). The code presented here is similar to that used for other primitive (nonvertex-based) shapes, such as cones and cylinders. The pyramid behaves like an <span class="bold"><b>SoCone</b></span>, except that it always has four sides. And, instead of a <span class="bold"><b>bottomRadius</b></span> field, the <span class="bold"><b>Pyramid</b></span> class has <span class="bold"><b>baseWidth</b></span> and <span class="bold"><b>baseDepth</b></span> fields in addition to the <span class="bold"><b>parts</b></span> and <span class="bold"><b>height</b></span> fields.</p>
+<p>Some of the work for all shapes can be done by methods on the base shape class, <span class="bold"><b>SoShape</b></span>. For example, <span class="bold"><b>SoShape::shouldGLRender()</b></span> checks for INVISIBLE draw style when rendering. <span class="bold"><b>SoShape::shouldRayPick()</b></span> checks for UNPICKABLE pick style when picking. This means that shape subclasses can concentrate on their specific behaviors.</p>
+<p>To define a vertex-based shape subclass, you probably want to derive your class from either <span class="bold"><b>SoNonIndexedShape</b></span> or <span class="bold"><b>SoIndexedShape</b></span>. These classes define some methods and macros that can make your job easier.</p>
+<p>You may notice in this example that there are macros (defined in SoSFEnum.h) that make it easy to deal with fields containing enumerated<br>
+types, such as the <span class="bold"><b>parts</b></span> field of our node. Similar macros are found in SoMFEnum.h and in the header files for the bit-mask fields.</p>
+<p>The class header for the <span class="bold"><b>Pyramid</b></span> node is shown in Example 2-3.</p>
+<div class="example"><p><a name="id5448752"></a><b>Example 2-3. Pyramid.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SbLinear.h&gt;
+#include &lt;Inventor/fields/SoSFBitMask.h&gt;
+#include &lt;Inventor/fields/SoSFFloat.h&gt;
+#include &lt;Inventor/nodes/SoShape.h&gt;
+// SoShape.h includes SoSubNode.h; no need to include it again.
+
+// Pyramid texture coordinates are defined on the sides so that
+// the seam is along the left rear edge, wrapping
+// counterclockwise around the sides. The texture coordinates on
+// the base are set up so the texture is right side up when the
+// pyramid is tilted back.
+
+class Pyramid : public SoShape {
+
+   SO_NODE_HEADER(Pyramid);
+
+ public:
+
+   enum Part {                 // Pyramid parts:
+     SIDES = 0x01,             // The 4 side faces
+     BASE  = 0x02,             // The bottom square face
+     ALL   = 0x03,             // All parts
+   };
+
+   // Fields
+   SoSFBitMask   parts;         // Visible parts
+   SoSFFloat     baseWidth;     // Width of base
+   SoSFFloat     baseDepth;     // Depth of base
+   SoSFFloat     height;        // Height, base to apex 
+
+   // Initializes this class.
+   static void   initClass();
+
+   // Constructor
+   Pyramid();
+
+   // Turns on/off a part of the pyramid. (Convenience)
+   void          addPart(Part part);
+   void          removePart(Part part);
+
+   // Returns whether a given part is on or off. (Convenience)
+   SbBool        hasPart(Part part) const;
+
+ protected:
+   // This implements the GL rendering action. We will inherit
+   // all other action behavior, including rayPick(), which is
+   // defined by SoShape to pick against all of the triangles
+   // created by generatePrimitives.
+   virtual void  GLRender(SoGLRenderAction *action);
+
+   // Generates triangles representing a pyramid.
+   virtual void  generatePrimitives(SoAction *action);
+
+   // This computes the bounding box and center of a pyramid. It
+   // is used by SoShape for the SoGetBoundingBoxAction and also
+   // to compute the correct box to render or pick when
+   // complexity is BOUNDING_BOX. Note that we do not have to
+   // define a getBoundingBox() method, since SoShape already
+   // takes care of that (using this method).
+   virtual void   computeBBox(SoAction *action,
+                              SbBox3f &amp;box, SbVec3f &amp;center);
+ private:
+   // Face normals. These are static because they are computed
+   // once and are shared by all instances.
+   static SbVec3f frontNormal, rearNormal;
+   static SbVec3f leftNormal,  rightNormal; 
+   static SbVec3f baseNormal;
+
+   // Destructor
+   virtual ~Pyramid();
+
+   // Computes and returns half-width, half-height, and
+   // half-depth based on current field values.
+   void           getSize(float &amp;halfWidth,
+                          float &amp;halfHeight,
+                          float &amp;halfDepth) const;
+};
+</pre></td></tr></table><p>The source code for the Pyramid node is shown in Example 2-4. </p>
+<div class="example"><p><a name="id5448855"></a><b>Example 2-4. Pyramid.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;GL/gl.h&gt;
+#include &lt;Inventor/SbBox.h&gt;
+#include &lt;Inventor/SoPickedPoint.h&gt;
+#include &lt;Inventor/SoPrimitiveVertex.h&gt;
+#include &lt;Inventor/actions/SoGLRenderAction.h&gt;
+#include &lt;Inventor/bundles/SoMaterialBundle.h&gt;
+#include &lt;Inventor/elements/SoGLTextureCoordinateElement.h&gt;
+#include &lt;Inventor/elements/SoGLTextureEnabledElement.h&gt;
+#include &lt;Inventor/elements/SoLightModelElement.h&gt;
+#include &lt;Inventor/elements/SoMaterialBindingElement.h&gt;
+#include &lt;Inventor/elements/SoModelMatrixElement.h&gt;
+#include &lt;Inventor/misc/SoState.h&gt;
+#include &quot;Pyramid.h&quot;
+
+// Shorthand macro for testing whether the current parts field
+// value (parts) includes a given part (part).
+#define HAS_PART(parts, part) (((parts) &amp; (part)) != 0)
+
+SO_NODE_SOURCE(Pyramid);
+
+// Normals to four side faces and to base.
+SbVec3f Pyramid::frontNormal, Pyramid::rearNormal;
+SbVec3f Pyramid::leftNormal,  Pyramid::rightNormal;
+SbVec3f Pyramid::baseNormal;
+
+// This initializes the Pyramid class.
+
+void
+Pyramid::initClass()
+{
+   // Initialize type id variables.
+   SO_NODE_INIT_CLASS(Pyramid, SoShape, &quot;Shape&quot;);
+}
+
+// Constructor
+
+Pyramid::Pyramid()
+{
+   SO_NODE_CONSTRUCTOR(Pyramid);
+   SO_NODE_ADD_FIELD(parts,     (ALL));
+   SO_NODE_ADD_FIELD(baseWidth, (2.0));
+   SO_NODE_ADD_FIELD(baseDepth, (2.0));
+   SO_NODE_ADD_FIELD(height,    (2.0));
+
+   // Set up static values and strings for the &quot;parts&quot;
+   // enumerated type field. This allows the SoSFEnum class to
+   // read values for this field. For example, the first line
+   // below says that the first value (index 0) has the value
+   // SIDES (defined in the header file) and is represented in
+   // the file format by the string &quot;SIDES&quot;.
+   SO_NODE_DEFINE_ENUM_VALUE(Part, SIDES);
+   SO_NODE_DEFINE_ENUM_VALUE(Part, BASE);
+   SO_NODE_DEFINE_ENUM_VALUE(Part, ALL);
+
+   // Copy static information for &quot;parts&quot; enumerated type field
+   // into this instance. 
+   SO_NODE_SET_SF_ENUM_TYPE(parts, Part);
+
+   // If this is the first time the constructor is called, set
+   // up the static normals.
+   if (SO_NODE_IS_FIRST_INSTANCE()) {
+     float invRoot5      = 1.0 / sqrt(5.0);
+     float invRoot5Twice = 2.0 * invRoot5;
+
+     frontNormal.setValue(0.0, invRoot5,  invRoot5Twice);
+     rearNormal.setValue( 0.0, invRoot5, -invRoot5Twice);
+     leftNormal.setValue( -invRoot5Twice, invRoot5, 0.0);
+     rightNormal.setValue( invRoot5Twice, invRoot5, 0.0);
+     baseNormal.setValue(0.0, -1.0, 0.0);
+   }
+}
+
+// Destructor
+
+Pyramid::~Pyramid()
+{
+}
+
+// Turns on a part of the pyramid. (Convenience function.)
+
+void
+Pyramid::addPart(Part part)
+{
+   parts.setValue(parts.getValue() | part);
+}
+
+// Turns off a part of the pyramid. (Convenience function.)
+
+void
+Pyramid::removePart(Part part)
+{
+   parts.setValue(parts.getValue() &amp; ~part);
+}
+
+// Returns whether a given part is on or off. (Convenience
+// function.)
+
+SbBool
+Pyramid::hasPart(Part part) const
+{
+   return HAS_PART(parts.getValue(), part);
+}
+
+// Implements the SoGLRenderAction for the Pyramid node.
+
+void
+Pyramid::GLRender(SoGLRenderAction *action)
+{
+   // Access the state from the action.
+   SoState  *state = action-&gt;getState();
+
+   // See which parts are enabled.
+   int curParts = (parts.isIgnored() ? ALL : parts.getValue());
+
+   // First see if the object is visible and should be rendered
+   // now. This is a method on SoShape that checks for INVISIBLE
+   // draw style, BOUNDING_BOX complexity, and delayed
+   // transparency.
+   if (! shouldGLRender(action))
+     return;
+
+   // Make sure things are set up correctly for a solid object.
+   // We are solid if all parts are on. beginSolidShape() is a
+   // method on SoShape that sets up backface culling and other
+   // optimizations.
+   if (curParts == ALL)
+     beginSolidShape(action);
+
+   // Change the current GL matrix to draw the pyramid with the
+   // correct size. This is easier than modifying all of the
+   // coordinates and normals of the pyramid. (For extra
+   // efficiency, you can check if the field values are all set
+   // to default values - if so, then you can skip this step.)
+   // Scale world if necessary.
+   float         halfWidth, halfHeight, halfDepth;
+   getSize(halfWidth, halfHeight, halfDepth);
+   glPushMatrix();
+   glScalef(halfWidth, halfHeight, halfDepth);
+
+   // See if texturing is enabled. If so, we will have to
+   // send explicit texture coordinates. The &quot;doTextures&quot; flag
+   // will indicate if we care about textures at all.
+   SbBool doTextures =
+     (SoGLTextureEnabledElement::get(state) &amp;&amp;
+      SoTextureCoordinateElement::getType(state) !=
+      SoTextureCoordinateElement::NONE);
+
+   // Determine if we need to send normals. Normals are
+   // necessary if we are not doing BASE_COLOR lighting.
+   SbBool sendNormals =
+     (SoLightModelElement::get(state) !=
+      SoLightModelElement::BASE_COLOR);
+
+   // Determine if there's a material bound per part.
+   SoMaterialBindingElement::Binding binding = 
+     SoMaterialBindingElement::get(state);
+   SbBool materialPerPart =
+     (binding == SoMaterialBindingElement::PER_PART ||
+      binding == SoMaterialBindingElement::PER_PART_INDEXED);
+
+   // Make sure first material is sent if necessary. We'll use
+   // the SoMaterialBundle class because it makes things very
+   // easy.
+   SoMaterialBundle mb(action);
+   mb.sendFirst();
+
+   // Render the parts of the pyramid. We don't have to worry
+   // about whether to render filled regions, lines, or points,
+   // since that is already taken care of. We are also ignoring
+   // complexity, which we could use to render a more
+   // finely-tessellated version of the pyramid.
+
+   // We'll use this macro to make the code easier. It uses the
+   // &quot;point&quot; variable to store the vertex point to send.
+   SbVec3f  point;
+
+#define SEND_VERTEX(x, y, z, s, t)\
+     point.setValue(x, y, z);             \
+     if (doTextures)                      \
+       glTexCoord2f(s, t);                \
+     glVertex3fv(point.getValue())
+
+   if (HAS_PART(curParts, SIDES)) {
+
+     // Draw each side separately, so that normals are correct.
+     // If sendNormals is TRUE, send face normals with the
+     // polygons. Make sure the vertex order obeys the
+     // right-hand rule.
+
+     glBegin(GL_TRIANGLES);
+
+     // Front face: left front, right front, apex
+     if (sendNormals)
+       glNormal3fv(frontNormal.getValue());
+     SEND_VERTEX(-1.0, -1.0,  1.0, .25,  0.0);
+     SEND_VERTEX( 1.0, -1.0,  1.0, .50,  0.0);
+     SEND_VERTEX( 0.0,  1.0,  0.0, .325, 1.0);
+
+     // Right face: right front, right rear, apex
+     if (sendNormals)
+       glNormal3fv(rightNormal.getValue());
+     SEND_VERTEX( 1.0, -1.0,  1.0, .50,  0.0);
+     SEND_VERTEX( 1.0, -1.0, -1.0, .75,  0.0);
+     SEND_VERTEX( 0.0,  1.0,  0.0, .625, 1.0);
+
+     // Rear face: right rear, left rear, apex
+     if (sendNormals)
+       glNormal3fv(rearNormal.getValue());
+     SEND_VERTEX( 1.0, -1.0, -1.0, .75,  0.0);
+     SEND_VERTEX(-1.0, -1.0, -1.0, 1.0,  0.0);
+     SEND_VERTEX( 0.0,  1.0,  0.0, .875, 1.0);
+
+     // Left face: left rear, left front, apex
+     if (sendNormals)
+       glNormal3fv(leftNormal.getValue());
+     SEND_VERTEX(-1.0, -1.0, -1.0, 0.0,  0.0);
+     SEND_VERTEX(-1.0, -1.0,  1.0, .25,  0.0);
+     SEND_VERTEX( 0.0,  1.0,  0.0, .125, 1.0);
+
+     glEnd();
+   }
+
+   if (HAS_PART(curParts, BASE)) {
+
+     // Send the next material if it varies per part.
+     if (materialPerPart)
+       mb.send(1, FALSE);
+
+     if (sendNormals)
+       glNormal3fv(baseNormal.getValue());
+
+     // Base: left rear, right rear, right front, left front
+     glBegin(GL_QUADS);
+     SEND_VERTEX(-1.0, -1.0, -1.0, 0.0,  0.0);
+     SEND_VERTEX( 1.0, -1.0, -1.0, 1.0,  0.0);
+     SEND_VERTEX( 1.0, -1.0,  1.0, 1.0,  1.0);
+     SEND_VERTEX(-1.0, -1.0,  1.0, 0.0,  1.0);
+     glEnd();
+   }
+
+   // Restore the GL matrix.
+   glPopMatrix();
+
+   // Terminate the effects of rendering a solid shape if
+   // necessary.
+   if (curParts == ALL)
+     endSolidShape(action);
+}
+
+// Generates triangles representing a pyramid.
+
+void
+Pyramid::generatePrimitives(SoAction *action)
+{
+   // The pyramid will generate 6 triangles: 1 for each side
+   // and 2 for the base. (Again, we are ignoring complexity.)
+   // This variable is used to store each vertex.
+   SoPrimitiveVertex   pv;
+
+   // Access the state from the action.
+   SoState  *state = action-&gt;getState();
+
+   // See which parts are enabled.
+   int curParts = (parts.isIgnored() ? ALL : parts.getValue());
+
+   // We need the size to adjust the coordinates.
+   float halfWidth, halfHeight, halfDepth;
+   getSize(halfWidth, halfHeight, halfDepth);
+
+   // See if we have to use a texture coordinate function,
+   // rather than generating explicit texture coordinates.
+   SbBool useTexFunc = 
+     (SoTextureCoordinateElement::getType(state) ==
+      SoTextureCoordinateElement::FUNCTION);
+
+   // If we need to generate texture coordinates with a
+   // function, we'll need an SoGLTextureCoordinateElement.
+   // Otherwise, we'll set up the coordinates directly.
+   const SoTextureCoordinateElement *tce;
+   SbVec4f texCoord;
+   if (useTexFunc)
+     tce = SoTextureCoordinateElement::getInstance(state);
+   else {
+     texCoord[2] = 0.0;
+     texCoord[3] = 1.0;
+   }
+
+   // Determine if there's a material bound per part.
+   SoMaterialBindingElement::Binding binding = 
+     SoMaterialBindingElement::get(state);
+   SbBool materialPerPart =
+     (binding == SoMaterialBindingElement::PER_PART ||
+      binding == SoMaterialBindingElement::PER_PART_INDEXED);
+
+   // We'll use this macro to make the code easier. It uses the
+   // &quot;point&quot; variable to store the primitive vertex's point.
+   SbVec3f  point;
+
+#define GEN_VERTEX(pv, x, y, z, s, t, normal)   \
+     point.setValue(halfWidth  * x,             \
+                halfHeight * y,                 \
+                halfDepth  * z);                \
+     if (useTexFunc)                            \
+       texCoord = tce-&gt;get(point, normal);      \
+     else {                                     \
+       texCoord[0] = s;                         \
+       texCoord[1] = t;                         \
+     }                                          \
+     pv.setPoint(point);                        \
+     pv.setNormal(normal);                      \
+     pv.setTextureCoords(texCoord);             \
+     shapeVertex(&amp;pv)
+
+   if (HAS_PART(curParts, SIDES)) {
+
+     // We will generate 4 triangles for the sides of the
+     // pyramid. We can use the beginShape() / shapeVertex() /
+     // endShape() convenience functions on SoShape to make the
+     // triangle generation easier and clearer. (The
+     // shapeVertex() call is built into the macro.)
+
+     // Note that there is no detail information for the
+     // Pyramid. If there were, we would create an instance of
+     // the correct subclass of SoDetail (such as
+     // PyramidDetail) and call pv.setDetail(&amp;detail); once.
+
+     beginShape(action, TRIANGLES);
+
+     // Front face: left front, right front, apex
+     GEN_VERTEX(pv, -1.0, -1.0,  1.0, .25,  0.0, frontNormal);
+     GEN_VERTEX(pv,  1.0, -1.0,  1.0, .50,  0.0, frontNormal);
+     GEN_VERTEX(pv,  0.0,  1.0,  0.0, .325, 1.0, frontNormal);
+
+     // Right face: right front, right rear, apex
+     GEN_VERTEX(pv,  1.0, -1.0,  1.0, .50,  0.0, rightNormal);
+     GEN_VERTEX(pv,  1.0, -1.0, -1.0, .75,  0.0, rightNormal);
+     GEN_VERTEX(pv,  0.0,  1.0,  0.0, .625, 1.0, rightNormal);
+
+     // Rear face: right rear, left rear, apex
+     GEN_VERTEX(pv,  1.0, -1.0, -1.0, .75,  0.0, rearNormal);
+     GEN_VERTEX(pv, -1.0, -1.0, -1.0, 1.0,  0.0, rearNormal);
+     GEN_VERTEX(pv,  0.0,  1.0,  0.0, .875, 1.0, rearNormal);
+
+     // Left face: left rear, left front, apex
+     GEN_VERTEX(pv, -1.0, -1.0, -1.0, 0.0,  0.0, leftNormal);
+     GEN_VERTEX(pv, -1.0, -1.0,  1.0, .25,  0.0, leftNormal);
+     GEN_VERTEX(pv,  0.0,  1.0,  0.0, .125, 1.0, leftNormal);
+
+     endShape();
+   }
+
+   if (HAS_PART(curParts, BASE)) {
+
+     // Increment the material index in the vertex if
+     // necessary. (The index is set to 0 by default.)
+     if (materialPerPart)
+       pv.setMaterialIndex(1);
+     // We will generate two triangles for the base, as a
+     // triangle strip.
+     beginShape(action, TRIANGLE_STRIP);
+
+     // Base: left front, left rear, right front, right rear
+     GEN_VERTEX(pv, -1.0, -1.0,  1.0, 0.0,  1.0, baseNormal);
+     GEN_VERTEX(pv, -1.0, -1.0, -1.0, 0.0,  0.0, baseNormal);
+     GEN_VERTEX(pv,  1.0, -1.0,  1.0, 1.0,  1.0, baseNormal);
+     GEN_VERTEX(pv,  1.0, -1.0, -1.0, 1.0,  0.0, baseNormal);
+
+     endShape();
+   }
+}
+
+// Computes the bounding box and center of a pyramid.
+
+void
+Pyramid::computeBBox(SoAction *, SbBox3f &amp;box, SbVec3f &amp;center)
+{
+   // Figure out what parts are active.
+   int curParts = (parts.isIgnored() ? ALL : parts.getValue());
+
+   // If no parts are active, set the bounding box to be tiny.
+   if (curParts == 0)
+     box.setBounds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+   else {
+     // These points define the min and max extents of the box.
+     SbVec3f min, max;
+
+     // Compute the half-width, half-height, and half-depth of
+     // the pyramid. We'll use this info to set the min and max
+     // points.
+     float   halfWidth, halfHeight, halfDepth;
+     getSize(halfWidth, halfHeight, halfDepth);
+
+     min.setValue(-halfWidth, -halfHeight, -halfDepth);
+
+     // The maximum point depends on whether the SIDES are
+     // active. If not, only the base is present.
+     if (HAS_PART(curParts, SIDES))
+       max.setValue(halfWidth, halfHeight, halfDepth);
+     else
+       max.setValue(halfWidth, -halfHeight, halfDepth);
+
+     // Set the box to bound the two extreme points.
+     box.setBounds(min, max);
+   }
+
+   // This defines the &quot;natural center&quot; of the pyramid. We could
+   // define it to be the center of the base, if we want, but
+   // let's just make it the center of the bounding box.
+   center.setValue(0.0, 0.0, 0.0);
+}
+
+// Computes and returns half-width, half-height, and half-depth
+// based on current field values.
+
+void
+Pyramid::getSize(float &amp;halfWidth,
+             float &amp;halfHeight,
+             float &amp;halfDepth) const
+{
+   halfWidth  = (baseWidth.isIgnored() ? 1.0 :
+                 baseWidth.getValue()  / 2.0);
+   halfHeight = (height.isIgnored()    ? 1.0 :
+                 height.getValue()     / 2.0);
+   halfDepth  = (baseDepth.isIgnored() ? 1.0 :
+                 baseDepth.getValue()  / 2.0);
+}
+</pre></td></tr></table><br><div class="tip"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/tip.png"></td><td align="left" valign="top"><b>Tip: </b>The easiest way to make sure your <span class="bold"><b>generatePrimitives()</b></span> method is working is to use it for rendering, by temporarily commenting out your shape's <span class="bold"><b>GLRender()</b></span> method (if it has one).
+</td></tr></table><hr noshade="noshade"></div><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5449283"></a><a name="id29107"></a>Creating a Group Node</h2></div></div>
+<p>This example illustrates how to create a group node subclass. (It is unlikely, however, that you'll need to create a new group class.) Our example class, <a name="idch0292"></a><span class="bold"><b>Alternate<a name="idch0293"></a></b></span>, traverses every other child (that is, child 0, then child 2, and so on). Since, like the base <span class="bold"><b>SoGroup</b></span> class, it has no fields, this example also illustrates how to create a node with no fields.</p>
+<p>If you do create a new group class, you will probably need to define a new traversal behavior for it. You may be able to inherit some of the traversal behavior from the parent class. Most groups define a protected <span class="bold"><b>traverseChildren()<a name="idch0294"></a></b></span> method that implements their &#8220;typical&#8221; traversal behavior. Your new group can probably inherit the <a name="idch0295"></a><span class="bold"><b>read()</b></span> and <a name="idch0296"></a><span class="bold"><b>write()</b></span> methods from <span class="bold"><b>SoGroup</b></span>.</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5449443"></a>Child List</h3></div></div>
+<p><a name="idch0297"></a><span class="bold"><b>SoGroup</b></span>, and all classes derived from it, store their children in an instance of<span class="bold"><b> SoChildList</b></span>. This extender class provides useful methods for group classes, including the <a name="idch0298"></a><span class="bold"><b>traverse()</b></span> method, which has three forms:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>traverse</b></span>(<i>action</i>)</span></td><td width="10"> </td><td><p>traverses all children in the child list</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>traverse</b></span>(<i>action, firstChild, lastChild</i>)</span></td><td width="10"> </td><td><p><br>
+traverses the children from first child to last child, inclusive</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>traverse</b></span>(<i>action, childIndex</i>)</span></td><td width="10"> </td><td><p><br>
+traverses one child with the specified index</p>
+
+</td></tr></table></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5449575"></a>Hidden Children</h3></div></div>
+<p>If you want your new node to have children, but you don't want to grant public access to the child list, you can implement the node to have <a name="idch0299"></a><i>hidden children</i>. Node kits are an example of groups within the Inventor library that have hidden children. Because node kits have a specific internal structure, access to the children needs to be restricted. If you want the node to have hidden children, it should not be derived from <a name="idch02100"></a><span class="bold"><b>SoGroup</b></span>, which has public children only.</p>
+<p><span class="bold"><b>SoNode</b></span> provides a virtual <span class="bold"><b>getChildren()</b></span> method that returns NULL by default.  To implement a new node with hidden children, you need to do the following:</p>
+<div class="orderedlist"><ol type="1"><li><p>Maintain an <span class="bold"><b>SoChildList</b></span> for the node.  This list can be a hierarchy of nodes.</p>
+</li>
+<li><p>Implement a <a name="idch02101"></a><span class="bold"><b>getChildren()</b></span> method that returns a pointer to the child list. <span class="bold"><b>(SoPath</b></span> uses <span class="bold"><b>getChildren()</b></span> to maintain paths.)</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5449732"></a>Using the Path Code</h3></div></div>
+<p>Recall that an action can be applied to a node, a single path, or a path list. Before a group can traverse its children, it needs to know what the action has been applied to. The <a name="idch02102"></a><a name="idch02103"></a><a name="idch02104"></a><span class="bold"><b>getPathCode() </b></span>method of <span class="bold"><b>SoAction</b></span> returns an enumerated value that indicates whether the action is being applied to a path and, if so, where this group node is in relation to the path or paths. The values returned by <span class="bold"><b>getPathCode()</b></span> are as follows:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term">NO_PATH </span></td><td width="10"> </td><td><p>the action is not being applied to a path (that is, the action is applied to a node)</p>
+
+</td></tr><tr valign="top"><td><span class="term">BELOW_PATH </span></td><td width="10"> </td><td><p>this node is at or below the last node in the path chain</p>
+
+</td></tr><tr valign="top"><td><span class="term">OFF_PATH </span></td><td width="10"> </td><td><p>this node is not on the path chain (the node is to the left of the path; it needs to be traversed if it affects the nodes in the path)</p>
+
+</td></tr><tr valign="top"><td><span class="term">IN_PATH </span></td><td width="10"> </td><td><p>the node is in the chain of the path (but is not the last node)</p>
+
+</td></tr></table></div><p><a href="ch02.html#id18434">Figure 2-1</a> shows five group nodes. Assume the render action is being applied to the path shown. Groups A and C are considered IN_PATH. Group B is OFF_PATH, and Groups D and E are BELOW_PATH.</p>
+<p><div class="figure"><p><a name="id5449853"></a><b>Figure 2-1. <a name="id18434"></a>Using the Path Code for Groups</b></p>
+<div class="mediaobject"><img src="figures/new2.1new.gif"></div></div><br>
+</p>
+<p>For <a name="idch02105"></a><span class="bold"><b>SoGroup</b></span>, if the group's path code is NO_PATH, BELOW_PATH, or OFF_PATH, it traverses all of its children. (Even if a node is OFF_PATH, you need to traverse it because it affects the nodes in the path to its right. Note, though, that if an <span class="bold"><b>SoSeparator</b></span> is OFF_PATH, you do not need to traverse it because it will not have any effect on the path.) If a node is IN_PATH, you may not need to traverse all children in the group, since children to the right of the action path do not affect the nodes in the path. In this case, <span class="bold"><b>getPathCode()</b></span> returns the indices of the children that need to be traversed.  The <span class="bold"><b>traverseChildren()</b></span> method for <span class="bold"><b>SoGroup</b></span> looks like this:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+SoGroup::traverseChildren(SoAction *action)
+{
+   int           numIndices;
+   const   int   *indices;
+
+   if (action-&gt;getPathCode(numIndices, indices) 
+       == SoAction::IN_PATH) 
+       children.traverse(action, 0, indices[numIndices - 1]);
+           // traverse all children up to and including the last
+           // child to traverse
+
+   else
+      children.traverse(action); // traverse all children
+}
+</pre></td></tr></table><p>The GL render, callback, handle event, pick, and search methods for <span class="bold"><b>SoGroup</b></span> all use <span class="bold"><b>traverseChildren()</b></span>. The write method for <span class="bold"><b>SoGroup</b></span>, which can be inherited by most subclasses, tests each node in the group before writing it out. The get matrix method does not use <span class="bold"><b>traverseChildren()</b></span> because it doesn't need to traverse as much. If the path code for a group is NO_PATH or BELOW_PATH, it does not traverse the children. Here is the code for<span class="bold"><b> SoGroup::getMatrix()</b></span>:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+SoGroup::getMatrix(SoGetMatrixAction *action)
+{
+   int         numIndices;
+   const int   *indices;
+
+   switch (action-&gt;getPathCode(numIndices, indices)) {
+      case SoAction::NO_PATH:
+      case SoAction::BELOW_PATH:
+         break;
+      case SoAction::IN_PATH:
+         children.traverse(action, 0, indices[numIndices - 1]);
+         break;
+      case SoAction::OFF_PATH:
+         children.traverse(action);
+         break;
+      }
+}
+</pre></td></tr></table><p> If a node is IN_PATH, the <a name="idch02106"></a><span class="bold"><b>getMatrix()</b></span> method traverses all the children in the group up to and including the last child in the action path (but not the children to the right of the path). If a node is OFF_PATH, the <span class="bold"><b>getMatrix()</b></span> method traverses all the children in the group, since they can affect what is in the path.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5450108"></a>What Happens If an Action Is Terminated?</h3></div></div>
+<p>Some actions, such as the GL render, handle event, and search actions, can terminate prematurely&#8212;for example, when the node to search for has been found.  The <span class="bold"><b>SoAction</b></span> class has a flag that indicates whether the action has terminated.  The <span class="bold"><b>SoChildList</b></span> class checks this flag automatically, so this termination is built into the <span class="bold"><b>SoChildList::traverse()</b></span> methods, and the group traversal methods do not need to check the flag.</p>
+<p>The new <span class="bold"><b>Alternate</b></span> class can inherit the read and write methods from <span class="bold"><b>SoGroup</b></span>. We just have to define the traversal behavior for the other actions. Most of the other actions can be handled by the <span class="bold"><b>traverseChildren()</b></span> method.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5450195"></a>Alternate Node</h3></div></div>
+<p>The class header for the <a name="idch02107"></a><span class="bold"><b>Alternate</b></span> node is shown in Example 2-5.</p>
+<div class="example"><p><a name="id5450213"></a><b>Example 2-5. <a name="idch02108"></a>Alternate.h  </b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/nodes/SoGroup.h&gt;
+// SoGroup.h includes SoSubNode.h; no need to include it again.
+
+class Alternate : public SoGroup {
+
+   SO_NODE_HEADER(Alternate);
+
+ public:
+   // Initializes this class.
+   static void   initClass();
+
+   // Default constructor
+   Alternate();
+
+   // Constructor that takes approximate number of children as
+   // a hint
+   Alternate::Alternate(int numChildren);
+
+ protected:
+   // Generic traversal of children for any action.
+   virtual void  doAction(SoAction *action);
+
+   // These implement supported actions.
+   virtual void  getBoundingBox(SoGetBoundingBoxAction *action);
+   virtual void  GLRender(SoGLRenderAction *action);
+   virtual void  handleEvent(SoHandleEventAction *action);
+   virtual void  pick(SoPickAction *action);
+   virtual void  getMatrix(SoGetMatrixAction *action);
+   virtual void  search(SoSearchAction *action);
+
+ private:
+   // Destructor
+   virtual ~Alternate();
+};
+</pre></td></tr></table><p>The <span class="bold"><b>Alternate</b></span> class source code is shown in Example 2-6.</p>
+<div class="example"><p><a name="id5450282"></a><b>Example 2-6. Alternate.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/misc/SoChildList.h&gt;
+#include &lt;Inventor/actions/SoGLRenderAction.h&gt;
+#include &lt;Inventor/actions/SoGetBoundingBoxAction.h&gt;
+#include &lt;Inventor/actions/SoGetMatrixAction.h&gt;
+#include &lt;Inventor/actions/SoHandleEventAction.h&gt;
+#include &lt;Inventor/actions/SoPickAction.h&gt;
+#include &lt;Inventor/actions/SoSearchAction.h&gt;
+#include &quot;Alternate.h&quot;
+
+SO_NODE_SOURCE(Alternate);
+
+// This initializes the Alternate class.
+
+void
+Alternate::initClass()
+{
+   // Initialize type id variables
+   SO_NODE_INIT_CLASS(Alternate, SoGroup, &quot;Group&quot;); 
+}
+
+// Constructor
+Alternate::Alternate()
+{
+   SO_NODE_CONSTRUCTOR(Alternate);
+}
+// Constructor that takes approximate number of children.
+
+Alternate::Alternate(int numChildren) : SoGroup(numChildren)
+{
+   SO_NODE_CONSTRUCTOR(Alternate);
+}
+
+// Destructor
+
+Alternate::~Alternate()
+{
+}
+
+// Each of these implements an action by calling the standard
+// traversal method. Note that (as in the Glow node source) we 
+// prefix the call to doAction() with the name of the class, to 
+// avoid problems with derived classes.
+
+void
+Alternate::getBoundingBox(SoGetBoundingBoxAction *action)
+{
+   Alternate::doAction(action);
+}
+
+void
+Alternate::GLRender(SoGLRenderAction *action)
+{
+   Alternate::doAction(action);
+}
+
+void
+Alternate::handleEvent(SoHandleEventAction *action)
+{
+   Alternate::doAction(action);
+}
+
+void
+Alternate::pick(SoPickAction *action)
+{
+   Alternate::doAction(action);
+}
+
+// This implements the traversal for the SoGetMatrixAction,
+// which is handled a little differently: it does not traverse
+// below the root node or tail of the path it is applied to.
+// Therefore, we need to compute the matrix only if this group
+// is in the middle of the current path chain or is off the path
+// chain (since the only way this could be true is if the group
+// is under a group that affects the chain).
+
+void
+Alternate::getMatrix(SoGetMatrixAction *action)
+{
+   int         numIndices;
+   const int   *indices;
+
+   // Use SoAction::getPathCode() to determine where this group
+   // is in relation to the path being applied to (if any).
+   switch (action-&gt;getPathCode(numIndices, indices)) {
+
+    case SoAction::NO_PATH:
+    case SoAction::BELOW_PATH:
+     // If there's no path, or we're off the end, do nothing.
+     break;
+
+    case SoAction::OFF_PATH:
+    case SoAction::IN_PATH:
+     // If we are in the path chain or we affect nodes in the
+     // path chain, traverse the children.
+     Alternate::doAction(action);
+     break;
+   }
+}
+
+// This implements the traversal for the SoSearchAction, which
+// is also a little different. The search action is set to
+// either traverse all nodes in the graph or just those that
+// would be traversed during normal traversal. We need to check
+// that flag before traversing our children.
+
+void
+Alternate::search(SoSearchAction *action)
+{
+   // If the action is searching everything, then traverse all
+   // of our children as SoGroup would.
+   if (action-&gt;isSearchingAll())
+     SoGroup::search(action);
+
+   else {
+     // First, make sure this node is found if we are searching
+     // for Alternate (or group) nodes.
+     SoNode::search(action);
+
+     // Traverse the children in our usual way.
+     Alternate::doAction(action);
+   }
+}
+
+// This implements typical action traversal for an Alternate
+// node, skipping every other child.
+
+void
+Alternate::doAction(SoAction *action)
+{
+   int         numIndices;
+   const int   *indices;
+
+   // This will be set to the index of the last (rightmost)
+   // child to traverse.
+   int         lastChildIndex;
+
+   // If this node is in a path, see which of our children are
+   // in paths, and traverse up to and including the rightmost
+   // of these nodes (the last one in the &quot;indices&quot; array).
+   if (action-&gt;getPathCode(numIndices, indices) ==
+      SoAction::IN_PATH)
+     lastChildIndex = indices[numIndices - 1];
+
+   // Otherwise, consider all of the children.
+   else
+     lastChildIndex = getNumChildren() - 1;
+
+   // Now we are ready to traverse the children, skipping every
+   // other one. For the SoGetBoundingBoxAction, however, we
+   // have to do some extra work in between each pair of
+   // children - we have to make sure the center points get
+   // averaged correctly.
+   if (action-&gt;isOfType(
+         SoGetBoundingBoxAction::getClassTypeId())) {
+     SoGetBoundingBoxAction *bba =
+       (SoGetBoundingBoxAction *) action;
+     SbVec3f  totalCenter(0.0, 0.0, 0.0);
+     int      numCenters = 0;
+
+     for (int i = 0; i &lt;= lastChildIndex; i += 2) {
+       children-&gt;traverse(bba, i);
+
+       // If the traversal set a center point in the action,
+       // add it to the total and reset for the next child.
+       if (bba-&gt;isCenterSet()) {
+         totalCenter += bba-&gt;getCenter();
+         numCenters++;
+         bba-&gt;resetCenter();
+       }
+     }
+     // Now, set the center to be the average. Since the
+     // centers were already transformed, there's no need to
+     // transform the average.
+     if (numCenters != 0)
+       bba-&gt;setCenter(totalCenter / numCenters, FALSE);
+   }
+
+   // For all other actions, just traverse every other child.
+   else
+     for (int i = 0; i &lt;= lastChildIndex; i += 2)
+       children-&gt;traverse(action, i);
+}
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5450503"></a>Using New Node Classes</h2></div></div>
+<p>Node classes you have created must be initialized in every application that uses them. Example 2-7 shows how this is done, using the <a name="idch02109"></a><a name="idch02110"></a><span class="bold"><b>Glow<a name="idch02111"></a></b></span>, <span class="bold"><b>Pyramid<a name="idch02112"></a></b></span>, and <span class="bold"><b>Alternate<a name="idch02113"></a></b></span> node classes defined in the previous examples. The program reads a file (newNodes.iv, shown in Example 2-8) that has a scene graph containing instances of these nodes. It writes the scene graph to standard output and then opens an examiner viewer to display the graph.</p>
+<p>You can see from this example that extender node classes should be initialized after standard classes, which are initialized by <a name="idch02114"></a><span class="bold"><b>SoDB::init()</b></span>. In this program, <span class="bold"><b>SoDB::init()</b></span> is called by <span class="bold"><b>SoXt::init()</b></span>. Also, base classes must be initialized before any classes derived from them, since the initialization macros for a node class refer to the parent class.</p>
+<p>Notice in <a name="idch02115"></a><a href="ch02.html#id16380">Example 2-8</a> that the <span class="bold"><b>Pyramid</b></span> and <span class="bold"><b>Glow</b></span> nodes, because they are not built into the Inventor library, write out their field names and types. (The <a name="idch02116"></a><span class="bold"><b>Alternate</b></span> class has no fields.) See the discussion of the file format for new (unknown) nodes in <i>The Inventor Mentor</i>, Chapter 11.</p>
+<p>The <a name="idch02117"></a><span class="bold"><b>isBuiltIn</b></span> flag is a protected variable in <span class="bold"><b>SoFieldContainer<a name="idch02118"></a></b></span>, from which <span class="bold"><b>SoNode</b></span> is derived.  If this flag is FALSE, field types are written out along with the field values. By default, this flag is FALSE, but all Inventor classes set it to TRUE. If you are building a toolkit that uses Inventor and want your new classes to appear the same as Inventor classes, be sure to set this flag to TRUE.</p>
+<div class="example"><p><a name="id5450732"></a><b>Example 2-7. NewNodes.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SoDB.h&gt;
+#include &lt;Inventor/SoInput.h&gt;
+#include &lt;Inventor/Xt/SoXt.h&gt;
+#include &lt;Inventor/Xt/viewers/SoXtExaminerViewer.h&gt;
+#include &lt;Inventor/actions/SoWriteAction.h&gt;
+#include &lt;Inventor/nodes/SoSeparator.h&gt;
+
+// Header files for new node classes
+#include &quot;Glow.h&quot;
+#include &quot;Pyramid.h&quot;
+#include &quot;Alternate.h&quot;
+
+main(int, char **argv)
+{
+   SoInput      myInput;
+   SoSeparator  *root;
+
+   // Initialize Inventor and Xt
+   Widget myWindow = SoXt::init(argv[0]);
+   if (myWindow == NULL) exit(1);
+
+   // Initialize the new node classes
+   Glow::initClass();
+   Pyramid::initClass();
+   Alternate::initClass();
+
+   if (! myInput.openFile(&quot;newNodes.iv&quot;)) {
+     fprintf(stderr, &quot;Can't open \&quot;newNodes.iv\&quot;\n&quot;);
+     return 1;
+   }
+
+   root = SoDB::readAll(&amp;myInput);
+   if (root == NULL) {
+     printf(&quot;File \&quot;newNodes.iv\&quot; contains bad data\n&quot;);
+     return 2;
+   }
+
+   root-&gt;ref();
+
+   // Write the graph to stdout
+   SoWriteAction wa;
+   wa.apply(root);
+
+   // Render it
+   SoXtExaminerViewer *myViewer =
+     new SoXtExaminerViewer(myWindow);
+   myViewer-&gt;setSceneGraph(root);
+   myViewer-&gt;setTitle(&quot;NewNodes&quot;);
+   myViewer-&gt;show();
+   myViewer-&gt;viewAll();
+
+   SoXt::show(myWindow);
+   SoXt::mainLoop();
+}
+</pre></td></tr></table><br><div class="example"><p><a name="id5450774"></a><b>Example 2-8. <a name="id16380"></a>newNodes.iv</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#Inventor V2.0 ascii
+
+#
+# Input file for &quot;newNodes&quot; example program
+#
+
+Separator {
+
+   Separator {
+     Transform {
+       translation 0 -1.1 0
+     }
+     Cube {
+       width       10
+       height      .1
+       depth       10
+     }
+   }
+
+   Material {
+     diffuseColor   .3 .6 .9
+     shininess      .5
+   }
+
+   # Skip every other child
+   Alternate {
+     fields         []
+     Pyramid {
+       fields         [SFBitMask parts,
+                       SFFloat   baseWidth,
+                       SFFloat   baseDepth,
+                       SFFloat   height ]
+     }
+
+     Cube {}           # This child is skipped
+
+     Separator {
+       Glow {
+         fields      [SFColor color,
+                      SFFloat brightness ]
+         brightness  .6
+         color       1 .3 .3
+       }
+       Transform {
+         translation 3 .6 0
+       }
+       Pyramid {
+         fields      [SFBitMask parts,
+                      SFFloat   baseWidth,
+                      SFFloat   baseDepth,
+                      SFFloat   height ]
+         height      3.2
+       }
+     }
+
+     Sphere {}         # This child is skipped
+   }
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5450839"></a><a name="id47156"></a>Creating an Abstract Node Class</h2></div></div>
+<p>Creating an abstract node class is slightly different from creating a nonabstract one. Examples of abstract node classes are <a name="idch02119"></a><span class="bold"><b>SoCamera</b></span>, <span class="bold"><b>SoLight</b></span>, and <span class="bold"><b>SoShape</b></span>.</p>
+<p>First, abstract classes should use the ABSTRACT versions of the macros described in SoSubNode.h. For example, the <a name="idch02120"></a><span class="bold"><b>SoLight</b></span> class makes this call in its <span class="bold"><b>initClass()</b></span> method:<a name="idch02121"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_NODE_INIT_ABSTRACT_CLASS(SoLight, &quot;Light&quot;, SoNode);
+</pre></td></tr></table><p>Second, the constructor for an abstract class should be protected, meaning that it is impossible to create an instance of it.<a name="idch02122"></a></p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5450948"></a><a name="id25188"></a>The copy() Method</h2></div></div>
+<p>The <a name="idch02123"></a><span class="bold"><b>copy()</b></span> method defined for <span class="bold"><b>SoNode</b></span> creates a copy of an instance of a node. If your node has no data other than fields and public children, then the <span class="bold"><b>copy()</b></span> methods defined for <span class="bold"><b>SoNode</b></span> and <span class="bold"><b>SoGroup</b></span> should suffice.</p>
+<p>However, if you have extra instance data in your node that needs to be copied, you will have to override the copy method. For example, if our <span class="bold"><b>Pyramid</b></span> node class defined earlier contained a private integer member variable called <span class="bold"><b>count </b></span>(for some private reason), the <span class="bold"><b>copy()</b></span> method would look like this:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoNode *
+Pyramid::copy(SbBool copyConnections) const
+{
+   // Use the standard version of the copy method to create a
+   // copy of this instance, including its field data
+   Pyramid *newPyramid = (Pyramid *)
+                         SoNode::copy(copyConnections);
+
+   // Copy the &quot;count&quot; field explicitly
+   newPyramid-&gt;count = count;
+
+   return newPyramid;
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5451071"></a><a name="id37360"></a>The affectsState() Method</h2></div></div>
+<p>The <a name="idch02124"></a><span class="bold"><b>affectsState()</b></span> method on <span class="bold"><b>SoNode</b></span> indicates whether a node has a net effect on the state. (For example, <span class="bold"><b>SoSeparator</b></span> changes the state, but it restores the state, so there's no net effect.) The default value for this method is TRUE, but some node classes such as<span class="bold"><b> SoSeparator</b></span>, <span class="bold"><b>SoShape</b></span>, <span class="bold"><b>SoArray</b></span>, and <span class="bold"><b>SoMultipleCopy</b></span> define it to be FALSE. When you define a new node class, you may need to redefine its <span class="bold"><b>affectsState()</b></span> method if it differs from that of the parent class.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5451181"></a>Uncacheable Nodes</h2></div></div>
+<p>You may create a new node whose effects should not be cached during rendering or bounding-box computation. For example, the <a name="idch02125"></a><a name="idch02126"></a><span class="bold"><b>SoCallback</b></span> node allows a user to change the effect of the callback function, such as drawing a cube instead of a sphere, without ever making an Inventor call. </p>
+<p>Uncacheable nodes such as <span class="bold"><b>SoCallback</b></span> should call </p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoCacheElement::invalidate(state)
+
+<a name="idch02127"></a></pre></td></tr></table><p>which aborts construction of the current cache. This call can be made during the render or bounding box action (the two actions that support caching). The <a name="idch02128"></a><span class="bold"><b>invalidate()</b></span> method also turns off auto-caching on any <span class="bold"><b>SoSeparator</b></span> nodes over the uncacheable node. </p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5451318"></a>Creating an Alternate Representation</h2></div></div>
+<p>When you create a new node, you probably also want to create an alternate representation for it that can be written to a file. For example, a good alternate representation for the <a name="idch02129"></a><span class="bold"><b>Glow</b></span> node would be an <span class="bold"><b>SoMaterial</b></span> node with all fields ignored except for <span class="bold"><b>emissiveColor</b></span>. The alternate representation is in the form of a field called <span class="bold"><b>alternateRep</b></span>, of type <span class="bold"><b>SoSFNode</b></span>. If your node is later read into an Inventor application that is not linked with this new node, Inventor will be able to render the node using this alternate representation even though the node has not been initialized with the database. (See Chapter 11 in <a name="idch02130"></a><i>The Inventor Mentor</i> on reading in extender nodes and engines.)</p>
+<p>Within your program, when a change is made to the original node, you may want the alternate representation to change as well.  In this case, override the <span class="bold"><b>write()</b></span> method on <span class="bold"><b>SoNode</b></span> to update the alternate representation, and then have it call the <span class="bold"><b>write()</b></span> method of the base class. </p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5451415"></a><a name="id20949"></a>Generating Default Normals</h2></div></div>
+<p>If you define your own vertex-based shape class and the parent class does not generate default normals, you need to generate default normals for rendering with the Phong lighting model and for generating primitives. <span class="bold"><b>SoVertexShape</b></span> provides the <span class="bold"><b>generateDefaultNormals()</b></span> method, which you can override for use when normal binding is DEFAULT. Although the specifics depend on the shape itself, <span class="bold"><b>SoNormalBundle</b></span> provides methods to facilitate this process.</p>
+<div class="tip"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/tip.png"></td><td align="left" valign="top"><b>Tip: </b>If you define a node class that creates a node sensor attached to itself or a field sensor attached to one of its fields, you'll need to redefine <span class="bold"><b>readInstance()</b></span> so that the sensor doesn't fire when the node is read from a file. Your <span class="bold"><b>readInstance()</b></span> method needs to detach the sensor, call the <span class="bold"><b>readInstance()</b></span> method of the parent class, and then reattach the sensor. Node kits provide the <span class="bold"><b>setUpConnections()</b></span> method to make and break these connections (see Chapter 7).
+</td></tr></table><hr noshade="noshade"></div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+
+</pre></td></tr></table><br></div></div><!--CONTENT_END--><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Table of Contents</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 1. Key Concepts </td><td width="20%" align="center"> </td><td width="40%" align="right">Chapter 3. Creating a Field </td></tr></table></div></body></html>

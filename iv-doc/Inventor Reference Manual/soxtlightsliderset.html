@@ -1,0 +1,35 @@
+<html>
+<body>
+SoXtLightSliderSet
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtLightSliderSet -- component with Motif sliders for editing SoLight nodes
+
+<dt>INHERITS FROM
+<dd><a href="soxtcomponent.html">SoXtComponent</a> &gt; <a href="soxtslidersetbase.html">SoXtSliderSetBase</a> &gt; <a href="soxtsliderset.html">SoXtSliderSet</a> &gt; SoXtLightSliderSet
+
+<dt>DESCRIPTION
+<dd>This class is used to manipulate the intensity and color of an SoLight node using an arrangement of Motif sliders and buttons.
+
+<dt>METHODS
+<dl>
+<dd><b>SoXtLightSliderSet</b>(Widget parent = NULL, const char *name = NULL, SbBool buildInsideParent = TRUE, SoNode*newEditNode = NULL )
+<dd>~<b>SoXtLightSliderSet</b>()
+<dd>Constructor and destructor. At construction time the light node to edit can be supplied.
+
+<dt><b>Methods from class SoXtSliderSetBase</b>:
+<dd>setNode, getNode
+
+<dt><b>Methods from class SoXtComponent</b>:
+<dd>show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle, getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/SoXtLightSliderSet.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soxtsliderset.html">SoXtSliderSet</a>, <a href="soxtslidersetbase.html">SoXtSliderSetBase</a>, <a href="soxtcomponent.html">SoXtComponent</a>, <a href="solight.html">SoLight</a>, <a href="sonode.html">SoNode</a>
+</dl>
+</body>
+</html>

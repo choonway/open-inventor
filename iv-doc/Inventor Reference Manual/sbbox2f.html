@@ -1,0 +1,65 @@
+<html>
+<body>
+<p>SbBox2f
+<hr>
+<dl>
+<dt>NAME
+<dd>SbBox2f -- 2D box class
+
+<dt>INHERITS FROM
+<dd>SbBox2f
+
+<dt>DESCRIPTION
+<dd>2D box which has planes parallel to the major axes and is specified by two points (specified as floating point) on a diagonal. This class is part of the standard Inventordatatype classes and is used as input and output to geometry operations.
+
+<dt>METHODS
+<dl>
+<dt><b>SbBox2f</b>()
+<dt><b>SbBox2f</b>(float xmin, float ymin, float xmax float ymax)
+<dt><b>SbBox2f</b>(const SbVec2f &min, const SbVec2f &max)
+<dt>void ~<b>SbBox2f</b>()
+<dd>Constructors and destructor for a 2D float box. xmin, ymin, xmax, and ymax are the bounds of the box. min and max are the corners of the diagonal thatdefine the box.
+
+<dt>const SbVec2f & <b>getMin</b>()
+<dt>const SbVec2f & <b>getMax</b>()
+<dd>Returns the minimum and maximum points of the box. SbVec2f getCenter()Returns the center of the box.
+
+<dt>void <b>extendBy</b>(const SbVec2f &point)
+<dt>void <b>extendBy</b>(const SbBox2f &box)
+<dd>Extends this box (if necessary) to contain the specified point or other box. 
+<dt>SbBool <b>intersect</b>(const SbVec2f &point)
+<dt>SbBool <b>intersect</b>(const SbBox2f &box)
+<dd>Returns TRUE if the specified point or box intersects this box.
+
+<dt>void <b>setBounds</b>(float xmin, float ymin, float xmax, float ymax)
+<dt>void <b>setBounds</b>(const SbVec2f &min, const SbVec2f &max)
+<dd>Sets the corners of the box.
+
+<dt>void <b>getBounds</b>(float &xmin, float &ymin, float &xmax, float&ymax)
+<dt>void <b>getBounds</b>(SbVec2f &min, SbVec2f &max)
+<dd>Gets the corners of the box.
+
+<dt>void <b>getOrigin</b>(float &x0, float &y0)
+<dd>Gets box origin.
+
+<dt>void <b>getSize</b>(float &x, float &y)
+<dd>Gets box size.
+
+<dt>float <b>getAspectRatio</b>()Gets box aspect ratio.
+<dd>void makeEmpty()Makes an empty box.
+
+<dt>SbBool <b>isEmpty</b>()
+<dd>Returns TRUE if the box is empty, and FALSE otherwise.
+
+<dt>SbBool <b>hasArea</b>()
+<dd>Returns TRUE if both dimensions of the box have positive size, and FALSE otherwise.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbBox.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbbox3f.html">SbBox3f</a>, <a href="sbxfbox3f.html">SbXfBox3f</a>, <a href="sbbox2s.html">SbBox2s</a>, <a href="sbvec3f.html">SbVec3f</a>, <a href="sbvec2f.html">SbVec2f</a>, <a href="sbvec2s.html">SbVec2s</a>, <a href="sbmatrix.html">SbMatrix</a>
+</dl>
+</body>
+</html>

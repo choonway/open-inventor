@@ -1,0 +1,48 @@
+<html>
+<body>
+<p>SoXtResource
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtResource -- used to retrieve X resources for SoXtComponents and widgets
+
+<dt>INHERITS FROM
+<dd>SoXtResource
+
+<dt>DESCRIPTION
+<dd>This class provides an easy to use interface for retrieving X resource values for widgets and components. Rather than use standard Xt calls to traverse up a widget hierarchy, this class performs its own traversal so that it may provide special care for widgets which are Inventor components. For instance, the Inventor Material Editor top level widget is a Motif form widget. Its class name is thus XmForm. SoXtResource knows that the editor is an Inventor component, though, so it uses the class name provided by the editor (in this case &quot;SoXtMaterialEditor&quot;) when looking up resource values.
+
+<dt>EXAMPLE:
+
+<dd><code>
+SoXtResource xr( materialEditor-&gt;getWidget() );<br>
+xr.getResource(&quot;tile1Color&quot;, &quot;Tile1Color&quot;, color);<br>
+xr.getResource(&quot;updateFrequency&quot;, &quot;UpdateFrequency&quot;, freq);<br>
+</code>
+
+<dt>METHODS
+<dl>
+<dt><b>SoXtResource</b>(Widget w)
+<dt>~<b>SoXtResource</b>()
+<dd>Constructor and destructor. The constructor takes the widget for which it will retrieve resource values.
+
+<dt>SbBool <b>getResource</b>(char *resName, char *resClass, SbColor &c)
+<dt>SbBool <b>getResource</b>(char *resName, char *resClass, short &i)
+<dt>SbBool <b>getResource</b>(char *resName, char *resClass, unsigned short &u)
+<dt>SbBool <b>getResource</b>(char *resName, char *resClass, char *&s)
+<dt>SbBool <b>getResource</b>(char *resName, char *resClass, SbBool &b)
+<dt>SbBool <b>getResource</b>(char *resName, char *resClass, float &f)
+
+<dd>This returns the X resource value for the specified resource name and class.There is no need to specify the widget hierarchy; this is automatically computed in the constructor.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/SoXtResource.h&gt;
+
+<dt>NOTES
+<dd>Components will typically look up their own resources during buildWidget(). In order for a component to have its Inventor class name recognized by SoXtResource,it must call SoXtComponent::registerWidget() in its buildWidget() method. (This is done in every Inventor component.)
+
+<dt>SEE ALSO
+<dt>X Resources (Xrm), X Intrinsics (Xt), <a href="soxt.html">SoXt</a>, <a href="soxtcomponent.html">SoXtComponent</a>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<html>
+<body>
+SoSField
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSField -- abstract base class for all single-value fields
+
+<dt>INHERITS FROM
+<dd><a href="sofield.html">SoField</a> &gt; SoSField
+
+<dt>DESCRIPTION
+<dd>Each class derived from SoSField begins with an SoSF prefix and contains one value of a particular type. Each has setValue() and getValue() methods that are used to change or access this value. In addition, some field classes have extra convenience routines that allow values to be set or retrieved in other related formats (see below). In addition to setValue(), all single-value fields overload the &quot;=&quot; assignment operatorto set the field value from the correct datatype or from another field instance of the same type. The value of a single-value field is written to file in a format dependent on the fieldtype; see the subclass man pages for details.
+
+<p>A field that is ignored has a tilde (~) either in place of the value (if the actual value is the default) or after it (otherwise).
+
+<dt>METHODS
+<dl>
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Return the type identifier for this field class.
+
+<dt><b>Methods from class SoField</b>:
+<dd>setIgnored, isIgnored, isDefault, getTypeId, isOfType, set, get, operator ==,operator !=, touch, connectFrom, connectFrom, disconnect, isConnected, isConnectedFromField, getConnectedField, isConnectedFromEngine,getConnectedEngine, enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoField.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sofield.html">SoField</a>, <a href="somfield.html">SoMField</a>
+</dl>
+</body>
+</html>

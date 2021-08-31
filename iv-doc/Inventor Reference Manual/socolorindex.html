@@ -1,0 +1,59 @@
+<html>
+<body>
+SoColorIndex
+<hr>
+<dl>
+<dt>NAME
+<dd>SoColorIndex -- surface color index node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoColorIndex
+
+<dt>DESCRIPTION
+<dd>This node specifies the color to use for subsequent shapes as an index into the current color table. This is used only for BASE_COLOR lighting (see SoLightModel)in color index mode. Color index mode may be enabled by the window in which rendering occurs. Since color indices make sense only in the context of OpenGL rendering, this nodeimplements only a method for the SoGLRenderAction.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFLong index
+<dd>Color index.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoColorIndex</b>()
+<dd>Creates a color index node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Sets the color index for subsequent shapes rendered with BASE_COLORlighting.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>ColorIndex {
+<dd>index 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dl>#include &lt;Inventor/nodes/SoColorIndex.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sobasecolor.html">SoBaseColor</a>, <a href="solightmodel.html">SoLightModel</a>, <a href="somaterialindex.html">SoMaterialIndex</a>
+
+</body>
+</html>

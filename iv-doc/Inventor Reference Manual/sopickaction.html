@@ -1,0 +1,33 @@
+<html>
+<body>
+SoPickAction
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPickAction -- abstract base class for picking objects in a scene
+
+<dt>INHERITS FROM
+<dd><a href="soaction.html">SoAction</a> &gt; SoPickAction
+
+<dt>DESCRIPTION
+<dd>This is an abstract base class for all picking actions. Currently, the only supported subclass is the SoRayPickAction.
+
+<dt>METHODS
+<dl>
+<dt>void <b>setViewportRegion</b>(const SbViewportRegion &amp;newRegion)
+<dt>const SbViewportRegion &amp;<b>getViewportRegion</b>() const
+
+<dd>Sets/returns current viewport region to use for action. Even though the picking operation may not involve a window per se, some nodes need this information to determine their size and placement.
+
+<dt><b>Methods from class SoAction</b>:
+<dd>apply, apply, apply, getClassTypeId, getTypeId, isOfType, invalidateState
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/actions/SoPickAction.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soraypickaction.html">SoRayPickAction</a>
+</dl>
+</body>
+</html>

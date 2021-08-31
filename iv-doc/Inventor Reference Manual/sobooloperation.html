@@ -1,0 +1,86 @@
+<html>
+<body>
+SoBoolOperation
+<hr>
+<dl>
+<dt>NAME
+<dd>SoBoolOperation -- performs Boolean operations
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoBoolOperation
+
+<dt>DESCRIPTION
+<dd>This engine performs a Boolean operation on two inputs, and returns both the result of the operation and its inverse. The input fields can have multiple values, allowing the engine to perform several Boolean operations in parallel. One input may have more values than the other. In that case, the last value of the shorter input will be repeated as necessary.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFBool a
+<dd>First argument to the Boolean operation.
+
+<dt>SoMFBool b
+<dd>Second argument to the Boolean operation.
+
+<dt>SoMFEnum operation
+<dd>The Boolean operation.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFBool) output
+<dd>Result of the Boolean operation applied to the inputs.
+<dt>(SoMFBool) inverse
+<dd>Inverse of output.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoBoolOperation</b>()
+<dd>Constructor.
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>BoolOperation {
+<dd>a FALSE
+<dd>b FALSE
+<dd>operation A
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoBoolOperation.h&gt;
+
+<dl>
+<dt>enum Operation {
+<dd>SoBoolOperation::CLEAR
+<dd>SoBoolOperation::SET
+<dd>SoBoolOperation::A
+<dd>SoBoolOperation::NOT_A
+<dd>SoBoolOperation::B
+<dd>SoBoolOperation::NOT_B
+<dd>SoBoolOperation::A_OR_B
+<dd>SoBoolOperation::NOT_A_OR_B
+<dd>SoBoolOperation::A_OR_NOT_B
+<dd>SoBoolOperation::NOT_A_OR_NOT_B
+<dd>SoBoolOperation::A_AND_B
+<dd>SoBoolOperation::NOT_A_AND_B
+<dd>SoBoolOperation::A_AND_NOT_B
+<dd>SoBoolOperation::NOT_A_AND_NOT_B
+<dd>SoBoolOperation::A_EQUALS_B
+<dd>SoBoolOperation::A_NOT_EQUALS_B
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>, <a href="socalculator.html">SoCalculator</a>
+</dl>
+</body>
+</html>

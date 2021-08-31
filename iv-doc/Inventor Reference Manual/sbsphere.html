@@ -1,0 +1,47 @@
+<html>
+<body>
+SbSphere
+<hr>
+<dl>
+<dt>NAME
+<dd>SbSphere -- class for representing a sphere
+
+<dt>INHERITS FROM
+<dd>SbSphere
+
+<dt>DESCRIPTION
+<dd>Represents a sphere in 3D. This is a lightweight datatype that is used for arguments or return values in the Inventor toolkit. See SoSphere for a database sphere (used for rendering, picking, etc.).
+
+<dt>METHODS
+<dl>
+<dt><b>SbSphere</b>()
+<dt><b>SbSphere</b>(const SbVec3f &center, float radius)
+<dd>Constructors.
+
+<dt>void <b>setValue</b>(const SbVec3f &center, float radius)
+<dd>Change the center and radius.
+
+<dt>void <b>setCenter</b>(const SbVec3f &center)
+<dt>void <b>setRadius</b>(float radius)
+<dd>Set just the center or radius.
+
+<dt>const SbVec3f & <b>getCenter</b>() const
+<dt>float <b>getRadius</b>() const
+<dd>Return the center and radius.
+
+<dt>void <b>circumscribe</b>(const SbBox3f &box)
+<dd>Return a sphere containing a given box.
+
+<dt>SbBool <b>intersect</b>(const SbLine &l, SbVec3f &intersection) const
+<dt>SbBool <b>intersect</b>(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const
+<dd>Intersect line and sphere, returning TRUE if there is an intersection. The line is treated as a ray.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbLinear.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbvec3f.html">SbVec3f</a>, <a href="sbline.html">SbLine</a>, <a href="sosphere.html">SoSphere</a>
+</dl>
+</body>
+</html>

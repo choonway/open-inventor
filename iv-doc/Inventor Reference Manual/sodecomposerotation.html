@@ -1,0 +1,59 @@
+<html>
+<body>
+SoDecomposeRotation
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDecomposeRotation -- decomposes rotation values
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoDecomposeRotation
+
+<dt>DESCRIPTION
+<dd>This engine takes as input a rotation, and decomposes it into an axis value and a rotation angle (in radians). The input can have multiple values, allowing the engine to decompose several rotations in parallel.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFRotation rotation
+<dd>Rotation to be decomposed.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFVec3f) axis
+<dd>Axis of rotation derived from the input.
+
+<dt>(SoMFFloat) angle
+<dd>Angle (in radians) derived from the input.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoDecomposeRotation()
+<dd>Constructor
+
+<dt>Methods from class SoEngine:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>DecomposeRotation {
+<dd>rotation 0 0 1 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCompose.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodecomposerotationfromto.html">SoDecomposeRotationFromTo</a>, <a href="socomposerotation.html">SoComposeRotation</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+
+</body>
+</html>

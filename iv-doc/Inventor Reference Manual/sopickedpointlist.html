@@ -1,0 +1,55 @@
+<html>
+<body>
+SoPickedPointList
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPickedPointList -- maintains a list of pointers to SoPickedPoint instances 
+<dt>INHERITS FROM
+<dd><a href="sbplist.html">SbPList</a> &gt; SoPickedPointList
+
+<dt>DESCRIPTION
+<dd>This subclass of SbPList holds lists of pointers to instances of classes derived from SoPickedPoint. It is used primarily to return information from picking with theSoRayPickAction class.
+
+<dt>METHODS
+<dl>
+<dt><b>SoPickedPointList</b>()
+<dd>Constructor.
+
+<dt><b>SoPickedPointList</b>(int size)
+<dd>Constructor that pre-allocates storage for size pointers.
+
+<dt><b>SoPickedPointList</b>(const SoPickedPointList &l)
+<dd>Constructor that copies the contents of another list.
+
+<dt>~<b>SoPickedPointList</b>()
+<dd>Destructor.
+
+<dt>void <b>append</b>(SoPickedPoint *ptr)
+<dd>Adds a pointer to the end of the list.
+
+<dt>void <b>insert</b>(SoPickedPoint *ptr, int addBefore)
+<dd>Inserts given pointer in list before pointer with given index.
+
+<dt>void <b>truncate</b>(int start)
+<dd>Removes all pointers after one with given index, inclusive, deleting all instances removed from the list.
+
+<dt>SoPickedPoint * operator <b>[ ]</b>(int i) const
+<dd>Accesses an element of a list.
+
+<dt>void <b>set</b>(int i, SoPickedPoint *pickedPoint)
+<dd>Sets an element of a list.
+
+<dt><b>Methods from class SbPList</b>:
+<dd>find, remove, getLength, copy, operator =, operator ==, operator !=
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoLists.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sopickedpoint.html">SoPickedPoint</a>, <a href="soraypickaction.html">SoRayPickAction</a>
+</dl>
+
+</body>
+</html>

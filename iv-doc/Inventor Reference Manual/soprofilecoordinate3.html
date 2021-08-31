@@ -1,0 +1,58 @@
+<html>
+<body>
+SoProfileCoordinate3
+<hr>
+<dl>
+<dt>NAME
+<dd>SoProfileCoordinate3 -- rational profile coordinate node
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoProfileCoordinate3
+
+<dt>DESCRIPTION
+<dd>This node defines a set of rational 3D coordinates to be used by subsequent SoProfile nodes. (These coordinates may be used for any type of profile; they maybe useful in some cases for specifying control points for SoNurbsProfile nodes.) This node does not produce a visible result during rendering; it simply replaces thecurrent profile coordinates in the traversal state for subsequent nodes to use.
+
+<dt>FIELDS 
+<dl>
+<dt>SoMFVec3f point
+<dd>Rational 3D profile coordinate points.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoProfileCoordinate3()
+<dd>Creates a profile coordinate node with default settings.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+
+<dd>Sets profile coordinates in current traversal state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>ProfileCoordinate3 {
+<dd>point 0 0 1
+</dl>}
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoProfileCoordinate3.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soprofile.html">SoProfile</a>, <a href="soprofilecoordinate2.html">SoProfileCoordinate2</a>
+</body>
+</html>

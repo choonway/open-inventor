@@ -1,0 +1,121 @@
+<html>
+<body>
+SoJackDragger
+<hr>
+<dl>
+<dt>NAME
+<dd>SoJackDragger -- jack-shaped object you rotate, translate, or scale by dragging with the mouse
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sobasekit.html">SoBaseKit</a> &gt; <a href="sointeractionkit.html">SoInteractionKit</a> &gt; <a href="sodragger.html">SoDragger</a> &gt; SoJackDragger
+
+<dt>DESCRIPTION
+<dd><p>SoJackDragger is a composite dragger in the shape of a jack from the children's game jacks. Three lines along the x, y, and z axes form the central star shape, whichyou can drag with the mouse to rotate the jack. Dragging any of the small cubes mounted at the end of the axes will scale the jack uniformly in all 3 dimensions. At the core of the jack is an SoDragPointDragger for translating the jack.
+
+<p>Each of these shapes is a different dragger with the default geometry changed. All ofthem are parts of the jack dragger, which keeps them moving together. The star is an SoRotateSphericalDragger, and dragging it updates the rotation field of the jackdragger. The small cubes are an SoScaleUniformDragger, tied to the scaleFactor field. The position of the SoDragPointDragger is given by the translation field. As with all draggers, if you change the fields the dragger will move to match the new settings. Remember: This is not an SoTransform!. If you want to move other objects with this dragger, you can either:
+
+<p>[a] Use an SoJackManip, which is subclassed from SoTransform. It creates one ofthese draggers and uses it as the interface to change its fields. (see the SoJackManip man page). [b] Use field-to-field connections to connect the fields of this dragger to those of anySoTransformation node.
+
+<p>You can change the parts in any instance of this dragger using setPart(). The defaultpart geometries are defined as resources for this SoJackDragger class. They are detailed in the Dragger Resources section of the online reference page for this class.You can make your program use different default resources for the parts by copying the file /usr/share/data/draggerDefaults/jackDragger.iv into your own directory,editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory.
+
+<dt>FIELDS
+<dl>
+<dt><a href="sosfrotation.html">SoSFRotation</a> rotation
+<dd>Orientation of the dragger.
+
+<dt><a href="sosfvec3f.html">SoSFVec3f</a> scaleFactor
+<dd>Scale of the dragger.
+
+<dt><a href="sosfvec3f.html">SoSFVec3f</a> translation
+<dd>Position of the dragger.
+
+<dt>Fields from class <a href="sodragger.html">SoDragger</a>:
+<dd>isActive
+
+<dt>Fields from class <a href="sointeractionkit.html">SoInteractionKit</a>:
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+</dl>
+
+<dt>PARTS
+<dl>
+<dt>Parts from class SoBaseKit:
+<dd>callbackList
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoJackDragger</b>()
+<dd>Constructor.
+
+<dt>static const SoNodekitCatalog *<b>getClassNodekitCatalog</b>() const
+<dd>Returns an SoNodekitCatalog for this class
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoDragger</b>:
+<dd>addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback, addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+<dt><b>Methods from class SoInteractionKit</b>:
+<dd>setPartAsPath
+
+<dt><b>Methods from class SoBaseKit</b>:
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+<dd>SO_GET_PART, SO_CHECK_PART CATALOG PARTS
+</dl>
+
+<dt>CATALOG PARTS
+<table border=1 cellspacing=0>
+<tr><th colspan=4 align=center>All parts</th></tr>
+<tr><th>Part Name</th> <th>Part Type</th> <th>Default Type</th> <th>NULL by default</th></tr>
+<tr><td>callbackList</td> <td>NodeKitListPart</td> <td>--</td> <td>yes</td>
+<tr><td>surroundScale</td> <td>SurroundScale</td> <td>--</td> <td>yes</td>
+<tr><td>antiSquish</td> <td>AntiSquish</td> <td>--</td> <td>no</td>
+<tr><td>scaler</td> <td>ScaleUniformDragger</td> <td>--</td> <td>yes</td>
+<tr><td>rotator</td> <td>RotateSphericalDragger</td> <td>--</td> <td>yes</td>
+<tr><td>translator</td> <td>DragPointDragger</td> <td>--</td> <td>yes</td>
+</tr></table>
+
+<p><table border=1 cellspacing=0>
+<tr>
+<td colspan=3>Extra information for list parts from above table</td>
+</tr>
+<tr><th>Part Name</th> <th>Container Type</th> <th>Permissible Types</th></tr>
+<tr><td>callbackList</td> <td>Separator</td> <td>Callback, EventCallback</td></tr>
+</table>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>JackDragger {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO
+<dd>isActive FALSE
+<dd>rotation 0 0 1 0
+<dd>translation 0 0 0
+<dd>scaleFactor 1 1 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/draggers/SoJackDragger.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sointeractionkit.html">SoInteractionKit</a>, <a href="sodragger.html">SoDragger</a>, <a href="socenterballdragger.html">SoCenterballDragger</a>, <a href="sodirectionallightdragger.html">SoDirectionalLightDragger</a>, <a href="sodragpointdragger.html">SoDragPointDragger</a>, <a href="sohandleboxdragger.html">SoHandleBoxDragger</a>, <a href="sopointlightdragger.html">SoPointLightDragger</a>, <a href="sorotatecylindricaldragger.html">SoRotateCylindricalDragger</a>, <a href="sorotatediscdragger.html">SoRotateDiscDragger</a>, <a href="sorotatesphericaldragger.html">SoRotateSphericalDragger</a>, <a href="soscale1dragger.html">SoScale1Dragger</a>, <a href="soscale2dragger.html">SoScale2Dragger</a>, <a href="soscale2uniformdragger.html">SoScale2UniformDragger</a>, <a href="soscaleuniformdragger.html">SoScaleUniformDragger</a>, <a href="sospotlightdragger.html">SoSpotLightDragger</a>, <a href="sotabboxdragger.html">SoTabBoxDragger</a>, <a href="sotabplanedragger.html">SoTabPlaneDragger</a>, <a href="sotrackballdragger.html">SoTrackballDragger</a>, <a href="sotransformboxdragger.html">SoTransformBoxDragger</a>, <a href="sotranslate1dragger.html">SoTranslate1Dragger</a>,<a href="sotranslate2dragger.html">SoTranslate2Dragger</a>
+</body>
+</html>

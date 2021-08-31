@@ -1,0 +1,64 @@
+<html>
+<body>
+SoOnOff
+<hr>
+<dl>
+<dt>NAME
+<dd>SoOnOff -- engine that functions as an on/off switch
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoOnOff
+
+<dt>DESCRIPTION
+<dd><p>This engine has three triggers as input and two Boolean values as output. The isOn output is a switch that can be turned on or off by triggering the corresponding input. You can toggle the value by triggering the toggle input. By default isOn is FALSE. The isOff output value is the inverse of isOn.
+
+<dt>INPUTS
+<dl>
+<dt><a href="sosftrigger.html">SoSFTrigger</a> on
+<dd>Turn the isOn switch on.
+
+<dt>SoSFTrigger off
+<dd>Turn the isOn switch off.
+
+<dt>SoSFTrigger toggle
+<dd>Toggle the switch value.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoSFBool) isOn
+<dd>Switch value.
+
+<dt>(SoSFBool) isOff
+<dd>The inverse of isOn.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoOnOff()
+<dd>Constructor.
+
+<dt>Methods from class SoEngine:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>OnOff {
+<dd>onoff toggle
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoOnOff.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>
+</body>
+</html>

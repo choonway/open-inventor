@@ -1,0 +1,79 @@
+<html>
+<body>
+SoQuadMesh
+<hr>
+<dl>
+<dt>NAME
+<dd>SoQuadMesh -- quadrilateral mesh shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; <a href="sovertexshape.html">SoVertexShape</a> &gt; <a href="sononindexedshape.html">SoNonIndexedShape</a> &gt; SoQuadMesh
+
+<dt>DESCRIPTION
+<dd>This shape node constructs quadrilaterals out of vertices located at the current coordinates. SoQuadMesh uses the current coordinates, in order, starting at theindex specified by the startIndex field. The number of vertices in the columns and rows of the mesh are specified by the verticesPerColumn and verticesPerRow fields. (Note that these numbers are 1 greater than the number of quadrilaterals per row and per column.) For example, an SoQuadMesh with a startIndex of 3, verticesPerColumn of 3, and verticesPerRow of 4 would use coordinates 3, 4, 5, and 6 for the first row of vertices, coordinates 7, 8, 9, and 10 for the second row, and coordinates 11, 12, 13, and 14 for the third (last) row. The result is a mesh of 3 quadrilaterals across by 2 down. Note: non-planar quadrilaterals formed by a quad mesh may cause interesting but unpredictable results.
+
+<p>The coordinates of the mesh are transformed by the current cumulativetransformation. The mesh is drawn with the current light model and drawing style. Treatment of the current material and normal binding is as follows:
+
+<dl>
+<dd>The PER_PART binding specifies a material or normal for each row of the mesh.
+<dd>The PER_FACE binding specifies a material or normal for each quadrilateral. <dd>The _INDEXED bindings are equivalent to their non-indexed counterparts.
+<dd>The DEFAULT material binding is equal to OVERALL.
+<dd>The DEFAULT normal binding is equal to PER_VERTEX. The startIndex is also used for materials, normals, or texture coordinates when the binding indicates that they should be used per vertex. If the current complexity value is less than 0.5, some rows will be skipped during rendering.
+</dl>
+
+<dt>FIELDS
+<dl>
+<dt>SoSFLong verticesPerColumn
+<dd>SoSFLong verticesPerRowNumber of vertices per column and row.
+
+<dt>Fields from class SoNonIndexedShape:
+<dd>startIndex
+
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoQuadMesh</b>()
+<dd>Creates a quadrilateral mesh node with default settings. static SoType getClassTypeId()Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws a mesh based on the current coordinates, normals, materials, drawingstyle, and so on.
+<dt>SoRayPickAction
+<dd>Picks on the mesh based on the current coordinates and transformation. Details about the intersection are returned in an SoFaceDetail.
+
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses all vertices of the mesh with the current transformation applied to them. Sets the center to the average of thecoordinates of all vertices.
+
+<dt>SoCallbackAction
+<dd>If any triangle callbacks are registered with the action, they will be invoked for each successive triangle forming the quadrilaterals of the mesh.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>QuadMesh {
+<dd>startIndex
+<dd>0verticesPerColumn 1
+<dd>verticesPerRow 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoQuadMesh.h&gt;
+
+<dt>SEE ALSO
+<a href="socoordinate.html">SoCoordinate3</a>, <a href="sodrawstyle.html">SoDrawStyle</a>, <a href="sofacedetail.html">SoFaceDetail</a>, <a href="sofaceset.html">SoFaceSet</a>, <a href="sotrianglestripset.html">SoTriangleStripSet</a>
+
+</body>

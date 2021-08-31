@@ -1,0 +1,60 @@
+<html>
+<body>
+SoBaseColor
+<hr>
+<dl>
+
+<dt>NAME
+<dd>SoBaseColor -- node that defines an object's base color
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseColor
+
+<dt>DESCRIPTION
+<dd>This node defines the base color (or colors) of subsequent shape nodes in the scene graph. SoBaseColor sets only the diffuse color(s) of the current material and has no effect on the material's other attributes.
+
+<dt>FIELDS
+<dl>
+<dt><a href="somfcolor.html">SoMFColor</a> rgb
+<dd>RGB color(s).
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoBaseColor</b>()
+<dd>Creates a base color node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction
+<dd>Sets the current base color in the state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>BaseColor {
+<dd>rgb 0.8 0.8 0.8
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoBaseColor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="somaterial.html">SoMaterial</a>, <a href="sopackedcolor.html">SoPackedColor</a>
+
+</body>
+</html>

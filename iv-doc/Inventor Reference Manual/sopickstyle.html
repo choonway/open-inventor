@@ -1,0 +1,67 @@
+<html>
+<body>
+SoPickStyle
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPickStyle -- picking style node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoPickStyle
+
+<dt>DESCRIPTION
+<dd>This node determines how subsequent geometry nodes in the scene graph are to be picked, as indicated by the style field. Note that this is the only way to change the pick behavior of shapes; drawing style,complexity, and other rendering-related properties have no effect on picking.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum style
+<dd>Picking style.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoPickStyle</b>()
+<dd>Creates a pick style node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoRayPickAction, SoCallbackAction
+<dd>Sets the current pick style in the state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>PickStyle {
+<dd>style SHAPE
+<dt>}
+
+</dl>
+
+<dt>INCLUDE FILE
+<dl>
+<dt>#include &lt;Inventor/nodes/SoPickStyle.h&gt;
+
+<dt>enum Style {
+<dd>SoPickStyle::SHAPE Points on the surfaces of shapes may be picked
+<dd>SoPickStyle::BOUNDING_BOX Points on the surfaces of 3D bounding boxes of shapes may be picked
+<dd>SoPickStyle::UNPICKABLE Subsequent objects are transparent to picks
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="socomplexity.html">SoComplexity</a>, <a href="sodrawstyle.html">SoDrawStyle</a>, <a href="soraypickaction.html">SoRayPickAction</a>
+</body>
+</html>

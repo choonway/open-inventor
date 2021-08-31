@@ -1,0 +1,60 @@
+<html>
+<body>
+SoLinearProfile
+<hr>
+<dl>
+<dt>NAME
+<dd>SoLinearProfile -- Piecewise-linear profile curve
+
+<dt>INHERITS FROM
+<dd><a href="base.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soprofile.html">SoProfile</a> &gt; SoLinearProfile
+
+<dt>DESCRIPTION
+<dd>this node specifies a piecewise-linear curve that is used as a profile.
+
+<dt>FIELDS
+<dl>
+<dt>Fields from class SoProfile:
+<dd>index, linkage
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoLinearProfile</b>()
+<dd>Creates a linear profile node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoRayPickAction, SoCallbackAction
+<dd>Adds a profile to the current state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>LinearProfile {
+<dd>index 0
+<dd>linkage START_FIRST
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoLinearProfile.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sonurbsprofile.html">SoNurbsProfile</a>, <a href="soprofilecoordinate2.html">SoProfileCoordinate2</a>, <a href="soprofilecoordinate3.html">SoProfileCoordinate3</a>
+</dl>
+</body>
+</html>

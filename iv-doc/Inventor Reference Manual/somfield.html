@@ -1,0 +1,58 @@
+<html>
+<body>
+SoMField
+<hr>
+<dl>
+<dt>NAME
+<dd>SoMField -- base class for all multiple-valued fields
+
+<dt>INHERITS FROM
+<dd><a href="sofield.html">SoField</a> &gt; SoMField
+
+<dt>DESCRIPTION
+<dd>Each class derived from SoMField begins with an SoMF prefix and contains a dynamic array of values of a particular type. Each has a setValues() method that is passed a pointer to a const array of values of the correct type; these values are copied into the array in the field, making extra room in the array if necessary. The start andnum parameters to this method indicate the starting array index to copy into and the number of values to copy. The getValues() method for a multiple-value field returns a const pointer to thearray of values in the field. (Because this pointer is const, it cannot be used to change values in this array.) In addition, the indexing operator &quot;[ ]&quot; is overloaded to return the i'th value in thearray; because it returns a const reference, it can be used only to get values, not to set them. Methods are provided for getting the number of values in the field, inserting space for new values in the middle, and deleting values.
+
+<p>There are other methods that allow you to set only one value of several in the field and to set the field to contain one and only one value. Two other methods can be used to make several changes to a multiple-value field without the overhead of copying values into and out of the fields. The startEditing() method returns a non-const pointer to the array of values in the field;this pointer can then be used to change (but not add or remove) any values in the array. The finishEditing() method indicates that the editing is done and notifies any sensors or engines that may be connected to the field.
+
+<p>SoMFields are written to file as a series of values separated by commas, all enclosedin square brackets. If the field has no values (getNum() returns zero), then only the square brackets (&quot;[ ]&quot;) are written. The last value may optionally be followed by acomma. Each field subtype defines how the values are written; for example, a field whose values are integers might be written as:
+
+<p>[ 1, 2, 3, 4 ]
+
+<p>or:
+
+<p>[ 1, 2, 3, 4, ]
+
+<dt>METHODS
+<dl>
+<dt>int <b>getNum</b>() const
+<dd>Returns the number of values currently in the field.
+
+<dt>void <b>setNum</b>(int num)
+<dd>Forces this field to have exactly num values, inserting or deleting values as necessary.
+
+<dt>virtual void <b>deleteValues</b>(int start, int num = -1)
+<dd>Deletes num values beginning at index start (index start through start+num-1 will be deleted, and any left over values will be moved down to fill in the gap created). A num of -1 means delete all values from start to the last value in the field; getNum() will return start as the number of values in the field after this operation (deleteValues(0, -1) empties the field).
+
+<dt>virtual void <b>insertSpace</b>(int start, int num)
+<dd>Inserts space for num values at index start. Index start through start+num-1 will be moved up to make room. For example, to make room for 7 new values at the beginning of the field call insertSpace(0, 10).
+
+<dt>SbBool <b>set1</b>(int index, const char *valueString)
+<dt>void <b>get1</b>(int index, SbString &valueString)
+<dd>These are equivalent to the set() and get() methods of SoField, but they operate on only one value. See the SoField methods for details.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Return the type identifier for this field class.
+
+<dt><b>Methods from class SoField</b>:
+<dd>setIgnored, isIgnored, isDefault, getTypeId, isOfType, set, get, operator ==,operator !=, touch, connectFrom, connectFrom, disconnect, isConnected, isConnectedFromField, getConnectedField, isConnectedFromEngine,getConnectedEngine, enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoField.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sonode.html">SoNode</a>, <a href="soengine.html">SoEngine</a>
+</dl>
+
+</body>
+</html>

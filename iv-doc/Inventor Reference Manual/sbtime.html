@@ -1,0 +1,127 @@
+<html>
+<body>
+SbTimer
+<dl>
+<dt>NAME
+<dd>SbTime -- class for representation of a time
+
+<dt>INHERITS FROM
+<dd>SbTime
+
+<dt>DESCRIPTION
+<dd>This class represents and performs operations on time. Operations may be done in seconds, seconds and microseconds, or using a struct timeval (defined in/usr/include/sys/time.h).
+
+<dt>METHODS
+<dl>
+<dt><b>SbTime</b>()
+<dt><b>SbTime</b>(double sec)
+<dt><b>SbTime</b>(long sec, long usec)
+<dt><b>SbTime</b>(const struct timeval *tv)
+
+<dt>Constructors taking seconds, seconds and microseconds, or a struct timeval. NOTE that an integer parameter will not automatically cast to a double toinvoke the constructor taking seconds; that is, SbTime(1) will result in a compilation error -- SbTime(1.0) must be used instead. This is to avoiderrors in upgrading from an earlier release, in which SbTime(1) had different semantics. In future releases, this distinction will be eliminated,and the effect of SbTime(1.0) and that of SbTime(1) will be identical.
+
+<dt>static SbTime <b>getTimeOfDay</b>()
+<dd>Get the current time (seconds since Jan 1, 1970).
+
+<dt>void <b>setToTimeOfDay</b>()
+<dd>Set to the current time (seconds since Jan 1, 1970).
+
+<dt>static SbTime <b>zero</b>()
+<dd>Get a zero time.
+
+<dt>static SbTime <b>max</b>()
+<dd>Get a time far, far into the future.
+
+<dt>void <b>setValue</b>(double sec)
+<dd>Set time from a double (in seconds).
+
+<dt>void <b>setValue</b>(long sec, long usec)
+<dd>Set time from seconds + microseconds.
+
+<dt>void <b>setValue</b>(const struct timeval *tv)
+<dd>Set time from a struct timeval.
+
+<dt>void <b>setMsecValue</b>(unsigned long msec)
+<dd>Set time from milliseconds.
+
+<dt>double <b>getValue</b>() const
+<dd>Get time in seconds as a double.
+
+<dt>void <b>getValue</b>(long &sec, long &usec) const
+<dd>Get time in seconds and microseconds.
+
+<dt>void <b>getValue</b>(struct timeval *tv) const
+<dd>Get time in a struct timeval.
+
+<dt>unsigned long <b>getMsecValue</b>() const
+<dd>Get time in milliseconds (for Xt).
+
+<dt>SbString <b>format</b>(const char *fmt = &quot;%S.%i&quot;) const
+<dd>Convert to a string. The default format is seconds with 3 digits of fraction precision. fmt is a character string that consists of field descriptors and text characters, in a manner analogous to cftime (3C) and printf (3S). Each field descriptor consists of a % character followed by another character which specifies the replacement for the field descriptor. All other characters are copied from fmt into the result. The following field descriptors are supported:
+
+<dl>
+<dd>% the `%' character
+<dd>D total number of days
+<dd>H total number of hours
+<dd>M total number of minutes
+<dd>S total number of seconds
+<dd>I total number of milliseconds
+<dd>U total number of microseconds
+<dd>h hours remaining after the days (00-23)
+<dd>m minutes remaining after the hours (00-59)
+<dd>s seconds remaining after the minutes (00-59)
+<dd>i milliseconds remaining after the seconds (000-999)
+<dd>u microseconds remaining after the seconds (000000-999999)
+</dl>
+
+<dd>The uppercase descriptors are formatted with a leading `--' for negative times; the lowercase descriptors are formatted fixed width, with leading zeros. For example, a reasonable format string might be&quot;elapsed time: %M minutes, %s seconds&quot;. The default value of fmt, &quot;%S.%i&quot;, formats the time as seconds with 3 digits of fractional precision.
+
+<dt>SbString <b>formatDate</b>(const char *fmt = &quot;%A, %D %r&quot;) const
+<dd>Convert to a date string, interpreting the time as seconds since Jan 1, 1970. The default format gives &quot;Tuesday, 01/26/93 11:23:41 AM&quot;. See the cftime()reference page for explanation of the format string.
+
+<dt>SbTime operator <b>+</b>(const SbTime &t0, const SbTime &t1)
+<dt>SbTime operator <b>-</b>(const SbTime &t0, const SbTime &t1)
+<dd>Addition and subtraction of two times.
+
+<dt>SbTime & operator <b>+=</b>(const SbTime &tm)
+<dd>SbTime & operator <b>-=</b>(const SbTime &tm)
+<dd>Addition and subtraction of two times which modifies the time structure.
+
+<dt>SbTime operator <b>-</b>() const
+<dd>Unary negation.
+
+<dt>SbTime operator <b>*</b>(double s, const SbTime &tm)
+<dt>SbTime operator <b>*</b>(const SbTime &tm, double s)
+<dt>SbTime operator <b>/</b>(const SbTime &tm, double s)
+<dd>Multiplication and division by scalar.
+
+<dt>SbTime & operator <b>*=</b>(double s)
+<dt>SbTime & operator <b>/=</b>(double s)
+<dd>Destructive multiplication and division by scalar.
+
+<dt>double operator <b>/</b>(const SbTime &tm) const
+<dd>Division by another time.
+
+<dt>SbTime operator <b>%</b>(const SbTime &tm) const
+<dd>Modulus for two times (remainder when time1 is divided by time2).
+
+<dt>int operator <b>==</b>(const SbTime &tm) const
+<dt>int operator <b>!=</b>(const SbTime &tm) const
+<dd>Equality operators.
+
+<dt>SbBool operator <b>&lt;</b>(const SbTime &tm) const
+<dt>SbBool operator <b>&gt;</b>(const SbTime &tm) const
+<dt>SbBool operator <b>&lt;=</b>(const SbTime &tm) const
+<dt>SbBool operator <b>&gt;=</b>(const SbTime &tm) const
+<dd>Relational operators.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbTime.h&gt;
+
+<dt>SEE ALSO
+<dd>cftime
+</dl>
+
+</body>
+</html>

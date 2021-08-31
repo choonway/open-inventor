@@ -1,0 +1,49 @@
+<html>
+<body>
+<p>SbCylinderSectionProjector
+<hr>
+<dl>
+<dt>NAME
+<dd>SbCylinderSectionProjector -- cylinder-section projector
+
+<dt>INHERITS FROM
+<dd>SbProjector &gt; <a href="sbcylinderprojector.html">SbCylinderProjector</a> &gt; <a href="sbcylindersectionprojector.html">SbCylinderSectionProjector</a>
+
+<dt>DESCRIPTION
+<dd>SbCylinderSectionProjector projects a window space point (usually based on the mouse location) onto the section of a cylinder that has been sliced by a plane. Twoprojected points can produce a rotation along the cylinder's axis. The tolerance slice can be specified as a fraction of the radius of the cylinder. The projection pointwill not extend beyond the sliced portion of the cylinder.
+
+<dd>Incremental changes (delta rotation) can be computed during interactive sessions.Cylinder projectors are typically used to write interactive 3D manipulators and viewers.
+
+<dt>METHODS
+<dl>
+<dt><b>SbCylinderSectionProjector</b>(float edgeTol = .9, SbBoolorientToEye = TRUE)
+<dt><b>SbCylinderSectionProjector</b>(const SbCylinder &cyl, float edgeTol = .9, SbBool orientToEye = TRUE)
+<dd>Constructors. The first uses a default cylinder aligned with the Y axis with radius 1.0; the cylinder is supplied in the second. The position of the planewhich slices the cylinder into a section is specified as a fraction of the cylinder radius with the parameter edgeTol. A tolerance value of 1.0positions the plane down the center of the cylinder. A tolerance value of 0.5 defines the longitudinal plane halfway between the center and the outsideedge of the cylinder. The default value is .9, so that almost half the cylinder is in front of the plane. The orientToEye parameter determines whether theplane is perpendicular to the eye, or perpendicular to the cylinder's Z axis. Setting that parameter to TRUE (the default) specifies that the plane beperpendicular to the eye, which is most often the desired behavior.
+
+<dd>The default view volume is undefined, and the working space is identity.
+
+<dt>~<b>SbCylinderSectionProjector()</b>
+<dd>Destructor.
+
+<dt>void <b>setTolerance</b>(float edgeTol)
+<dt>float <b>getTolerance</b>() const
+
+<dd>Set and get the edge tolerance as a fraction of the radius of the cylinder. Ifthis is 1.0, the projector is a half cylinder. If this is .1, the projector is a slice of the cylinder with radius .1*radius. Default is .9.
+
+<dt>SbBool <b>isWithinTolerance</b>(const SbVec3f &point)
+<dd>Find whether this point on the cylinder or tolerance plane is within tolerance.
+
+<dt><b>Methods from class SbCylinderProjector</b>:
+<dd>projectAndGetRotation, getRotation, setCylinder, getCylinder,setOrientToEye, isOrientToEye, setFront, isFront, isPointInFront
+
+<dt><b>Methods from class SbProjector</b>:
+<dd>project, setViewVolume, getViewVolume, setWorkingSpace,getWorkingSpace, copy</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/projectors/SbCylinderSectionProjector.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbcylinderplaneprojector.html">SbCylinderPlaneProjector</a>, <a href="sbcylindersheetprojector.html">SbCylinderSheetProjector</a>, <a href="sblineprojector.html">SbLineProjector</a>, <a href="sbplaneprojector.html">SbPlaneProjector</a>, <a href="sbsphereplaneprojector.html">SbSpherePlaneProjector</a>, <a href="sbsphereprojector.html">SbSphereProjector</a>, <a href="sbspheresectionprojector.html">SbSphereSectionProjector</a>, <a href="sbspheresheetprojector.html">SbSphereSheetProjector</a>
+</dl>
+</body>
+</html>

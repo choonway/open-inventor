@@ -1,0 +1,134 @@
+<html>
+
+<body>
+ 
+<h2>SoArray</h2>
+
+<hr></hr>
+
+<dl>
+
+<dt>NAME SoArray -- group node that creates a regular IxJxK array of copies of its children
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sogroup.html">SoGroup</a> &gt; SoArray
+<dt>DESCRIPTION
+<dd>This group node traverses its children, in order, several times, creating a regular 3D
+
+array of copies of them. The number of copies in each of the three directions is specified by fields, as are the vectors used to separate the copies in each of the three dimensions. For example, an SoArray node can be used to create a 2x3x4 array of copies of its children, where the separation vectors between adjacent copies in the three array dimensions are (1,2,3), (-4,-5,-6), and (7,8,9), respectively. The base point of the array can be set to one of several values, as described in the origin field.
+
+Copies are traversed so that the first dimension cycles most quickly, followed by thesecond, and then the third. This order is important because SoArray sets the current switch value to N before traversing the children for the Nth time (for use with inherited switch values - see <a href="soswitch.html">SoSwitch<a/>).
+<dt>
+
+FIELDS
+<dl>
+<dt><a href="sosfshort.html">SoSFShort</a> numElements1
+
+
+<dt><a href="sosfshort.html">SoSFShort</a> numElements2
+<dt><a href="sosfshort.html">SoSFShort</a> numElements3
+<dd>
+
+Number of elements in each of the three array dimensions.
+<dt><a href="sosfvec3f.html">SoSFVec3f</a> separation1
+<dt><a href="sosfvec3f.html">SoSFVec3f</a> separation2
+<dt><a href="sosfvec3f.html">SoSFVec3f</a> separation3
+<dd>Separation vector in each of the three array dimensions.
+
+<dt><a href="sosfenum.html">
+SoSFEnum</a> origin
+<dd>Defines the base point from which copies are distributed.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoArray()
+<dd>Creates an array node with default settings.
+<dt>static <a href="sotype.html">SoType</a> getClassTypeId()
+<dd>Returns type identifier for this class.
+
+
+
+<dt>
+
+Methods from class SoGroup:
+
+<dd>addChild, insertChild, getChild, findChild, getNumChildren, removeChild,removeChild, removeAllChildren, replaceChild, replaceChild
+
+<dt>
+
+Methods from class SoNode:
+
+<dd>
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+
+
+<dt>Methods from class SoFieldContainer:
+
+
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>
+
+Methods from class SoBase:
+<dd>
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>
+
+ACTION BEHAVIOR
+<dl>
+<dt><a href="soglrenderaction.html">SoGLRenderAction</a>, SoCallbackAction, SoGetBoundingBoxAction,
+
+SoRayPickAction
+<dd>Traverses all children for each array element, saving and restoring state 
+
+before and after each traversal.
+
+<dt>SoSearchAction
+<dd>Traverses all children once, setting the inherited switch value to 
+
+SO_SWITCH_ALL first.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Array {
+
+<dd>
+numElements1 1
+<dd>numElements2 1
+<dd>numElements3 1
+<dd>separation1 1 0 0
+<dd>separation2 0 1 0
+<dd>separation3 0 0 1
+<dd>origin FIRST
+<dt>}
+</dl>
+
+
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoArray.h&gt;
+
+<dd>
+<dl>
+<dt>
+
+enum Origin {
+<dd>SoArray::FIRST First copy is rendered at the current local origin; all other copies 
+
+are distributed relative to it
+<dd>SoArray::CENTER Copies are distributed relative to the center of the array
+<dd>SoArray::LAST Last copy is rendered at the current local origin; all other copies are distributed relative to it 
+</dl>}
+
+<dt>SEE ALSO
+<dd><a href="somultiplecopy.html">SoMultipleCopy</a>, <a href="soswitch.html">SoSwitch</a>
+
+
+</body>
+</html>

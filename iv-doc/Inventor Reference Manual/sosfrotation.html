@@ -1,0 +1,56 @@
+<html>
+<body>
+SoSFRotation
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSFRotation -- field containing a rotation
+
+<dt>INHERITS FROM
+<dd><a href="sofield.html">SoField</a> &gt; <a href="sosfield.html">SoSField</a> &gt; SoSFRotation
+
+<dt>DESCRIPTION
+<dd>A field containing a single SbRotation (an arbitrary rotation).
+
+<p>SoSFRotations are written to file as four floating point values separated bywhitespace. The 4 values represent an axis of rotation followed by the amount of right-handed rotation about that axis, in radians. For example, a 180 degree rotationabout the Y axis is:
+
+<p>0 1 0 3.14159265
+
+<dt>METHODS
+<dl>
+<dt>void <b>getValue</b>(const SbVec3f &axis, float angle) const
+<dd>Gets the value of the field as an axis/angle.
+
+<dt>void <b>setValue</b>(float q0, float q1, float q2, float q3)
+<dt><b>setValue</b>(float q[4])
+<dd>Set the field to the given quaternion.
+
+<dt>void <b>setValue</b>(const SbVec3f &axis, float angle)Set the field to the rotation given by axis/angle.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dt>virtual void <b>getTypeId</b>() const
+<dd>Returns the type for this class or a particular object of this class.
+
+<dt>const SbRotation & <b>getValue</b>() const
+<dd>Returns this field's value.
+
+<dt>const SbRotation <b>& operator =</b>(const SbRotation & newValue)
+<dt>void <b>setValue</b>(const SbRotation & newValue)
+<dd>Sets this field to newValue.
+ 
+<dt>int <b>operator ==</b>(const SoSFRotation &f) const
+<dt>int <b>operator !=</b>(const SoSFRotation &f) const
+<dd>Returns TRUE if f is of the same type and has the same value as this field.
+
+<dt><b>Methods from class <a href="sofield.html">SoField</a></b>:
+<dd>setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField, getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoSFRotation.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbrotation.html">SbRotation</a>, <a href="sofield.html">SoField</a>, <a href="sosfield.html">SoSField</a>, <a href="somfrotation.html">SoMFRotation</a>
+</dl>
+</body>
+</html>

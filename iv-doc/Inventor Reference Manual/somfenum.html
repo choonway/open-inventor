@@ -1,0 +1,63 @@
+<html>
+<body>
+SSooMMFFEEnnuummhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoMFEnum -- multiple-value field containing any number of enumerated type
+
+values INHERITS FROMSoField &gt; SoMField &gt; SoMFEnum
+
+DESCRIPTIONA multiple-value field that contains any number of enumerated type values, stored
+
+as ints. Nodes that use this field class define mnemonic names for values. Thesenames should be used when setting or testing the values of the field, even though the values are treated as integers in the methods. SoMFEnums are written to file as a set of mnemonic enumerated type names. Thesenames differ among uses of this field in various node classes. See the reference pages for specific nodes for the names. When more than one value is present, all of the values are enclosed in squarebrackets and separated by commas.
+
+METHODSvoid setValue(const SbName &name)
+
+Sets this field to contain one and only one value, which is the mnemonicname as a string.
+
+void set1Value(int index, const SbName &name)Sets the index'th value to be the integer corresponding to the mnemonic
+
+name in the given string. static SoType getClassTypeId()virtual void getTypeId() const
+
+Returns the type for this class or a particular object of this class. int operator [ ](int i) constReturns the i'th value of the field. Indexing past the end of the field (passing
+
+in i greater than getNum()) will return garbage. const int * getValues(int start) constReturns a pointer into the array of values in the field, starting at index start.
+
+The values are read-only; see the startEditing()/finishEditing() methods fora way of modifying values in place.
+
+365<hr>
+
+SSooMMFFEEnnuummhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+int find(int targetValue, SbBool addIfNotFound = FALSE)Finds the given value in the array and returns the index of that value in the
+
+array. If the value is not found, -1 is returned. If addIfNotFound is set, thentargetValue is added to the end of the array (but -1 is still returned).
+
+void setValues(int start, int num, const int *newValues)Sets num values starting at index start to the values in newValues. The array
+
+will be automatically be made larger to accomodate the new values, ifnecessary.
+
+void set1Value(int index, int newValue)Sets the index'th value in the array to newValue. The array will be
+
+automatically expanded, if necessary. int operator =(int newValue)void setValue(int newValue)
+
+Sets the first value in the array to newValue, and deletes the second andsubsequent values.
+
+int operator ==(const SoMFEnum &f) constint operator !=(const SoMFEnum &f) const
+
+Returns TRUE if all of the values of this field equal (do not equal) those ofthe given field. If the fields are different types FALSE will always be returned (even if one field is an SoMFFloat with one value of 1.0 and the other is anSoMFInt with a value of 1, for example).
+
+int * startEditing()void finishEditing()
+
+startEditing() returns a pointer to the internally-maintained array that canbe modified. The values in the array may be changed, but values cannot be added or removed. It is illegal to call any other editing methods betweenstartEditing() and finishEditing() (e.g. set1Value(), setValue(), etc).
+
+Fields, engines or sensors connected to this field and sensors are not notifiedthat this field has changed until finishEditing() is called. Calling finishEditing() always sets the isDefault() flag to FALSE and informsengines and sensors that the field changed, even if none of the values actually were changed. Methods from class SoMField:
+
+getNum, setNum, deleteValues, insertSpace, set1, get1
+
+366 Open Inventor C++ Reference Pages<hr>
+
+SSooMMFFEEnnuummhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</body>
+</html>

@@ -1,0 +1,60 @@
+<html>
+<body>
+SoOffScreenRenderer
+<hr>
+<dl>
+<dt>NAME
+<dd>SoOffScreenRenderer -- renders to an off-screen buffer for printing or generating textures
+
+<dt>INHERITS FROM
+<dd>SoOffScreenRenderer
+
+<dt>DESCRIPTION
+<dd>This class is used to render into an off-screen buffer to create a printable image or to generate a texture image. It uses X Pixmaps for rendering. Methods are provided towrite the buffer to a file, either as an RGB image or an encapsulated PostScript description.
+
+<dt>METHODS
+<dl>
+<dt>static float <b>getScreenPixelsPerInch</b>()
+<dd>Returns the number of pixels per inch (in the horizontal direction) of thecurrent X device screen.
+
+<dt>void <b>setComponents</b>(Components components)
+<dt>Components <b>getComponents</b>() const
+<dd>Sets or returns the components to be rendered.
+
+<dt>void <b>setViewportRegion</b>(const SbViewportRegion &region)
+<dt>const <b>SbViewportRegion</b> &getViewportRegion() const
+<dd>Sets or returns the viewport region used for rendering.
+
+<dt>void <b>setBackgroundColor</b>(const SbColor &c)
+<dt>const SbColor & <b>getBackgroundColor</b>() const
+<dd>Sets or returns the background color for rendering.
+
+<dt>SbBool <b>render</b>(SoNode *scene)
+<dt>SbBool <b>render</b>(SoPath *scene)
+<dd>Renders the given scene, specified as a node or a path, into an off-screenbuffer.
+
+<dt>unsigned char * <b>getBuffer</b>() const
+<dd>Returns the buffer containing the rendered image.
+
+<dt>SbBool <b>writeToRGB</b>(FILE *fp) const
+<dd>Writes the buffer as a .rgb file to the given file pointer.
+
+<dt>SbBool <b>writeToPostScript</b>(FILE *fp) const
+<dt>SbBool <b>writeToPostScript</b>(FILE *fp, const SbVec2f &printSize) const
+<dd>Writes the buffer as encapsulated PostScript. If a print size is not given, thesize of the image in the buffer is adjusted so it is the same as the apparent size of the viewport region on the current device.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/misc/SoOffScreenRenderer.h&gt;
+
+<dl>
+<dt>enum Components {
+<dd>SoOffScreenRenderer::LUMINANCE
+<dd>SoOffScreenRenderer::LUMINANCE_TRANSPARENCY
+<dd>SoOffScreenRenderer::RGB
+<dd>SoOffScreenRenderer::RGB_TRANSPARENCY
+<dt>}
+</dl>
+
+</body>
+</html>

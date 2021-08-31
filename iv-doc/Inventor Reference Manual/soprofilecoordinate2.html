@@ -1,0 +1,60 @@
+<html>
+<body>
+SoProfileCoordinate2
+<dl>
+<dt>NAME
+<dd>SoProfileCoordinate2 -- profile coordinate node
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoProfileCoordinate2
+
+<dt>DESCRIPTION
+<dd><p>This node defines a set of 2D coordinates to be used by subsequent SoProfile nodes.
+
+<p>This node does not produce a visible result during rendering; it simply replaces the current profile coordinates in the traversal state for subsequent nodes to use.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFVec2f point
+<dd>2D profile coordinate points.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoProfileCoordinate2()
+<dd>Creates a profile coordinate node with default settings.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+
+<dd>Sets profile coordinates in current traversal state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>ProfileCoordinate2 {
+<dd>point 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoProfileCoordinate2.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soprofile.html">SoProfile</a>, <a href="soprofilecoordinate3.html">SoProfileCoordinate3</a>
+</body>
+</html>

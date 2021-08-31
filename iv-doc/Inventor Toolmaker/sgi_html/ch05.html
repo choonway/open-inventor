@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Chapter 5. Creating an Element</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"><meta name="generator" content="SGI XSL DocBook Customization Stylesheets V1.0"><link rel="home" href="index.html" title="The Inventor Toolmaker"><link rel="up" href="index.html" title="The Inventor Toolmaker"><link rel="previous" href="ch04.html" title="Chapter 4. Creating an Action"><link rel="next" href="ch06.html" title="Chapter 6. Creating an Engine"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. Creating an Element</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch06.html">Next</a></td></tr></table><hr></div><!--CONTENT_BEGIN--><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="id5454441"></a>Chapter 5. Creating an Element</h2></div></div>
+<p>If you want to create nodes that have effects not covered by the set of standard Inventor elements, you may need to create a new element class. Be sure you are familiar with the information in Chapters 1, 2, and 4 before you read this chapter.<a name="idch051"></a></p>
+<p>The first part of this chapter offers an overview of the steps required to create a new element class. When necessary, additional sections explain key concepts in further detail and list relevant macros. The chapter example shows creating a new element, the <span class="bold"><b>temperature</b></span> element, which is derived from <a name="idch052"></a><span class="bold"><b>SoFloatElement</b></span>.</p>
+<div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5454523"></a>Overview</h2></div></div>
+<p>The file SoSubElement.h contains the macros for defining new element classes. The SO_ELEMENT_HEADER() macro declares type identifier and naming variables and methods that all element classes must support. The SO_ELEMENT_SOURCE() macro defines the static variables and methods declared in the SO_ELEMENT_HEADER() macro. Other macros useful in creating new element classes are mentioned in the following sections.<a name="idch053"></a><a name="idch054"></a><a name="idch055"></a><a name="idch056"></a></p>
+<p>Creating a new element requires these steps:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new element class and determine what class it is derived from (see <a href="ch05.html#id14370">&#8220;Deriving a Class from an Existing Element&#8221;</a>).</p>
+</li>
+<li><p>Implement an <span class="bold"><b>initClass()</b></span> method to initialize the type information (see <a href="ch05.html#id35071">&#8220;The initClass() Method&#8221;</a>).</p>
+</li>
+<li><p>Implement a destructor.  Elements don't have constructors (see <a href="ch05.html#id13607">&#8220;Destructor&#8221;</a>).</p>
+</li>
+<li><p>Implement an <span class="bold"><b>init()</b></span> method (see <a href="ch05.html#id58867">&#8220;The init() Method&#8221;</a>).</p>
+</li>
+<li><p>Implement <span class="bold"><b>set()</b></span> and <span class="bold"><b>get()</b></span> methods to modify and access current values (see <a href="ch05.html#id10221">&#8220;The set() and get() Methods&#8221;</a>).</p>
+</li>
+<li><p>Implement a <span class="bold"><b>print()</b></span> method for debugging purposes (see <a href="ch05.html#id21117">&#8220;The print() Method&#8221;</a>).</p>
+</li>
+<li><p>Depending on what your class is derived from and the nature of your element, you may need to implement the following methods:</p>
+<p><span class="bold"><b>a.  matches()</b></span> and <span class="bold"><b>copyMatchInfo()</b></span> <br>
+    (see <a href="ch05.html#id33450">&#8220;Additional Methods&#8221;</a>).</p>
+<p><span class="bold"><b>b.  push()</b></span> and <span class="bold"><b>pop()</b></span> (see <a href="ch05.html#id10769">&#8220;Pushing and Popping Elements&#8221;</a>).</p>
+<p><span class="bold"><b>c.  setElt()</b></span> (see <a href="ch05.html#id33450">&#8220;Additional Methods&#8221;</a>).</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5454877"></a><a name="id14370"></a>Deriving a Class from an Existing Element</h2></div></div>
+<p>Elements are used for storing information in the Inventor traversal state. Writing a new element goes hand-in-hand with writing a new node, since nodes set and get element values. As explained in Chapter 1, elements provide the mechanism for caching in Inventor. They also provide the pushing and popping facility used by separators. Later sections in this chapter supply details on both topics.<a name="idch057"></a><a name="idch058"></a><a name="idch059"></a></p>
+<p>Before an element class can be used, it must be <a name="idch0510"></a><i>initialized</i> using one of the macros provided (see <a href="ch05.html#id83140">&#8220;Creating a New Element&#8221;</a>). The element must also be <i>enabled</i> in the method list of each action for which it is required. (Nodes and actions enable the elements in an action's state.)<a name="idch0511"></a></p>
+<p>As shown in <a name="idch0512"></a><a href="ch05.html#id90902">Figure 5-1</a>, most elements are derived from one of four abstract base classes: <a name="idch0513"></a><span class="bold"><b>SoFloatElement</b></span>,<span class="bold"><b> SoLongElement<a name="idch0514"></a></b></span>,<span class="bold"><b> SoReplacedElement<a name="idch0515"></a></b></span>, or <span class="bold"><b>SoAccumulatedElement<a name="idch0516"></a></b></span>. Most elements fall into the <span class="bold"><b>SoReplacedElement</b></span> category. The diffuse-color and specular-color elements are examples of elements that fall into this category, because their value replaces the previous value (and it is not a simple floating-point or integer value). A few elements, such as transformations and profiles, accumulate values.</p>
+<p><div class="figure"><p><a name="id5455070"></a><b>Figure 5-1. <a name="id90902"></a>Element Class Tree (Part 1 of 2)</b></p>
+<div class="mediaobject"><img src="figures/fig5.1SoElement1new.gif"></div></div><br>
+<div class="figure"><p><a name="id5455089"></a><b>Figure 5-2. Element Class Tree (Part 2 of 2)</b></p>
+<div class="mediaobject"><img src="figures/fig5.1SoElement2new.gif"></div></div><br>
+</p>
+<p>In addition, some elements have a derived element class that is used to cause the side effects required for OpenGL. An example is <a name="idch0517"></a><span class="bold"><b>SoDrawStyleElement</b></span>, from which <span class="bold"><b>SoGLDrawStyleElement</b></span> is derived.  <a href="ch05.html#id30652">&#8220;Special Behavior for Derived Elements&#8221;</a> discusses the use of these element class pairs.</p>
+<p>The first question to ask when creating a new element class is: What class can I derive my new element from? The answer depends partly on the kind of information stored in the element. If it can be stored as a single floating-point value (such as complexity or font size), derive your new class from <span class="bold"><b>SoFloatElement</b></span>. If it can be stored as an integer (such as drawing style, an enumerated value), derive your new class from <span class="bold"><b>SoLongElement</b></span>. You will probably be able to inherit many of the base class methods in these cases.</p>
+<p>If your new element contains other types of values, you may be able to derive it from <span class="bold"><b>SoReplacedElement</b></span>. If the current value of the element accumulates with previous values, you can derive it from <span class="bold"><b>SoAccumulated-<br>
+Element</b></span>. Later sections in this chapter describe in detail how these classes differ from each other.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5455214"></a><a name="id35071"></a>The initClass() Method</h2></div></div>
+<p>The <a name="idch0518"></a><a name="idch0519"></a><a name="idch0520"></a><span class="bold"><b>initClass()</b></span> method sets up runtime type checking for the class. Use SO_ELEMENT_INIT_CLASS() in the initialization method for non-abstract classes. Use SO_ELEMENT_INIT_ABSTRACT_CLASS() in the initialization method for abstract classes.<a name="idch0521"></a><a name="idch0522"></a></p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5455287"></a><a name="id13607"></a>Destructor</h2></div></div>
+<p>The destructor for the element is of the standard format:<a name="idch0523"></a><a name="idch0524"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoModelMatrixElement::~SoModelMatrixElement()
+</pre></td></tr></table><p>If your element requires special cleanup&#8212;for example, because it allocates memory space that needs to be freed&#8212;the destructor should also perform that work.</p>
+<p>At this point, you might be thinking, &#8220;What about the element constructor? Don't I need to write one?&#8221; Actually, you don't. The constructor for an element is built into the header, and you do not have access to it. There are only two times when an element instance is created:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>When the first instance of an element is created and put on the stack by the state</p>
+</li>
+<li><p>When a new element instance is pushed onto the stack</p>
+</li>
+</ul></div><p>In the first case, the virtual<span class="bold"><b> init()<a name="idch0525"></a></b></span> method is used after creating the first instance of the element. In the second case, the virtual <a name="idch0526"></a><span class="bold"><b>push()</b></span> method is used after creating each subsequent instance of the element. You can override the virtual <span class="bold"><b>init()</b></span> and <span class="bold"><b>push()</b></span> methods if your element class requires its own default value or other special behavior.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5455422"></a><a name="id58867"></a>The init() Method</h2></div></div>
+<p>The <a name="idch0527"></a><span class="bold"><b>init()</b></span> method is called to initialize the very first instance of the element class used in a state instance and to set up its default values. The state creates the element and calls <span class="bold"><b>init()</b></span> on it. Since all other instances are created by pushing, this method is called only once for each state instance.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5455459"></a>The <a name="id10221"></a>set() and get() Methods</h2></div></div>
+<p>All elements also need <span class="bold"><b>set()</b></span> and <a name="idch0528"></a><span class="bold"><b>get()</b></span> methods that are used by the nodes to modify and access current values. There may also be a static method that returns the default value(s) for the element. <a name="idch0529"></a></p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5455498"></a>The <a name="id21117"></a>print() Method</h2></div></div>
+<p>The <a name="idch0530"></a><span class="bold"><b>print()</b></span> method prints out an element's values, primarily for debugging purposes. This method, called by <a name="idch0531"></a><span class="bold"><b>SoState::print()</b></span>,  is useful in tracking down problems during graph traversal.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5455586"></a><a name="id33450"></a>Additional Methods</h2></div></div>
+<p>You may need to implement additional methods for certain element classes. Detailed information on <span class="bold"><b>matches()</b></span> and <span class="bold"><b>copyMatchInfo()</b></span> is presented in <a href="ch05.html#id40413">&#8220;Special Considerations for Caching&#8221;</a>. The <span class="bold"><b>setElt()</b></span> method is discussed in <a href="ch05.html#id30652">&#8220;Special Behavior for Derived Elements&#8221;</a>. The <span class="bold"><b>push()</b></span> and <span class="bold"><b>pop()</b></span> methods are discussed in <a href="ch05.html#id10769">&#8220;Pushing and Popping Elements&#8221;</a>.</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>matches()<a name="idch0532"></a></b></span></span></td><td width="10"> </td><td><p>called to determine whether an element matches another element. This method is used to compare states for cache validity. <a name="idch0533"></a><span class="bold"><b>copyMatchInfo()</b></span> is used to create a copy of an element to be added to a cache.</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>setElt()<a name="idch0534"></a></b></span></span></td><td width="10"> </td><td><p>a virtual method that is called by an element's static <span class="bold"><b>set()</b></span> method in some cases. For details, read <a href="ch05.html#id30652">&#8220;Special Behavior for Derived Elements&#8221;</a>. </p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>push()</b></span></span></td><td width="10"> </td><td><p>used in a few cases to set up a new element instance that is a copy of the one just below it in the stack. Elements that contain two or more pieces of data and elements that implement side effects (often for OpenGL rendering) need to implement a <a name="idch0535"></a><span class="bold"><b>push()</b></span> method. The default <span class="bold"><b>push()</b></span> method does nothing, since most elements contain only one piece of data and the value is typically set immediately after a push. Subclasses of <span class="bold"><b>SoAccumulatedElement</b></span> must define their own <span class="bold"><b>push()</b></span> method to copy values from the next instance in the stack, since the new instance accumulates values on top of the old ones. Use the<span class="bold"><b> SoElement</b></span> method <span class="bold"><b>getNextInStack()</b></span>.</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>pop()</b></span> <a name="idch0536"></a></span></td><td width="10"> </td><td><p>the counterpart to <span class="bold"><b>push()</b></span>. The default method does nothing. You need to implement a <span class="bold"><b>pop()</b></span> method if your element has side effects. For example, when the <span class="bold"><b>SoGLDrawStyleElement</b></span> pops, it restores the previous value by sending it to OpenGL. Other examples are the GL matrix elements, which call <span class="bold"><b>glPopMatrix()</b></span> when they pop (see <a href="ch05.html#id10769">&#8220;Pushing and Popping Elements&#8221;</a>). </p>
+
+</td></tr></table></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5455993"></a><a name="id40413"></a>Special Considerations for Caching</h2></div></div>
+<p>Elements do all of the work for caching in Inventor. If you are creating a node or an action that uses existing elements, you don't need to worry about caching. However, if you are creating a new element, you need to provide the necessary information so that caching continues to work. (You might want to reread <a name="idch0537"></a><a href="ch01.html#id22452">&#8220;Caching&#8221; in Chapter 1</a> before continuing with this section.)</p>
+<p>A cache is essentially a faster representation of the data you're trying to generate or compute in Inventor. What the cache contains depends on the action. A GL render cache contains an OpenGL display list. A bounding-box cache contains the bounding box itself. Using the cache speeds up subsequent traversal of the scene graph. In addition, the cache contains a list of the elements outside the cache that the information inside the cache depends on. For efficiency, the cache does not make an exact copy of each element it depends on. Instead, it copies only enough information to determine later on whether the cache is still valid.</p>
+<p>The form of this information depends on the element. For some elements, such as those derived from <span class="bold"><b>SoFloatElement</b></span> or <span class="bold"><b>SoLongElement</b></span>, the <i>value</i> of the element is compared. For others, the <i>node ID</i> of the node that set the element's value is compared. For elements such as those derived from <span class="bold"><b>SoAccumulatedElement</b></span>, the <i>list of node IDs</i> for all nodes that affect the instance of the element is compared. The <a name="idch0538"></a><span class="bold"><b>copyMatchInfo()</b></span> method should copy just enough information so that <a name="idch0539"></a><span class="bold"><b>matches()</b></span> can work properly.</p>
+<p>Inventor uses an element's <span class="bold"><b>copyMatchInfo()</b></span> method to copy the comparison data for the element into the cache. Then, to determine whether a cache is valid, Inventor compares each element in the cache with the corresponding element in the state by calling the element's <span class="bold"><b>matches()</b></span> method. </p>
+<p>You can inherit the <span class="bold"><b>matches()</b></span> and <span class="bold"><b>copyMatchInfo()</b></span> methods from the base classes, or for efficiency, you can write routines that are tailored to your new element class. The following sections explain in more detail how those routines work for the base classes.</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5456176"></a>SoFloatElement and SoLongElement<a name="idch0540"></a><a name="idch0541"></a></h3></div></div>
+<p>In many cases, you need to store only the <i>value</i> of the element in the cache. It doesn't matter which node has set the value. If the value of the element in the cache matches the value of the element in the state, the cache is still valid. The <span class="bold"><b>matches()</b></span> and <span class="bold"><b>copyMatchInfo()</b></span> methods for the <span class="bold"><b>SoFloatElement</b></span> and <span class="bold"><b>SoLongElement</b></span> classes function in this way.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5456229"></a>SoReplacedElement</h3></div></div>
+<p><span class="bold"><b>SoReplacedElement<a name="idch0542"></a></b></span> redefines the <a name="idch0543"></a><span class="bold"><b>getElement()</b></span> method of <span class="bold"><b>SoElement</b></span> to store the node ID of the node that is about to set the value in the element. (Recall that a node's ID is unique and changes whenever the node changes.) <span class="bold"><b>SoReplacedElement</b></span> also redefines <span class="bold"><b>matches()</b></span> to compare the node IDs and return TRUE if the node IDs of the two elements match, as follows:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SbBool
+SoReplacedElement::matches(const SoElement *elt) const
+{
+    return (nodeId == ((const SoReplacedElement *)
+            elt)-&gt;nodeId);
+}
+</pre></td></tr></table><p>An example of such an element is the coordinate element, which stores multiple coordinate values. Rather than compare all the values, this element simply compares the node IDs. The <span class="bold"><b>copyMatchInfo()</b></span> method for this class copies only the node ID, since that is the information used to determine if the cache matches the state:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoElement *
+SoReplacedElement::copyMatchInfo() const
+{
+    SoReplacedElement *result =
+        (SoReplacedElement *)getTypeId().createInstance();
+
+    result-&gt;nodeId = nodeId;
+
+    return result;
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5456362"></a>SoAccumulatedElement</h3></div></div>
+<p>Elements that accumulate values need to keep a list of node IDs for all nodes that affect an instance of the element. To determine whether a cache is valid for an accumulated element, the node ID list for the element in the cache is compared with the node ID list for the element in the state. <a name="idch0544"></a></p>
+<p>The <a name="idch0545"></a><span class="bold"><b>SoAccumulatedElement</b></span> class redefines the <span class="bold"><b>matches()</b></span> method to compare lists of node IDs. If they plan to use the standard <span class="bold"><b>matches()</b></span> method, subclasses of <span class="bold"><b>SoAccumulatedElement</b></span> need to use the following methods provided by this parent class to keep the list of node IDs up to date:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>clearNodeIds()</b></span></span></td><td width="10"> </td><td><p>clears the list of node IDs</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>addNodeId()</b></span></span></td><td width="10"> </td><td><p>adds the ID of the given node to the current list</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>setNodeId()</b></span></span></td><td width="10"> </td><td><p>sets the node ID list to only the node ID of the given node</p>
+
+</td></tr></table></div></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5456496"></a><a name="id30652"></a>Special Behavior for Derived Elements</h2></div></div>
+<p>In Inventor, elements that do not have a derived class have only a static <span class="bold"><b>set()</b></span> method. Elements with derived classes for their GL versions often have both a static <span class="bold"><b>set()</b></span> method and a <span class="bold"><b>setElt()</b></span> method. Using this mechanism, nodes can deal with the generic base class for elements without dealing individually with each subclass. For example, a node's <span class="bold"><b>doAction()</b></span> method can simply call <span class="bold"><b>SoDrawStyleElement::set</b></span> rather than calling <span class="bold"><b>SoGLDrawStyleElement::set</b></span>. If you are deriving an element from an existing element class, or if you are creating a new hierarchy of element classes, the <span class="bold"><b>setElt()</b></span> mechanism described here may prove useful.</p>
+<p>Suppose you are writing a new renderer and need some elements to perform additional work. In this case, you can derive an element from the existing element.  You write a virtual <a name="idch0546"></a><a name="idch0547"></a><a name="idch0548"></a><span class="bold"><b>setElt()</b></span> method for your new derived class that sets the element to its correct value and performs the desired side effects. The rest is C++ magic, as follows:</p>
+<div class="orderedlist"><ol type="1"><li><p>The static <span class="bold"><b>set()</b></span> method of the base class calls its virtual <span class="bold"><b>setElt()</b></span> method.</p>
+</li>
+<li><p>If there is no derived class, the <span class="bold"><b>setElt()</b></span> method of the base class is called. If there is a derived class, the <span class="bold"><b>setElt()</b></span> method of the derived class is called to set the element value.</p>
+</li>
+</ol></div><p>In Open Inventor, this mechanism is used for the GL rendering version of certain elements. Let's take a closer look at the plain vanilla and GL versions of the draw-style element to illustrate this process. As noted in <a name="idch0549"></a><a href="ch05.html#id14370">&#8220;Deriving a Class from an Existing Element&#8221;</a>, the GL version is used to perform side effects required for GL rendering. The base class, <span class="bold"><b>SoDrawStyleElement</b></span>, provides a static <span class="bold"><b>set()</b></span> method that calls a virtual <span class="bold"><b>setElt()</b></span> on the modifiable instance of the element:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+// Sets draw style in element accessed from state.
+void
+SoDrawStyleElement::set(SoState *state, SoNode *node, Style
+                        style)
+{
+   SoDrawStyleElement *elt;
+
+   // Get an instance we can change (pushing if necessary)
+   elt = (SoDrawStyleElement *)
+             getElement(state, classStackIndex,node);
+
+   if (elt != NULL)
+      elt-&gt;setElt(style);      // virtual setElt()--see below
+}
+</pre></td></tr></table><p>The virtual <span class="bold"><b>setElt()</b></span> is defined in the base class as follows:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoLongElement::setElt( long value )
+{
+   data = value;
+}
+</pre></td></tr></table><p>The derived GL class, <span class="bold"><b>SoGLDrawStyleElement</b></span>, redefines the virtual <span class="bold"><b>setElt()</b></span> method to do two things:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>It sets the value in the Inventor instance of the element.</p>
+</li>
+<li><p>It makes the proper calls to OpenGL (<span class="bold"><b>glPolygonMode</b></span>()) to reflect the current state.</p>
+</li>
+</ul></div><p>The code for the <span class="bold"><b>setElt()</b></span> method in <span class="bold"><b>SoGLDrawStyleElement</b></span> is as follows:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+// Sets draw style in element.
+void
+SoGLDrawStyleElement::setElt(long value)
+if (data != value) {
+   data = value;
+   send();       // The send() method calls glPolygonMode().
+}
+</pre></td></tr></table><p>At the same time, <span class="bold"><b>SoGLDrawStyleElement</b></span> inherits the static <span class="bold"><b>set()</b></span> method from the parent class, <span class="bold"><b>SoDrawStyleElement</b></span>. Note that you can derive other classes from <span class="bold"><b>SoDrawStyleElement</b></span> in a similar way to support other rendering actions.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5456945"></a><a name="id10769"></a>Pushing and Popping Elements</h2></div></div>
+<p>You need to implement a <a name="idch0550"></a><a name="idch0551"></a><a name="idch0552"></a><span class="bold"><b>push()</b></span> method for your new element if the pushed copy of the element uses the previous element in some way.  For example, accumulated elements such as the <a name="idch0553"></a><span class="bold"><b>SoProfileElement</b></span> need the previous element because they append values to the previous values. Their <span class="bold"><b>push()</b></span> method copies the values from the previous element in the stack into the new element on the stack so that the current value can be appended to it. You also need to implement a <span class="bold"><b>push()</b></span> method if your element requires some side effect when its value is set.  For example, some matrix elements call <a name="idch0554"></a><span class="bold"><b>glPushMatrix()</b></span> inside their <span class="bold"><b>push()</b></span> routine. You do not need to implement a <span class="bold"><b>push()</b></span> method for most replaced elements (unless they have side effects), since their new value wipes out the previous value.</p>
+<p>The <span class="bold"><b>push()</b></span> method is called when you call <span class="bold"><b>set()</b></span> on an element for the first time after the state is pushed (for example, underneath a separator). You may need to implement a corresponding <span class="bold"><b>pop()<a name="idch0555"></a></b></span> method whenever you implement a <span class="bold"><b>push()</b></span> method for an element.</p>
+<p>If your <span class="bold"><b>pop()</b></span> method has side effects, those side effects need to be included in a cache for the separator that performs the pop; otherwise, the separator cannot restore the state properly. Include this line in an element's <span class="bold"><b>pop()</b></span> method to tell all open caches they need to depend on this element when validating a cache:<a name="idch0556"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+capture(state);
+</pre></td></tr></table><p>For example, suppose the scene graph contains a draw-style node with a value of FILLED. A separator node to the right of this draw-style node contains a draw-style node with a value of LINES and a cube. Assume caching is turned on at the separator node. The separator's cache contains instructions for setting the draw-style to LINES and drawing the cube. When the state is restored, the draw-style element's <a name="idch0557"></a><span class="bold"><b>pop()</b></span> method causes the draw-style to be restored to its previous value (FILLED). If that previous value changes, this separator's cache is no longer valid.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5457200"></a><a name="id83140"></a><a name="id31469"></a>Creating a New Element</h2></div></div>
+<p>This example creates an element called <a name="idch0558"></a><span class="bold"><b>TemperatureElement</b></span> that holds the current temperature of shapes during traversal. This element is derived from the <span class="bold"><b>SoFloatElement</b></span> class.</p>
+<p>Example 5-1 shows the header file for the <span class="bold"><b>TemperatureElement</b></span>.</p>
+<div class="example"><p><a name="id5457296"></a><b>Example 5-1. <a name="idch0559"></a>TemperatureElement.h <span class="bold"> </span></b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/elements/SoFloatElement.h&gt;
+
+class TemperatureElement : public SoFloatElement {
+
+   SO_ELEMENT_HEADER(TemperatureElement);
+
+ public:
+   // Initializes the TemperatureElement class
+   static void    initClass();
+
+   // Initializes element
+   virtual void   init(SoState *state);
+
+   // Sets the current temperature in the state to the given
+   // temperature (in degrees Fahrenheit)
+   static void    set(SoState *state, SoNode *node, float temp);
+
+   // Returns the current temperature from the state
+   static float   get(SoState *state);
+
+   // Returns the default temperature
+   static float   getDefault()         { return 98.6; }
+
+ private:
+   virtual ~TemperatureElement();
+};
+</pre></td></tr></table><p>Example 5-2 shows the source code for the <span class="bold"><b>TemperatureElement</b></span>.</p>
+<div class="example"><p><a name="id5457362"></a><b>Example 5-2. TemperatureElement.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &quot;TemperatureElement.h&quot;
+
+SO_ELEMENT_SOURCE(TemperatureElement);
+
+// Initializes the TemperatureElement class.
+
+void
+TemperatureElement::initClass()
+{
+   SO_ELEMENT_INIT_CLASS(TemperatureElement, SoFloatElement);
+}
+
+// Destructor
+
+TemperatureElement::~TemperatureElement()
+{
+}
+
+// Initializes the first instance used in an action's state.
+
+void
+TemperatureElement::init(SoState *)
+{
+   data = getDefault();
+}
+
+// Sets the current temperature in the state.
+
+void
+TemperatureElement::set(SoState *state, SoNode *node,
+                  float temp)
+{
+   // Use the corresponding method on SoFloatElement to set the
+   // value in the top instance in the state
+   SoFloatElement::set(classStackIndex, state, node, temp);
+}
+
+// Returns the current temperature from the state.
+
+float
+TemperatureElement::get(SoState *state)
+{
+   // Use the corresponding method on SoFloatElement to get the
+   // value from the top instance in the state
+   return SoFloatElement::get(classStackIndex, state);
+}
+
+</pre></td></tr></table><br></div></div><!--CONTENT_END--><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Table of Contents</a></td><td width="40%" align="right"> <a accesskey="n" href="ch06.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 4. Creating an Action </td><td width="20%" align="center"> </td><td width="40%" align="right">Chapter 6. Creating an Engine </td></tr></table></div></body></html>

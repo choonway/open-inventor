@@ -1,0 +1,59 @@
+<html>
+<body>
+SoDecomposeVec2f
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDecomposeVec2f -- decomposes 2D vectors into floating-point values
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoDecomposeVec2f
+
+<dt>DESCRIPTION
+<dd>This engine takes as input a 2D vector, and decomposes it into two single floatingpoint values. The input can have multiple values, allowing the engine to decompose severalvectors in parallel.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFVec2f vector
+<dd>Vector to be decomposed.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFFloat) x
+<dd>First component of the vector.
+
+<dt>(SoMFFloat) y
+<dd>Second component of the vector.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoDecomposeVec2f()
+<dd>Constructor
+
+<dt>Methods from class SoEngine:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>DecomposeVec2f {
+<dd>vector 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCompose.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socomposevec2f.html">SoComposeVec2f</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+
+</body>
+</html>

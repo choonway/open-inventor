@@ -1,0 +1,38 @@
+<html>
+<body>
+SoCylinderDetail
+<hr>
+<dl>
+<dt>NAME
+<dd>SoCylinderDetail -- stores detail information about the SoCylinder node
+
+<dt>INHERITS FROM
+<dd>SoDetail &gt; SoCylinderDetail
+
+<dt>DESCRIPTION
+<dd>This class contains detail information about a point on a cylinder. It contains the part of the cylinder that was hit (sides, top, or bottom).
+
+<dt>METHODS
+<dl>
+<dt>SoCylinderDetail()
+<dt>virtual ~SoCylinderDetail()
+<dd>Constructor and destructor.
+
+<dt>int getPart() const
+<dd>Returns the part in the detail. The returned value is one of the SoCylinder
+part flags.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoDetail:
+<dd>copy, getTypeId, isOfType
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/details/SoCylinderDetail.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socylinder.html">SoCylinder</a>, <a href="sodetail.html">SoDetail</a>, <a href="sopickedpoint.html">SoPickedPoint</a>, <a href="soprimitivevertex.html">SoPrimitiveVertex</a>
+</body>
+</html>

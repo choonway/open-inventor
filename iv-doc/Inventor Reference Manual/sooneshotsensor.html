@@ -1,0 +1,41 @@
+<html>
+<body>
+SoOneShotSensor
+<hr>
+<dl>
+<dt>NAME
+<dd>SoOneShotSensor -- sensor for one-time only callbacks
+
+<dt>INHERITS FROM
+<dd><a href="sosensor.html">SoSensor</a> &gt; <a href="sodelayqueuesensor.html">SoDelayQueueSensor</a> &gt; SoOneShotSensor
+
+<dt>DESCRIPTION
+<dd>A one-shot sensor is triggered once after it is scheduled, when the delay queue is processed. Like all delay queue sensors, one-shot sensors with a non-zero priority are just added to the delay queue when scheduled; if they are scheduled again before the delay queue is processed nothing happens, and they are guaranteed to be called only once when the delay queue is processed. For example, a one-shot sensor whose callback function redraws the scene might be scheduled whenever the scene graph changes and whenever a window-system event reporting that the window changed size occurs. By using a one-shot, the scene will only be redrawn once even if a window-changed-size event occurs just after the scene graph is modified (or if several window-changed-size events occur in a row). Calling schedule() in the callback function is a useful way of getting something tohappen repeatedly as often as possible, while still handling events and timeouts.
+
+<dd>A priority 0 one-shot sensor isn't very useful, since scheduling it is exactly the same as directly calling its callback function.
+
+<dt>METHODS
+<dl>
+<dt><b>SoOneShotSensor</b>()
+<dt><b>SoOneShotSensor</b>(SoSensorCB *func, void *data)
+<dd>Creation methods. The second method takes the callback function and data to be called when the sensor is triggered.
+
+<dt>~<b>SoOneShotSensor</b>()
+<dd>Destroys the sensor, freeing up any memory associated with it after unscheduling it.
+
+<dt><b>Methods from class SoDelayQueueSensor</b>:
+<dd>setPriority, getPriority, getDefaultPriority, schedule, unschedule, isScheduled
+
+<dt><b>Methods from class SoSensor</b>:
+<dd>setFunction, getFunction, setData, getData
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/sensors/SoOneShotSensor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soidlesensor.html">SoIdleSensor</a>, <a href="sodelayqueuesensor.html">SoDelayQueueSensor</a>
+</dl>
+
+</body>
+</html>

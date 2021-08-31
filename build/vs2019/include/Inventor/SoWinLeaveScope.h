@@ -1,0 +1,2 @@
+
+/* SoWinLeaveScope.h (empty) */

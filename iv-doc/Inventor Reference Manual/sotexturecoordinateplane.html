@@ -1,0 +1,67 @@
+<html>
+<body>
+<dl>
+<dt>NAME
+<dd>SoTextureCoordinatePlane -- node that specifies texture coordinates by projection from a plane
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sotexturecoordinatefunction.html">SoTextureCoordinateFunction</a> &gt; SoTextureCoordinatePlane
+
+<dt>DESCRIPTION
+<dd>This node creates texture coordinates for points on an object's surface by projectingthem onto a plane. The directionS and directionT fields define the plane. The S coordinate is computed as the distance from the object-space origin along the vector specified in the directionS field. The T coordinate is computed similarly, using the directionT field.
+
+<p>The length of the direction vector is also taken into account. For example, assume directionS is (0.5, 0, 0) and directionT is (0, 1, 0). The square defined by the (x, y, z) vertices:
+
+<p>(-1, -1, 0) (1, -1, 0) (1, 1, 0) (-1, 1, 0) will be assigned the (s, t) texture coordinates:
+
+<p>(-2, -1) (2, -1) (2, 1) (-2, 1)
+
+<dt>FIELDS
+<dl>
+<dt>SoSFVec3f directionS
+<dt>SoSFVec3f directionT
+<dd>Directions of projection for S and T coordinates.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoTextureCoordinatePlane</b>()
+<dd>Creates a texture function node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoRayPickAction
+<dd>Sets the current texture function in the state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>TextureCoordinatePlane {
+<dd>directionS 1 0 0
+<dd>directionT 0 1 0
+<dt>}
+
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoTextureCoordinatePlane.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotexture2.html">SoTexture2</a>, <a href="sotexture2transform.html">SoTexture2Transform</a>, <a href="sotexturecoordinatecube.html">SoTextureCoordinateCube</a>, <a href="sotexturecoordinatecylinder.html">SoTextureCoordinateCylinder</a>, <a href="sotexturecoordinatedefault.html">SoTextureCoordinateDefault</a>, <a href="sotexturecoordinateenvironment.html">SoTextureCoordinateEnvironment</a>, <a href="sotexturecoordinatesphere.html">SoTextureCoordinateSphere</a>
+
+</dl>
+</body>
+</html>

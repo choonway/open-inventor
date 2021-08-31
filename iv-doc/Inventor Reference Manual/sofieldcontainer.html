@@ -1,0 +1,66 @@
+<html>
+<body>
+SoFieldContainer
+<hr>
+<dl>
+<dt>NAME
+<dd>SoFieldContainer -- abstract base class for objects that contain fields
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; SoFieldContainer
+
+<dt>DESCRIPTION
+<dd>SoFieldContainer is the abstract base class for engines and nodes. It contains methods for finding out what fields an object has, controlling notification, and fordealing with all of the fields of an object at once.
+
+<p>The fields of an engine are its inputs. Note that even though an engine's outputcorresponds to a specific type of field, an engine output is not a field.
+
+<dt>METHODS
+<dl>
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns the type of this class. void setToDefaults()Sets all fields in this object to their default values.
+
+<dt>SbBool <b>hasDefaultValues</b>() const
+<dd>Returns TRUE if all of the object's fields have their default values. This will return TRUE even if a field's isDefault() method returns FALSE -- forexample, if a field's default value is 0.0 and you setValue(0.0) that field, the default flag will be set to FALSE (because it would be too slow to comparethe field against its default value every time setValue is called). However, hasDefaultValues() would return TRUE in this case.
+
+<dt>SbBool <b>fieldsAreEqual</b>(const SoFieldContainer *fc) const
+<dd>Returns TRUE if this object's fields are exactly equal to fc's fields. If fc is not exactly same type as this object, FALSE is returned.
+
+<dt>void <b>copyFieldValues</b>(const SoFieldContainer *fc, SbBoolcopyConnections = FALSE)
+<dd>Copies the contents of fc's fields into this object's fields. fc must be the sametype as this object. If copyConnections is TRUE, then if any of fc's fields are connected then this object's fields will also be connected to the same source.
+
+<dt>SbBool <b>set</b>(const char *fieldDataString)
+<dd>Sets one or more fields in this object to the values specified in the given string, which should be a string in the Inventor file format. TRUE is returnedif the string was valid Inventor file format. For example, you could set the fields of an SoCube by doing:
+
+<dl><dd>
+SoCube *cube = ....cube-&gt;set(&quot;width 1.0 height 2.0 depth 3.2&quot;);</dl>
+
+<dt>void <b>get</b>(SbString &fieldDataString)
+<dd>Returns the values of the fields of this object in the Inventor ASCII file format in the given string. Fields whose isDefault() bit is set will not be partof the string. You can use the field-&gt;get() method to get a field's value as a string even if has its default value.
+
+<dt>virtual int <b>getFields</b>(SoFieldList &resultList) const
+<dd>Appends pointers to all of this object's fields to resultList, and returns the number of fields appended. The types of the fields can be determined usingfield-&gt;isOfType() and field-&gt;getTypeId(), and their names can be determined by passing the field pointers to the getFieldName() method (seebelow).
+
+<dt>virtual SoField * <b>getField</b>(const SbName &fieldName) const
+<dd>Returns a pointer to the field of this object whose name is fieldName. Returns NULL if there is no field with the given name.
+
+<dt>SbBool <b>getFieldName</b>(const SoField *field, SbName &fieldName) const
+<dd>Returns the name of the given field in the fieldName argument. Returns FALSE if field is not a member of this object.
+
+<dt>SbBool <b>enableNotify</b>(SbBool flag)SbBool isNotifyEnabled() const
+<dd>Notification is the process of telling intersted objects that this object has changed. Notification is needed to make engines and sensors function, is used to keep SoPaths up to date when the scene graph's topology changes,and is also used to invalidate rendering or bounding box caches.
+
+<p>Notification is normally enabled, but can be disabled on a node by node (or engine by engine) basis. If you are making extensive changes to a large part of the scene graph then disabling notification can increase performance, atthe expense of increased responsibility for making sure that any interested engines, sensors or paths are kept up to date.
+
+<p>For example, if you will be making a lot of changes to a small part of your scene graph and you know that there are no engines or sensors attached to nodes in that part of the scene graph, you might disable notification on the nodes you are changing, modify them, re-enable notification, and then touch() one of the nodes to cause a redraw. However, you should profile your application and make sure that notification is taking a significant amount of time before going to the trouble of manually controlling notification. 
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoFieldContainer.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sosfield.html">SoSField</a>, <a href="somfield.html">SoMField</a>, <a href="sonode.html">SoNode</a>, <a href="sodb.html">SoDB</a>
+</dl>
+</body>
+</html>

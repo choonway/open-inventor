@@ -1,0 +1,59 @@
+<html>
+<body>
+SoComposeRotation
+<hr>
+<dl>
+<dt>NAME
+<dd>SoComposeRotation -- composes a rotation from axis and angle values
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoComposeRotation
+
+<dt>DESCRIPTION
+<dd>This engine has two inputs, representing an axis of rotation and a rotation angle in radians. As output, the engine composes the inputs into a rotation field. The input fields can have multiple values, allowing the engine to compose several rotations in parallel. Some inputs may have more values than others. In such cases, the last value of the shorter inputs will be repeated as necessary.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFVec3f axis
+<dd>Axis of rotation.
+
+<dt>SoMFFloat angle
+<dd>Angle of rotation.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFRotation) rotation
+<dd>Rotation field, defined by the inputs.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoComposeRotation</b>()
+
+<dt><b>Constructor Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>ComposeRotation {
+<dd>axis 0 0 1
+<dd>angle 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCompose.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socomposerotationfromto.html">SoComposeRotationFromTo</a>, <a href="sodecomposerotation.html">SoDecomposeRotation</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+</dl>
+</body>
+</html>

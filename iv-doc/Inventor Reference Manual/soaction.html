@@ -1,0 +1,56 @@
+<html>
+<body>
+<p>SoAction
+<hr>
+<dl>
+<dt>NAME
+<dd>SoAction -- abstract base class for all actions
+
+<dt>INHERITS FROM
+<dd>SoAction
+
+<dt>DESCRIPTION
+<dd>SoAction is the abstract base class for all actions. Classes derived from SoAction define operations to be applied at each node encountered during traversal of a scenegraph. The function that gets called to implement the action for a particular node type is determined by a lookup table in the global database.
+
+<dt>METHODS
+<dl>
+<dt>virtual ~<b>SoAction</b>()
+<dd>Destructor.
+
+<dt>virtual void <b>apply</b>(SoNode *node)
+<dt>virtual void <b>apply</b>(SoPath *path)
+<dt>virtual void <b>apply</b>(const SoPathList &pathList, SbBool obeysRules = FALSE)
+<dd>Initiates an action on the graph defined either by a node, path, or list of paths. TRUE can be passed for the obeysRules flag if the given path list hasthe following 4 properties:
+<dl>
+<dd>1 - All paths have the same head node
+<dd>2 - Paths are sorted in traversal order
+<dd>3 - If one path ends at node A, no other pathcontinues through A
+<dd>4 - No two paths are the same These rules will be obeyed by path lists returned by picking and by searchesfor non-group nodes.
+</dl>
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns the type identifier for this class.
+
+<dt>virtual SoType <b>getTypeId</b>()
+<dd>Returns the type identifier for a specific instance.
+
+<dt>virtual SbBool <b>isOfType</b>(SoType type)
+<dd>Returns TRUE if this instance is of the type specified in type or is derived from that type. Otherwise, it returns FALSE. For example,
+<dl>
+<dd>actionPtr-&gt;isOfType(SoGetMatrixAction::getClassTypeId())
+</dl>
+<p>returns TRUE if actionPtr is an instance of SoGetMatrixAction or one of itssubclasses.
+
+<dt>virtual void <b>invalidateState</b>()
+<dd>Invalidates the current traversal state in the action, forcing it to be recreated when the action is next applied. This is typically unnecessary in most applications.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/actions/SoAction.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sonode.html">SoNode</a>, <a href="sopath.html">SoPath</a>, <a href="sopathlist.html">SoPathList</a>, <a href="socallbackaction.html">SoCallbackAction</a>, <a href="soglrenderaction.html">SoGLRenderAction</a>, <a href="sogetboundingboxaction.html">SoGetBoundingBoxAction</a>, <a href="sogetmatrixaction.html">SoGetMatrixAction</a>, <a href="sohandleeventaction.html">SoHandleEventAction</a>, <a href="sopickaction.html">SoPickAction</a>, <a href="soraypickaction.html">SoRayPickAction</a>, <a href="sosearchaction.html">SoSearchAction</a>, <a href="sowriteaction.html">SoWriteAction</a>
+
+</dl>
+</body>
+</html>

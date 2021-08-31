@@ -1,0 +1,128 @@
+<html>
+<body>
+<p>SoTransformBoxDragger
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTransformBoxDragger -- box-like object you scale, rotate, and translate by dragging with the mouse
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sobasekit.html">SoBaseKit</a> &gt; <a href="sointeractionkit.html">SoInteractionKit</a> &gt; <a href="sodragger.html">SoDragger</a> &gt; SoTransformBoxDragger
+
+<dt>DESCRIPTION
+<dd>SoTransformBoxDragger is a composite dragger shaped like a box with small cubes at the corners. Click and drag any of these cubes to scale the box uniformly. Dragany edge of the box to rotate the whole dragger about its center, along an axis parallel to that edge. Pick any face of the box for 2D translation in the plane of thatface.
+
+<p>Although the box looks just about like a wireframe cube, it is composed of manydifferent simple draggers arranged in a composite assembly. When one part is dragged, the transformBox makes sure they all move together. Each of the parts ofthe box is a different dragger with the default geometry changed. The faces of the box are SoTranslate2Draggers, the edges are SoRotateCylindricalDraggers, andthe cubes are an SoScaleUniformDragger. Drag them and the dragger will update its translation, rotation and scaleFactor fields to reflect the changes. As with alldraggers, if you change the fields the dragger will move to match the new settings.
+
+<p>Remember: This is not an SoTransform!. If you want to move other objects with thisdragger, you can either: [a] Use an SoTransformBoxManip, which is subclassed from SoTransform. Itcreates one of these draggers and uses it as the interface to change its fields. (see the SoTransformBoxManip man page). [b] Use field-to-field connections to connect the fields of this dragger to those of anySoTransformation node.
+
+<p>You can change the parts in any instance of this dragger using setPart(). The defaultpart geometries are defined as resources for this SoTransformBoxDragger class. They are detailed in the Dragger Resources section of the online reference page forthis class. You can make your program use different default resources for the parts by copying the file /usr/share/data/draggerDefaults/transformBoxDragger.iv intoyour own directory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFRotation rotation
+<dd>Orientation of the dragger.
+
+<dt>SoSFVec3f translation
+<dd>Position of the dragger.
+
+<dt>SoSFVec3f scaleFactor
+<dd>Scale of the dragger.
+
+<dt>Fields from class SoDragger:
+<dd>isActive
+
+<dt>Fields from class SoInteractionKit:
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+
+</dl>
+
+<dt>PARTS
+<dd>Parts from class SoBaseKit:
+
+callbackList
+
+<dt>METHODS
+<dl>
+<dt>SoTransformBoxDragger()
+<dd>Constructor.
+
+<dt>static const SoNodekitCatalog *getClassNodekitCatalog() const
+<dd>Returns an SoNodekitCatalog for this class static
+
+<dt>SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoDragger:
+<dd>addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback, addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+<dt>Methods from class SoInteractionKit:
+<dd>setPartAsPath
+
+<dt>Methods from class SoBaseKit:
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+<dd>SO_GET_PART, SO_CHECK_PART CATALOG PARTS
+</dl>
+
+<dt>CATALOG PARTS
+<dd><table border=1>
+<tr><td colspan=4 align=center>All parts</td></tr>
+<tr><th>Part Name</th> <th>Part Type</th> <th>Default Type</th> <th>NULL by default</th></tr>
+<tr><td>callbackList</td> <td>NodeKitListPart</td> <td>--</td> <td>yes</td></tr>
+<tr><td>surroundScale</td> <td>SurroundScale</td> <td>--</td> <td>yes</td></tr>
+<tr><td>antiSquish</td> <td>AntiSquish</td> <td>--</td> <td>no</tr>
+<tr><td>scaler</td> <td>ScaleUniformDragger</td> <td>--</td> <td>yes</tr>
+<tr><td>rotator1</td> <td>RotateCylindricalDragger</td> <td>--</td> <td>yes</tr>
+<tr><td>rotator2</td> <td>RotateCylindricalDragger</td> <td>--</td> <td>yes</tr>
+<tr><td>rotator3</td> <td>RotateCylindricalDragger</td> <td>--</td> <td>yes</tr>
+<tr><td>translator1</td> <td>Translate2Dragger</td> <td>--</td> <td>yes</tr>
+<tr><td>translator2</td> <td>Translate2Dragger</td> <td>--</td> <td>yes</tr>
+<tr><td>translator3</td> <td>Translate2Dragger</td> <td>--</td> <td>yes</tr>
+<tr><td>translator4</td> <td>Translate2Dragger</td> <td>--</td> <td>yes</tr>
+<tr><td>translator5</td> <td>Translate2Dragger</td> <td>--</td> <td>yes</tr>
+<tr><td>translator6</td> <td>Translate2Dragger</td> <td>--</td> <td>yes</tr>
+</table>
+
+
+<p><table border=1>
+<tr>
+<td colspan=3>Extra information for list parts from above table</td>
+</tr>
+<tr><th>Part Name</th> <th>Container Type</th> <th>Permissible Types</th></tr>
+<tr><td>callbackList</td> <td>Separator</td> <td>Callback, EventCallback</td></tr>
+</table>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>TransformBoxDragger {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO
+<dd>isActive FALSE
+<dd>rotation 0 0 1 0
+<dd>translation 0 0 0
+<dd>scaleFactor 1 1 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/draggers/SoTransformBoxDragger.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sointeractionkit.html">SoInteractionKit</a>, <a href="sodragger.html">SoDragger</a>, <a href="socenterballdragger.html">SoCenterballDragger</a>, <a href="sodirectionallightdragger.html">SoDirectionalLightDragger</a>, <a href="sodragpointdragger.html">SoDragPointDragger</a>, <a href="sohandleboxdragger.html">SoHandleBoxDragger</a>, <a href="sojackdragger.html">SoJackDragger</a>, <a href="sopointlightdragger.html">SoPointLightDragger</a>, <a href="sorotatecylindricaldragger.html">SoRotateCylindricalDragger</a>, <a href="sorotatediscdragger.html">SoRotateDiscDragger</a>, <a href="sorotatesphericaldragger.html">SoRotateSphericalDragger</a>, <a href="soscale1dragger.html">SoScale1Dragger</a>,<a href="soscale2dragger.html">SoScale2Dragger</a>, <a href="soscale2uniformdragger.html">SoScale2UniformDragger</a>, <a href="soscaleuniformdragger.html">SoScaleUniformDragger</a>, <a href="sospotlightdragger.html">SoSpotLightDragger</a>, <a href="sotabboxdragger.html">SoTabBoxDragger</a>, <a href="sotabplanedragger.html">SoTabPlaneDragger</a>, <a href="sotrackballdragger.html">SoTrackballDragger</a>, <a href="sotranslate1dragger.html">SoTranslate1Dragger</a>, <a href="sotranslate2dragger.html">SoTranslate2Dragger</a>
+</body>
+</html>

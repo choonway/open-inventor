@@ -1,0 +1,104 @@
+<html>
+<body>
+SoInteractionKit
+<hr>
+<dl>
+<dt>NAME
+<dd>SoInteractionKit -- base class for all interaction nodekit classes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sobasekit.html">SoBaseKit</a> &gt; <a href="sointeractionkit.html">SoInteractionKit</a>
+
+<dt>DESCRIPTION
+<dd>This is the base class for all classes of interaction nodekits. Currently, the only subclass is SoDragger, which reacts to click-drag-release events from the mouse. This node has four fields corresponding to those of an SoSeparator: They are renderCaching, boundingBoxCaching, renderCulling, and pickCulling. They behave the same here as they do for an SoSeparator The setPartAsPath() method provides support for creating &quot;stand-in&quot; objects forparts in the interaction kit. The &quot;stand-in&quot;, or &quot;surrogate&quot; part, is a path to an object that lies somewhere else in the scene graph.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum renderCaching
+<dd>Set render caching mode. Default is AUTO.
+
+<dt>SoSFEnum boundingBoxCaching
+<dd>Set bounding box caching mode. Default is ON. Setting this value to AUTO is equivalent to ON - automatic culling is not implemented.
+
+<dt>SoSFEnum renderCulling
+<dd>Set render culling mode. Default is OFF. Setting this value to AUTO is equivalent to ON - automatic culling is not implemented.
+
+<dt>SoSFEnum pickCulling
+<dd>Set pick caching mode. Default is AUTO.
+</dl>
+
+<dt>PARTS
+<dl>
+<dt>Parts from class SoBaseKit:
+<dd>callbackList
+</dl>
+
+<dt>METHODS
+<dl>
+<dt> SoInteractionKit()
+<dd>Constructor.
+
+<dt>virtual SbBool setPartAsPath(const SbName &partName, SoPath*surrogatePath )
+<dd>Sets any public part in the interaction kit as a &quot;surrogate&quot; path instead. Theobject at the end of the path serves as a stand-in when a pick occurs, and can thus initiate interaction.
+<p>Instead of the usual setPart(), which replaces partName with a new node,this will remove the node being used for partName from the scene and remember the surrogatePath you give it. Later, any pick on surrogatePath willbe regarded as a pick on partName.
+<p>For example, set the XRotator part of an SoTrackballDragger to be the pathto an object in the scene. The rest of the trackball will look the same, but the XRotator stripe will disappear. However, click the mouse on the object at theend of surrogatePath and the ball will start to drag in rotation around its X axis. Note that this is different from setting the part to be the node at the end ofthe path. When you set the part as a node, a second instance will be drawn in the local space of the interaction kit. When you set it as a path, the objectitself is used, not a copy.
+<p>The partName may be any part name that follows the nodekit syntax forparts, such as childList[0].shape or rotator.rotatorActive. (See the getPart() method in the SoBaseKit reference page for a complete description.)
+
+<dt>static const SoNodekitCatalog *getClassNodekitCatalog() const
+<dd>Returns an SoNodekitCatalog for the class SoInteractionKit.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoBaseKit:
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+
+<dd>SO_GET_PART, SO_CHECK_PART CATALOG PARTS
+</dl>
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yesiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiccc cc cc
+
+cc cc
+
+cc c
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separatoriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiccc cc cc
+
+cc cc
+
+cc c
+
+FILE FORMAT/DEFAULTSInteractionKit {
+
+renderCaching AUTOboundingBoxCaching AUTO renderCulling AUTOpickCulling AUTO } INCLUDE FILE#include &lt;Inventor/nodekits/SoInteractionKit.h&gt;
+
+enum CacheEnabled {SoInteractionKit::OFF Never build or use a cache
+
+SoInteractionKit::ON Always try to build a cacheSoInteractionKit::AUTO Automatic caching } SEE ALSOSoBaseKit, SoInteraction, SoNodeKitDetail, SoNodeKitPath, SoNodekitCatalog,
+
+SoDragger, SoCenterballDragger, SoDirectionalLightDragger, SoDragPointDragger,SoHandleBoxDragger, SoJackDragger, SoPointLightDragger, SoRotateCylindricalDragger, SoRotateDiscDragger, SoRotateSphericalDragger,SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger, SoScaleUniformDragger, SoSpotLightDragger, SoTabBoxDragger, SoTabPlaneDragger,SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger, SoTranslate2Dragger
+</body>
+</html>

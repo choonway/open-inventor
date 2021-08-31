@@ -1,0 +1,48 @@
+<html>
+<body>
+SoTextDetail
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTextDetail -- stores detail information about a text node
+
+<dt>INHERITS FROM
+<dd><a href="sodetail.html">SoDetail</a> &gt; SoTextDetail
+
+<dt>DESCRIPTION
+<dd>This class contains detail information about a point on a text shape (SoText2 or SoText3). It contains the part of the text, string, and character that were hit or generated.
+
+<dt>METHODS
+<dl>
+<dt><b>SoTextDetail</b>()
+<dt>virtual ~<b>SoTextDetail</b>()
+<dd>Constructor and destructor.
+
+<dt>long <b>getStringIndex</b>() const
+<dd>Returns the index of the relevant string within a multiple-value string field of a text node.
+
+<dt>long <b>getCharacterIndex</b>() const
+<dd>Returns the index of the relevant character within the string. For example, if the character of detail was the &quot;u&quot; within &quot;Splurmph&quot;, the character index would be 3.
+
+<dt>SoText3::Part <b>getPart</b>() const
+<dd>For SoText3, this returns which part was picked or generated.
+
+<dt>SbBox3f <b>getBoundingBox</b>() const
+<dt>SbXfBox3f <b>getXfBoundingBox</b>() const
+<dd>When the detail is returned from picking, these return the object-spacebounding box of the character that was intersected. Otherwise, they return an empty box. The second method returns an SbXfBox3f instead of aSbBox3f. These methods are implemented only for 3D text.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoDetail</b>:
+<dd>copy, getTypeId, isOfType
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/details/SoTextDetail.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotext2.html">SoText2</a>, <a href="sotext3.html">SoText3</a>, <a href="sodetail.html">SoDetail</a>, <a href="sopickedpoint.html">SoPickedPoint</a>, <a href="soprimitivevertex.html">SoPrimitiveVertex</a>
+</dl>
+</body>
+</html>

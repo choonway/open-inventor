@@ -1,0 +1,169 @@
+<html>
+<body>
+SoKeyboardEvent
+<hr>
+<dl>
+<dt>NAME
+<dd>SoKeyboardEvent -- keyboard key press and release events
+
+<dt>INHERITS FROM
+<dd><a href="soevent.html">SoEvent</a> &gt; <a href="sobuttonevent.html">SoButtonEvent</a> &gt; SoKeyboardEvent
+
+<dt>DESCRIPTION
+<dd>SoKeyboardEvent represents keyboard key press and release events in the Inventor event model.
+
+<dt>METHODS
+<dl>
+<dt><b>SoKeyboardEvent</b>()
+<dd>Constructor.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Return the type id for the SoKeyboardEvent class.
+
+<dt>void <b>setKey</b>(SoKeyboardEvent::Key whichKey)
+<dt>SoKeyboardEvent::Key <b>getKey</b>() const
+<dd>Set and get which key generated the event.
+
+<dt>static SbBool <b>isKeyPressEvent</b>(const SoEvent *e, SoKeyboardEvent::KeywhichKey)
+<dt>static SbBool <b>isKeyReleaseEvent</b>(const SoEvent *e, SoKeyboardEvent::KeywhichKey)
+<dd>Returns whether the passed event is a keyboard press or release event of thepassed key. When SoKeyboardEvent::ANY is passed, this returns TRUE if the event represents a keyboard press or release of any key.
+<dt>char <b>getPrintableCharacter</b>() const
+<dd>Convenience routine that returns the character representing the key, if it's printable. If not, this returns NULL ('\0').
+
+<dt><b>Methods from class SoButtonEvent</b>:
+<dd>setState, getState
+
+<dt><b>Methods from class SoEvent</b>:
+<dd>getTypeId, isOfType, setTime, getTime, setPosition, getPosition, getPosition,getNormalizedPosition, setShiftDown, setCtrlDown, setAltDown, wasShiftDown, wasCtrlDown, wasAltDown
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/events/SoKeyboardEvent.h&gt;
+
+<dd>#define SO_KEY_PRESS_EVENT(EVENT,KEY)(SoKeyboardEvent::isKeyPressEvent(EVENT,SoKeyboardEvent::KEY))
+<dd>#define SO_KEY_RELEASE_EVENT(EVENT,KEY)(SoKeyboardEvent::isKeyReleaseEvent(EVENT,SoKeyboardEvent::KEY))
+
+<dl>
+<dt>enum Key {
+<dd>SoKeyboardEvent::ANY Special constant for any key
+<dd>SoKeyboardEvent::LEFT_SHIFT Modifiers
+<dd>SoKeyboardEvent::RIGHT_SHIFT
+<dd>SoKeyboardEvent::LEFT_CONTROL
+<dd>SoKeyboardEvent::RIGHT_CONTROL
+<dd>SoKeyboardEvent::LEFT_ALT
+<dd>SoKeyboardEvent::RIGHT_ALT
+<dd>SoKeyboardEvent::NUMBER_0 Numbers
+<dd>SoKeyboardEvent::NUMBER_1
+<dd>SoKeyboardEvent::NUMBER_2
+<dd>SoKeyboardEvent::NUMBER_3
+<dd>SoKeyboardEvent::NUMBER_4
+<dd>SoKeyboardEvent::NUMBER_5
+<dd>SoKeyboardEvent::NUMBER_6
+<dd>SoKeyboardEvent::NUMBER_7
+<dd>SoKeyboardEvent::NUMBER_8
+<dd>SoKeyboardEvent::NUMBER_9
+<dd>SoKeyboardEvent::A Letters
+<dd>SoKeyboardEvent::B
+<dd>SoKeyboardEvent::C
+<dd>SoKeyboardEvent::D
+<dd>SoKeyboardEvent::E
+<dd>SoKeyboardEvent::F
+<dd>SoKeyboardEvent::G
+<dd>SoKeyboardEvent::H
+<dd>SoKeyboardEvent::I
+<dd>SoKeyboardEvent::J
+<dd>SoKeyboardEvent::K
+<dd>SoKeyboardEvent::L
+<dd>SoKeyboardEvent::M
+<dd>SoKeyboardEvent::N
+<dd>SoKeyboardEvent::O
+<dd>SoKeyboardEvent::P
+<dd>SoKeyboardEvent::Q
+<dd>SoKeyboardEvent::R
+<dd>SoKeyboardEvent::S
+<dd>SoKeyboardEvent::T
+<dd>SoKeyboardEvent::U
+<dd>SoKeyboardEvent::V
+<dd>SoKeyboardEvent::W
+<dd>SoKeyboardEvent::X
+<dd>SoKeyboardEvent::Y
+<dd>SoKeyboardEvent::Z
+<dd>SoKeyboardEvent::HOME Cursor control and motion
+<dd>SoKeyboardEvent::LEFT_ARROW
+<dd>SoKeyboardEvent::UP_ARROW
+<dd>SoKeyboardEvent::RIGHT_ARROW
+<dd>SoKeyboardEvent::DOWN_ARROW
+<dd>SoKeyboardEvent::PAGE_UP
+<dd>SoKeyboardEvent::PAGE_DOWN
+<dd>SoKeyboardEvent::PRIOR
+<dd>SoKeyboardEvent::NEXT
+<dd>SoKeyboardEvent::END
+<dd>SoKeyboardEvent::PAD_ENTER Keypad functions
+<dd>SoKeyboardEvent::PAD_F1
+<dd>SoKeyboardEvent::PAD_F2
+<dd>SoKeyboardEvent::PAD_F3
+<dd>SoKeyboardEvent::PAD_F4
+<dd>SoKeyboardEvent::PAD_0
+<dd>SoKeyboardEvent::PAD_1
+<dd>SoKeyboardEvent::PAD_2
+<dd>SoKeyboardEvent::PAD_3
+<dd>SoKeyboardEvent::PAD_4
+<dd>SoKeyboardEvent::PAD_5
+<dd>SoKeyboardEvent::PAD_6
+<dd>SoKeyboardEvent::PAD_7
+<dd>SoKeyboardEvent::PAD_8
+<dd>SoKeyboardEvent::PAD_9
+<dd>SoKeyboardEvent::PAD_ADD
+<dd>SoKeyboardEvent::PAD_SUBTRACT
+<dd>SoKeyboardEvent::PAD_MULTIPLY
+<dd>SoKeyboardEvent::PAD_DIVIDE
+<dd>SoKeyboardEvent::PAD_SPACE
+<dd>SoKeyboardEvent::PAD_TAB
+<dd>SoKeyboardEvent::PAD_INSERT
+<dd>SoKeyboardEvent::PAD_DELETE
+<dd>SoKeyboardEvent::PAD_PERIOD
+<dd>SoKeyboardEvent::F1 Function keys
+<dd>SoKeyboardEvent::F2
+<dd>SoKeyboardEvent::F3
+<dd>SoKeyboardEvent::F4
+<dd>SoKeyboardEvent::F5
+<dd>SoKeyboardEvent::F6
+<dd>SoKeyboardEvent::F7
+<dd>SoKeyboardEvent::F8
+<dd>SoKeyboardEvent::F9
+<dd>SoKeyboardEvent::F10
+<dd>SoKeyboardEvent::F11
+<dd>SoKeyboardEvent::F12
+<dd>SoKeyboardEvent::BACKSPACE Miscellaneous
+<dd>SoKeyboardEvent::TAB
+<dd>SoKeyboardEvent::RETURN
+<dd>SoKeyboardEvent::ENTER
+<dd>SoKeyboardEvent::PAUSE
+<dd>SoKeyboardEvent::SCROLL_LOCK
+<dd>SoKeyboardEvent::ESCAPE
+<dd>SoKeyboardEvent::DELETE
+<dd>SoKeyboardEvent::PRINT
+<dd>SoKeyboardEvent::INSERT
+<dd>SoKeyboardEvent::NUM_LOCK
+<dd>SoKeyboardEvent::CAPS_LOCK
+<dd>SoKeyboardEvent::SHIFT_LOCK
+<dd>SoKeyboardEvent::SPACE
+<dd>SoKeyboardEvent::APOSTROPHE
+<dd>SoKeyboardEvent::COMMA
+<dd>SoKeyboardEvent::MINUS
+<dd>SoKeyboardEvent::PERIOD
+<dd>SoKeyboardEvent::SLASH
+<dd>SoKeyboardEvent::SEMICOLON
+<dd>SoKeyboardEvent::EQUAL
+<dd>SoKeyboardEvent::BRACKETLEFT
+<dd>SoKeyboardEvent::BACKSLASH
+<dd>SoKeyboardEvent::BRACKETRIGHT
+<dd>SoKeyboardEvent::GRAVE
+}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soevent.html">SoEvent</a>, <a href="sobuttonevent.html">SoButtonEvent</a>, <a href="solocation2event.html">SoLocation2Event</a>, <a href="somotion3event.html">SoMotion3Event</a>, <a href="somousebuttonevent.html">SoMouseButtonEvent</a>, <a href="sospaceballbuttonevent.html">SoSpaceballButtonEvent</a>, <a href="sohandleeventaction.html">SoHandleEventAction</a>, <a href="soeventcallback.html">SoEventCallback</a>, <a href="soselection.html">SoSelection</a>, <a href="sointeraction.html">SoInteraction</a>, <a href="soxtdevice.html">SoXtDevice</a>
+</dl>
+</body>
+</html>

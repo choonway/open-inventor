@@ -1,0 +1,115 @@
+<html>
+<body>
+SoRotateDiscDragger
+<br>
+<dl>
+<dt>NAME
+<dd>SoRotateDiscDragger -- object you can rotate like a knob by dragging With the mouse
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sobasekit.html">SoBaseKit</a> &gt; <a href="sointeractionkit.html">SoInteractionKit</a> &gt; <a href="sodragger.html">SoDragger</a> &gt; SoRotateDiscDragger
+
+<dt>DESCRIPTION
+<dd>SoRotateDiscDragger is a simple dragger that rotates about the z axis of its local space. The feel of the rotation is as if you were spinning a record on a turntable o rrotating the volume knob of a radio. The local space is determined by its location in the scene graph. Transformation nodes placed before it will affect both the dragger and the direction of motion.
+
+<p>This node has a rotation field which always reflects its orientation in local space. If you set the field, the dragger will rotate accordingly. You can also connect fields of other nodes or engines from this one to make them follow the dragger's rotation. This dragger contains four parts, rotator, rotatorActive, feedback, and feedbackActive. Each of these is set by default from a resource described in the Dragger Resources section of the online reference page for this class. You can change the parts in any instance of this dragger using setPart(). You can make your program use different default resources for the parts by copyingthe file /usr/share/data/draggerDefaults/rotateDiscDragger.iv into your own directory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFRotation rotation
+<dd>Orientation of the dragger.
+
+<dt>Fields from class SoDragger:
+<dd>isActive
+
+<dt>Fields from class SoInteractionKit:
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+</dl>
+
+<dt>PARTS
+<dl>
+<dt>Parts from class SoBaseKit:
+<dd>callbackList
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoRotateDiscDragger</b>()
+<dd>Constructor.
+
+<dt>static const SoNodekitCatalog *<b>getClassNodekitCatalog</b>() const
+<dd>Returns an SoNodekitCatalog for this class
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoDragger</b>:
+<dd>addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback, addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+<dt><b>Methods from class SoInteractionKit</b>:
+<dd>setPartAsPath
+
+<dt><b>Methods from class SoBaseKit</b>:
+
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+<dd>SO_GET_PART, SO_CHECK_PART
+</dl>
+
+<dt>CATALOG PARTS
+<dd>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yesrotator Separator -- yes rotatorActive Separator -- yesfeedback Separator -- yes feedbackActive Separator -- yes iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc cc cc c
+
+cc cc
+
+cc cc cc cc c
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separator iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc
+
+cc cc
+
+cc cc
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>RotateDiscDragger {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO 
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO 
+<dd>isActive FALSE
+<dd>rotation 0 0 1 0 
+<dt>}
+</dl> 
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/draggers/SoRotateDiscDragger.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sointeractionkit.html">SoInteractionKit</a>, <a href="sodragger.html">SoDragger</a>, <a href="socenterballdragger.html">SoCenterballDragger</a>, <a href="sodirectionallightdragger.html">SoDirectionalLightDragger</a>, SoDragPointDragger, SoHandleBoxDragger, SoJackDragger, SoPointLightDragger,SoRotateCylindricalDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger, SoScaleUniformDragger,SoSpotLightDragger, SoTabBoxDragger, SoTabPlaneDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger, SoTranslate2Dragger
+</body>
+</html>

@@ -1,0 +1,67 @@
+<html>
+<body>
+SoInput
+<hr>
+<dl>
+<dt>NAME
+<dd>SoInput -- used to read Inventor data files
+
+<dt>INHERITS FROM
+<dd>SoInput
+
+<dt>DESCRIPTION
+<dd>This class is used by the SoDB reading routines when reading Inventor data files. It supports both ASCII (default) and binary Inventor formats. It skips over Inventorcomments (from '#' to end of line) and can stack input files. When EOF is reached, the stack is popped. This class can also be used to read from a buffer in memory.
+
+<dt>METHODS
+<dl>
+<dt><b>SoInput</b>()
+<dt>~<b>SoInput</b>()
+<dd>Constructor and destructor. The default SoInput reads from stdin. The destructor closes any files opened by the SoInput.
+
+<dt>static void <b>addDirectoryFirst</b>(const char *dirName)
+<dt>static void <b>addDirectoryLast</b>(const char *dirName)
+<dt>static void <b>addEnvDirectoriesFirst</b>(const char *envVarName)
+<dt>static void <b>addEnvDirectoriesLast</b>(const char *envVarName)
+<dd>The SoInput class maintains a global list of directories that is searched to find files when opening them. Directories are searched in order. Each of these routines adds directories to the list, either at the beginning (&quot;First&quot;) orthe end (&quot;Last&quot;). The last two routines add directories named in the value of the given environment variable. Directories may be separated by colons or whitespace in the variable's value.
+
+<dt>static void <b>removeDirectory</b>(const char *dirName)
+<dd>Removes named directory from the list.
+
+<dt>static void <b>clearDirectories</b>()
+<dd>Clears the list of directories (including the current directory).
+
+<dt>static const SbStringList &amp;<b>getDirectories</b>()
+<dd>Returns the list of directories as an SbStringList.
+
+<dt>void <b>setFilePointer</b>(FILE *newFP)
+<dd>Sets file pointer to read from. Clears the stack of input files if necessary.
+
+<dt>SbBool <b>openFile</b>(const char *fileName, SbBool okIfNotFound = FALSE)
+<dd>Opens named file, sets file pointer to result. Clears the stack of input files if necessary. This returns FALSE on error; if okIfNotFound is FALSE (the default),this prints an error message if the file could not be found.
+
+<dt>SbBool <b>pushFile</b>(const char *fileName)
+<dd>Opens named file, pushing the resulting file pointer onto the stack. Returns FALSE on error.
+
+<dt><b>closeFile</b>()
+<dd>Closes all files on stack opened with openFile() or pushFile().
+
+<dt>SbBool <b>isValidFile</b>()
+<dd>Returns TRUE if the currently open file is a valid Inventor file; that is, it begins with a valid Inventor header.
+
+<dt>FILE * <b>getCurFile</b>() const
+<dd>Returns a pointer to the current file, or NULL if reading from a buffer.
+
+<dt>const char * <b>getCurFileName</b>() const
+<dd>Returns full name (including directory path) of current file, or NULL if reading from a buffer.
+
+<dt>void <b>setBuffer</b>(void *bufPointer, size_t bufSize)
+<dd>Sets an in-memory buffer to read from, along with its size.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoInput.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodb.html">SoDB</a>, <a href="sooutput.html">SoOutput</a>, <a href="sotranreceiver.html">SoTranReceiver</a>
+</body>
+</html>

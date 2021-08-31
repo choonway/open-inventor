@@ -1,0 +1,105 @@
+<html>
+<body>
+SSooDDiirreeccttiioonnaallLLiigghhttDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoDirectionalLightDragger -- directional icon you rotate and translate by dragging
+
+with the mouse INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoInteractionKit &gt; SoDragger &gt;
+
+SoDirectionalLightDragger DESCRIPTIONSoDirectionalLightDragger is a composite dragger. It looks like a sun with a large
+
+arrow coming out of it. The arrow can be rotated about the sun by dragging withthe mouse; its orientation is given by the rotation field. You can also drag the sun (and the arrow with it) through 3-space. The location is stored in the translationfield.
+
+The dragger uses an SoRotateSphericalDragger for changing the rotation. Insteadof using the default spherical geometry, this dragger uses an arrow shape. The sun is an SoDragPointDragger. Dragging it edits the translation field;conversely, if you change the translation field the sun will move to that new location, bringing the arrow with it. The sun looks and behaves just like the sun inan SoPointLightDragger, as does the material part. See the SoPointLightDragger man page for details. Remember: This is not a light source! It just looks like one. If you want to move alight with this dragger, you can either:
+
+[a] Use an SoDirectionalLightManip, which is subclassed from SoLight. It createsan SoDirectionalLightDragger and uses it as the interface to change the direction of its light source (see the SoDirectionalLightManip man page). The manipulatoralso edits the material part of this dragger to match the color of light the manipulator is producing. However, the directional light manipulator will ignorethe translation field, because a directional light has no location or translation field. So in this case the translation dragger merely allows you to move the physical arrowto wherever you'd like it to be.
+
+[b] Put an SoTransform under an SoTransformSeparator. Add theSoDirectionalLight as the next child. Use a field-to-field connection between the rotation fields of this dragger and the transform node to synchronize the light withthis dragger.
+
+208 Open Inventor C++ Reference Pages<hr>
+
+SSooDDiirreeccttiioonnaallLLiigghhttDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh [c] Use engines to connect the rotation field of this dragger to the direction field ofan SoDirectionalLight. Use the rotation as input to an SoComposeMatrix engine. Then, use an SoTransformVec3f engine to apply that matrix to (0,0,-1), the defaultlight direction.
+
+You can change the parts in any instance of this dragger using setPart(). The defaultpart geometries are defined as resources for this SoDirectionalLightDragger class. They are detailed in the Dragger Resources section of the online reference page forthis class. You can make your program use different default resources for the parts by copying the file /usr/share/data/draggerDefaults/directionalLightDragger.ivinto your own directory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory. FIELDS SoSFRotation rotation
+
+Orientation of the rotating part (an arrow by default). SoSFVec3f translationPosition of the origin of the directional light dragger.
+
+Fields from class SoDragger:
+
+isActive
+
+Fields from class SoInteractionKit:
+
+renderCaching, boundingBoxCaching, renderCulling, pickCulling
+
+PARTS Parts from class SoBaseKit:
+
+callbackList METHODS SoDirectionalLightDragger()
+
+Constructor. static const SoNodekitCatalog *getClassNodekitCatalog() const
+
+Returns an SoNodekitCatalog for this class static SoType getClassTypeId()Returns type identifier for this class.
+
+209<hr>
+
+SSooDDiirreeccttiioonnaallLLiigghhttDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+Methods from class SoDragger:
+
+addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback,
+
+addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+Methods from class SoInteractionKit:
+
+setPartAsPath
+
+Methods from class SoBaseKit:
+
+getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+MACROSMacros from class SoBaseKit:
+
+SO_GET_PART, SO_CHECK_PART CATALOG PARTSiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yesmaterial Material -- yes translatorRotInv Rotation -- yestranslator DragPointDragger -- yes rotator RotateSphericalDragger -- yesiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc cc c
+
+cc cc cc cc cc c
+
+210 Open Inventor C++ Reference Pages<hr>
+
+SSooDDiirreeccttiioonnaallLLiigghhttDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separatoriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiccc cc cc
+
+cc cc
+
+cc c
+
+FILE FORMAT/DEFAULTSDirectionalLightDragger {
+
+renderCaching AUTOboundingBoxCaching AUTO renderCulling AUTOpickCulling AUTO isActive FALSEtranslation 0 0 0 rotation 0 0 1 0}
+
+INCLUDE FILE#include &lt;Inventor/draggers/SoDirectionalLightDragger.h&gt;
+
+SEE ALSOSoInteractionKit, SoDragger, SoCenterballDragger, SoDragPointDragger,
+
+SoHandleBoxDragger, SoJackDragger, SoPointLightDragger,SoRotateCylindricalDragger, SoRotateDiscDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger,SoScaleUniformDragger, SoSpotLightDragger, SoTabBoxDragger, SoTabPlaneDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger,SoTranslate2Dragger
+</body>
+</html>

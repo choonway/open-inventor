@@ -1,0 +1,29 @@
+<html>
+<body>
+SSooNNooddeeKKiittDDeettaaiillhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoNodeKitDetail -- stores detail information about a nodekit INHERITS FROMSoDetail &gt; SoNodeKitDetail DESCRIPTIONThis class contains detail information about a nodekit. This consists of a pointer to
+
+the nodekit, a pointer to the child part within the nodekit, and the name of thechild part.
+
+During a pick action, each nodekit along the picked path creates its ownSoNodeKitDetail. Together, the full set of details gives you complete picture of the pickpath. Since nodekits have hidden children (See the reference page for SoBaseKit), aregular SoPath ends at the topmost nodekit in the path. If you cast the pickpath
+
+from an SoPath pointer to an SoNodeKitPath pointer, you can then retrieve allnodekits along the path and examine their corresponding details.
+
+METHODS SoNodeKitDetail()
+
+virtual ~SoNodeKitDetail()Constructor and destructor.
+
+SoBaseKit * getNodeKit() constReturns a pointer to the nodekit that created this detail. SoNode * getPart() constReturns a pointer to the part selected within the nodekit that created this
+
+detail. const SbName & getPartName() constReturns the name of the part selected within the nodekit that created this
+
+detail. (See SoRayPickAction in the ACTIONS section of the SoBaseKitreference page for more information).
+
+Methods from class SoDetail:
+
+copy, getClassTypeId, getTypeId, isOfType
+
+INCLUDE FILE#include &lt;Inventor/details/SoNodeKitDetail.h&gt;
+
+SEE ALSOSoBaseKit, SoNodeKitPath, SoDetail, SoPickedPoint
+</body>
+</html>

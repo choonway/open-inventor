@@ -1,0 +1,42 @@
+<html>
+<body>
+SoSphereSheetProjector
+<hr>
+<dl>
+<dt>NAME SbSphereSheetProjector -- sphere-sheet projector
+
+<dt>INHERITS FROM
+<dd><a href="sbprojector.html">SbProjector</a> &gt; <a href="sbsphereprojector.html">SbSphereProjector</a> &gt; SbSphereSheetProjector
+
+<dt>DESCRIPTION
+<dd>SbSphereSheetProjector projects a window space point (usually based on the mouse location) onto the surface of a sphere with a hyperbolic sheet draped over it. Thisallows smooth transitions onto and off of the sphere. Two projected points can produce a rotation about the sphere's center. When the mouse position projects onto the sheet, the rotations will be as if the sheet is being dragged, causing the sphere to roll beneath it. Incremental changes (delta rotation) can be computed during interactive sessions.Sphere projectors are typically used to write interactive 3D manipulators and viewers.
+
+<dt>METHODS
+<dl>
+<dt>SbSphereSheetProjector(SbBool orientToEye = TRUE)
+<dt>SbSphereSheetProjector(const SbSphere &sph, SbBoolorientToEye = TRUE)
+
+<dd>Constructors. The first uses a default sphere centered at the origin withradius 1.0; the sphere is supplied in the second. The orientToEye parameter determines whether the sheet is perpendicular to the eye, or perpendicularto the sphere's Z axis. Setting that parameter to TRUE (the default) specifies that the sheet be perpendicular to the eye, which is most often the desiredbehavior.<br>
+
+The default view volume is undefined, and the working space is identity.
+
+<dt>~SbSphereSheetProjector()
+<dd>Destructor.
+
+<dt>Methods from class SbSphereProjector:
+
+<dd>projectAndGetRotation, getRotation, setSphere, getSphere, setOrientToEye,isOrientToEye, setFront, isFront, isPointInFront
+
+<dt>Methods from class SbProjector:
+
+<dd>project, setViewVolume, getViewVolume, setWorkingSpace,getWorkingSpace, copy
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/projectors/SbSphereSheetProjector.h&gt;
+
+<dt>SEE ALSO
+<dd>SbCylinderProjector, SbCylinderPlaneProjector, SbCylinderSectionProjector, SbCylinderSheetProjector, SbLineProjector, SbPlaneProjector,SbSpherePlaneProjector
+</dl>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<html>
+<body>
+SoTransform
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTransform -- general 3D geometric transformation node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sotransformation.html">SoTransformation</a> &gt; SoTransform
+
+<dt>DESCRIPTION
+<dd>This node defines a geometric 3D transformation consisting of (in order) a (possibly) non-uniform scale about an arbitrary point, a rotation about an arbitrary point andaxis, and a translation. (While the transformations can be thought of as being applied in that order, matrices are actually premultiplied in the opposite order.Therefore, the operations are listed in the reverse order throughout this reference page.)
+
+<dt>FIELDS
+<dl>
+<dt>SoSFVec3f translation
+<dd>Translation vector.
+
+<dt>SoSFRotation rotation
+<dd>Rotation specification.
+
+<dt>SoSFVec3f scaleFactor
+<dd>Scale factors.
+
+<dt>SoSFRotation scaleOrientation
+<dd>Rotational orientation for scale.
+
+<dt>SoSFVec3f center
+<dd>Origin for scale and rotation.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoTransform()
+<dd>Creates a transformation node with default settings.
+
+<dt>void pointAt(const SbVec3f &fromPoint, const SbVec3f &toPoint)
+<dd>Sets the node to translate the origin to the fromPoint and rotate the negative z-axis (0,0,-1) to lie on the vector from fromPoint to toPoint. This always tries to keep the &quot;up&quot; direction the positive y-axis, unless that is impossible. All current field values in the node are replaced.
+
+<dt>void getScaleSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const
+<dt>void getRotationSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const
+<dt>void getTranslationSpaceMatrix(SbMatrix &mat, SbMatrix &inv)const
+<dd>These return composite matrices that transform from object space to each ofthe spaces after the scale, rotation, or translation.
+
+<dt>void multLeft(const SbMatrix &mat)
+<dt>void multRight(const SbMatrix &mat)
+<dd>These are convenience functions that combine the effects of a matrixtransformation into the current transformation stored in this node. The first method premultiplies the transformation and the second postmultiplies it.
+
+<dt>void combineLeft(SoTransformation *nodeOnLeft)
+<dt>void combineRight(SoTransformation *nodeOnRight)
+<dd>These are convenience functions that combine the effects of anothertransformation node into the current transformation stored in this node. The first method premultiplies the transformation and the secondpostmultiplies it.
+
+<dt>void setMatrix(const SbMatrix &mat)
+<dd>Sets the fields in the node to implement the transformation represented by the given matrix. Note that invalid matrices (such as singular ones) have undefined results.
+
+<dt>void recenter(const SbVec3f &newCenter)
+<dd>Changes the center of the transformation to the given point without
+affecting the overall effect of the transformation.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>ACTION BEHAVIOR
+
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Accumulates transformation into the current transformation.
+
+<dt>SoGetMatrixAction
+<dd>Returns the matrix corresponding to the total transformation.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Transform {
+<dd>translation 0 0 0
+<dd>rotation 0 0 1 0
+<dd>scaleFactor 1 1 1
+<dd>scaleOrientation 0 0 1 0
+<dd>center 0 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoTransform.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="somatrixtransform.html">SoMatrixTransform</a>, <a href="soresettransform.html">SoResetTransform</a>, <a href="sorotation.html">SoRotation</a>, <a href="sorotationxyz.html">SoRotationXYZ</a>, <a href="soscale.html">SoScale</a>, <a href="sotransformmanip.html">SoTransformManip</a>, <a href="sotransformseparator.html">SoTransformSeparator</a>, <a href="sotranslation.html">SoTranslation</a>
+</body>
+</html>

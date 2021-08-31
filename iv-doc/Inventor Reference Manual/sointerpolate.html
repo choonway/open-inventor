@@ -1,0 +1,49 @@
+<html>
+<body>
+SoInterpolate
+<hr>
+<dl>
+<dt>NAME
+<dd>SoInterpolate -- base class for all interpolator engines
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoInterpolate
+
+<dt>DESCRIPTION
+<dd>SoInterpolate is the abstract base class for all interpolator engines. An interpolator engine linearly interpolates between two values, based on the alpha input value.The alpha value should be between 0.0 and 1.0. The interpolator engines derived from this class define the input fields that are to be interpolated.
+
+<dt>INPUTS
+<dl>
+<dt>SoSFFloat alpha
+<dd>Interpolation control value.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFFloat) output
+<dd>Interpolated value. The type of the output value is the same as the type ofthe input values, which is specified by the derived classes.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dd>This is an abstract class. See the man page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoInterpolate.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>, <a href="sointerpolatefloat.html">SoInterpolateFloat</a>, <a href="sointerpolaterotation.html">SoInterpolateRotation</a>, <a href="sointerpolatevec2f.html">SoInterpolateVec2f</a>, <a href="sointerpolatevec3f.html">SoInterpolateVec3f</a>, <a href="sointerpolatevec4f.html">SoInterpolateVec4f</a>
+</dl>
+</body>
+</html>

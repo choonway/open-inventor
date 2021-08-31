@@ -1,0 +1,73 @@
+<html>
+<body>
+SoPathSwitch
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPathSwitch -- group node that traverses only when traversed along a given path
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoGroup &gt; SoPathSwitch
+
+<dt>DESCRIPTION
+<dd>SoPathSwitch is a group node that traverses its children only if the current traversal path matches the SoPath in the path field. This can be used, for example, to affectonly one instance of a subgraph. The path field contains the path up to (but not including) the SoPathSwitch. The path need not go all the way back to the root; ifit does not, then only the number of ancestors that are in the path are compared to see if the children should be traversed. A NULL path means that the children arenever traversed.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFPath path
+<dd>The path that must match the current traversal path.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoPathSwitch()
+
+<dd>Creates a path switch node with default settings.
+<dt>SoPathSwitch(int nChildren)
+<dd>Constructor that takes approximate number of children.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoGroup:
+<dd>addChild, insertChild, getChild, findChild, getNumChildren, removeChild,removeChild, removeAllChildren, replaceChild, replaceChild
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction, SoHandleEventAction
+
+<dd>Traverses the children if the paths match.
+
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>PathSwitch {
+<dd>path NULL
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dl>
+<dt>#include &lt;Inventor/nodes/SoPathSwitch.h&gt;
+</dl>
+
+<dt>SEE ALSO
+<dl>
+<dt><a href="sopath.html">SoPath</a>, <a href="soswitch.html">SoSwitch</a>
+</dl>
+
+</dl>
+
+</body>
+</html>

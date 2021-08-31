@@ -1,0 +1,91 @@
+<html>
+<body>
+<p>SoCone
+<hr>
+<dl>
+<dt>NAME
+<dd>SoCone -- cone shape node
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; <a href="soshape.html">SoShape</a> &gt; SoCone
+
+<dt>DESCRIPTION
+<dd>This node represents a simple cone whose central axis is aligned with the y-axis. By default, the cone is centered at (0,0,0) and has a size of -1 to +1 in all threedirections. The cone has a radius of 1 at the bottom and a height of 2, with its apex at 1. The cone has two parts: the sides and the bottom. The cone is transformed by the current cumulative transformation and is drawnwith the current lighting model, drawing style, material, and geometric complexity.
+
+<p>If the current material binding is PER_PART or PER_PART_INDEXED, the firstcurrent material is used for the sides of the cone, and the second is used for the bottom. Otherwise, the first material is used for the entire cone. When a texture is applied to a cone, it is applied differently to the sides and bottom.On the sides, the texture wraps counterclockwise (from above) starting at the back of the cone. The texture has a vertical seam at the back, intersecting the yz-plane.For the bottom, a circle is cut out of the texture square and applied to the cone's base circle. The texture appears right side up when the top of the cone is tilted awayfrom the camera.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFBitMask <b>parts</b>
+<dd>Visible parts of cone.
+<dt>SoSFFloat <b>bottomRadius</b>
+<dt>SoSFFloat <b>height</b>
+<dd>These define the cone's height and the radius of the base circle; values mustbe greater than 0.0.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoCone()</b>
+<dd>Creates a cone node with default settings.
+
+<dt>void <b>addPart</b>(SoCone::Part part)
+<dt>void <b>removePart</b>(SoCone::Part part)
+<dd>These are convenience functions that make it easy to turn on or off a part ofthe cone.
+
+<dt>SbBool <b>hasPart</b>(SoCone::Part part) const
+<dd>This convenience function returns whether a given part is on or off.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode:</b>
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer:</b>
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase:</b>
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt><b>SoGLRenderAction</b>
+<dd>Draws cone based on the current coordinates, materials, drawing style, andso on.
+
+<dt><b>SoRayPickAction</b>
+<dd>Intersects the ray with the cone. The part of the cone that was picked is
+available from the SoConeDetail.
+
+<dt><b>SoGetBoundingBoxAction</b>
+<dd>Computes the bounding box that encloses the cone.
+
+<dt><b>SoCallbackAction</b></dt>
+<dd>If any triangle callbacks are registered with the action, they will be invoked for each successive triangle that approximates the cone.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+
+<dl><dt>Cone {
+<dd>parts ALL
+<dd>bottomRadius 1
+<dd>height 2
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoCone.h&gt;
+
+<dl>
+<dt>enum <b>Part</b> {
+<dd><b>SoCone::SIDES</b> The conical part
+<dd><b>SoCone::BOTTOM</b> The bottom circular face
+<dd><b>SoCone::ALL</b> All parts
+<dt>}
+
+<dt>SEE ALSO
+<dd><a href="soconedetail.html">SoConeDetail</a>, <a href="socube.html">SoCube</a>, <a href="socylinder.html">SoCylinder</a>, <a href="sosphere.html">SoSphere</a>
+</dl>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<html>
+<body>
+SSooSSppaacceebbaallllBBuuttttoonnEEvveenntthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSpaceballButtonEvent -- spaceball button press and release events INHERITS FROMSoEvent &gt; SoButtonEvent &gt; SoSpaceballButtonEvent DESCRIPTIONSoSpaceballButtonEvent represents spaceball button press and release events in the
+
+Inventor event model. METHODS SoSpaceballButtonEvent()
+
+Constructor. static SoType getClassTypeId()Return the type id for the SoSpaceballButtonEvent class.
+
+void setButton(SoSpaceballButtonEvent::Button b)SoSpaceballButtonEvent::Button
+
+getButton() constSet and get which spaceball button generated the event.
+
+static SbBool isButtonPressEvent(const SoEvent *e,SoSpaceballButtonEvent::Button whichButton) static SbBool isButtonReleaseEvent(const SoEvent *e,SoSpaceballButtonEvent::Button whichButton)
+
+Returns whether the passed event is a spaceball button press or release eventof the passed button. When SoSpaceballButtonEvent::ANY is passed, this returns TRUE if the event represents a button press or release of anyspaceball button.
+
+Methods from class SoButtonEvent:
+
+setState, getState
+
+Methods from class SoEvent:
+
+getTypeId, isOfType, setTime, getTime, setPosition, getPosition, getPosition,getNormalizedPosition, setShiftDown, setCtrlDown, setAltDown,
+
+wasShiftDown, wasCtrlDown, wasAltDown
+
+599<hr>
+
+SSooSSppaacceebbaallllBBuuttttoonnEEvveenntthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh INCLUDE FILE#include &lt;Inventor/events/SoSpaceballButtonEvent.h&gt;
+
+#define SO_SPACEBALL_PRESS_EVENT(EVENT,BUTTON)(SoSpaceballButtonEvent::isButtonPressEvent(EVENT,
+
+SoSpaceballButtonEvent::BUTTON))#define SO_SPACEBALL_RELEASE_EVENT(EVENT,BUTTON) (SoSpaceballButtonEvent::isButtonReleaseEvent(EVENT,SoSpaceballButtonEvent::BUTTON))
+
+enum Button {SoSpaceballButtonEvent::ANY Any spaceball button
+
+SoSpaceballButtonEvent::BUTTON1 Spaceball button 1SoSpaceballButtonEvent::BUTTON2 Spaceball button 2 SoSpaceballButtonEvent::BUTTON3 Spaceball button 3SoSpaceballButtonEvent::BUTTON4 Spaceball button 4 SoSpaceballButtonEvent::BUTTON5 Spaceball button 5SoSpaceballButtonEvent::BUTTON6 Spaceball button 6 SoSpaceballButtonEvent::BUTTON7 Spaceball button 7SoSpaceballButtonEvent::BUTTON8 Spaceball button 8 SoSpaceballButtonEvent::PICK Spaceball pick button}
+
+SEE ALSOSoEvent, SoButtonEvent, SoKeyboardEvent, SoLocation2Event, SoMotion3Event,
+
+SoMouseButtonEvent, SoHandleEventAction, SoEventCallback, SoSelection,SoInteraction, SoXtDevice
+</body>
+</html>

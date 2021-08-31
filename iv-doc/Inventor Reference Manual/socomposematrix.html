@@ -1,0 +1,72 @@
+<html>
+<body>
+SoComposeMatrix
+<hr>
+<dl>
+<dt>NAME
+<dd>SoComposeMatrix -- composes a transformation matrix
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoComposeMatrix
+
+<dt>DESCRIPTION
+<dd>This engine has inputs that specify values for translation, rotation, scale, and center of transformation. As output, it produces a transformation matrix that transforms objects into the space specified by the scale, rotation, and translation inputs (in that order). The input fields can have multiple values, allowing the engine to compose several matrices in parallel. Some inputs may have more values than others. In such cases, the last value of the shorter inputs will be repeated as necessary.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFVec3f translation
+<dd>Translation in x, y, and z.
+
+<dt>SoMFRotation rotation
+<dd>Rotation.
+
+<dt>SoMFVec3f scaleFactor
+<dd>Scale factors in x, y, and z.
+
+<dt>SoMFRotation scaleOrientation
+<dd>Rotational space for scaling.
+
+<dt>SoMFVec3f center
+<dd>Center point for scaling and rotating.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFMatrix) matrix
+<dd>Transformation matrix that transforms from object space into the space specified by the inputs.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoComposeMatrix</b>()
+<dd>Constructor
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>ComposeMatrix {
+<dd>translation 0 0 0
+<dd>rotation 0 0 1 0
+<dd>scaleFactor 1 1 1
+<dd>scaleOrientation 0 0 1 0
+<dd>center 0 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCompose.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodecomposematrix.html">SoDecomposeMatrix</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+</dl>
+</body>
+</html>

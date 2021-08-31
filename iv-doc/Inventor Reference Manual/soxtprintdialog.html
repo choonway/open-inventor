@@ -1,0 +1,29 @@
+<html>
+<body>
+SSooXXttPPrriinnttDDiiaalloogghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoXtPrintDialog -- dialog box for controlling printing INHERITS FROMSoXtComponent &gt; SoXtPrintDialog DESCRIPTIONThis class provides an interactive widget for setting available options used in
+
+printing with the SoPrintAction and its subclasses. Options include whether toprint with hidden lines or not, whether to print using the Landscape format, whether to print to a file or a printer. METHODS SoXtPrintDialog(Widget parent = NULL, const char *name =
+
+NULL, SbBool buildInsideParent = TRUE)~SoXtPrintDialog() Constructors and destructor. void setSceneGraph(SoNode *root )SoNode * getSceneGraph() void setSceneGraph(SoPath *path )SoPath * getSceneGraphPath()
+
+Sets/gets the root node or path to nodes to be used for printing. void setPrintSize(SbVec2f &inches)void setPrintSize(SbVec2s & )
+
+Sets/gets the size of the printed image. This is typically the same size as thewindow displaying the scene to be printed.
+
+void setBeforePrintCallback(SoXtPrintDialogCB *f, void *userData =NULL) void setAfterPrintCallback(SoXtPrintDialogCB *f, void *userData =NULL)
+
+Two callbacks are maintained, one which gets called just before a print isexecuted, and one which gets called after a print is executed. These two methods sets the appropriate callback function (set these to NULL to removethe callback).
+
+Methods from class SoXtComponent:
+
+show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle,
+
+getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+
+745<hr>
+
+SSooXXttPPrriinnttDDiiaalloogghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh INCLUDE FILE#include &lt;Inventor/Xt/SoXtPrintDialog.h&gt;
+
+typedef void SoXtPrintDialogCB(void *userData, SoXtPrintDialog *dialog) SEE ALSOSoPrintAction, SoCallbackList, SoXtComponent
+</body>
+</html>

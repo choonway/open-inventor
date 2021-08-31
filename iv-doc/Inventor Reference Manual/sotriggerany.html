@@ -1,0 +1,72 @@
+<html>
+<body>
+SoTriggerAny
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTriggerAny -- provides fan-in for triggers
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoTriggerAny
+
+<dt>DESCRIPTION
+<dd>This engine takes up to 10 input triggers, and produces one trigger output. The output is triggered whenever one of the inputs is touched.
+
+<dt>INPUTS
+<dl>
+<dt>SoSFTrigger input0
+<dt>SoSFTrigger input1
+<dt>SoSFTrigger input2
+<dt>SoSFTrigger input3
+<dt>SoSFTrigger input4
+<dt>SoSFTrigger input5
+<dt>SoSFTrigger input6
+<dt>SoSFTrigger input7
+<dt>SoSFTrigger input8
+<dt>SoSFTrigger input9
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoSFTrigger) output
+<dd>Triggered when any of the inputs is touched.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoTriggerAny</b>()
+
+<dt><b>Constructor Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>TriggerAny {
+<dd>input0
+<dd>input1
+<dd>input2
+<dd>input3
+<dd>input4
+<dd>input5
+<dd>input6
+<dd>input7
+<dd>input8
+<dd>input9
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoSoTriggerAny.h&gt;
+
+<dt.SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>, <a href="sosftrigger.html">SoSFTrigger</a>
+</dl>
+</body>
+</html>

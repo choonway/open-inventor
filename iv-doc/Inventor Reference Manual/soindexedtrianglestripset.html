@@ -1,0 +1,81 @@
+<html>
+<body>
+SoIndexedTriangeStripSet
+<dl>
+<dt>NAME
+<dd>SoIndexedTriangleStripSet -- indexed triangle strip set shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; <a href="spvertexshape.html">SoVertexShape</a> &gt; <a href="soindexedshape.html">SoIndexedShape</a> &gt; SoIndexedTriangleStripSet
+
+<dt>DESCRIPTION
+<dd>This shape node constructs triangle strips out of vertices located at the current coordinates. SoIndexedTriangleStripSet uses the indices in the coordIndex field(from SoIndexedShape) to specify the vertices of the triangle strips. An index of SO_END_STRIP_INDEX (-1) indicates that the current strip has ended and the nextone begins.
+
+<p>The vertices of the faces are transformed by the current transformation matrix. Thefaces are drawn with the current light model and drawing style. Treatment of the current material and normal binding is as follows:
+
+<dl>
+<dd>PER_PART specifies a material or normal per strip.
+<dd>PER_FACE binding specifies a material or normal for each triangle.
+<dd>PER_VERTEX specifies a material or normal for each vertex. The corresponding _INDEXED bindings are the same, but use the materialIndex or normalIndex indices (see SoIndexedShape)
+<dd>The DEFAULT material binding is equal to OVERALL. The DEFAULT normal binding is equal to PER_VERTEX_INDEXED; if insufficient normals exist in the state, vertex normalswill be generated automatically.
+</dl>
+
+<p>Textures are applied as described for the SoIndexedShape class. If the current complexity value is less than 0.5, some strips will be skipped during rendering.
+
+<dt>FIELDS
+<dl>
+<dt>Fields from class SoIndexedShape:
+<dd>coordIndex, materialIndex, normalIndex, textureCoordIndex
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoIndexedTriangleStripSet</b>()
+<dd>Creates an indexed triangle strip set node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws a strip set based on the current coordinates, normals, materials,drawing style, and so on.
+
+<dt>SoRayPickAction
+<dd>Picks on the strip set based on the current coordinates and transformation. Details about the intersection are returned in an SoFaceDetail.
+
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses all vertices of the strip set with the current transformation applied to them. Sets the center to the average ofthe coordinates of all vertices.
+
+<dt>SoCallbackAction
+<dd>If any triangle callbacks are registered with the action, they will be invoked for each successive triangle forming the strips of the set.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>IndexedTriangleStripSet {
+<dd>coordIndex 0
+<dd>materialIndex -1
+<dd>normalIndex -1
+<dd>textureCoordIndex -1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoIndexedTriangleStripSet.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socoordinate3.html">SoCoordinate3</a>, <a href="sodrawstyle.html">SoDrawStyle</a>, <a href="sofacedetail.html">SoFaceDetail</a>, <a href="soindexedfaceset.html">SoIndexedFaceSet</a>, <a href="sotrianglestripset.html">SoTriangleStripSet</a>
+
+</body>
+</html>

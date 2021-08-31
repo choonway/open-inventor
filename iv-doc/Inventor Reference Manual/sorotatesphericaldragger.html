@@ -1,0 +1,99 @@
+<html>
+<body>
+SSooRRoottaatteeSSpphheerriiccaallDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoRotateSphericalDragger -- object you can rotate about a spherical surface by
+
+dragging with the mouse INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoInteractionKit &gt; SoDragger &gt;
+
+SoRotateSphericalDragger DESCRIPTIONSoRotateSphericalDragger is a simple dragger that rotates freely in all directions.
+
+The feel of the rotation is as if you were rolling a ball. The center of rotation is theorigin of the local space, determined by the dragger's location in the scene graph. Transformation nodes placed before it will affect both the dragger and the directionof motion.
+
+This node has a rotation field which always reflects its orientation in local space. Ifyou set the field, the dragger will rotate accordingly. You can also connect fields of other nodes or engines from this one to make them follow the dragger's orientation. This dragger contains four parts, rotator, rotatorActive, feedback, and feedbackActive. Each of these is set by default from a resource described in the Dragger Resourcessection of the online reference page for this class. You can change the parts in any instance of this dragger using setPart(). You can make your program use different default resources for the parts by copyingthe file /usr/share/data/draggerDefaults/rotateSphericalDragger.iv into your own directory, editing the file, and then setting the environment variableSO_DRAGGER_DIR to be a path to that directory.
+
+FIELDS SoSFRotation rotation
+
+Orientation of the dragger. Fields from class SoDragger:
+
+isActive
+
+Fields from class SoInteractionKit:
+
+renderCaching, boundingBoxCaching, renderCulling, pickCulling
+
+PARTS Parts from class SoBaseKit:
+
+callbackList
+
+510 Open Inventor C++ Reference Pages<hr>
+
+SSooRRoottaatteeSSpphheerriiccaallDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh METHODS SoRotateSphericalDragger()
+
+Constructor. void setProjector(SbSphereProjector *p)const SbSphereProjector *
+
+getProjector() constSet and get a different sphere projector. See the SbSphereProjector man pages to find out how each kind affects the feel of your dragger's motion.The default uses an SbSpherePlaneProjector.
+
+Passing in NULL will cause the default type of projector to be used. Anyprojector you pass in will be deleted by this dragger when this dragger is deleted. Note that the center and radius of the sphere are determined by thedragger, based on the origin of the local space and the distance between the initial mouse click and that origin. static const SoNodekitCatalog *getClassNodekitCatalog() const
+
+Returns an SoNodekitCatalog for this class static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoDragger:
+
+addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback,
+
+addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+Methods from class SoInteractionKit:
+
+setPartAsPath
+
+Methods from class SoBaseKit:
+
+getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+511<hr>
+
+SSooRRoottaatteeSSpphheerriiccaallDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+MACROSMacros from class SoBaseKit:
+
+SO_GET_PART, SO_CHECK_PART CATALOG PARTSiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yesrotator Separator -- yes rotatorActive Separator -- yesfeedback Separator -- yes feedbackActive Separator -- yesiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc cc c
+
+cc cc cc cc cc c
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separatoriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiccc cc cc
+
+cc cc
+
+cc c
+
+FILE FORMAT/DEFAULTSRotateSphericalDragger {
+
+renderCaching AUTOboundingBoxCaching AUTO renderCulling AUTOpickCulling AUTO isActive FALSErotation 0 0 1 0 } INCLUDE FILE#include &lt;Inventor/draggers/SoRotateSphericalDragger.h&gt;
+
+SEE ALSOSoInteractionKit, SoDragger, SoCenterballDragger, SoDirectionalLightDragger,
+
+SoDragPointDragger, SoHandleBoxDragger, SoJackDragger, SoPointLightDragger,SoRotateCylindricalDragger, SoRotateDiscDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger, SoScaleUniformDragger,SoSpotLightDragger, SoTabBoxDragger, SoTabPlaneDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger, SoTranslate2Dragger
+</body>
+</html>

@@ -1,0 +1,7 @@
+glVertArray.c
+SoMaterialIndex.cxx
+SoNodesAToF.cxx
+SoNodesGToN.cxx
+SoNodesOToS.cxx
+SoNodesTToZ.cxx
+SoQuadSet.cxx

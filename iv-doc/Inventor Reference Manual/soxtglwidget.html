@@ -1,0 +1,51 @@
+<html>
+<body>
+<p>SoXtGLWidget
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtGLWidget -- wrapper around GLwMDraw for OpenGL rendering in a motif widget
+<dt>INHERITS FROM
+<dd><a href="soxtcomponent.html">SoXtComponent</a> &gt; SoXtGLWidget
+
+<dt>DESCRIPTION
+<dd>This abstract base class provides a C++ wrapper around the GLwMDraw widget. It allows OpenGL rendering to be performed within a motif widget and is used by theSoXtRenderArea. SoXtGlWidget uses a form widget around two separate GLwMDraw widgets (one for single and one for double buffering), with routines toreturn the appropriate windows.
+
+<p>Subclasses only need to redefine the redraw() routine for rendering andprocessEvent() routine if they are interested in receiving X events.
+
+<dt>METHODS
+<dl>
+<dt>void <b>setBorder</b>(SbBool onOrOff)
+<dt>SbBool <b>isBorder</b>() const
+<dd>Show and hide the border around the glx widgets (thickness 3). Default is no border (FALSE). (The SoXtRenderArea subclass defaults turns the border onby default.)
+
+<dt>void <b>setDoubleBuffer</b>(SbBool onOrOff)
+<dt>SbBool <b>isDoubleBuffer</b>()
+
+<dd>Routine which dynamically changes between single and double buffering.Default is double buffer off. (The SoXtRenderArea subclass makes it double buffer by default.)
+
+<dt>Window <b>getNormalWindow</b>()
+<dt>Window <b>getOverlayWindow</b>()
+<dt>GLXContext <b>getNormalContext</b>()
+<dt>GLXContext <b>getOverlayContext</b>()
+<dt>Widget <b>getNormalWidget</b>()
+<dt>Widget <b>getOverlayWidget</b>()
+<dd>Get the current normal and overlay GLX windows, contexes and widgets,which are needed as arguments to glXMakeCurrent() when doing drawing in the normal or overlay planes. Note: These should not be cached by users because they will change assingle/double buffering changes.
+
+<dt>virtual void <b>setNormalVisual</b>(XVisualInfo *vis)
+<dt>XVisualInfo * <b>getNormalVisual</b>()
+<dt>virtual void <b>setOverlayVisual</b>(XVisualInfo *vis)
+<dt>XVisualInfo * <b>getOverlayVisual</b>()
+<dd>Specify exactly what the visual should be for the normal and overlaywindow. This allows the user to create all possible visuals supported by OpenGL. The XVisualInfo structure should be a valid OpenGL visualreturned by glXChooseVisual(). This structure will be copied by the SoXtGLWidget; the application is responsible for freeing the visual infowith XFree() when done. (The methods for setting the visual are virtual so that derived classes can know when the visual is changing.)
+</dl>
+<dt><b>Methods from class SoXtComponent</b>:
+<dd>show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle, getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/SoXtGLWidget.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soxtcomponent.html">SoXtComponent</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>
+</dl>
+</body>
+</html>

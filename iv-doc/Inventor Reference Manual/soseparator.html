@@ -1,0 +1,91 @@
+<html>
+<body>
+<p>SoSeparator
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSeparator -- group node that saves and restores traversal state
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sogroup.html">SoGroup</a> &gt; SoSeparator
+
+<dt>DESCRIPTION
+<dd>This group node performs a push (save) of the traversal state before traversing its children and a pop (restore) after traversing them. This isolates the separator'schildren from the rest of the scene graph. A separator can include lights, cameras, coordinates, normals, bindings, and all other properties. Separators are relatively inexpensive, so they can be used freely within scenes.
+
+<p>The SoSeparator node provides caching of state during rendering and bounding boxcomputation. This feature can be enabled by setting the renderCaching and boundingBoxCaching fields. By default, these are set to AUTO, which means thatInventor decides whether to build a cache based on internal heuristics.
+
+<p>Separators can also perform culling during rendering and picking. Culling skips overtraversal of the separator's children if they are not going to be rendered or picked, based on the comparison of the separator's bounding box with the current viewvolume. Culling is controlled by the renderCulling and pickCulling fields. These are also set to AUTO by default; however, render culling can be expensive (and caninterfere with render caching), so the AUTO heuristics leave it disabled unless specified otherwise.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum renderCaching
+<dd>Whether to cache during rendering traversal.
+<dt>SoSFEnum boundingBoxCaching
+<dd>Whether to cache during bounding box traversal.
+<dt>SoSFEnum renderCulling
+<dd>Whether to cull during rendering traversal.
+<dt>SoSFEnum pickCulling
+<dd>Whether to cull during picking traversal.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoSeparator</b>()
+<dd>Creates a separator node with default settings.
+<dt><b>SoSeparator</b>(int nChildren)
+<dd>Constructor that takes approximate number of children.
+<dt>static void <b>setNumRenderCaches</b>(int howMany)
+<dd>By default, each separator node maintains 2 render caches. (This is to allow two different representations, such as filled and wire-frame, to both becached.) The setNumRenderCaches() method sets the number of render caches each separator will have. Each render cache uses memory, soincreasing this number may increase the memory requirements of the application. This method affects only separators that are created after it iscalled, not separators that were created before. Setting the number of caches to 0 turns off render caching globally from then on.
+
+<dt>static int <b>getNumRenderCaches</b>()
+<dd>Returns the current number of render caches.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoGroup</b>:
+<dd>addChild, insertChild, getChild, findChild, getNumChildren, removeChild,removeChild, removeAllChildren, replaceChild, replaceChild
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoGetMatrixAction, SoHandleEventAction, SoRayPickAction, SoSearchAction
+<dd>Saves the current traversal state, traverses all children, and restores the previous traversal state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+
+<dl>
+<dt>Separator {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO
+<dt>}
+
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoSeparator.h&gt;
+
+<dl>
+<dt>enum CacheEnabled {
+<dd>SoSeparator::OFF Never build a cache
+<dd>SoSeparator::ON Always try to build a cache
+<dd>SoSeparator::AUTO Decide whether to cache based on some heuristic
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soselection.html">SoSelection</a>, <a href="sotransformseparator.html">SoTransformSeparator</a>
+</body>
+</html>

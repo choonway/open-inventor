@@ -1,0 +1,75 @@
+<html>
+<body>
+SoRotationXYZ
+<hr>
+<dl>
+<dt>NAME
+<dd>SoRotationXYZ -- node representing a 3D rotation about the x-, y-, or z-axis
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoTransformation &gt; SoRotationXYZ
+
+<dt>DESCRIPTION
+<dd>This node defines a 3D rotation about one of the three principal axes. The rotation is accumulated into the current transformation, which is applied to subsequent shapes.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum axis
+<dd>Rotation axis.
+<dt>SoSFFloat angle
+<dd>Rotation angle (in radians), using the right-hand rule.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoRotationXYZ</b>()
+<dd>Creates a rotation node with default settings.
+
+<dt>SbRotation <b>getRotation</b>() const
+<dd>Returns an SbRotation equivalent to the specified rotation.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Accumulates rotation transformation into the current transformation.
+</dl>
+
+SoGetMatrixActionReturns the matrix corresponding to the rotation.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>RotationXYZ {
+<dd>axis X
+<dd>angle 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoRotationXYZ.h&gt;
+
+<dl>
+<dt>enum Axis {
+<dd>SoRotationXYZ::X The x-axis
+<dd>SoRotationXYZ::Y The y-axis
+<dd>SoRotationXYZ::Z The z-axis 
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="sorotation.html">SoRotation</a>, <a href="sotransform.html">SoTransform</a>
+
+</body>
+</html>

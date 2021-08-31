@@ -1,0 +1,61 @@
+<html>
+<body>
+SoNormal
+<hr>
+<dl>
+<dt>NAME
+<dd>SoNormal -- node that defines surface normals for shapes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoNormal
+
+<dt>DESCRIPTION
+<dd>This node defines a set of 3D surface normal vectors to be used by vertex-based shape nodes that follow it in the scene graph. This node does not produce a visibleresult during rendering; it simply replaces the current normals in the rendering state for subsequent nodes to use. This node contains one multiple-valued field thatcontains the normal vectors.
+
+<p>Surface normals are needed to compute lighting when the Phong lighting model isused. Most vertex-based shapes that use normals can compute default normals if none are specified, depending on the current normal binding.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFVec3f vector
+<dd>Surface normal vectors.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoNormal</b>()
+<dd>Creates a surface normal node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoRayPickAction
+<dd>Sets the current normals in the traversal state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Normal {
+<dd>vector 0 0 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoNormal.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socoordinate3.html">SoCoordinate3</a>, <a href="solightmodel.html">SoLightModel</a>, <a href="sonormalbinding.html">SoNormalBinding</a>, <a href="sovertexshape.html">SoVertexShape</a>
+</dl>
+</body>
+</html>

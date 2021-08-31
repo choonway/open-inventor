@@ -1,0 +1,160 @@
+<html>
+<body>
+SoShapeKit
+<hr>
+<dl>
+<dt>NAME</dt>
+<dd>SoShapeKit -- shape nodekit class</dd>
+
+<dt>INHERITS FROM</dt>
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoSeparatorKit &gt; SoShapeKit</dd>
+
+<dt>DESCRIPTION</dt>
+<dd><p>A nodekit that is used for creating a shape (i.e. geometry). SoShapeKit is derived
+
+from SoSeparatorKit and SoBaseKit, and thus inherits all the parts defined by theseclasses.</p>
+
+<p>Furthermore, SoShapeKit adds numerous parts that can be used to define a varietyof shape objects, a localTransform part, and of course a shape part. All of the property nodes requires to define any of the Inventor shapes are includedas parts in this class. Not all of these parts (nodes) are needed for any one type of shape. For example, if you set the shape part to be an SoSphere node, then it is notnecessary to create a profileCoordinate3 part since it will be ignored in drawing the sphere. (And the unneeded parts will not be created, so there is no performancepenalty for using this class of node.</p>
+
+<p>This class contains two private parts. They are both SoSeparator nodes. One of themsits just below the nodekit itself, and serves to contain all properties within this nodekit from affecting nodes that come after this nodekit. The second separator sitsabove the shape and localTransform parts, and serves to cache them even when the transform and appearance parts are changing.</p>
+
+<dt>FIELDS</dt>
+<dl>
+<dt>Fields from class SoSeparatorKit:</dt>
+<dd><p>renderCaching, boundingBoxCaching, renderCulling, pickCulling</p></dd>
+</dl>
+
+<dt>PARTS</dt>
+<dl>
+<dt>(SoSeparator) shapeSeparator</dt>
+<dd>This is a private part. The parent node of the actual shape part. It is aSoSeparator and is NULL by default, but is created automatically if necessary.</dd>
+
+<dt>(SoMaterialBinding) materialBinding</dt>
+<dd>An SoMaterialBinding node that can be used to set the material binding forthe shape. This part is NULL by default, but is created automatically if necessary.</dd>
+
+<dt>(SoNormalBinding) normalBinding</dt>
+<dd>An SoNormalBinding node that can be used to set the normal binding forthe shape. This part is NULL by default, but is created automatically if necessary.</dd> 
+
+<dt>(SoTextureCoordinateBinding)textureCoordinateBinding</dt>
+<dd>An SoTextureCoordinateBinding node that can be used to set the texturecoordinate binding for the shape. This part is NULL by default, but is created automatically if necessary.</dd>
+
+<dt>(SoShapeHints) shapeHints</dt>
+<dd>An SoShapeHints node that can be used to set the shape hints for the shape. This part is NULL by default, but is created automatically if necessary.</dd>
+
+<dt>(SoCoordinate3) coordinate3</dt>
+<dd>An SoCoordinate3 node that can be used to set the 3D coordinates for a vertex-based shape. This part is NULL by default, but is created automatically if necessary.</dd>
+
+<dt>(SoCoordinate4) coordinate4</dt>
+<dd>An SoCoordinate4 node that can be used to set the 4D coordinates for a NURBS shapes. This part is NULL by default, but is created automatically ifnecessary.</dd>
+
+<dt>(SoNormal) normal</dt>
+<dd>An SoNormal node that can be used to set the normal vectors for a vertexbased shape. This part is NULL by default, but is created automatically ifnecessary.</dd>
+
+<dt>(SoTextureCoordinate2)textureCoordinate2</dt>
+<dd>An SoTextureCoordinate2 node that can be used to set the texturecoordinates for a vertex-based shape. This part is NULL by default, but is created automatically if necessary.</dd>
+
+<dt>(SoTextureCoordinateFunction)textureCoordinateFunction</dt>
+<dd>An SoTextureCoordinateFunction node that can be used to set the aprocedural texture coordinates function for a vertex-based shape. This part is NULL by default, but is created automatically if necessary.</dd>
+
+<dt>(SoProfileCoordinate2)profileCoordinate2</dt>
+<dd>An SoProfileCoordinate2 node that can be used to set the 2D profilecoordinates for a shape that uses them, (e.g., SoText3). This part is NULL by default, but is created automatically if necessary.</dd>
+
+<dt>(SoProfileCoordinate3)profileCoordinate3</dt>
+<dd>An SoProfileCoordinate3 node that can be used to set the 3D profilecoordinates for a shape that uses them, (e.g., SoSoNURBSCurve). This part is NULL by default, but is created automatically if necessary.
+
+<dt>(SoNodeKitListPart) profileList</dt>
+<dd>An SoProfileList node that can be used to set the profile curve for a shapethat uses them, (e.g., SoNurbsCurve). This part is NULL by default, but is created automatically if necessary.</dd>
+
+<dt>(SoTransform) localTransform</dt>
+<dd>An SoTransform node that can be used to set a local tranformation on the shape. This part is NULL by default, but is created automatically if necessary.</dd>
+
+<dt>(SoShape) shape</dt>
+<dd>This is the part which specifies the actual shape node. This can be any node derived from SoShape By default, an SoCube is created. It is important to setall of the appropriate parts within this nodekit to suit the type of SoShape that is used. For example, if the shape part is set to an SoFaceSet, then thecoordinate3 shape and probably the normal shape would be set as well. See the reference page of the shape used for details on which other nodes arenecessary.</dd>
+
+<dt>Parts from class SoSeparatorKit:</dt>
+<dd>pickStyle, appearance, units, transform, texture2Transform, childList</dd>
+
+<dt>Parts from class SoBaseKit:</dt>
+<dd>callbackList</dd>
+</dl>
+
+<dt>METHODS</dt>
+<dl>
+<dt>SoShapeKit()</dt>
+<dd>Constructor.</dd>
+
+<dt>static const SoNodekitCatalog *getClassNodekitCatalog() const</dt>
+<dd>Returns an SoNodekitCatalog for the class SoShapeKit.
+
+<dt>static SoType getClassTypeId()</dt>
+<dd>Returns type identifier for this class.</dd>
+
+<dt>Methods from class SoBaseKit:</dt>
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren</dd>
+
+<dt>Methods from class SoNode:</dt>
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName</dd>
+
+<dt>Methods from class SoFieldContainer:</dt>
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled</dd>
+
+<dt>Methods from class SoBase:</dt>
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName</dd>
+
+</dd>
+
+<dt>MACROS</dt>
+<dl>
+<dt>Macros from class SoBaseKit:</dt>
+<dd>SO_GET_PART, SO_CHECK_PART</dd>
+
+<dt>CATALOG PARTS</dt>
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yespickStyle PickStyle -- yes appearance AppearanceKit -- yesunits Units -- yes transform Transform -- yestexture2Transform Texture2Transform -- yes childList NodeKitListPart -- yesmaterialBinding MaterialBinding -- yes normalBinding NormalBinding -- yestextureCoordinate- TextureCoordinate- -- yes
+
+Binding BindingshapeHints ShapeHints -- yes coordinate3 Coordinate3 -- yescoordinate4 Coordinate4 -- yes normal Normal -- yestextureCoordinate2 TextureCoordinate2 -- yes textureCoordinate- TextureCoordinate- TextureCoordinate- yesFunction Function Default profileCoordinate2 ProfileCoordinate2 -- yesprofileCoordinate3 ProfileCoordinate3 -- yes profileList NodeKitListPart -- yeslocalTransform Transform -- yes shape Shape Cube noiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc c
+
+cc cc
+
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc c
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separator ShapeKit, SeparatorKitchildList Separator ProfileprofileList Groupiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiccc
+
+cc
+
+cc cc c
+
+cc cc
+
+cc cc cc
+
+595<hr>
+
+SSooSShhaappeeKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+<dt>FILE FORMAT/DEFAULTS</dt>
+
+<code>ShapeKit {
+	renderCaching AUTO
+    boundingBoxCaching AUTO
+    renderCulling AUTO
+    pickCulling AUTO 
+    }</code>
+<dt>INCLUDE FILE</dt>
+
+#include &lt;Inventor/nodekits/SoShapeKit.h&gt;
+
+SEE ALSOSoAppearanceKit, SoBaseKit, SoCameraKit, SoLightKit, SoNodeKit, SoNodeKitDetail,
+
+SoNodeKitListPart, SoNodeKitPath, SoNodekitCatalog, SoSceneKit, SoSeparatorKit,SoWrapperKit, SoCone, SoCube, SoCylinder, SoIndexedNurbsCurve, SoIndexedNurbsSurface, SoNurbsCurve, SoNurbsSurface, SoShapeHints, SoSphere,SoText2, SoText3, SoVertexShape
+</body>
+</html>

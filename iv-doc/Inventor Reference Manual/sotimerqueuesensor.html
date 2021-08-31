@@ -1,0 +1,41 @@
+<html>
+<body>
+SoTimerQueueSensor
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTimerQueueSensor -- abstract base class for sensors dependent on time
+
+<dt>INHERITS FROM
+<dd><a href="sosensor.html">SoSensor</a> &gt; SoTimerQueueSensor
+
+<dt>DESCRIPTION
+<dd>Timer queue sensors are sensors that trigger themselves at specific times. The timer queue is normally processed as part of a programs main loop when the program is not busy doing something else. Note that processing the timer queue is not asynchronous -- the program must re-enter its main loop for timers to be triggered. When the timer queue is processed, all timers scheduled to go off at or before the current time are triggered once, in order from earliest to latest.
+
+<dt>METHODS
+<dl>
+<dt>const SbTime & <b>getTriggerTime</b>()
+<dd>Returns the time at which this sensor is scheduled to be triggered. If thesensor is not scheduled the results are undefined.
+
+<dt>virtual void <b>schedule</b>()
+<dd>Adds this sensor to the timer queue. Subclasses provide methods for setting when the sensor will be triggered.
+
+<dt>virtual void <b>unschedule</b>()
+<dd>If this sensor is scheduled, removes it from the timer queue so that it will not be triggered.
+
+<dt>virtual SbBool <b>isScheduled</b>()
+<dd>Returns TRUE if this sensor has been scheduled and is waiting in the timer queue to be triggered.
+
+<dt><b>Methods from class SoSensor</b>:
+<dd>setFunction, getFunction, setData, getData
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/sensors/SoTimerQueueSensor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotimersensor.html">SoTimerSensor</a>, <a href="soalarmsensor.html">SoAlarmSensor</a>, <a href="soidlesensor.html">SoIdleSensor</a>, <a href="sooneshotsensor.html">SoOneShotSensor</a>, <a href="sodatasensor.html">SoDataSensor</a>
+</dl>
+
+</body>
+</html>

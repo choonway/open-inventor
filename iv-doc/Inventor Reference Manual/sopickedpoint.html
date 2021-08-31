@@ -1,0 +1,59 @@
+<html>
+<body>
+SoPickedPoint
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPickedPoint -- represents point on surface of picked object
+
+<dt>INHERITS FROM
+<dd>SoPickedPoint
+
+<dt>DESCRIPTION
+<dd>An SoPickedPoint represents a point on the surface of an object that was picked by applying an SoRayPickAction to a scene. It contains a path to the picked shape, thepoint of intersection, the surface normal and texture coordinates at that point, and other information. Each node in the picked path may have a corresponding instance of a detail subclass. These detail instances are stored in the SoPickedPoint.
+
+<dt>METHODS
+<dl>
+<dt><b>SoPickedPoint</b>(const SoPickedPoint &pp)
+<dd>Copy constructor.
+
+<dt>~<b>SoPickedPoint</b>()
+<dd>Destructor.
+
+<dt>const SbVec3f & <b>getPoint</b>() const
+<dt>const SbVec3f & <b>getNormal</b>() const
+<dt>const SbVec4f & <b>getTextureCoords</b>() const
+<dd>These return the intersection point and surface normal in world space, and the texture coordinates in image space.
+
+<dt>int <b>getMaterialIndex</b>() const
+<dd>Returns the index into the current set of materials of the material active at the intersection point. Note that if the materials are interpolated betweenvertices, the index will correspond to the material at one of the vertices.
+
+<dt>SoPath * <b>getPath</b>() const
+<dd>Returns the path to the object that was intersected.
+
+<dt>SbBool <b>isOnGeometry</b>() const
+<dd>Returns whether the intersection is actually on the geometry of the character that was hit, as opposed to being on the bounding box. The pickstyle (see SoPickStyle) affects this decision.
+
+<dt>const SoDetail * <b>getDetail</b>(const SoNode *node = NULL) const
+<dd>Returns the detail that corresponds to the given node in the path returned by getPath(). If the node pointer is NULL (the default), the detail corresponding to the tail of the path is returned.
+
+<dt>const SbMatrix <b>getObjectToWorld</b>(const SoNode *node = NULL) const
+<dt>const SbMatrix <b>getWorldToObject</b>(const SoNode *node = NULL) const
+<dd>These return the transformation matrices between world space and theobject space corresponding to the given node in the path. If the node pointer is NULL (the default), the matrix corresponding to the tail of the path is returned.
+
+<dt>const SbMatrix <b>getObjectToImage</b>(const SoNode *node = NULL) const
+<dt>const SbMatrix <b>getImageToObject</b>(const SoNode *node = NULL) const
+<dd>These return the texture transformation matrices between image space andthe object space corresponding to the given node in the path. If the node pointer is NULL (the default), the matrix corresponding to the tail of the path is returned.
+
+<dt>const SbVec3f <b>getObjectPoint</b>(const SoNode *node = NULL) const
+<dt>const SbVec3f <b>getObjectNormal</b>(const SoNode *node = NULL) const
+<dt>const SbVec4f <b>getObjectTextureCoords</b>(const SoNode *node=NULL) const
+<dd>These return the intersection point, surface normal, and texture coordinates in the object space corresponding to the given node in the path. If the node pointer is NULL (the default), the information corresponding to the tail of the path is returned.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoPickedPoint.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soraypickaction.html">SoRayPickAction</a>, <a href="sopickstyle.html">SoPickStyle</a>, <a href="sodetail.html">SoDetail</a>, <a href="sopath.html">SoPath</a>
+</body>
+</html>

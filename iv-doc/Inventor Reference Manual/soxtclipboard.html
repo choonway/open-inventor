@@ -1,0 +1,39 @@
+<html>
+<body>
+SoXtClipboard
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtClipboard -- Supports copy/paste for Inventor using Xt
+<dt>INHERITS FROM
+<dd>SoXtClipboard
+
+<dt>DESCRIPTION
+<dd>This class manages data transfers for copy and paste. Transfers may occur within the same widget, from one widget to another widget, and from process to process. This uses the ICCCM protocol for the transfer of data.
+
+<dt>METHODS
+<dl>
+<dt><b>SoXtClipboard</b>(Widget w, Atom selectionAtom =_XA_CLIPBOARD_)
+<dt>~<b>SoXtClipboard</b>()
+<dd>Constructor and destructor. w is the Xt widget which this clipboard acts as an agent for. selectionAtom is the X selection through which data should be transferred. For quick data transfers, this should be XA_PRIMARY. The default is to use the X clipboard selection.
+
+<dt>void <b>copy</b>(SoNode *node, Time eventTime)
+<dt>void <b>copy</b>(SoPath *path, Time eventTime)
+<dt>void <b>copy</b>(SoPathList *pathList, Time eventTime)
+<dd>This copies the passed scene graph object, and tells the X server that the clipboard now owns the selection which was specified by selectionAtom inthe constructor. When a paste happens (in this window, another window, or another process), the X server will ask this clipboard for the data it copiedhere. The eventTime should be the time found in the X event structure which triggered the copy operation, and is used to insure synchronization of copyand paste requests. Data targets supported for export are INVENTOR, XA_STRING, and TARGETS.
+
+<dt>void <b>paste</b>(Time eventTime, SoXtClipboardPasteCB *pasteDoneFunc,void *userData = NULL)
+<dd>This makes a request to the X server for data to paste from the selectionatom specified in the constructor (selectionAtom), then returns. When the data is retrieved from the selection owner, the pasteDoneFunc callback isinvoked. The newly pasted data is passed as the callback function's pathList argument (an SoPathList). Data targets supported for import are INVENTOR, XA_STRING, and TARGETS.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/SoXtClipboard.h&gt;
+
+<dd>typedef void SoXtClipboardPasteCB(void *userData, SoPathList *pathList)
+<dd>#define _XA_CLIPBOARD_ ((Atom) 0)
+
+<dt>SEE ALSO
+<dd><a href="soselection.html">SoSelection</a>, <a href="soxt.html">SoXt</a>, X Selections
+</dl>
+</body>
+</html>

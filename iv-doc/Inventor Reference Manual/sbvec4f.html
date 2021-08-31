@@ -1,0 +1,86 @@
+<html>
+<body>
+<p>SbVec4f
+<hr>
+<dl>
+<dt>NAME
+<dd>SbVec4f -- 4D vector class
+
+<dt>INHERITS FROM
+<dd>SbVec4f
+
+<dt>DESCRIPTION
+<dd>4D vector class used to store homogeneous coordinates. This class is used in Inventor for arguments and return values.
+
+<dt>METHODS
+<dl>
+<dt><b>SbVec4f</b>()
+<dd>Default constructor.
+<dt><b>SbVec4f</b>(const float v[4])
+<dt><b>SbVec4f</b>(float x, float y, float z, float w)
+<dd>Constructor given vector components.
+
+<dt>float <b>dot</b>(const SbVec4f &v) const
+<dd>Returns dot (inner) product of vector and another vector.
+
+<dt>SbBool <b>equals</b>(const SbVec4f v, float tolerance) const
+<dd>Equality comparison within given tolerance -- the square of the length of the maximum distance between the two vectors.
+<dt>void <b>getReal</b>(SbVec3f &v) const
+<dd>Returns the real portion of the vector by dividing by the fourth value.
+
+<dt>const float * <b>getValue</b>() const
+<dt>void <b>getValue</b>(float &x, float &y, float &z, float &w) const
+<dd>Returns vector components.
+
+<dt>float <b>length</b>() const
+<dd>Returns geometric length of vector.
+
+<dt>void <b>negate</b>()
+<dd>Negates each component of vector in place.
+
+<dt><b>normalize()</b>
+<dd>Changes vector to be unit length.
+
+<dt>SbVec4f & <b>setValue</b>(const float v[4])
+<dt>SbVec4f & <b>setValue</b>(float x, float y, float z, float w)
+<dd>Sets the vector components.
+
+<dt>float & <b>operator [ ]</b>(int i)
+<dt>const float & <b>operator [ ]</b>(int i)
+<dd>Accesses indexed component of vector.
+
+<dt>SbVec4f & <b>operator *=</b>(float d)
+<dt>SbVec4f & <b>operator /=</b>(float d)
+<dd>Component-wise scalar multiplication and division operators.
+
+<dt>SbVec4f & <b>operator +=</b>(const SbVec4f &u)
+<dt>SbVec4f & <b>operator -=</b>(const SbVec4f &u)
+
+<dd>Component-wise vector addition and subtraction operators.
+
+<dt>SbVec4f <b>operator -</b>() const
+<dd>Nondestructive unary negation -- returns a new vector.
+
+<dt>SbVec4f <b>operator *</b>(const SbVec4f &v, float d)
+<dt>SbVec4f <b>operator *</b>(float d, const SbVec4f &v)
+<dt>SbVec4f <b>operator /</b>(const SbVec4f &v, float d)
+<dd>Component-wise binary scalar multiplication and division operators.
+
+<dt>SbVec4f <b>operator +</b>(const SbVec4f &v1, const SbVec4f &v2)
+<dt>SbVec4f <b>operator -</b>(const SbVec4f &v1, const SbVec4f &v2)
+<dd>Component-wise binary vector addition and subtraction operators.
+
+<dt>int <b>operator ==</b>(const SbVec4f &v1, const SbVec4f &v2)
+<dt>int <b>operator !=</b>(const SbVec4f &v1, const SbVec4f &v2)
+<dd>Equality comparison operators.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbLinear.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbvec2f.html">SbVec2f</a>, <a href="sbvec3f.html">SbVec3f</a>, <a href="sbvec2s.html">SbVec2s</a>, <a href="sbrotation.html">SbRotation</a>
+</dl>
+
+</body>
+</html>

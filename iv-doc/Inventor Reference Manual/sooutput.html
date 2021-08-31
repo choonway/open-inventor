@@ -1,0 +1,62 @@
+<html>
+<body>
+SoOutput
+<hr>
+<dl>
+<dt>NAME
+<dd>SoOutput -- used to write Inventor data files
+
+<dt>INHERITS FROM
+<dd>SoOutput
+
+<dt>DESCRIPTION
+<dd>This class is used for writing Inventor data files. It supports both ASCII (default) and binary formats and provides some convenience functions for handling files. It canalso write to a buffer in memory as well as to a file pointer. An instance of SoOutput is contained in an SoWriteAction; this is typically the only instance needed.
+
+<dt>METHODS
+<dl>
+<dt><b>SoOutput</b>()
+<dt>~<b>SoOutput</b>()
+<dd>Constructor and destructor. The default SoOutput writes to stdout. The destructor closes any files opened by the SoOutput.
+
+<dt>void <b>setFilePointer</b>(FILE *newFP)
+<dd>Sets file pointer to write to.
+
+<dt>FILE * <b>getFilePointer</b>() const
+<dd>Returns the file pointer in use, or NULL if using a buffer.
+
+<dt>SbBool <b>openFile</b>(const char *fileName)
+<dd>Opens named file, sets file pointer to result. This returns FALSE on error.
+
+<dt><b>closeFile</b>()
+<dd>Closes current file if opened with openFile().
+
+<dt>void <b>setBuffer</b>(void *bufPointer, size_t initSize, SoOutputReallocCB*reallocFunc, long offset = 0)
+<dd>Sets up memory buffer to write to, initial size, reallocation function (whichis called if there is not enough room in the buffer), and offset in the buffer at which to begin writing. If the reallocation function returns NULL, writing will be disabled.
+
+<dt>SbBool <b>getBuffer</b>(void *&bufPointer, size_t &nBytes) const
+<dd>Returns pointer to memory buffer being written to and the new size of thebuffer. Returns FALSE if not writing into a buffer.
+
+<dt>size_t <b>getBufferSize</b>() const
+<dd>The total number of bytes allocated to a memory buffer may be larger than the number of bytes written. This returns that total number.
+
+<dt>void <b>resetBuffer</b>()
+<dd>Resets buffer for output again. Output starts over at beginning of buffer.
+
+<dt>void <b>setBinary</b>(SbBool flag)Sets whether output should be ASCII (default) or binary.
+
+<dt>SbBool <b>isBinary</b>() const
+<dd>Returns current state of binary flag.
+
+<dt>static float <b>isASCIIHeader</b>(const char *string)
+<dt>static float <b>isBinaryHeader</b>(const char *string)
+<dd>Returns non-zero if given string matches the ASCII or binary file header. Thevalue returned is the file format version number.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoOutput.h&gt;
+
+<dd>typedef void * SoOutputReallocCB(void *ptr, size_t newSize)
+
+<dt>SEE ALSO
+<dd><a href="soinput.html">SoInput</a>, <a href="sowriteaction.html">SoWriteAction</a>, <a href="sotransender.html">SoTranSender</a>
+</body>
+</html>

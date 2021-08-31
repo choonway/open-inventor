@@ -1,0 +1,67 @@
+<html>
+<body>
+<p>SoTransformBoxManip
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTransformBoxManip -- transform node with 3D interface for changing scaling, rotation, and translation
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sotransformation.html">SoTransformation</a> &gt; <a href="sotransform.html">SoTransform</a> &gt; <a href="sotransformmanip.html">SoTransformManip</a> &gt; SoTransformBoxManip
+
+<dt>DESCRIPTION
+<dd>SoTransformBoxManip is derived from SoTransform (by way of SoTransformManip). When its fields change, nodes following it in the scene graphrotate, scale, and/or translate.
+
+<p>As a subclass of SoTransformManip, this manipulator also has a 3D interface to editsome of its fields. In this case, the interface edits the scaleFactor, rotation and translation fields. A manipulator differs from a dragger. When you move a dragger, no other nodes areaffected. When you move an SoTransformManip, other nodes move along with it. (See the reference page for SoTransformManip). The interface for an SoTransformBoxManip is exactly the same as that of theSoTransformBoxDragger. To find out more about the interface, see the reference page for SoTransformBoxDragger. To find out how the manipulator uses a draggerto provide its interface, see the reference page for SoTransformManip.
+
+<p>On screen, this manipulator will surround the objects influenced by its motion. Thisis because it turns on the surroundScale part of the dragger (See the reference page for SoSurroundScale)
+
+<dt>FIELDS
+<dl>
+<dt>Fields from class SoTransform:
+<dd>translation, rotation, scaleFactor, scaleOrientation, center
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoTransformBoxManip()
+<dd>Constructor.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoTransformManip:
+<dd>getDragger, replaceNode, replaceManip
+
+<dt>Methods from class SoTransform:
+<dd>pointAt, getScaleSpaceMatrix, getRotationSpaceMatrix,getTranslationSpaceMatrix, multLeft, multRight, combineLeft, combineRight, setMatrix, recenter
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>TransformBoxManip {
+<dd>translation 0 0 0
+<dd>rotation 0 0 1 0
+<dd>scaleFactor 1 1 1
+<dd>scaleOrientation 0 0 1 0
+<dd>center 0 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/manips/SoTransformBoxManip.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socenterballmanip.html">SoCenterballManip</a>, <a href="sohandleboxmanip.html">SoHandleBoxManip</a>, <a href="sojackmanip.html">SoJackManip</a>, <a href="sotabboxmanip.html">SoTabBoxManip</a>, <a href="sotrackballmanip.html">SoTrackballManip</a>, <a href="sotransform.html">SoTransform</a>, <a href="sotransformboxdragger.html">SoTransformBoxDragger</a>, <a href="sotransformmanip.html">SoTransformManip</a>
+</dl>
+</body>
+</html>

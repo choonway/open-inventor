@@ -1,0 +1,56 @@
+<html>
+<body>
+SbName
+<hr>
+<dl>
+<dt>NAME
+<dd>SbName -- character string stored in a hash table
+
+<dt>INHERITS FROM
+<dd>SbName
+
+<dt>DESCRIPTION
+<dd>This class of strings stores the string in a hash table. It is used by the Inventor toolkit for keywords and other unique names. It is not recommended for general use (onlyin the context of Inventor objects). When a string is stored in this table, a pointer to the storage is returned. Two identical strings will return the same pointer. Thismeans that comparison of two SbNames for equality can be accomplished by comparing their identifiers. SbNames are used for strings which are expected toshow up frequently, such as node names.
+
+<dt>METHODS
+<dl>
+<dt><b>SbName</b>()
+<dt><b>SbName</b>(const char *s)
+<dt><b>SbName</b>(const SbString &s)
+<dt><b>SbName</b>(const SbName &n)
+<dt>~<b>SbName</b>()
+<dd>Constructors and destructor.
+
+<dt>const char * <b>getString</b>() const
+<dd>Returns pointer to the character string.
+
+<dt>int <b>getLength</b>() const
+<dd>Returns length of string.
+
+<dt>static SbBool <b>isIdentStartChar</b>(char c)
+<dd>Returns TRUE if given character is a legal starting character for an identifier.
+
+<dt>static SbBool <b>isIdentChar</b>(char c)
+<dd>Returns TRUE if given character is a legal nonstarting character for an identifier.
+
+<dt>int <b>operator !</b>() const
+<dd>Unary &quot;not&quot; operator; returns TRUE if string is empty (&quot;&quot;).
+
+<dt>int <b>operator ==</b>(const char *s, const SbName &n)
+<dt>int <b>operator ==</b>(const SbName &n1, const SbName &n2)
+<dt>int <b>operator ==</b>(const SbName &n, const char *s)
+<dd>Equality operator for SbName/char* and SbName/SbName comparison.
+
+<dt>int <b>operator !=</b>(const char *s, const SbName &n)
+<dt>int <b>operator !=</b>(const SbName &n1, const SbName &n2)
+<dt>int <b>operator !=</b>(const SbName &n, const char *s)
+<dd>Inequality operator for SbName/char* and SbName/SbName comparison.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbString.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbstring.html">SbString</a>
+</body>
+</html>

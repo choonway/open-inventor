@@ -1,0 +1,54 @@
+<html>
+<body>
+SbColor
+<hr>
+<dl>
+<dt>NAME
+<dd>SbColor -- color vector class
+
+<dt>INHERITS FROM
+<dd><a href="sbvec3f.html">SbVec3f</a>
+
+<dt>DESCRIPTION
+<dd>This class is used to represent an RGB color. Each component of the vector is a floating-point number between 0.0 and 1.0. There are routines to convert back and forth between RGB and HSV.
+
+<dt>METHODS
+<dl>
+<dt><b>SbColor</b>(const SbVec3f vec3f)
+<dt><b>SbColor</b>(const float rgb[3])
+<dt><b>SbColor</b>(float r, float g, float b)
+<dd>Constructors for color vector.
+
+<dt>SbColor & <b>setHSVValue</b>(float h, float s, float v)
+<dd>Sets value of color vector from 3 HSV (Hue, Saturation, and Value) components. Value is the same as brightness of the color.
+
+<dt>SbColor & <b>setHSVValue</b>(const float hsv[3])
+<dd>Sets value of color vector from array of 3 HSV components
+
+<dt>void <b>getHSVValue</b>(float &h, float &s, float &v) const
+<dd>Returns 3 individual HSV components
+
+<dt>void <b>getHSVValue</b>(float hsv[3]) const
+<dd>Returns an array of 3 HSV components
+
+<dt>SbColor & <b>setPackedValue</b>(unsigned long rgba)
+<dd>RGBA Packed integer color routines. The color format expressed in hexadecimal is 0xaabbggrr, where<br>
+aa is the alpha value<br>
+bb is the blue value<br>
+gg is the green value<br>
+rr is the red value
+<dd>RGBA component values range from 0 to 0xFF (255). Sets value from RGBA packed color. Alpha value is ignored.
+
+<dt>unsigned long <b>getPackedValue</b>() const
+<dd>Returns RGBA packed color. Alpha color is always set to 0xFF (255).
+
+<dt><b>Methods from class SbVec3f</b>:
+<dd>cross, dot, equals, getClosestAxis, getValue, getValue, length, negate,normalize, setValue, setValue, setValue, operator [ ], operator [ ], operator *=, operator /=, operator +=, operator -=, operator -, operator *, operator *,operator /, operator +, operator -, operator ==, operator !=
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbColor.h&gt;
+</dl>
+
+</body>
+</html>

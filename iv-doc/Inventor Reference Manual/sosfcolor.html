@@ -1,0 +1,49 @@
+<html>
+<body>
+SoSFColor
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSFColor -- field containing an RGB color
+
+<dt>INHERITS FROM
+<dd><a href="sofield.html">SoField</a> &gt; <a href="sosfield.html">SoSField</a> &gt; SoSFColor
+
+<dt>DESCRIPTION
+<dd>A single-value field containing an SbColor. Values may be set in either RGB (red, green, blue) or HSV (hue, saturation, value) color spaces. SoSFColors are written to file as an RGB triple of floating point numbers in standard scientific notation, in the range 0.0 to 1.0.
+
+<dt>METHODS
+<dl>
+<dt>void <b>setValue</b>(const SbVec3f &vec)
+<dt>void <b>setValue</b>(float red, float green, float blue)
+<dt>void <b>setValue</b>(const float rgb[3])
+<dt>void <b>setHSVValue</b>(float hue, float saturation, float value)
+<dt>void <b>setHSVValue</b>(const float hsv[3])
+
+<dd>Convenience methods for setting the value.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dt>virtual void <b>getTypeId</b>() const
+
+<dd>Returns the type for this class or a particular object of this class.
+
+<dt>const SbColor & <b>getValue</b>() const
+<dd>Returns this field's value.
+
+<dt>const SbColor & <b>operator =</b>(const SbColor & newValue)
+<dt>void <b>setValue</b>(const SbColor & newValue)
+<dd>Sets this field to newValue.
+
+<dt>int <b>operator ==</b>(const SoSFColor &f) const
+<dt>int <b>operator !=</b>(const SoSFColor &f) const
+<dd>Returns TRUE if f is of the same type and has the same value as this field.
+
+<dt><b>Methods from class SoField</b>:
+<dd>setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField, getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="sofield.html">SoField</a>, <a href="sosfield.html">SoSField</a>, <a href="somfcolor.html">SoMFColor</a>, <a href="sbcolor.html">SbColor</a>
+</dl>
+</body>
+</html>

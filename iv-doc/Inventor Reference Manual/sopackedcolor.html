@@ -1,0 +1,41 @@
+<html>
+<body>
+SSooPPaacckkeeddCCoolloorrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoPackedColor -- node that defines base colors using packed representation INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoPackedColor DESCRIPTIONSoPackedColor is similar to SoBaseColor in that it sets the diffuse color component
+
+of the current material. However, it also changes the transparency component. Thecolor and transparency information is packed into unsigned long integers: 0xaabbggrr, where aa represents the alpha (0x00 = fully transparent, 0xff = opaque),and bb, gg, and rr represent the blue, green, and red components of the color, respectively. SoPackedColor uses less memory than SoBaseColor or SoMaterial to store multiplecolor and transparency values. It can be used in cases where space is critical.
+
+FIELDS SoMFULong rgba
+
+Defines the packed colors.
+
+METHODS SoPackedColor()
+
+Creates a packed color node with default settings. static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+ACTION BEHAVIORSoGLRenderAction, SoCallbackAction
+
+Sets the current base (diffuse) color(s) in the state.
+
+452 Open Inventor C++ Reference Pages<hr>
+
+SSooPPaacckkeeddCCoolloorrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh FILE FORMAT/DEFAULTSPackedColor {
+
+rgba 0xffcccccc}
+
+INCLUDE FILE#include &lt;Inventor/nodes/SoPackedColor.h&gt;
+
+SEE ALSOSoBaseColor, SoMaterial
+</body>
+</html>

@@ -1,0 +1,82 @@
+<html>
+<body>
+SoIndexedLineSet
+<hr>
+<dl>
+<dt>NAME
+<dd>SoIndexedLineSet -- indexed polyline shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; <a href="sovertexshape.html">SoVertexShape</a> &gt; <a href="soindexedshape.html">SoIndexedShape</a> &gt; SoIndexedLineSet
+
+<dt>DESCRIPTION
+<dd>This node represents a 3D shape formed by constructing polylines from vertices located at the current coordinates. SoIndexedLineSet uses the indices in thecoordIndex field (from SoIndexedShape) to specify the polylines. An index of SO_END_LINE_INDEX (-1) indicates that the current polyline has ended and thenext one begins.
+
+<p>The coordinates of the line set are transformed by the current cumulativetransformation. The lines are drawn with the current light model and drawing style (drawing style FILLED is treated as LINES). Treatment of the current material and normal binding is as follows:
+
+<dl>
+<dd>The PER_PART binding specifies a material or normal for each segment of the line.
+<dd>The PER_FACE binding specifies a material or normal for each polyline.
+<dd>PER_VERTEX specifies amaterial or normal for each vertex. The corresponding _INDEXED bindings are the same, but use the materialIndex or normalIndex indices (see SoIndexedShape)
+<dd>The DEFAULT material binding is equal to OVERALL. The DEFAULT normal binding is equal to PER_VERTEX_INDEXED; if insufficient normals exist in the state, vertexnormals will be generated automatically.
+</dl>
+
+<p>Textures are applied as described for the SoIndexedShape class. The current complexity value has no effect on the rendering of indexed line sets.
+
+<dt>FIELDS
+<dl>
+<dt>Fields from class SoIndexedShape:
+<dd>coordIndex, materialIndex, normalIndex, textureCoordIndex
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoIndexedLineSet</b>()
+<dd>Creates an indexed line set node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws lines based on the current coordinates, normals, materials, drawingstyle, and so on.
+
+<dt>SoRayPickAction
+<dd>Picks lines based on the current coordinates and transformation. Details about the intersection are returned in an SoLineDetail.
+
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses all vertices of the line set with the current transformation applied to them. Sets the center to the average of thecoordinates of all vertices.
+
+<dt>SoCallbackAction
+<dd>If any line segment callbacks are registered with the action, they will be invoked for each successive segment in the line set.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>IndexedLineSet {
+<dd>coordIndex 0
+<dd>materialIndex -1
+<dd>normalIndex -1
+<dd>textureCoordIndex -1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoIndexedLineSet.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socoordinate3.html">SoCoordinate3</a>, <a href="sodrawstyle.html">SoDrawStyle</a>, <a href="solinedetail.html">SoLineDetail</a>, <a href="solineset.html">SoLineSet</a>
+
+</body>
+</html>

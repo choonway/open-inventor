@@ -1,0 +1,65 @@
+<html>
+<body>
+SoGate
+<hr>
+<dl>
+<dt>NAME
+<dd>SoGate -- selectively copies its input to its output
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoGate
+
+<dt>DESCRIPTION
+<dd>This engine selectively copies its input to its output. The type of the input field can be any subclass of SoMField. The type is specified when an instance of the class iscreated. For example, SoGate(SoMFFloat::getClassTypeId()) creates an engine that copies floating-point values. The enable input controls continous flow-through of values. While enable is TRUE,the input will be copied to the output. Alternatively, by touching the trigger input, you can copy a single value from the input to the output. Note that unlike most other engine fields, input and output are pointers. Note alsothat by default input does not contain any values.
+
+<dt>INPUTS
+<dl>
+<dt>SoSFBool enable
+<dd>Enable continous flow-through.
+
+<dt>SoSFTrigger trigger
+<dd>Copy a single value.
+
+<dt>&lt;inputType&gt; input
+<dd>The value that is copied to the output when the gate is open.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(&lt;outputType&gt;) output
+<dd>Contains a copy of the input value if the gate is open.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoGate(SoType inputType)
+<dd>Constructor. The argument specifies the type of the input field.
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Gate {
+<dd>type &lt;inputType&gt;input []
+<dd>enable FALSE
+<dd>trigger
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/So.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>, <a href="soconcatenate.html">SoConcatenate</a>, <a href="soselectone.html">SoSelectOne</a>
+</dl>
+
+</body>
+</html>

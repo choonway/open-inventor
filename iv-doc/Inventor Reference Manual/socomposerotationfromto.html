@@ -1,0 +1,63 @@
+<html>
+<body>
+SoComposeRotationFromTo
+<hr>
+<dl>
+<dt>NAME
+<dd>SoComposeRotationFromTo -- composes a rotation that rotates from one vector into another
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoComposeRotationFromTo
+
+<dt>DESCRIPTION
+<dd>This engine takes two inputs, representing a vector before and after a rotation has been applied. As output, it produces the rotation value that would cause the first vector to transform into the other.
+
+<dd>The input fields can have multiple values, allowing the engine to compose several rotations in parallel. Some inputs may have more values than others. In such cases, the last value of the shorter inputs will be repeated as necessary.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFVec3f from
+<dd>Vector before the rotation.
+
+<dt>SoMFVec3f to
+<dd>Vector after the rotation.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFRotation) rotation
+<dd>A rotation that transforms one vector into another.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoComposeRotationFromTo</b>()
+<dd>Constructor
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>ComposeRotationFromTo {
+<dd>from 0 0 1
+<dd>to 0 0 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCompose.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socomposerotation.html">SoComposeRotation</a>, <a href="sodecomposerotationfromto.html">SoDecomposeRotationFromTo</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+</dl>
+
+</body>
+</html>

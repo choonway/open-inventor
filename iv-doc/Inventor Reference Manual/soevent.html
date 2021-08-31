@@ -1,0 +1,60 @@
+<html>
+<body>
+SoEvent
+<hr>
+<dl>
+<dt>NAME
+<dd>SoEvent -- base class for all events
+
+<dt>INHERITS FROM
+<dd>SoEvent
+
+<dt>DESCRIPTION
+<dd>SoEvent is the base class for events in the Inventor event model. An event typically represents a user action, such as a mouse button being pressed or a keyboard keybeing released. SoEvent contains general information found in all Inventor events, including the time the event occurred, the position of the locater when the eventoccurred, and the state of the modifier keys when the event occurred.
+
+<dt>METHODS
+<dl>
+<dt><b>SoEvent</b>()
+<dt>virtual ~<b>SoEvent</b>()
+<dd>Constructor and destructor.
+
+<dt>virtual SoType <b>getTypeId</b>() const
+<dd>Return the type id for this event instance.
+
+<dt>static SoType <B>getClassTypeId</b>()
+<dd>Return the type id for the SoEvent class.
+
+<dt>SbBool <b>isOfType</b>(SoType type) const
+<dd>This returns TRUE if the event is an instance of or derived from an event of the passed type.
+
+<dt>void <b>setTime</b>(SbTime t)
+<dt>SbTime <b>getTime</b>() const
+<dd>Set and get the time at which the event occurred.
+
+<dt>void <b>setPosition</b>(const SbVec2s &p)
+<dd>const SbVec2s & <b>getPosition</b>() const
+<dd>Set the window pixel location of the cursor when the event occurred. The position is relative to the lower left corner of the window in which the event occurred.
+
+<dt>const SbVec2s & <b>getPosition</b>(const SbViewportRegion &vpRgn) const
+<dd>Get the viewport pixel location of the cursor when the event occurred, relative to the specified viewport region.
+
+<dt>const SbVec2f & <b>getNormalizedPosition</b>(const SbViewportRegion &vpRgn)const
+<dd>Get the normalized location of the cursor when the event occurred, relative to the specified viewport region. The returned value will lie between 0.0 and 1.0.
+
+<dt>void <b>setShiftDown</b>(SbBool isDown)
+<dt>void <b>setCtrlDown</b>(SbBool isDown)
+<dt>void <b>setAltDown</b>(SbBool isDown)
+<dd>Set whether the modifier keys were down when the event occurred.
+
+<dt>SbBool <b>wasShiftDown</b>() const
+<dt>SbBool <b>wasCtrlDown</b>() const
+<dt>SbBool <b>wasAltDown</b>() const
+<dd>Get whether the modifier keys were down when the event occurred.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/events/SoEvent.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sobuttonevent.html">SoButtonEvent</a>, <a href="sokeyboardevent.html">SoKeyboardEvent</a>, <a href="solocation2event.html">SoLocation2Event</a>, <a href="somotion3event.html">SoMotion3Event</a>, <a href="somousebuttonevent.html">SoMouseButtonEvent</a>, <a href="sospaceballbuttonevent.html">SoSpaceballButtonEvent</a>, <a href="sohandleeventaction.html">SoHandleEventAction</a>, <a href="soeventcallback.html">SoEventCallback</a>, <a href="soselection.html">SoSelection</a>, <a href="sointeraction.html">SoInteraction</a>, <a href="soxtdevice.html">SoXtDevice</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>
+</body>
+</html>

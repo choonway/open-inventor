@@ -1,0 +1,45 @@
+<html>
+<body>
+<p>SoError
+<hr>
+<dl>
+<dt>NAME
+<dd>SoError -- error handling base class
+
+<dt>INHERITS FROM
+<dd>SoError
+
+<dt>DESCRIPTION
+<dd>SoError is the base class for all error classes, which provide error handling for applications. There are two facets to errors: posting and handling. An error is postedwhen some bad condition occurs. Posting is done primarily by the Inventor library itself, but extenders can post their own errors. Posting an error creates an instance ofthe appropriate error class (or subclass) and then passes it to the active error handler. The default handler just prints an appropriate message to stderr. Applications canoverride this behavior by supplying a different handler (by specifying a callback function). Each subclass of SoError supports the setHandlerCallback() method, which is usedto set the callback function to handle errors. The callback function for a specfic error class is always used in preference to that of any base classes when handling errors.The error instance passed to a callback is deleted immediately after the callback is called; an application that wishes to save information from the instance has to copyit out first.
+
+<p>Each error class contains a run-time class type id (SoType) that can be used todetermine the type of an instance. The base class defines a character string that represents a detailed error message that is printed by the default handler. Allhandlers are called by the SoError::handleError() method. When debugging, you can set a breakpoint on this method to stop right before an error is handled.
+
+<dt>METHODS
+<dl>
+<dt>static void <b>setHandlerCallback</b>(SoErrorCB *cb, void *data)
+<dt>static SoErrorCB * <b>getHandlerCallback</b>()
+<dt>static void * <b>getHandlerData</b>()
+<dd>Sets/returns handler callback for SoError class.
+
+<dt>const SbString & <b>getDebugString</b>() const
+<dd>Returns debug string containing full error information from instance.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for SoError class.
+
+<dt>virtual SoType <b>getTypeId</b>() const
+<dd>Returns type identifier for error instance.
+
+<dt>SbBool <b>isOfType</b>(SoType type) const
+<dd>Returns TRUE if instance is of given type or is derived from it.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/errors/SoError.h&gt;
+
+<dd>typedef void SoErrorCB(const SoError *error, void *data)
+
+<dt>SEE ALSO
+<dd><a href="sodebugerror.html">SoDebugError</a>, <a href="somemoryerror.html">SoMemoryError</a>, <a href="soreaderror.html">SoReadError</a>
+</body>
+</html>

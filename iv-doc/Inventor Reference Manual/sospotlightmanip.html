@@ -1,0 +1,109 @@
+<html>
+<body>
+    SoSpotlightManip
+    <hr />
+    <dl>
+        <dt>NAME</dt>
+        <dd>SoSpotLightManip -- spotlight node with 3D interface for editing location, direction, and beam width</dd>
+
+        <dt>INHERITS FROM</dt>
+        <dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="solight.html">SoLight</a> &gt; <a href="sospotlight.html">SoSpotLight</a> &gt; SoSpotLightManip</dd>
+
+        <dt>DESCRIPTION</dt>
+        <dd>
+            <p>SoSpotLightManip is the base class for all SoSpotLight nodes that have a built-in 3D user interface (this is the only such class provided with the Inventor toolkit). Since it is derived from SoSpotLight, any changes to its fields result in a change of lighting for nodes that follow it in the scene graph. In this case, the interface edits the location, direction, and cutOffAngle fields. Also, the color of the manipulator's geometry will reflect the color of the light (but you can not edit thecolor using this manipulator).</p>
+            <p>Typically, you will want to replace a regular SoSpotLight with an SoSpotLightManip (as when the user selects a light to be edited), or vice versa (as when the user is done moving the light and the interface should go away). Use thereplaceNode() method to insert a manipulator into a scene graph, and the replaceManip() method to remove it when done. The SoSpotLightManip utilizes an SoSpotLightDragger to provide a 3D interface. However, the manipulator differs from the dragger; it lights other objects in the scene because, as an SoSpotLight, it alters the state. The fields values andmovement of the dragger, on the other hand, affect only the dragger itself. To find out more about how the interface works and what each part will do, see the reference page for SoSpotLightDragger. The interfaces of the dragger and the manipulator are identical. The SoSpotLightManip utilizes its dragger by adding it as a hidden child. When an action is applied to the manipulator, such as rendering or handling events, the manipulator first traverses the dragger, and then the manipulator adds its lighting parameters to the state. When you click-drag-release over the manipulator, it passes these events down to the dragger, which moves as a result (&quot;I can't help it, I'm a dragger!&quot;).</p>
+            <p>The manipulator maintains consistency between the fields of the dragger and itsown fields. Let's say you use the mouse to widen the cone of the dragger. Callbacks insure that the cutOffAngle field of the manipulator will change by the sameamount, thus changing the lighting of nodes which follow in the scene graph. Similarly, if you set the cutOffAngle field of the SoSpotLightManip, themanipulator will widen the beam of the dragger accordingly.</p>
+            <p> the dragger is a hidden child, you can see the dragger on screen and interact with it, but the dragger does not show up when you write the manipulator to file. Also, any SoPath will end at the manipulator. (See the Actions section of this reference page for a complete description of when the dragger is traversed).</p>
+            <p>If you want to get a pointer to the dragger you can get it from the manipulator using the getDragger() method. You will need to do this if you want to change the geometry of a manipulator, since the geometry actually belongs to the dragger.</p>
+        </dd>
+
+        <dt>FIELDS</dt>
+        <dd>
+            <dl>
+                <dt>Fields from class SoSpotLight:</dt>
+                <dd>location, direction, dropOffRate, cutOffAngle</dd>
+
+                <dt>Fields from class SoLight:</dt>
+                <dd>on, intensity, color</dd>
+            </dl>
+        </dd>
+
+        <dt>METHODS</dt>
+
+        <dd>
+            <dl>
+                <dt>SoSpotLightManip()</dt>
+                <dd>Constructor.</dd>
+
+                <dt>SoDragger * getDragger()</dt>
+                <dd>
+                    Returns a pointer to the dragger being used by this manipulator. Given this pointer, you can customize the dragger just like you would any other dragger. You can change geometry using the setPart() method, or add callbacks using the methods found in the SoDragger reference page.
+                </dd>
+
+                <dt>SbBool replaceNode(SoPath *p )</dt>
+                <dd>
+                    <p>Replaces the tail of the path with this manipulator. The tail of the path must be an SoSpotLight node (or subclass thereof). If the path has a nodekit, this will try to use setPart() to insert the manipulator. Otherwise, the manipulator requires that the next to last node in the path chain be a group. The field values from the spotlight node will be copied to this manipulator,and the light node will be replaced.</p>
+                    <p>The manipulator will not call ref() on the node it is replacing. The old node will disappear if it has no references other than from the input path p and its parent, since this manipulator will be replacing it in both of those places. Nor will the manipulator make any changes to field connections of the old node. The calling process is thus responsible for keeping track of its ownnodes and field connections.</p>
+                </dd>
+
+                <dt>SbBool replaceManip(SoPath *p, SoSpotLight *newOne ) const</dt>
+                <dd>
+                    Replaces the tail of the path, which must be this manipulator, with the given SoSpotLight node. If the path has a nodekit, this will try to use setPart() to insert the new node. Otherwise, the manipulator requires that the next to last node in the path chain be a group. The field values from the manipulator will be copied to the spotlight node,and the manipulator will be replaced.<br />
+                    The manipulator will not call ref() or unref() on the node which is replacing it, nor will it make any changes to field connections. The calling process is thus responsible for keeping track of its own nodes and field connections.
+                </dd>
+
+                <dt>static SoType getClassTypeId()</dt>
+                <dd>Returns type identifier for this class.</dd>
+
+                <dt>Methods from class SoNode:</dt>
+                <dd>setOverride, isOverride, copy, affectsState, getByName, getByName</dd>
+
+                <dt>Methods from class SoFieldContainer:</dt>
+                <dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled</dd>
+
+                <dt>Methods from class SoBase:</dt>
+                <dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName</dd>
+            </dl>
+        </dd>
+
+        <dt>ACTION BEHAVIOR</dt>
+        <dd><dl>
+            <dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoGetMatrixAction, SoHandleEventAction, SoRayPickActionFirst</dt>
+            <dd>traverses the dragger the way an SoGroup would. All draggers place themselves in space, but leave the current transformation unchanged when finished. Then the SoSpotLightManip adds a spotlight to the state, just like its base class, SoSpotLight.</dd>
+
+            <dt>SoSearchAction</dt>
+            <dd>Searches just like an SoSpotLight. Does not search the dragger, which is a hidden child.</dd>
+
+            <dt>SoWriteAction</dt>
+            <dd>
+                Writes out just like an SoSpotLight. Does not write the dragger, which is a hidden child. If you really need to write valuable information about the dragger, such as customized geometry, you can retrieve the dragger with the getDragger() method and then write it out separately.
+            </dd>
+        </dl></dd>
+
+        <dt>FILE FORMAT/DEFAULTS</dt>
+        <dd>
+            <pre>
+SpotLightManip {
+    on TRUE
+    intensity 1
+    color 1 1 1
+    location 0 0 1
+    direction 0 0 -1
+    dropOffRate 0
+    cutOffAngle 0.785398
+}
+</pre>
+
+        </dd>
+
+        <dt>INCLUDE FILE</dt>
+        <dd>#include &lt;Inventor/manips/SoSpotLightManip.h&gt;</dd>
+
+        <dt>SEE ALSO</dt>
+        <dd>
+            <a href="sodragger.html">SoDragger</a>, <a href="sospotlight.html">SoSpotLight</a>, <a href="sospotlightdragger.html">SoSpotLightDragger</a>, <a href="sodirectionallightmanip.html">SoDirectionalLightManip</a>, <a href="sopointlightmanip.html">SoPointLightManip</a>
+        </dd>
+    </dl>  
+</body>
+</html>

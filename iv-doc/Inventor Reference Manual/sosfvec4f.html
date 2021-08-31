@@ -1,0 +1,25 @@
+<html>
+<body>
+SSooSSFFVVeecc44ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSFVec4f -- field containing a homogeneous three-dimensional vector INHERITS FROMSoField &gt; SoSField &gt; SoSFVec4f DESCRIPTIONField containing a homogeneous three-dimensional vector.
+
+SoSFVec4fs are written to file as four floating point values separated by whitespace. METHODSvoid setValue(float x, float y, float z, float w)
+
+void setValue(const float xyzw[4])Sets the field to the given value.
+
+static SoType getClassTypeId()virtual void getTypeId() const
+
+Returns the type for this class or a particular object of this class. const SbVec4f & getValue() constReturns this field's value.
+
+const SbVec4f & operator =(const SbVec4f & newValue)void setValue(const SbVec4f & newValue)
+
+Sets this field to newValue. int operator ==(const SoSFVec4f &f) constint operator !=(const SoSFVec4f &f) const
+
+Returns TRUE if f is of the same type and has the same value as this field. Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer INCLUDE FILE#include &lt;Inventor/fields/SoSFVec4f.h&gt;
+
+SEE ALSOSoField, SoSField, SoMFVec4f
+</body>
+</html>

@@ -1,0 +1,181 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="default.css">
+</head>
+<body>
+    SoDragger
+    <hr />
+    <dl>
+        <dt>NAME</dt>
+        <dd>SoDragger -- base class for nodekits that move in response to click-drag-release mouse events</dd>
+    </dl>
+
+    <dl>
+        <dt>INHERITS FROM</dt>
+
+        <dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sobasekit.html">SoBaseKit</a> &gt; <a href="sointeractionkit.html">SoInteractionKit</a> &gt; SoDragger</dd>
+    </dl>
+
+    <dl>
+        <dt>DESCRIPTION</dt>
+        <dd>
+            <p>SoDragger is the base class for all nodekits you move by using the mouse to click drag-and-release. More specifically, they are operated by a start (mouse button 1pressed over dragger to pick it), followed by dragging (mouse motion events are interpreted by the dragger and result in some form of motion and/or change to a field), followed by finish (mouse up).</p>
+
+            <p>Each dragger has a different paradigm for interpreting mouse motion and changing its fields as a result. Draggers map 2D mouse motion into motion of a point on 3D lines, planes, spheres or cylinders. (See the SbProjector reference pages.) Then theyreact to this motion of a point through 3-space by scaling, translating, or rotating. For example, SoTranslate2Dragger maps mouse motion onto a 3D plane, thentranslates to follow the cursor as it moves within that plane.</p>
+
+            <p>Every dragger has fields that describe its current state. Scaling draggers have a scaleFactor field, rotational draggers have a rotation field, etc. All draggers have the isActive field, defined in this class. It is TRUE while the dragger is being dragged, FALSE otherwise.</p>
+
+            <p>Draggers that have only one part to pick and one motion field are called simple draggers. Examples are the SoRotateDiscDragger, SoScale1Dragger, and SoTranslate2Dragger.</p>
+
+            <p>Draggers that create assemblies out of other draggers and then orchestrate the motion of the whole assembly are call composite draggers. SoTransformBoxDragger is a composite dragger made entirely of simple draggers.SoDirectionalLightDragger contains both a simple dragger (SoRotateSphericalDragger) and a composite dragger (SoDragPointDragger) When using a composite dragger, the fields of the composite dragger are the ones you should work with. Draggers lower down in the assemblage usually have zeroed out values. For example, when you drag the face of a transformBox, an SoTranslate2Dragger, the transformBox &quot;steals&quot; the translation from the child dragger and transfers it up to the top of the composite dragger, where it effects all pieces of the assemblage.</p>
+
+            <p>Draggers always keep their fields up to date, including while they are being dragged. So you can use field-to-field connections and engines to connect dragger values to other parts of your scene graph. Hence draggers can be easily utilized as input devices for mouse-driven 3D interface elements. You can also register value-changed callbacks, which are called whenever any of the fields is changed.</p>
+
+            <p>Also, if you set the field of a dragger through some method other than dragging, (bycalling setValue(), for example), the dragger's internal SoFieldSensor will sense this and the dragger will move to satisfy that new value. This makes it easy to constrain draggers to keep their fields within certain limits: if the limit is exceeded, just set it back to the exceeded maximum or minimum. You can do this even as the dragger is in use.</p>
+
+            <p>When you drag a dragger, the dragger only moves itself. Draggers do not changethe state or affect objects that follow in the scene graph. For example a dragger does not ever behave like an SoTransform and change the current transformation matrix. Draggers are not transforms, even if they have field names like translation, rotation, scaleFactor. Many draggers, such as SoTrackballDragger, have a corresponding SoTransformManip, in this case SoTrackballManip. The manipulator is a subclass of SoTransform, and affects other objects in the scene; ituses a trackball dragger to provide its user interface. In this way, draggers are employed extensively by manipulators. Callback functions on the dragger allow its employer to be notified of start, motion, finish, and value changes. In all cases, the callback function is passed a pointer to the dragger which initiated the callback. (Seethe various man pages for more details on specific draggers and manipulators).</p>
+
+            <p>All draggers are nodekits. However, draggers do not list their parts in the Parts section of the reference page. Instead, there is a section called Dragger Resources, more suited to describe the parts made available to the programmer. Because ofspace limitations, the Dragger Resources section only appears in the online versions of the reference pages. Each dragger has some parts you can pick on, and other parts that replace them when they are active or moving. These active parts are often just the same geometry in another color. Draggers also have pieces for displaying feedback. Each of these pieces has a default scene graph, as well as a special function within the dragger. Each part also has a resource name. All this information is contained in the DRAGGER RESOURCES section.</p>
+
+            <p>Since draggers are nodekits, you can set the parts in any instance of a dragger usingsetPart(). But draggers also give each part a resource name. When a dragger builds a part, itlooks in the global dictionary for the node with that resourceName. By putting a new entry in the dictionary, you can override that default. The default partgeometries are defined as resources for each class, and each class has a file you can change to alter the defaults. The files are listed in each dragger's man page. You can make your program use different default resources for the parts by copying the listedfile from the directory /usr/share/data/draggerDefaults into your own directory, editing the file, and then setting the environment variable SO_DRAGGER_DIR tobe a path to that directory.</p>
+        </dd>
+    </dl>
+    <dl>
+        <dt>FIELDS</dt>
+        <dd>
+            <dl>
+                <dt>SoSFBool isActive</dt>
+                <dd>TRUE when mouse is down and dragging, else FALSE.</dd>
+
+                <dt>Fields from class SoInteractionKit:</dt>
+                <dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling</dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>PARTS</dt>
+        <dd>
+            <dl>
+                <dt>Parts from class SoBaseKit:
+                <dd>callbackList
+            </dl>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>METHODS</dt>
+        <dd>
+            <dl>
+                <dt>void <b>addStartCallback</b>(SoDraggerCB *f, void *userData = NULL)</dt>
+                <dt>void <b>removeStartCallback</b>(SoDraggerCB *f, void *userData = NULL)</dt>
+                <dd>Start callbacks are made after the mouse button 1 goes down and the dragger determines that it has been picked. If it is going to begin dragging, it grabsevents and invokes the startCallbacks.</dd>
+
+                <dt>void <b>addMotionCallback</b>(SoDraggerCB *f, void *userData = NULL)</dt>
+                <dt>void <b>removeMotionCallback</b>(SoDraggerCB *f, void *userData = NULL)</dt>
+                <dd>Motion callbacks are called after each movement of the mouse during dragging.</dd>
+
+                <dt>void <b>addFinishCallback</b>(SoDraggerCB *f, void *userData = NULL)</dt>
+                <dt>void <b>removeFinishCallback</b>(SoDraggerCB *f, void *userData = NULL)</dt>
+                <dd>Finish callbacks are made after dragging ends and the dragger has stopped grabbing events.</dd>
+
+                <dt>void <b>addValueChangedCallback</b>(SoDraggerCB *f, void *userData =NULL)</dt>
+                <dt>void <b>removeValueChangedCallback</b>(SoDraggerCB *f, void*userData = NULL)</dt>
+                <dd>Value-changed callbacks are made after a dragger changes any of its fields.This does not include changes to the isActive field.</dd>
+
+                <dt>void <b>setMinGesture</b>(int pixels)</dt>
+                <dt>int <b>getMinGesture</b>() const</dt>
+                <dd>Set and get the number of pixels of movement required to initiate aconstraint gesture. Default is 8.</dd>
+
+                <dt>static void <b>setMinScale</b>(float newMinScale)</dt>
+                <dt>static float <b>getMinScale</b>()</dt>
+                <dd>The smallest scale that any dragger will write. If the user attempts to gobelow this amount, the dragger will set it to this minimum. Default is .001</dd>
+
+                <dt>static const SoNodekitCatalog *<b>getClassNodekitCatalog</b>() const</dt>
+                <dd>Returns an SoNodekitCatalog for this class.</dd>
+
+                <dt>static SoType <b>getClassTypeId</b></dt>
+                <dd>()Returns type identifier for this class.</dd>
+
+                <dt><b>Methods from class SoInteractionKit</b>:
+                <dd>setPartAsPath</dd>
+
+                <dt><b>Methods from class SoBaseKit</b>:</dt>
+                <dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren</dd>
+
+                <dt><b>Methods from class SoNode</b>:</dt>
+                <dd>setOverride, isOverride, copy, affectsState, getByName, getByName</dd>
+
+                <dt><b>Methods from class SoFieldContainer</b>:</dt>
+                <dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled</dd>
+
+                <dt><b>Methods from class SoBase:</b></dt>
+                <dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName</dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>MACROS</dt>
+        <dd>
+            <dl>
+                <dt>Macros from class SoBaseKit:
+                <dd>SO_GET_PART, SO_CHECK_PART
+            </dl>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>CATALOG PARTS</dt>
+        <dd>
+            <table>
+                <tr><th colspan=4 id="t01">All parts</th></tr>
+                <tr><th>Part Name</th> <th>Part Type</th> <th>Default Type</th> <th>NULL by default</th></tr>
+                <tr><td>callbackList</td> <td>NodeKitListPart</td> <td>--</td> <td>yes</td></tr>
+            </table>
+        </dd>
+
+        <dd>
+            <table>
+                <tr>
+                    <th colspan="3" id="t01">Extra information for list parts from above table</th>
+                </tr>
+                <tr><th>Part Name</th> <th>Container Type</th> <th>Permissible Types</th></tr>
+                <tr><td>callbackList</td> <td>Separator</td> <td>Callback, EventCallback</td></tr>
+            </table>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>FILE FORMAT/DEFAULTS</dt>
+        <dd>
+            <pre>
+Dragger {
+    renderCaching AUTO
+    boundingBoxCaching AUTO
+    renderCulling AUTO
+    pickCulling AUTO
+    isActive FALSE
+}
+</pre>
+        </dd>
+
+    </dl>
+
+
+    <dl>
+        <dt>INCLUDE FILE</dt>
+        <dd>#include &lt;Inventor/draggers/SoDragger.h&gt;</dd>
+
+        <dd>typedef void SoDraggerCB(void *userData, SoDragger *dragger)</dd>
+    </dl>
+
+
+    <dl>
+        <dt>SEE ALSO</dt>
+        <dd>
+            <a href="sointeractionkit.html">SoInteractionKit</a>, <a href="socenterballdragger.html">SoCenterballDragger</a>, <a href="sodirectionallightdragger.html">SoDirectionalLightDragger</a>, <a href="sodragpointdragger.html">SoDragPointDragger</a>, <a href="sohandleboxdragger.html">SoHandleBoxDragger</a>, <a href="sojackdragger.html">SoJackDragger</a>, <a href="sopointlightdragger.html">SoPointLightDragger</a>, <a href="sorotatecylindricaldragger.html">SoRotateCylindricalDragger</a>, <a href="sorotatediscdragger.html">SoRotateDiscDragger</a>, <a href="sorotatesphericaldragger.html">SoRotateSphericalDragger</a>, <a href="soscale1dragger.html">SoScale1Dragger</a>, <a href="soscale2dragger.html">SoScale2Dragger</a>, <a href="soscale2uniformdragger.html">SoScale2UniformDragger</a>, <a href="soscaleuniformdragger.html">SoScaleUniformDragger</a>, <a href="sospotlightdragger.html">SoSpotLightDragger</a>, <a href="sotabboxdragger.html">SoTabBoxDragger</a>, <a href="sotabplanedragger.html">SoTabPlaneDragger</a>, <a href="sotrackballdragger.html">SoTrackballDragger</a>, <a href="sotransformboxdragger.html">SoTransformBoxDragger</a>, <a href="sotranslate1dragger.html">SoTranslate1Dragger</a>, <a href="sotranslate2dragger.html">SoTranslate2Dragger</a>
+        </dd>
+    </dl>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<html>
+<body>
+<p>SoSphere
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSphere -- sphere shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; SoSphere
+
+<dt>DESCRIPTION
+<dd>This node represents a sphere. By default, the sphere is centered at the origin and has a radius of 1. The sphere is transformed by the current cumulativetransformation and is drawn with the current lighting model, drawing style, material, and geometric complexity. A sphere does not have faces or parts. Therefore, the sphere ignores material andnormal bindings, using the first material for the entire sphere and using its own normals. When a texture is applied to a sphere, the texture covers the entire surface,wrapping counterclockwise from the back of the sphere. The texture has a seam at the back on the yz-plane.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFFloat radius
+<dd>Radius of sphere. This must be greater than 0.
+</dl>
+
+<dt>METHODS 
+<dl>
+<dt><b>SoSphere</b>()
+<dd>Creates a sphere node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws sphere based on the current coordinates, materials, drawing style, andso on.
+
+<dt>SoRayPickAction
+<dd>Intersects the ray with the sphere. No details are created for intersections.
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses the sphere.
+
+<dt>SoCallbackAction
+<dd>If any triangle callbacks are registered with the action, they will be invoked for each successive triangle that approximates the sphere.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+
+<dl>
+<dt>Sphere {
+<dd>radius 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoSphere.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socone.html">SoCone</a>, <a href="socube.html">SoCube</a>, <a href="socylinder.html">SoCylinder</a>
+
+</dl>
+</body>
+</html>

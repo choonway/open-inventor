@@ -1,0 +1,128 @@
+<html>
+<body>
+SoTrackballDragger
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTrackballDragger -- striped ball you can rotate or scale uniformly by dragging with the mouse
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoInteractionKit &gt; SoDragger &gt; SoTrackballDragger 
+
+<dt>DESCRIPTION
+<dd>SoTrackballDragger is a ball wrapped in three circular stripes. The stripes are oriented like wheels that spin around the x, y, and z axes. Drag the stripes to rotatethe trackball around those axes. You do not have to hit the lines; pick anywhere within the stripe's outline. To rotate the trackball freely in 3 dimensions, click thearea between the stripes and then drag. An invisible but pickable sphere initiates this dragging. If the mouse is still moving when you release it, the trackball will continue to spin.
+
+<p>Press the &lt;Alt&gt; key to scale the trackball uniformly instead of rotating. Press the &lt;Shift&gt; key and the user axis appears; this is a draggable axis with an extrastripe around it. Moving the mouse along the surface of the sphere drags the 'pole' of the axis. Release the &lt;Shift&gt; key and the user axis remains; drag the new stripe forconstrained rotation around the user axis. To make the user axis disappear, press &lt;Shift&gt; and drag the pole to where two of other stripes intersect. This aligns the useraxis with a primary axis, at which point the user axis disappears.
+
+<p>As you drag the trackball, it updates its rotation field, or its scaleFactor field if the&lt;Alt&gt; key is down. As with all draggers, if you change the fields the dragger moves in response. Remember: This is not an SoTransform!. If you want to move other objects with thisdragger, you can either:
+
+<p>[a] Use an SoTrackballManip, which is subclassed from SoTransform. Themanipulator creates one of these draggers and uses it as the interface to edit the manipulator's fields. (see the SoTrackballManip reference page). [b] Use field-to-field connections to connect the fields of this dragger to those of anySoTransformation node.
+
+<p>You can change the parts in any instance of this dragger using setPart(). The defaultpart geometries are defined as resources for this SoTrackballDragger class. They are detailed in the Dragger Resources section of the online reference page for this class.You can make your program use different default resources for the parts by copying the file /usr/share/data/draggerDefaults/trackballDragger.iv into your owndirectory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFVec3f scaleFactor
+<dd>Scale of the dragger.
+
+<dt>SoSFRotation rotation
+<dd>Orientation of the dragger.
+
+<dt>Fields from class SoDragger:
+<dd>isActive
+
+<dt>Fields from class SoInteractionKit:
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+</dl>
+
+<dt>PARTS
+<dl>
+<dt>Parts from class SoBaseKit:
+<dd>callbackList
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoTrackballDragger()
+<dd>Constructor.
+
+<dt>SbBool isAnimationEnabled
+<dt>()void setAnimationEnabled(SbBool newVal)
+
+<dd>If the mouse is moving while you release it, the trackball will continue tospin afterwards. These two methods will query and set whether this feature is turned on or off. By default, the animation feature is turned on.
+
+<dt>static const SoNodekitCatalog *getClassNodekitCatalog() const
+<dd>Returns an SoNodekitCatalog for this class
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoDragger:
+
+<dd>addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback, addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+<dt>Methods from class SoInteractionKit:
+<dd>setPartAsPath
+
+<dt>Methods from class SoBaseKit:
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+<dd>SO_GET_PART, SO_CHECK_PART
+</dl>
+
+<dt>CATALOG PARTS iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yessurroundScale SurroundScale -- yes antiSquish AntiSquish -- norotator Separator -- yes rotatorActive Separator -- yesXRotator Separator -- yes XRotatorActive Separator -- yesYRotator Separator -- yes YRotatorActive Separator -- yesZRotator Separator -- yes ZRotatorActive Separator -- yesuserAxis Separator -- yes userAxisActive Separator -- yesuserRotator Separator -- yes userRotatorActive Separator -- yesiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc cc cc cc cc cc cc cc c
+
+cc cc cc cc cc cc cc cc cc cc cc c
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separatoriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiccc cc cc
+
+cc cc
+
+cc c
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>TrackballDragger {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO
+<dd>isActive FALSE
+<dd>rotation 0 0 1 0
+<dd>scaleFactor 1 1 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/draggers/SoTrackballDragger.h&gt;
+
+<dt>NOTE
+<dd>Unlike most multi-function draggers, SoTrackballDragger is not a compound dragger made up of other draggers that perform its smaller tasks. This is not because it was inappropriate, but because the trackball was written before implementation of the methods that take care of synchronizing multiple child draggers. The younger SoCenterballDragger is similar in form to the trackball, but the centerball is a compound dragger.
+
+<dt>SEE ALSO
+<dd>SoInteractionKit, SoDragger, SoCenterballDragger, SoDirectionalLightDragger, SoDragPointDragger, SoHandleBoxDragger, SoJackDragger, SoPointLightDragger,SoRotateCylindricalDragger, SoRotateDiscDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger,SoScaleUniformDragger, SoSpotLightDragger, SoTabBoxDragger, SoTabPlaneDragger, SoTransformBoxDragger, SoTranslate1Dragger, SoTranslate2Dragger
+</body>
+</html>

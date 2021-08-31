@@ -1,0 +1,44 @@
+<html>
+<body>
+SoTimerSensor
+<dl>
+<dt>NAME
+<dd>SoTimerSensor -- sensor that triggers callback repeatedly at regular intervals
+<dt>INHERITS FROM
+<dd><a href="sosensor.html">SoSensor</a> &gt; <a href="sotimerqueuesensor.html">SoTimerQueueSensor</a> &gt; SoTimerSensor
+
+<dt>DESCRIPTION
+<dd>Timer sensors trigger their callback function at regular intervals. For example, a timer might be setup to call its callback function every second on the second by setting the base time to SbTime(0.0) and the interval to SbTime(1.0). Timers are guaranteed to be triggered only once when the timer queue is processed, so if the application only processes the timer queue once every 5 seconds (because it is busy doing something else) the once-a-second sensor's callback will be called only once every 5 seconds.
+
+<p>Note also that SoTimers always schedule themselves to be triggered the next even multiple of the interval time after the base time; so, for example, if the once-asecond sensor is triggered at time 2.9 (because the application way busy doing something at time 2.0 and didn't get around to processing the sensor queue for a while) it will reschedule itself to go off at time 3.0, not at time 3.9. If the base timewas never set, the sensor would be scheduled for time 3.9.
+
+<dt>METHODS
+<dl>
+<dt><b>SoTimerSensor</b>()
+<dt><b>SoTimerSensor</b>(SoSensorCB *func, void *data)
+<dd>Creation methods. The second method takes the callback function and data to be called when the sensor is triggered.
+
+<dt>~<b>SoTimerSensor</b>()
+<dd>Destroys the sensor, freeing up any memory associated with it after unscheduling it.
+
+<dt>void <b>setBaseTime</b>(const SbTime &base)
+<dt>const SbTime & <b>getBaseTime</b>() const
+<dt>void <b>setInterval</b>(const SbTime &interval)
+<dt>const SbTime & <b>getInterval</b>() const
+<dd>Sets/gets the base time and the interval. The default base time is the timewhen the sensor is scheduled or rescheduled, and the default interval is 1/30th of a second.
+
+<dt><b>Methods from class SoTimerQueueSensor</b>:
+<dd>getTriggerTime, schedule, unschedule, isScheduled
+
+<dt><b>Methods from class SoSensor</b>:
+<dd>setFunction, getFunction, setData, getData
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/sensors/SoTimerSensor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sooneshotsensor.html">SoOneShotSensor</a>, <a href="soalarmsensor.html">SoAlarmSensor</a>, <a href="sotimerqueuesensor.html">SoTimerQueueSensor</a>, <a href="sbtime.html">SbTime</a>
+</dl>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<html>
+<body>
+SoFaceDetail
+<hr>
+<dl>
+<dt>NAME
+<dd>SoFaceDetail -- stores detail information about vertex-based shapes made of faces
+<dt>INHERITS FROM
+<dd><a href="sodetail.html">SoDetail</a> &gt; SoFaceDetail
+
+<dt>DESCRIPTION
+<dd>This class contains detail information about a point on a face in a vertex-based shape made of faces. The information includes the number of points in the face, the points forming the vertices of the face, and the index of the face within the shape.
+
+<p>Note that when an SoFaceDetail is returned from picking (in an SoPickedPoint), itwill contain details for all points defining the face that was intersected. However, when an SoFaceDetail is created for a triangle produced during primitive generation(in an SoPrimitiveVertex), it will contain details for only the three vertices of the triangle.
+
+<dt>METHODS
+<dl>
+<dt><b>SoFaceDetail</b>()
+<dt>virtual ~<b>SoFaceDetail</b>()
+<dd>Constructor and destructor.
+
+<dt>long <b>getNumPoints</b>() const
+<dd>Returns the number of points in the face.
+
+<dt>const SoPointDetail *<b>getPoint</b>(int i) const
+<dd>Returns information about the point forming the i'th vertex of the face,represented as an SoPointDetail.
+
+<dt>long <b>getFaceIndex</b>() const
+<dd>Returns the index of the face within the shape.
+
+<dt>long <b>getPartIndex</b>() const
+<dd>Returns the index of the part containing the face within the shape.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoDetail</b>:
+<dd>copy, getTypeId, isOfType
+
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/details/SoFaceDetail.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodetail.html">SoDetail</a>, <a href="sopickedpoint.html">SoPickedPoint</a>, <a href="soprimitivevertex.html">SoPrimitiveVertex</a>, <a href="sovertexshape.html">SoVertexShape</a>
+</dl>
+
+</body>
+</html>

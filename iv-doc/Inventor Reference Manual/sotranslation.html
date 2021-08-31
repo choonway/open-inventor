@@ -1,0 +1,60 @@
+<html>
+<body>
+<p>SoTranslation
+<dl>
+<dt>NAME
+<dd>SoTranslation -- node representing a 3D translation
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sotransformation.html">SoTransformation</a> &gt; SoTranslation
+
+<dt>DESCRIPTION
+<dd>This node defines a translation by a 3D vector.
+
+<dt>FIELDS
+<dl>
+<dt><a href="sosfvec3f.html">SoSFVec3f</a> translation
+<dd>Translation vector.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoTranslation</b>()
+<dd>Creates a translation node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Accumulates translation into the current transformation.
+
+<dt>SoGetMatrixAction
+<dd>Returns the matrix corresponding to the translation.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Translation {
+<dd>translation 0 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoTranslation.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotransform.html">SoTransform</a>
+</body>
+</html>

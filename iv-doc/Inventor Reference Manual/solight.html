@@ -1,0 +1,58 @@
+<html>
+<body>
+SoLight
+<hr>
+<dl>
+<dt>NAME
+<dd>SoLight -- abstract base class for all light source nodes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoLight
+
+<dt>DESCRIPTION
+<dd>SoLight is the abstract base class for all light nodes. A light node defines an illumination source that may affect subsequent shapes in the scene graph,depending on the current lighting style. Light sources are affected by the current transformation. A light node under a separator does not affect any objects outsidethat separator.
+
+<dd>You can also use a node kit to create a light; see the reference page for SoLightKit.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFBool on
+<dd>Determines whether the source is active or inactive. When inactive, thesource does not illuminate at all.
+
+<dt>SoSFFloat intensity
+<dd>Illumination intensity of light source. Valid values range from 0.0 (no illumination) to 1.0 (maximum illumination).
+
+<dt>SoSFColor color
+<dd>Light source illumination color.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+
+<dt>SoGLRenderAction
+<dd>Activates this light (if so specified) during traversal. All shape nodes thatcome after this light in the scene graph are illuminated by this light.
+
+<dt>FILE FORMAT/DEFAULTS
+<dd>This is an abstract class. See the reference page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoLight.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodirectionallight.html">SoDirectionalLight</a>, <a href="soenvironment.html">SoEnvironment</a>, <a href="solightkit.html">SoLightKit</a>, <a href="solightmodel.html">SoLightModel</a>, <a href="somaterial.html">SoMaterial</a>, <a href="sopointlight.html">SoPointLight</a>, <a href="sospotlight.html">SoSpotLight</a>
+</body>
+</html>

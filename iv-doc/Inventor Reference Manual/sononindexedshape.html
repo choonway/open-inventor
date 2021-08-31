@@ -1,0 +1,45 @@
+<html>
+<body>
+SoNonIndexedShape
+<hr>
+<dl>
+<dt>NAME
+<dd>SoNonIndexedShape -- abstract base class for all non-indexed vertex-based shapes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; <a href="sovertexshape.html">SoVertexShape</a> &gt; SoNonIndexedShape
+
+<dt>DESCRIPTION
+<dd>This node is the abstract base class for all vertex-based shapes that are not constructed from indices, such as SoFaceSet, SoLineSet, and SoQuadMesh. All subclasses of SoNonIndexedShape construct objects by using the current coordinates as the object's vertices. The startIndex field defined by this class contains the index of the coordinate to use for the first vertex. This index is also used for materials, normals, or texture coordinates when the binding indicates that they should be used per vertex. The subclass decides what to do with this and any subsequent coordinates. Theshape is drawn with the current lighting model and drawing style and is transformed by the current transformation matrix. Material, normal, and texture coordinate bindings for shapes derived from this classignore any index specifications. That is, a binding value of PER_FACE_INDEXED is treated the same way as PER_FACE, and so on. If there aren't sufficient values in the current coordinates, material, or texturecoordinates, errors will occur.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFLong startIndex
+<dd>Index of first coordinate of shape.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dd>This is an abstract class. See the reference page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoNonIndexedShape.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sofaceset.html">SoFaceSet</a>, <a href="soindexedshape.html">SoIndexedShape</a>, <a href="solineset.html">SoLineSet</a>, <a href="sopointeset.html">SoPointSet</a>, <a href="soquadmesh.html">SoQuadMesh</a>, <a href="sotrianglestripset.html">SoTriangleStripSet</a>
+</body>
+</html>

@@ -1,0 +1,1189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Chapter 10. Creating a Component</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"><meta name="generator" content="SGI XSL DocBook Customization Stylesheets V1.0"><link rel="home" href="index.html" title="The Inventor Toolmaker"><link rel="up" href="index.html" title="The Inventor Toolmaker"><link rel="previous" href="ch09.html" title="Chapter 9. Creating a Selection Highlight Style"><link rel="next" href="ch11.html" title="Chapter 11. Creating an Event and Device"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 10. Creating a Component</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr></table><hr></div><!--CONTENT_BEGIN--><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="id5476832"></a>Chapter 10. <a name="id11499"></a>Creating a<a name="id41552"></a> Component</h2></div></div>
+<p>This chapter describes how to create your own Inventor Xt component. Before creating a new Xt component, be sure to read Chapters 10 and 16 in The Inventor Mentor.<a name="idch101"></a></p>
+<p>The first part of this chapter offers an overview of the steps required to create a new component. The second part of the chapter describes the additional steps required to create a new viewer, which is a specific type of component. The chapter examples show creating two new component classes:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>A component derived from <span class="bold"><b>SoXtRenderArea</b></span> called <span class="bold"><b>SceneTumble</b></span></p>
+</li>
+<li><p>A viewer called <span class="bold"><b>simpleViewer</b></span></p>
+</li>
+</ul></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5476920"></a>Creating a New Component</h2></div></div>
+<p>This section describes the general process of creating a new component. The sample class shown here is derived from <span class="bold"><b>SoXtRenderArea</b></span>. The second half of this chapter, beginning with <a href="ch10.html#id12767">&#8220;Creating a New Viewer&#8221;</a>, describes creating a more specialized component, a viewer.</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5476949"></a>Overview</h3></div></div>
+<p>There are no special macros for creating new component classes. Creating a new component requires these steps:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new component class and determine what class it is derived from (see <a href="ch10.html#id31062">&#8220;Overview&#8221;</a> for a discussion of deriving new viewers).</p>
+</li>
+<li><p>Define a constructor for the new class.  If you want other programmers to be able to derive classes from your new class, you need to define two constructors for the class, a public constructor and a protected one (see <a name="idch102"></a><a href="ch10.html#id40831">&#8220;Defining the Constructor&#8221;</a>). If no one will be deriving classes from your new class, you can simply define a public constructor.</p>
+</li>
+<li><p>Implement <a name="idch103"></a><span class="bold"><b>show()</b></span> and <span class="bold"><b>hide</b></span>() methods for your component (optional step). The base class, <span class="bold"><b>SoXtComponent</b></span>, takes care of showing and hiding your new component. But if your component needs to show <i>other</i> components when it is shown, or hide other components when it is hidden, you need to implement these two methods for your new class (see <a href="ch10.html#id23890">&#8220;The show() and hide() Methods&#8221;</a>).</p>
+</li>
+<li><p>Implement the visibility-changed callback function (optional step). This function is called when the component changes state between visible and invisible (see <a name="idch104"></a><a href="ch10.html#id99964">&#8220;Visibility-Changed Callback Function&#8221;</a>).</p>
+</li>
+</ol></div><p>See the SoXtComponent.h file for additional methods you may choose to implement. Possibilities include the following:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>windowCloseAction()<a name="idch105"></a></b></span>
+</span></td><td width="10"> </td><td><p>
+
+
+<br>
+specifies what happens when the user closes the window using the Window Manager (for example, you could implement this method to exit the program or delete the component)<a name="idch106"></a></p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>openHelpCard()<a name="idch107"></a></b></span></span></td><td width="10"> </td><td><p>opens a help card for the component</p>
+
+</td></tr></table></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5477220"></a><a name="id40831"></a>Defining the Constructor</h3></div></div>
+<p>If you are sure that no one will need to derive classes from your new component, you can simply implement one public constructor. This constructor needs to do the following:<a name="idch108"></a></p>
+<div class="itemizedlist"><ul type="disc"><li><p>Build the widget (or the widget tree if your component is made up of more than one widget)<a name="idch109"></a></p>
+</li>
+<li><p>Call <a name="idch1010"></a><span class="bold"><b>setBaseWidget()</b></span> so that the <span class="bold"><b>SoXtComponent</b></span> base class methods&#8212;such as <span class="bold"><b>show()</b></span> and <span class="bold"><b>hide()</b></span>&#8212;work properly</p>
+</li>
+</ul></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5477294"></a>Defining Public and Protected Constructors</h4></div></div>
+<p>If you want to be sure that programmers can derive new classes from your class, you need to provide a protected constructor in addition to the public constructor. Here's why. The widget tree is built when the component is constructed. If you derive a component subclass, the parent class constructor is called before the constructor of the subclass. This means that the parent class widget is built before the subclass widget. The problem arises if you want the component subclass to provide a container widget for the parent class. The Xt Library requires that a parent widget be supplied when a child widget is created and provides no way to reparent a widget. A little fancy footwork is required for the subclass to provide the parent widget, and that maneuver is provided by the protected constructor.<a name="idch1011"></a><a name="idch1012"></a><a name="idch1013"></a></p>
+<p>In Inventor, every <span class="bold"><b>SoXtComponent</b></span> class has two constructors: a public constructor and a protected constructor. The protected constructor has one additional parameter, <a name="idch1014"></a><span class="bold"><b>buildNow</b></span>, which is a Boolean value that specifies whether to build the widget tree now or later: </p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+protected:
+	 SoXtComponent(
+		Widget parent,
+         		const char *name,
+         		SbBool buildInsideParent,
+         		SbBool buildNow);
+</pre></td></tr></table><p>If you use the protected constructor and specify FALSE for <span class="bold"><b>buildNow</b></span>, you can have explicit control over which widgets are built and in what order. For example, your new class may want to build a container widget such as a Motif-style form or bulletin board before it lets the parent class build its widget. In this case, your new class can call its <a name="idch1015"></a><span class="bold"><b>buildWidget()</b></span> method first and then later it can call the <span class="bold"><b>buildWidget()</b></span> method of its parent class. In Inventor, the <span class="bold"><b>SoXtFullViewer</b></span> class uses this technique. It builds a form widget with user interface trim and then has the parent class, <a name="idch1016"></a><span class="bold"><b>SoXtRenderArea</b></span>, later build its widget inside this form.</p>
+<p>In Inventor, and in Examples 10-1 and 10-2, the basic constructor tasks are put into the <a name="idch1017"></a><span class="bold"><b>constructorCommon()</b></span> method, which is called by both constructors. Although this is a useful technique, it is not required. The <span class="bold"><b>constructorCommon()</b></span> method is where the actual building of this widget occurs. This method checks the <span class="bold"><b>buildNow</b></span> flag and builds the widget. </p>
+<p>Let's analyze the <span class="bold"><b>constructorCommon()</b></span> code in <a href="ch10.html#id32241">Example 10-2</a> in a bit more detail. After setting up sensors, a camera, and a light for the component, the following calls are made:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+addVisibilityChangeCallback(visibilityChangeCB, this);
+setClassName(&quot;SceneTumble&quot;);
+setTitle(&quot;Tumble&quot;);
+
+// If we do not build now, the subclass will build when ready
+if (buildNow) {
+   Widget w = buildWidget(getParentWidget());
+   setBaseWidget(w);
+}
+</pre></td></tr></table><p>The visibility-changed callback is described in <a href="ch10.html#id99964">&#8220;Visibility-Changed Callback Function&#8221;</a>. The <a name="idch1018"></a><span class="bold"><b>setClassName()</b></span> method sets the name of the class for X resource lookup, which occurs while the widget is being built. The <a name="idch1019"></a><span class="bold"><b>setTitle()</b></span> method sets the title used in the shell window if this is a top-level component. Although not shown here, you can also call <span class="bold"><b>setIconTitle()<a name="idch1020"></a></b></span> to set the title used when the component is iconified.</p>
+<p>The constructor then checks the  <a name="idch1021"></a><span class="bold"><b>buildNow</b></span> flag.  If this flag is TRUE, it builds the widget tree. Also, note that the <span class="bold"><b>buildWidget()</b></span> method uses <span class="bold"><b>getParentWidget()<a name="idch1022"></a></b></span> to obtain the parent widget, which is not necessarily the parent widget passed in to the constructor. (The parent passed in to the constructor could be NULL, or the <i>buildInsideParent</i> parameter could be FALSE.)</p>
+<p>Next, the constructor calls the <a name="idch1023"></a><span class="bold"><b>setBaseWidget()</b></span> method, which lets<span class="bold"><b> SoXtComponent</b></span> know what the root of the widget tree is. This widget is used for layout, and by the <a name="idch1024"></a><span class="bold"><b>show()</b></span> and <span class="bold"><b>hide()</b></span> methods. </p>
+</div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5477778"></a><a name="id18269"></a>The buildWidget() Method</h4></div></div>
+<p>In Inventor, because we want to allow subclasses to have explicit control over building the widget tree, we implement a separate <a name="idch1025"></a><span class="bold"><b>buildWidget()</b></span> method. If you are providing only the public constructor, you can simply build the widget in the constructor and do not need to create a separate <span class="bold"><b>buildWidget()</b></span> method. This method, called by the constructor of your new class (or by subclasses of your new class), builds the widget hierarchy and returns its topmost widget. <a name="idch1026"></a></p>
+<p>If your widget supports X resources, be sure to call <a name="idch1027"></a><span class="bold"><b>registerWidget()</b></span> immediately after you create the topmost container widget and before you build the rest of the widget hierarchy. This method associates the Motif-style widget with the Inventor component to which it belongs. When you create other widgets in the hierarchy, Inventor uses the class name of the component instead of the widget name during resource lookup. For example, the base widget of a render area is a Motif-style bulletin board. Once you have called <span class="bold"><b>registerWidget()</b></span>, you can set the background color resource directly on the render area without affecting other bulletin board widgets in your hierarchy. </p>
+<p>To define and retrieve your own resources, see the <a name="idch1028"></a><a name="idch1029"></a><i>Open Inventor C++ Reference Manual</i> on <span class="bold"><b>SoXtResource</b></span>. For more information on X resources, see the <a name="idch1030"></a><i>Xlib Programming Manual</i> by Adrian Nye (O'Reilly &amp; Associates, 1990).</p>
+</div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5477911"></a><a name="id23890"></a>The show() and hide() Methods</h3></div></div>
+<p>The base class <a name="idch1031"></a><span class="bold"><b>SoXtComponent</b></span> will show and hide your new component automatically. However, if your component needs to show or hide other components, you must implement your own <a name="idch1032"></a><span class="bold"><b>show()</b></span> and <a name="idch1033"></a><span class="bold"><b>hide()</b></span> methods. In Inventor, if the material editor and color editor are on the screen and the program tells the material editor to hide itself, the material editor needs to tell the color editor to hide itself as well. Similarly, when a viewer hides itself, it also hides the preference sheet if it is visible.<a name="idch1034"></a><a name="idch1035"></a><a name="idch1036"></a></p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5478006"></a><a name="id99964"></a>Visibility-Changed Callback Function</h3></div></div>
+<p>Using <a name="idch1037"></a><span class="bold"><b>addVisibilityChangeCallback()</b></span>, your new class can register a callback function with <a name="idch1038"></a><span class="bold"><b>SoXtComponent</b></span> that is called when its visibility changes. A component can be shown, hidden, or iconified; whenever it changes state between visible and invisible (hidden or iconified), the visibility-changed callback function is invoked. This callback is useful, for example, if your component contains a scene with animation. When your component is hidden or iconified, it can stop the animation. Another example of using this callback is the render area, which detaches its redraw sensor when it is hidden or iconified.<a name="idch1039"></a><a name="idch1040"></a></p>
+<p>See <a href="ch10.html#id32241">Example 10-2</a> for an illustration of using <a name="idch1041"></a><span class="bold"><b>visibilityChangeCB()</b></span>.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5478102"></a>Creating a Simple Component</h3></div></div>
+<p>The following examples show the header file and source code for a simple component derived from <a name="idch1042"></a><span class="bold"><b>SoXtRenderArea</b></span>. This component animates a camera to rotate the scene. It uses a visibility-changed callback function to stop the tumbling when the component is not visible. A slider at the bottom of the window controls the speed of tumbling.<a name="idch1043"></a></p>
+<p><a href="ch10.html#id49736">Example 10-1</a> shows the include file for the <span class="bold"><b>SceneTumble</b></span> class. <a href="ch10.html#id32241">Example 10-2</a> shows the source code for this class.</p>
+<div class="example"><p><a name="id5478158"></a><b>Example 10-1. <a name="id49736"></a><a name="idch1044"></a>SceneTumble.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/Xt/SoXtRenderArea.h&gt;
+
+class SoPerspectiveCamera;
+class SoRotation;
+class SoSeparator;
+class SoTimerSensor;
+
+class SceneTumble : public SoXtRenderArea {
+
+public:
+   
+   // Constructor for public consumption
+   SceneTumble(
+     Widget parent = NULL,
+     const char *name = NULL, 
+     SbBool buildInsideParent = TRUE);
+   ~SceneTumble();
+
+   virtual void setSceneGraph(SoNode *newScene);
+   virtual SoNode *getSceneGraph();
+
+   void setTumbling(SbBool onOff);
+   SbBool isTumbling() const;
+   
+   protected:
+   
+   // Constructor subclasses can call if they don't want the
+   // widget built right away (i.e. the subclass wants to create
+   // a container widget first.)
+   SceneTumble(
+     Widget parent,
+     const char *name, 
+     SbBool buildInsideParent, 
+     SbBool buildNow);
+
+   Widget buildWidget(Widget parent);
+
+   void doTumbleAnimation();
+
+   void setSpeed(int s) { speed = s; }
+   int getSpeed() const { return speed; }
+
+   Widget speedSlider;
+   
+private:
+
+   SoNode * userScene;
+      SoPerspectiveCamera *camera;
+   SoRotation *rotx;
+   SoRotation *roty;
+   SoRotation *rotz;
+   SoSeparator *root;
+   int speed;
+   SoTimerSensor *animationSensor;
+   
+   void constructorCommon(SbBool buildNow);
+   static void visibilityChangeCB(void *userData,
+                                  SbBool visible);
+   static void animationSensorCB(void *userData, SoSensor *);
+   static void speedCB(Widget, XtPointer, XtPointer);
+}; 
+</pre></td></tr></table><br><div class="example"><p><a name="id5478239"></a><b>Example 10-2. <a name="id32241"></a>SceneTumble.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Xm/Form.h&gt;
+#include &lt;Xm/Scale.h&gt;
+#include &lt;Inventor/Xt/SoXtResource.h&gt;
+#include &lt;Inventor/nodes/SoDirectionalLight.h&gt;
+#include &lt;Inventor/nodes/SoPerspectiveCamera.h&gt;
+#include &lt;Inventor/nodes/SoRotation.h&gt;
+#include &lt;Inventor/nodes/SoSeparator.h&gt;
+#include &lt;Inventor/sensors/SoTimerSensor.h&gt;
+#include &quot;SceneTumble.h&quot;
+
+#define MIN_SPEED 0
+#define MAX_SPEED 100
+
+// Speed factor is a small angle
+#define SPEED_FACTOR (M_PI/3600.0)
+
+// Public constructor
+SceneTumble::SceneTumble(
+   Widget parent,
+   const char *name, 
+   SbBool buildInsideParent)
+   : SoXtRenderArea(parent, name, buildInsideParent, FALSE,
+                    FALSE)
+{
+   // Passing TRUE means build the component right now
+   constructorCommon(TRUE);
+}
+
+// Protected constructor for subclasses to call
+SceneTumble::SceneTumble(
+   Widget parent,
+   const char *name, 
+   SbBool buildInsideParent, 
+   SbBool buildNow)
+   : SoXtRenderArea(parent, name, buildInsideParent, FALSE,
+                    FALSE)
+{
+   // Subclass tells us whether to build now
+   constructorCommon(buildNow);
+}
+
+// Actual work done at construction time
+void
+SceneTumble::constructorCommon(SbBool buildNow)
+{
+   speed = MAX_SPEED/2;
+   
+   animationSensor = 
+        new SoTimerSensor(SceneTumble::animationSensorCB, this);
+   animationSensor-&gt;setInterval(1/60.0); // 60 frames per second
+
+   userScene = NULL;
+   root = new SoSeparator;
+   camera = new SoPerspectiveCamera;
+   rotx = new SoRotation;
+   roty = new SoRotation;
+   rotz = new SoRotation;
+   
+   root-&gt;addChild(camera);
+   root-&gt;addChild(new SoDirectionalLight);
+   root-&gt;addChild(rotx);
+   root-&gt;addChild(roty);
+   root-&gt;addChild(rotz);
+   root-&gt;ref();
+   
+   addVisibilityChangeCallback(visibilityChangeCB, this);
+   setClassName(&quot;SceneTumble&quot;);
+   setTitle(&quot;Tumble&quot;);
+
+   // If we do not build now, the subclass will build when ready
+   if (buildNow) {
+      Widget w = buildWidget(getParentWidget());
+      setBaseWidget(w);
+   }
+}
+
+// Destructor
+SceneTumble::~SceneTumble()
+{
+   root-&gt;unref();
+   delete animationSensor;
+}
+
+// Set the scene graph to tumble. We add this scene graph
+// to our local graph so that we can rotate our own camera
+// to create the tumbling effect. Our local scene graph
+// root is passed to the render area for rendering.
+void
+SceneTumble::setSceneGraph(SoNode *newScene)
+{
+   // Replace the existing scene with this one
+   if (userScene != NULL)
+      root-&gt;replaceChild(userScene, newScene);
+   else 
+      root-&gt;addChild(newScene);
+   userScene = newScene;
+   
+   // Make certain the scene is in view
+   camera-&gt;viewAll(root, getViewportRegion(), 2.0);
+   
+   // Render area will handle redraws for us
+   SoXtRenderArea::setSceneGraph(root);
+}
+
+// Return the user's scene graph, not our local graph
+SoNode *
+SceneTumble::getSceneGraph()
+{
+   return userScene;
+}
+
+// Build the widget - create a form widget, and place
+// in it a render area and a scale slider to control
+// the speed.
+Widget
+SceneTumble::buildWidget(Widget parent)
+{
+   Arg args[8];
+   int n;
+
+   // Create a form widget as the container.
+   Widget form = XtCreateWidget(getWidgetName(),
+                                xmFormWidgetClass, 
+                                parent, NULL, 0);
+   
+   // Register the widget, so we can get resources
+   registerWidget(form);
+   
+   // Get our starting speed from the resource.
+   // Resource file should say:
+   //    *SceneTumble*speed: &lt;int between 0 and 100&gt;
+   short s;
+   SoXtResource xr(form);
+   if (xr.getResource(&quot;speed&quot;, &quot;Speed&quot;, s)) {
+      if (s &gt; MAX_SPEED)
+         speed = MAX_SPEED;
+      else if (s &lt; MIN_SPEED)
+         speed = MIN_SPEED;
+      else 
+         speed = s;
+   }
+     
+   // Create render area
+   Widget raWidget = SoXtRenderArea::buildWidget(form);
+
+   // Create slider to control speed
+   n = 0;
+   XtSetArg(args[n], XmNminimum, MIN_SPEED); n++;
+   XtSetArg(args[n], XmNmaximum, MAX_SPEED); n++;
+   XtSetArg(args[n], XmNvalue, speed); n++;
+   XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
+   speedSlider =
+     XtCreateWidget(&quot;Speed&quot;, xmScaleWidgetClass, form, args, n);
+
+   // Callbacks on the slider
+   XtAddCallback(speedSlider, XmNdragCallback,
+                 SceneTumble::speedCB, this);
+   XtAddCallback(speedSlider, XmNvalueChangedCallback,
+                 SceneTumble::speedCB, this);
+   
+   // Layout 
+   n = 0;
+   XtSetArg(args[n], XmNtopAttachment, XmNONE); n++;
+   XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
+   XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
+   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++;
+   XtSetValues(speedSlider, args, n);
+   
+   n = 0;
+   XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
+   XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
+   XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
+   XtSetArg(args[n], XmNbottomAttachment,XmATTACH_WIDGET); n++;
+   XtSetArg(args[n], XmNbottomWidget, speedSlider); n++;
+   XtSetValues(raWidget, args, n);
+   
+   // Make the widgets visible
+   XtManageChild(speedSlider);
+   XtManageChild(raWidget);
+   
+   return form;
+}
+
+// Do the tumble animation. This entails updating our three
+// rotation nodes, one each for the x,y,and z axes.
+void
+SceneTumble::doTumbleAnimation()
+{ 
+   SbRotation r;
+   float angle;
+   
+   // Rotate about three axes in three speeds
+   angle = speed * SPEED_FACTOR;
+   r = rotx-&gt;rotation.getValue() * SbRotation(SbVec3f(1, 0, 0),
+                                              angle);
+   rotx-&gt;rotation.setValue(r);
+
+   angle = speed * SPEED_FACTOR * 1.5;
+   r = roty-&gt;rotation.getValue() * SbRotation(SbVec3f(0, 1, 0),
+                                              angle);
+   roty-&gt;rotation.setValue(r);
+
+   angle = speed * SPEED_FACTOR * 2.0;
+   r = rotz-&gt;rotation.getValue() * SbRotation(SbVec3f(0, 0, 1),
+                                              angle);
+   rotz-&gt;rotation.setValue(r);
+}
+
+// Turn tumbling on and off. We simply schedule or unschedule
+// the animation sensor.
+void
+SceneTumble::setTumbling(SbBool onOff)
+{ 
+   if (onOff) 
+     animationSensor-&gt;schedule();
+   else 
+      animationSensor-&gt;unschedule();
+}
+
+// Return whether we are tumbling.
+SbBool
+SceneTumble::isTumbling() const
+{
+   return animationSensor-&gt;isScheduled();
+}
+
+// This is called when the render area visibility changes
+// because it is shown, hidden, or iconified. If the 
+// component is not visible, we turn off the tumble animation.
+void
+SceneTumble::visibilityChangeCB(void *userData, SbBool visible)
+{
+   // Set tumbling on when the component is visible,
+   // and set it off when the component is not visible.
+   SceneTumble *tumbler = (SceneTumble *) userData;   
+   tumbler-&gt;setTumbling(visible);
+}
+
+// Animation sensor callback keeps the tumbling going.
+void
+SceneTumble::animationSensorCB(void *userData, SoSensor *)
+{ 
+   ((SceneTumble *) userData)-&gt;doTumbleAnimation();
+}
+
+// This is invoked when the speed slider changes value.
+// We use the value of the slider to change the tumble speed.
+void
+SceneTumble::speedCB(Widget, XtPointer userData, 
+                     XtPointer clientData)
+{
+   SceneTumble *tumbler = (SceneTumble *) userData;
+   XmScaleCallbackStruct *data = (XmScaleCallbackStruct *)
+                                 clientData;
+   tumbler-&gt;setSpeed(data-&gt;value);
+}
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5478450"></a><a name="id12767"></a>Creating a New Viewer</h2></div></div>
+<p>Viewers are subclassed from <a name="idch1045"></a><span class="bold"><b>SoXtRenderArea</b></span> and can be thought of as smart rendering windows that respond to events and modify the camera.  You can use one of the following classes as a base class for your own viewer: </p>
+<div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><b>SoXtViewer<a name="idch1046"></a></b></span></p>
+</li>
+<li><p><a name="idch1047"></a><span class="bold"><b>SoXtFullViewer</b></span></p>
+</li>
+<li><p><span class="bold"><b>SoXtConstrainedViewer<a name="idch1048"></a></b></span></p>
+</li>
+</ul></div><p><span class="bold"><b>SoXtViewer<a name="idch1049"></a></b></span>, the lowest base class for viewers, adds the notion of a camera to an <a name="idch1050"></a><span class="bold"><b>SoXtRenderArea</b></span>. The camera through which the scene is viewed is either found in the scene or created automatically by the viewer. <span class="bold"><b>SoXtFullViewer<a name="idch1051"></a></b></span> adds a decoration trim around the rendering area, which includes thumbwheels, a zoom slider, and push buttons. This class also creates a pop-up menu and a preference sheet with generic viewer functionality built into them. <a name="idch1052"></a><a name="idch1053"></a><a name="idch1054"></a><a name="idch1055"></a><a name="idch1056"></a><a name="idch1057"></a><span class="bold"><b>SoXtConstrainedViewer</b></span>, the last base class, is used for viewers that have the notion of a world up-direction. These viewers constrain the camera orientation to prevent the user from being upside down relative to the given world up-direction (which defaults to +y).<a name="idch1058"></a><a name="idch1059"></a></p>
+<p>The <span class="bold"><b>SoXtViewer</b></span> class provides basic viewer functionality. This base class provides methods for changing the camera, including <a name="idch1060"></a><a name="idch1061"></a><span class="bold"><b>setCamera()</b></span>, <span class="bold"><b>getCamera()<a name="idch1062"></a></b></span>, <a name="idch1063"></a><span class="bold"><b>viewAll()</b></span>, <a name="idch1064"></a><span class="bold"><b>saveHomePosition()</b></span>, and <a name="idch1065"></a><span class="bold"><b>resetToHome-<br>
+Position()</b></span>. <span class="bold"><b>SoXtViewer</b></span> also adds a headlight, as well as drawing styles, buffering types, and autoclipping. In addition,<a name="idch1066"></a><a name="idch1067"></a><a name="idch1068"></a><span class="bold"><b> SoXtViewer</b></span> adds support for seek, copy, and paste, enabling subclasses to redefine how a seek or a paste is performed.<a name="idch1069"></a></p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5478832"></a><a name="id31062"></a>Overview</h3></div></div>
+<p>If you create a viewer that is a subclass of <a name="idch1070"></a><span class="bold"><b>SoXtViewer</b></span>, you perform the following steps. Examples 10-3 and 10-4 illustrate each step.</p>
+<div class="orderedlist"><ol type="1"><li><p>Construct the viewer (required step for all new viewers). See <a href="ch10.html#id86388">&#8220;Defining the Constructor&#8221;</a>.</p>
+</li>
+<li><p>Implement the event-processing routines (required step for all new viewers). These routines include <span class="bold"><b>processEvent()</b></span> and <span class="bold"><b>processCommonEvents()</b></span>, which in turn calls <span class="bold"><b>translateCamera()</b></span> and <span class="bold"><b>switchMode()</b></span>. See <a href="ch10.html#id80642">&#8220;Defining the Event-Processing Routines&#8221;</a>.</p>
+</li>
+<li><p>Implement the seek function (optional step). See <a href="ch10.html#id83012">&#8220;Implementing the Seek Function&#8221;</a>.</p>
+</li>
+<li><p>Modify the cursor to be used for feedback (optional step). See <a href="ch10.html#id11605">&#8220;Using the Cursor for Feedback&#8221;</a>.</p>
+<p>If you create a viewer that is subclassed from <a name="idch1071"></a><span class="bold"><b>SoXtFullViewer</b></span>, you can perform the following steps, in addition to steps 1 through 4. Only step 5 is required; the other steps are optional.</p>
+</li>
+<li><p>Modify how the trim decoration is used (required step). See <a href="ch10.html#id69360">&#8220;Using the SoXtFullViewer Trim Decoration&#8221;</a>.</p>
+</li>
+<li><p>Add push buttons (optional step). See <a href="ch10.html#id43896">&#8220;Adding Push Buttons&#8221;</a>.</p>
+</li>
+<li><p>Change the preference sheet (optional step). See <a href="ch10.html#id52459">&#8220;Changing the Preference Sheet&#8221;</a>.</p>
+</li>
+<li><p>Change the pop-up menu (optional step). See <a href="ch10.html#id42271">&#8220;Changing the Pop-up Menu&#8221;</a>.</p>
+</li>
+<li><p>Change the trim decoration (optional step). See <a href="ch10.html#id15869">&#8220;Changing the Decoration Layout&#8221;</a>.</p>
+<p>If you create a viewer that is subclassed from <a name="idch1072"></a><span class="bold"><b>SoXtConstrainedViewer</b></span>,<br>
+you can perform the following step, in addition to steps 1 through 9. See <a href="ch10.html#id25227">&#8220;Creating a Constrained Viewer&#8221;</a> for more information on creating a viewer subclassed from <span class="bold"><b>SoXtConstrainedViewer</b></span>.</p>
+</li>
+<li><p>Define constraints for the viewer.</p>
+</li>
+</ol></div><p><a name="id35345"></a>Examples 10-3 and 10-4 show how to create a simple viewer derived from <a name="idch1073"></a><span class="bold"><b>SoXtFullViewer</b></span>, similar to the <span class="bold"><b>SoXtPlaneViewer</b></span>. The left mouse button is used to translate the camera in the viewer plane and to seek objects. This new viewer redefines the decoration thumbwheels to translate the camera. It also defines mouse cursors to reflect the viewer's current state (viewing, seeking, or picking).</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5479235"></a><a name="id86388"></a>Defining the Constructor</h3></div></div>
+<p>The constructor for the viewer takes an <a name="idch1074"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoXtViewer::Type
+</pre></td></tr></table><p> parameter, which specifies whether the viewer is of type BROWSER (the default) or <a name="idch1075"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+
+
+<a name="idch1076"></a></pre></td></tr></table><p>EDITOR. This argument specifies the camera creation policy of the viewer. For more information on component constructors, see <a href="ch10.html#id40831">&#8220;Defining the Constructor&#8221;</a>.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5479323"></a><a name="id80642"></a>Defining the Event-Processing Routines</h3></div></div>
+<p>Any new viewer must implement the <a name="idch1077"></a><a name="idch1078"></a><span class="bold"><b>processEvent()</b></span> routine, defined in <span class="bold"><b>SoXtRenderArea<a name="idch1079"></a></b></span>, to send events directly to the scene graph. When viewing is turned on, the new viewer uses those events to manipulate the camera.</p>
+<p>The base-class routine <a name="idch1080"></a><span class="bold"><b>processCommonEvents()</b></span>, defined in <a name="idch1081"></a><span class="bold"><b>SoXtViewer</b></span>,  is first called when an event is received. This routine is used to handle a set of events that should be common across all viewers. These events are as follows:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>Pressing the Escape key (toggles a viewer between Viewing and Picking mode)<a name="idch1082"></a></p>
+</li>
+<li><p>Pressing the Home key (resets the viewer to Home Position)</p>
+</li>
+<li><p>Pressing the S key (toggles Seek mode on and off)</p>
+</li>
+<li><p>Pressing any of the four arrow keys (moves the camera left, right, up, or down)</p>
+</li>
+</ul></div><p>The viewer calls the base class <a name="idch1083"></a><span class="bold"><b>interactiveCountInc()</b></span> and <span class="bold"><b>interactiveCountDec()<a name="idch1084"></a></b></span> methods when the left mouse button is pressed and released. These methods enable the viewer base class to call the user interactive start and finish callbacks and are also used to change the drawing styles and buffering types when interactive styles are chosen (for example, move wireframe).<a name="idch1085"></a></p>
+<p>The code to translate the camera using the new mouse position is called within the <a name="idch1086"></a><a name="idch1087"></a><span class="bold"><b>processEvent()</b></span> routine (see the <a name="idch1088"></a><span class="bold"><b>translateCamera()</b></span> method in <a href="ch10.html#id26192">Example 10-4</a>).</p>
+<p>The <a name="idch1089"></a><span class="bold"><b>switchMode()</b></span> routine called within <span class="bold"><b>processEvent()</b></span> switches between viewer modes. It also sets the correct cursor on the window (see <a name="idch1090"></a><a href="ch10.html#id11605">&#8220;Using the Cursor for Feedback&#8221;</a>).</p>
+<p>In addition to showing how the camera can be translated given the mouse events received, the <span class="bold"><b>processEvent()</b></span> routine also shows how seek functionality is supported in the viewer. This topic is explained in detail in the following section.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5479643"></a><a name="id83012"></a>Implementing the Seek Function</h3></div></div>
+<p>The seek function moves the camera to the picked point (when detail seek is ON) or to the picked object (when detail seek is OFF). The seek functionality for viewers is provided by the base class <a name="idch1091"></a><a name="idch1092"></a><a name="idch1093"></a><span class="bold"><b>SoXtViewer</b></span>. The following public methods can be called to set seek parameters:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>setDetailSeek()<a name="idch1094"></a></b></span></span></td><td width="10"> </td><td><p>specifies whether to orient the camera toward the picked point (detail seek is ON), or toward the center of the object's bounding box (detail seek is OFF). The default is ON.</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>isDetailSeek()<a name="idch1095"></a></b></span>
+</span></td><td width="10"> </td><td><p>returns whether detail seek is ON.</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>setSeekTime()<a name="idch1096"></a></b></span></span></td><td width="10"> </td><td><p>sets the time for a seek to animate the new camera location. The default time is 2 seconds.</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>getSeekTime()<a name="idch1097"></a></b></span></span></td><td width="10"> </td><td><p>returns the seek time.</p>
+
+</td></tr></table></div><p>Subclasses can then simply call <a name="idch1098"></a><span class="bold"><b>seekToPoint()</b></span>, passing the mouse location, and the base class <span class="bold"><b>SoXtViewer</b></span> performs the seek animation. By default, detail seek is ON, and the base class changes the camera to be the focal distance away from the picked point and aligned to the point normal. When detail seek is OFF, the camera centers itself on the object's bounding box and keeps its orientation the same (the picked point has no real importance; only the picked object is used in this case).</p>
+<p>Our simple viewer example uses the seek functionality defined in the base class. If a viewer needs to redefine how seek is performed (<a name="idch1099"></a><span class="bold"><b>SoXtFlyViewe</b></span>r and <a name="idch10100"></a><span class="bold"><b>SoXtWalkViewer</b></span> redefine it), the viewer can redefine the <span class="bold"><b>interpolateSeekAnimation()<a name="idch10101"></a></b></span> routine, which changes the camera.</p>
+<p>The following protected variables are defined in <span class="bold"><b>SoXtViewer</b></span> to help you redefine <span class="bold"><b>interpolateSeekAnimation()</b></span> for a new viewer:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>seekPoint<a name="idch10102"></a></b></span>,<span class="bold"><b> seekNormal</b></span>
+</span></td><td width="10"> </td><td><p><span class="bold"><b>
+
+
+<br>
+</b></span>point and normal to seek</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>oldCamOrientation<a name="idch10103"></a></b></span>,<span class="bold"><b> newCamOrientation</b></span>
+</span></td><td width="10"> </td><td><p><span class="bold"><b>
+
+
+<br>
+</b></span>old and new camera orientation</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>oldCamPosition<a name="idch10104"></a></b></span>, <span class="bold"><b>newCamPosition</b></span>
+</span></td><td width="10"> </td><td><p><span class="bold"><b>
+
+
+<br>
+</b></span>old and new camera position<a name="idch10105"></a></p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>seekDistance<a name="idch10106"></a></b></span></span></td><td width="10"> </td><td><p>seek distance (either a percentage or an absolute value)</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>seekDistAsPercentage<a name="idch10107"></a></b></span>
+</span></td><td width="10"> </td><td><p>
+
+
+<br>
+whether the seek distance is a percentage or an absolute value</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>computeSeekVariables<a name="idch10108"></a></b></span>
+</span></td><td width="10"> </td><td><p>
+
+
+<br>
+whether the final camera seek values have been computed. This flag is set to FALSE when <span class="bold"><b>interpolateSeekAnimation()</b></span> is first called on a new seek animation.</p>
+
+</td></tr></table></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5480224"></a><a name="id11605"></a>Using the Cursor for Feedback</h3></div></div>
+<p>It is often desirable to have a viewer change the cursor to reflect the viewer's state. The file SoXtCursors.h defines a set of X bitmaps that can be used for defining cursors. Some of these bitmaps were created for specific viewers, whereas others are generic enough to be reused across viewers. Most viewers have a different cursor during viewing and nonviewing modes. A generic viewer cursor is supplied in the file SoXtCursors.h.<a name="idch10109"></a><a name="idch10110"></a><a name="idch10111"></a></p>
+<p>To have a different cursor when viewing is on, the viewer needs to redefine the <a name="idch10112"></a><span class="bold"><b>setViewing()</b></span> method to set the correct cursor on the window. Similarly, if the viewer supports the seek functionality, it also needs to redefine the <span class="bold"><b>setSeekMode()<a name="idch10113"></a></b></span> method to change the cursor. <a href="ch10.html#id26192">Example 10-4</a> shows how to change the cursor.</p>
+<p>The <span class="bold"><b>defineCursors()</b></span> routine, also shown in <a name="idch10114"></a><a href="ch10.html#id26192">Example 10-4</a>, needs to be called only once to create the X cursor.</p>
+<p>X cursors can be defined only when the widget is actually mapped onto the screen. It is thus a good idea to define the cursors whenever the first event is received in the <a name="idch10115"></a><a name="idch10116"></a><span class="bold"><b>processEvent()</b></span> routine, since an event guarantees that the window is mapped onto the screen. </p>
+<p>Cursors should be defined on the render-area window, not on the window found in the X event structure. This is because the actual window events are received from changes when the viewer switches between single- and double-buffering. The render-area window, however, stays constant, so the cursor is correctly specified.<a name="idch10117"></a></p>
+<p>The following sections deal with more advanced features of viewers, such as the trim decoration around the render area and the viewer pop-up menu.</p>
+<p><a href="ch10.html#id38221">Example 10-3</a> shows the header file for the new simple viewer class.</p>
+<div class="example"><p><a name="id5361097"></a><b>Example 10-3. <a name="id38221"></a><a name="idch10118"></a>SimpleViewer.h </b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SbLinear.h&gt;
+#include &lt;Inventor/Xt/viewers/SoXtFullViewer.h&gt;
+
+class simpleViewer : public SoXtFullViewer {
+ public:
+   // Constructor/destructor
+   simpleViewer(
+      Widget parent = NULL,
+      const char *name = NULL, 
+      SbBool buildInsideParent = TRUE, 
+      SoXtFullViewer::BuildFlag flag = BUILD_ALL, 
+      SoXtViewer::Type type = BROWSER);
+   ~simpleViewer();
+   
+   // Redefine this to also change the cursor (viewerCursor)
+   virtual void        setViewing(SbBool onOrOff);
+   
+ protected:
+   // Redefine this to process the events
+   virtual void        processEvent(XAnyEvent *anyevent);
+   
+   // Redefine this to also change the cursor (seekCursor)
+   virtual void        setSeekMode(SbBool onOrOff);
+   
+   // Define these thumbwheels to translate in the viewer plane
+   virtual void        bottomWheelMotion(float newVal);
+   virtual void        leftWheelMotion(float newVal);
+   virtual void        rightWheelMotion(float newVal);
+   virtual void        bottomWheelStart();
+   virtual void        leftWheelStart();
+   
+   // Redefine this to customize the preference sheet
+   virtual void        createPrefSheet();
+   
+   // Define this to bring up the viewer help card
+   virtual void        openViewerHelpCard();
+   
+ private:
+   // Viewer state variables
+   int             mode;
+   SbBool          createdCursors;
+   Cursor          vwrCursor, seekCursor;
+   SbVec2s         locator; // mouse position
+   
+   // Camera translation variables
+   SbVec3f         locator3D;
+   SbPlane         focalplane;
+   float           transXspeed, transYspeed;
+   
+   void            switchMode(int newMode);
+   void            defineCursors();
+   void            translateCamera();
+   void            computeTranslateValues();
+};
+</pre></td></tr></table><br><div class="example"><p><a name="id5480655"></a><b>Example 10-4. <a name="id26192"></a>SimpleViewer.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;math.h&gt;
+
+#include &lt;X11/Intrinsic.h&gt;
+#include &lt;X11/Xlib.h&gt;
+#include &lt;X11/keysym.h&gt;
+
+#include &lt;Inventor/nodes/SoOrthographicCamera.h&gt;
+#include &lt;Inventor/nodes/SoPerspectiveCamera.h&gt;
+#include &lt;Inventor/Xt/SoXtCursors.h&gt;
+#include &quot;simpleViewer.h&quot;
+
+enum ViewerModes {
+   IDLE_MODE, 
+   TRANS_MODE, 
+   SEEK_MODE, 
+};
+
+// Constructor for the viewer
+simpleViewer::simpleViewer(
+   Widget parent,
+   const char *name, 
+   SbBool buildInsideParent, 
+   SoXtFullViewer::BuildFlag b, 
+   SoXtViewer::Type t)
+      : SoXtFullViewer(
+         parent,
+         name, 
+         buildInsideParent, 
+         b, 
+         t, 
+         TRUE) // Tell base class to build (since we don't add
+               // anything)
+{
+   // Init local vars
+   mode = IDLE_MODE;
+   createdCursors = FALSE;
+   setSize(SbVec2s(520, 360)); //def size
+   
+   // assign decoration titles
+   setPopupMenuString(&quot;Simple Viewer&quot;);
+   setBottomWheelString(&quot;transX&quot;);
+   setLeftWheelString(&quot;transY&quot;);
+   setRightWheelString(&quot;Dolly&quot;);
+   setPrefSheetString(&quot;Simple Viewer Preference Sheet&quot;);
+   setTitle(&quot;Simple Viewer&quot;);
+}
+
+simpleViewer::~simpleViewer()
+{
+}
+
+// Call the base class and set the correct cursor 
+// on the window
+void
+simpleViewer::setViewing(SbBool flag)
+{
+   if (flag == viewingFlag || camera == NULL) {
+      viewingFlag = flag;
+      return;
+   }
+   
+   // Call the base class
+   SoXtFullViewer::setViewing(flag);
+   
+   // Set the right cursor
+   Widget w = getRenderAreaWidget();
+   if (w != NULL &amp;&amp; XtWindow(w) != NULL) {
+      if (isViewing()) {
+         if (! createdCursors)
+            defineCursors();
+         XDefineCursor(XtDisplay(w), XtWindow(w), vwrCursor);
+      }
+      else
+         XUndefineCursor(XtDisplay(w), XtWindow(w));
+   }
+}
+
+// Process the given event to change the camera
+void
+simpleViewer::processEvent(XAnyEvent *xe)
+{
+   // Let the base class handle the common set of events
+   if (processCommonEvents(xe))
+      return;
+   
+   // Check if cursors need to be defined (they can only
+   // be defined after the window has been mapped. 
+   // Receiving events guarantees that the window has 
+   // been mapped.
+   if (! createdCursors) {
+      defineCursors();
+      Widget w = getRenderAreaWidget();
+      XDefineCursor(XtDisplay(w), XtWindow(w), vwrCursor);
+   }
+   
+   XButtonEvent    *be;
+   XMotionEvent    *me;
+   SbVec2s windowSize = getGlxSize();
+   
+   switch (xe-&gt;type) {
+      case ButtonPress:
+         be = (XButtonEvent *) xe;
+         locator[0] = be-&gt;x;
+         locator[1] = windowSize[1] - be-&gt;y;
+         if (be-&gt;button == Button1) {
+            switch (mode) {
+               case IDLE_MODE: 
+                  interactiveCountInc();
+                  switchMode(TRANS_MODE);
+                  break;
+               case SEEK_MODE:
+                  seekToPoint(locator);
+                  break;
+            }
+         }
+         break;
+         
+      case ButtonRelease:
+         be = (XButtonEvent *) xe;
+         if (be-&gt;button == Button1 &amp;&amp; mode == TRANS_MODE) {
+            switchMode(IDLE_MODE);
+            interactiveCountDec();
+         }
+         break;
+         
+      case MotionNotify:
+         me = (XMotionEvent *) xe;
+         locator[0] = me-&gt;x;
+         locator[1] = windowSize[1] - me-&gt;y;
+         if (mode == TRANS_MODE)
+            translateCamera();
+         break;
+   }
+}
+
+// Switches to the specified viewer mode. The correct
+// cursor is also set on the window.
+void
+simpleViewer::switchMode(int newMode)
+{
+   // needed to define new cursors
+   Widget w = getRenderAreaWidget();
+   Display *display = XtDisplay(w);
+   Window window = XtWindow(w);
+   if (! createdCursors)
+      defineCursors();
+   
+   // Switch to new viewer mode
+   mode = newMode;
+   switch (mode) {
+      case IDLE_MODE:
+         if (window != 0)
+            XDefineCursor(display, window, vwrCursor);
+         break;
+         
+      case TRANS_MODE:
+         {
+            // Figure out the focal plane
+            SbMatrix mx;
+            mx = camera-&gt;orientation.getValue();
+            SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
+            SbVec3f fp = camera-&gt;position.getValue() + 
+               forward * camera-&gt;focalDistance.getValue();
+            focalplane = SbPlane(forward, fp);
+            
+            // Map mouse position onto the viewing plane
+            SbVec2s windowSize = getGlxSize();
+            SbLine line;
+            SbViewVolume cameraVolume = camera-&gt;getViewVolume();
+            cameraVolume.projectPointToLine(
+                  SbVec2f( locator[0] / float(windowSize[0]), 
+                  locator[1] / float(windowSize[1])), line);
+            focalplane.intersect(line, locator3D);
+         }
+         if (window != 0)
+            XDefineCursor(display, window, vwrCursor);
+         break;
+      
+      case SEEK_MODE:
+         if (window != 0)
+            XDefineCursor(display, window, seekCursor);
+         break;
+   }
+}
+
+// Call the base class and set the correct cursor 
+// on the window.
+void
+simpleViewer::setSeekMode(SbBool flag)
+{
+   if (! isViewing())
+      return;
+   
+   // Call the base class
+   SoXtFullViewer::setSeekMode(flag);
+   
+   // Switch to the right mode
+   switchMode(isSeekMode() ? SEEK_MODE : IDLE_MODE);
+}
+
+// Redefine this routine to customize the preference sheet
+void
+simpleViewer::createPrefSheet()
+{
+   // Create the preference sheet shell and form widget
+   Widget shell, form;
+   createPrefSheetShellAndForm(shell, form);
+   
+   // Create most of the default parts
+   Widget widgetList[10];
+   int num = 0;
+   widgetList[num++] = createSeekPrefSheetGuts(form);
+   widgetList[num++] = createZoomPrefSheetGuts(form);
+   widgetList[num++] = createClippingPrefSheetGuts(form);
+   
+   layoutPartsAndMapPrefSheet(widgetList, num, form, shell);
+}
+
+// Bring up the viewer help card (called by &quot;?&quot; push button)
+void
+simpleViewer::openViewerHelpCard()
+{
+   // Tell the component to open the file for us
+   openHelpCard(&quot;simpleViewer.help&quot;);
+}
+
+// Translate the camera right/left (called by thumbwheel).
+void
+simpleViewer::bottomWheelMotion(float newVal)
+{
+   if (camera == NULL)
+      return;
+   
+   // Get camera right vector and translate by wheel 
+   // delta rotation
+   SbMatrix mx;
+   mx = camera-&gt;orientation.getValue();
+   SbVec3f rightVector(mx[0][0], mx[0][1], mx[0][2]);
+   float dist = transXspeed * (bottomWheelVal - newVal);
+   camera-&gt;position = camera-&gt;position.getValue() + 
+      dist * rightVector;
+   
+   bottomWheelVal = newVal;
+}
+
+// Translate the camera up/down (called by thumbwheel).
+void
+simpleViewer::leftWheelMotion(float newVal)
+{
+   if (camera == NULL)
+      return;
+   
+   // Get camera up vector and translate by wheel 
+   // delta rotation
+   SbMatrix mx;
+   mx = camera-&gt;orientation.getValue();
+   SbVec3f upVector(mx[1][0], mx[1][1], mx[1][2]);
+   float dist = transYspeed * (leftWheelVal - newVal);
+   camera-&gt;position = camera-&gt;position.getValue() + 
+      dist * upVector;
+   
+   leftWheelVal = newVal;
+}
+
+// Moves the camera closer/further away from the plane 
+// of interest, which is defined by the viewing normal 
+// and the camera focalDistance field value.
+void
+simpleViewer::rightWheelMotion(float newVal)
+{
+   if (camera == NULL)
+      return;
+   
+   // Shorten/grow the focal distance given the wheel rotation
+   float focalDistance = camera-&gt;focalDistance.getValue();
+   float newFocalDist = focalDistance / 
+                     pow(2.0, newVal - rightWheelVal);
+   
+   // Finally, reposition the camera
+   SbMatrix mx;
+   mx = camera-&gt;orientation.getValue();
+   SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
+   camera-&gt;position = camera-&gt;position.getValue() + 
+                  (focalDistance - newFocalDist) * forward;
+   camera-&gt;focalDistance = newFocalDist;
+   
+   rightWheelVal = newVal;
+}
+
+// This routine is used to define cursors, which can 
+// only be called after the window has been realized.
+void
+simpleViewer::defineCursors()
+{
+   XColor foreground;
+   Pixmap source;
+   Display *display = getDisplay();
+   Drawable d = DefaultRootWindow(display);
+   
+   // Set a red color
+   foreground.red = 65535;
+   foreground.green = foreground.blue = 0;
+   
+   // View plane translate cursor
+   source = XCreateBitmapFromData(display, d, 
+            so_xt_flat_hand_bits, so_xt_flat_hand_width,
+            so_xt_flat_hand_height);
+   vwrCursor = XCreatePixmapCursor(display, source, source, 
+               &amp;foreground, &amp;foreground, so_xt_flat_hand_x_hot, 
+               so_xt_flat_hand_y_hot);
+   XFreePixmap(display, source);
+   
+   // Seek cursor
+   source = XCreateBitmapFromData(display, d,
+            so_xt_target_bits, so_xt_target_width,
+            so_xt_target_height);
+   seekCursor = XCreatePixmapCursor(display, source, source, 
+                &amp;foreground, &amp;foreground, so_xt_target_x_hot,
+                so_xt_target_y_hot);
+   XFreePixmap(display, source);
+   
+   createdCursors = TRUE;
+}
+
+// Moves the camera into the plane defined by the camera 
+// forward vector and the focal point (using the camera
+// focalDistance field) to follow the new mouse location.
+void
+simpleViewer::translateCamera()
+{
+   if (camera == NULL)
+      return;
+   
+   SbVec2s windowSize = getGlxSize();
+   SbVec2f newLocator(locator[0] / float(windowSize[0]), 
+      locator[1] / float(windowSize[1]));
+   
+   // Map new mouse location into the camera focal plane
+   SbLine          line;
+   SbVec3f         newLocator3D;
+   SbViewVolume cameraVolume = camera-&gt;getViewVolume();
+   cameraVolume.projectPointToLine(newLocator, line);
+   focalplane.intersect(line, newLocator3D);
+   
+   // Move the camera by the delta 3D position amount
+   camera-&gt;position = camera-&gt;position.getValue() + 
+      (locator3D - newLocator3D);
+   
+   // You would think we would have to set locator3D to
+   // newLocator3D here.  But we don't, because moving 
+   // the camera essentially makes locator3D equal to 
+   // newLocator3D in the transformed space, and we will 
+   // project the next newLocator3D in this transformed space.
+}
+
+// Called by the bottom and left thumbwheels to compute 
+// the translation factors (how fast should we translate 
+// given a wheel rotation).
+void
+simpleViewer::computeTranslateValues()
+{
+   if (camera == NULL)
+      return;
+   
+   float height;
+   
+   if (camera-&gt;isOfType( 
+      SoPerspectiveCamera::getClassTypeId())) {
+      float angle = ((SoPerspectiveCamera *) 
+                    camera)-&gt;heightAngle.getValue() / 2;
+      float dist = camera-&gt;focalDistance.getValue();
+      height = dist * ftan(angle);
+   }
+   else if (camera-&gt;isOfType( 
+      SoOrthographicCamera::getClassTypeId()))
+      height = ((SoOrthographicCamera *) 
+               camera)-&gt;height.getValue() / 2;
+   
+   // Given the size of the viewing plane, figure out 
+   // the up/down and right/left speeds for the thumb wheels.
+   transYspeed = height / 2;
+   transXspeed = transYspeed * camera-&gt;aspectRatio.getValue();
+}
+
+// Thumbwheels start callbacks
+void
+simpleViewer::bottomWheelStart()
+{
+   computeTranslateValues();
+   
+   // call parent class
+   SoXtFullViewer::bottomWheelStart();
+}
+
+void
+simpleViewer::leftWheelStart()
+{
+   computeTranslateValues();
+   
+   // call parent class
+   SoXtFullViewer::leftWheelStart();
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5480934"></a><a name="id69360"></a>Using the SoXtFullViewer Trim Decoration</h3></div></div>
+<p><span class="bold"><b>SoXtFullViewer</b></span> is used as the base class for most viewers. This abstract class adds a decoration around the render area, a pop-up menu with viewer functions, and a preference sheet that can be used to customize a specific viewer. The decoration around the render area includes thumbwheels that duplicate direct viewing manipulation, a slider to change the camera zooming factor, and viewer/application push buttons. By default, the base class creates push buttons for viewing, home, set home, view all, and seek. Subclasses can easily add viewer-specific push buttons, as well as change the look of the decoration and the preference sheet. The creation of the decoration and preference sheet is accomplished by many small routines, so subclasses can redefine as much or as little as necessary.<a name="idch10119"></a></p>
+<p><span class="bold"><b>SoXtFullViewer</b></span> provides three thumbwheels around the render area. By default, these thumbwheels do nothing in the <span class="bold"><b>SoXtFullViewer </b></span>base class and should therefore be implemented by each subclass. The subclass should implement functions so that the bottom and left thumbwheels duplicate the right-left and up-down functionality of the mouse during direct viewing. The right thumbwheel is used to dolly the camera (move forward and backward).</p>
+<p>The simple viewer example defines the thumbwheel functionality by redefining methods from the base class as shown in <a name="idch10120"></a><a href="ch10.html#id26192">Example 10-4</a>.</p>
+<p>For convenience, when you are defining thumbwheel functionality and redefining the decoration layout, the base class <span class="bold"><b>SoXtFullViewer</b></span> provides the following thumbwheel variables. These variables include thumbwheel widgets, previous values (helpful for obtaining incremental rotation), and labels:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>rightWheel</b></span>, <span class="bold"><b>bottomWheel</b></span>, <span class="bold"><b>leftWheel</b></span>
+</span></td><td width="10"> </td><td><p><span class="bold"><b>
+
+
+<br>
+</b></span>thumbwheel widget variables</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>rightWheelStr</b></span>, <span class="bold"><b>bottomWheelStr</b></span>, <span class="bold"><b>leftWheelStr</b></span>
+</span></td><td width="10"> </td><td><p><span class="bold"><b>
+
+
+<br>
+</b></span>string label for each thumbwheel</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>rightWheelVal</b></span>, <span class="bold"><b>bottomWheelVal</b></span>, <span class="bold"><b>leftWheelVal</b></span>
+</span></td><td width="10"> </td><td><p><span class="bold"><b>
+
+
+<br>
+</b></span>previous value of each thumbwheel</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>rightWheelLabel</b></span>, <span class="bold"><b>bottomWheelLabel</b></span>, <span class="bold"><b>leftWheelLabel</b></span>
+</span></td><td width="10"> </td><td><p><span class="bold"><b>
+
+
+<br>
+</b></span>widget label for each thumbwheel</p>
+
+</td></tr></table></div><p>When a viewer is derived from <span class="bold"><b>SoXtFullViewer</b></span>, it should set the correct labels on the thumbwheels, the pop-up menu, the preference sheet, and the window title. This needs to be done only once and therefore should be done in the constructor. <a href="ch10.html#id26192">Example 10-4</a> shows the code to fully support the <span class="bold"><b>SoXtFullViewer</b></span> base class.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5481296"></a><a name="id43896"></a>Adding Push Buttons</h3></div></div>
+<p>By default, the base class <span class="bold"><b>SoXtFullViewer</b></span> creates a list of push buttons (<a name="idch10121"></a><a name="idch10122"></a><span class="bold"><b>XmPushButton</b></span> widgets with pixmaps). The method <a name="idch10123"></a><span class="bold"><b>buildViewer-<br>
+Buttons()</b></span>, which subclasses do not need to redefine, uses a list of push buttons to construct all the buttons within a form widget. The button's form widget is then laid out within the right-trim form widget. Subclasses can easily add or remove any number of buttons from the existing list of buttons by redefining the <a name="idch10124"></a><span class="bold"><b>createViewerButtons()</b></span> method and appending, inserting, and removing from the <a name="idch10125"></a><span class="bold"><b>SbPList</b></span> of buttons.</p>
+<p>Our simple viewer example does not add any new viewer buttons, but here is some sample code that adds a push button to the existing list.</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+SoXtExaminerViewer::createViewerButtons(Widget parent)
+{
+   // Get the default buttons
+   SoXtFullViewer::createViewerButtons(parent);
+    
+   // Allocate our buttons - this simple case doesn't
+   // set the XmNlabelType to be a pixmap, just a simple letter.
+   Arg args[2];
+   int n = 0;
+   XtSetArg(args[n], XmNshadowThickness, 2); n++;
+   XtSetArg(args[n], XmNhighlightThickness, 0); n++;
+   Widget button = XmCreatePushButtonGadget(parent, &quot;P&quot;, args,
+                                            n);
+   XtAddCallback(button, XmNactivateCallback,
+                 (XtCallbackProc)
+                 SoXtExaminerViewer::pushButtonCB, 
+                 (XtPointer) this);
+    
+   // Add this button to the list to have it laid out by the
+   // parent class (removing a widget from the list will
+   // prevent the corresponding push button from being laid
+   // out and managed; therefore it will not show up in the
+   // decoration).
+   viewerButtonWidgets-&gt;append(button);
+}
+</pre></td></tr></table><p>Look at the file SbPList.h for a description of methods available on the <span class="bold"><b>SoXtFullViewer::viewerButtonWidgets<a name="idch10126"></a></b></span> protected variable.</p>
+<div class="note"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/note.png"></td><td align="left" valign="top"><b>Note: </b>The viewer default push buttons all have a 24-by-24-pixel size, and the decoration trim is designed with that in mind. It is therefore recommended that you create pixmaps of this size for viewer or application push buttons.<a name="idch10127"></a>
+</td></tr></table><hr noshade="noshade"></div><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5481522"></a><a name="id52459"></a>Changing the Preference Sheet</h3></div></div>
+<p>Preference sheets allow the user to customize the behavior of a viewer. A default preference sheet is created by the <a name="idch10128"></a><span class="bold"><b>SoXtFullViewer</b></span> class. Subclasses typically make changes to the default preference sheet to give the user control over viewer-specific parameters. Like the decoration in <span class="bold"><b>SoXtFullViewer</b></span>, the preference sheet is made up of many small building blocks to make it easier for subclasses to redefine it. The following protected methods are used to build the different parts of the preference sheet:</p>
+<p>void  <span class="bold"><b>setPrefSheetString</b></span>(const char *<i>name</i>);</p>
+<p>virtual void  <span class="bold"><b>createPrefSheet</b></span>();</p>
+<p>void  <span class="bold"><b>createPrefSheetShellAndForm</b></span>(Widget &amp;<i>shell</i>, Widget &amp;<i>form</i>);</p>
+<p>void  <span class="bold"><b>createDefaultPrefSheetParts</b></span>(Widget <i>widgetList</i>[ ], int  &amp;<i>num</i>,	<br>
+                         	 Widget <i>form</i>);</p>
+<p>void  <span class="bold"><b>layoutPartsAndMapPrefSheet</b></span>(Widget <i>widgetList</i>[ ], int <i>num</i>, <br>
+ 		Widget <i>form</i>, Widget <i>shell</i>);</p>
+<p>Widget  <span class="bold"><b>createSeekPrefSheetGuts</b></span>(Widget <i>parent</i>);</p>
+<p>Widget  <span class="bold"><b>createSeekDistPrefSheetGuts</b></span>(Widget <i>parent</i>);</p>
+<p>Widget  <span class="bold"><b>createZoomPrefSheetGuts</b></span>(Widget <i>parent</i>);</p>
+<p>Widget  <span class="bold"><b>createClippingPrefSheetGuts</b></span>(Widget <i>parent</i>);</p>
+<p>Widget <span class="bold"><b>createStereoPrefSheetGuts</b></span>(Widget <i>parent</i>);</p>
+<p>To change only the preference-sheet title, use the <span class="bold"><b>setPrefSheetString()</b></span> method. Use the <a name="idch10129"></a><span class="bold"><b>createPrefSheet()</b></span> method to redefine the preference sheet for a subclass, as follows:<a name="idch10130"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+//	 This creates the preference sheet in a separate window. It
+// calls other routines to create the actual content of the 
+// sheet.
+void
+SoXtFullViewer::createPrefSheet()
+{
+	   // Create the preference sheet shell and form widget
+	   Widget shell, form;
+	   createPrefSheetShellAndForm(shell, form);
+	
+   	// Create all of the default parts
+	   Widget widgetList[10];
+   	int num = 0;
+   	createDefaultPrefSheetParts(widgetList, num, form);
+	
+	   layoutPartsAndMapPrefSheet(widgetList, num, form, shell);
+}
+
+// 	This simply creates the default parts of the pref sheet.
+void
+SoXtFullViewer::createDefaultPrefSheetParts(
+                     Widget widgetList[], int &amp;num, Widget form)
+{
+	   widgetList[num++] = createSeekPrefSheetGuts(form);
+	   widgetList[num++] = createSeekDistPrefSheetGuts(form);
+	   widgetList[num++] = createZoomPrefSheetGuts(form);
+	   widgetList[num++] = createClippingPrefSheetGuts(form);
+	   widgetList[num++] = createStereoPrefSheetGuts(form);
+}
+</pre></td></tr></table><p>When a subclass creates its own preference sheet, it only needs to redefine the <span class="bold"><b>createPrefSheet()</b></span> routine and write it like the base class routine. The simple viewer example redefines the preference sheet to omit some of the default parts. <a href="ch10.html#id26192">Example 10-4</a> shows the <span class="bold"><b>createPrefSheet()</b></span> method for <span class="bold"><b>simpleViewer</b></span>.</p>
+<p>Subclasses can easily add new items to the preference sheet by adding them to the widget list that is passed to the <span class="bold"><b>layoutPartsAndMapPrefSheet()</b></span> method, just like the default parts. The custom items should all be built within a form widget that is automatically laid out and managed within the <a name="idch10131"></a><span class="bold"><b>layoutPartsAndMapPrefSheet()<a name="idch10132"></a></b></span> method. The layout is from top to bottom in the shell widget.</p>
+<p>The preference-sheet widget and all of its child widgets are destroyed when the preference-sheet window is closed by the user. This behavior is intended, since the preference sheet is only a temporary window, and we don't want to carry the unwanted widget around when it is no longer needed.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5481982"></a><a name="id42271"></a>Changing the Pop-up Menu</h3></div></div>
+<p>The <span class="bold"><b>SoXtFullViewer</b></span> pop-up menu, which includes a rich set of viewer functions, can be changed in subclasses by redefining any of the following pop-up menu build routines:<a name="idch10133"></a></p>
+<p>void<span class="bold"><b>  setPopupMenuString</b></span>(const char *<i>name</i>);</p>
+<p>virtual void  <span class="bold"><b>buildPopupMenu</b></span>();</p>
+<p>Widget  <span class="bold"><b>buildFunctionsSubmenu</b></span>(Widget <i>popup</i>);</p>
+<p>Widget  <span class="bold"><b>buildDrawStyleSubmenu</b></span>(Widget <i>popup</i>);</p>
+<p>To change the pop-up menu title, use the <span class="bold"><b>setPopupMenuString()</b></span> method. To change the pop-up menu, subclasses can redefine the <span class="bold"><b>buildPopupMenu()</b></span> method. Subclasses can also append new entries to the pop-up menu by directly adding a Motif-compliant<a name="idch10134"></a><span class="bold"><b> xmToggleButton</b></span> or <span class="bold"><b>xmPushButton </b></span>to the pop-up menu widget.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5482152"></a><a name="id15869"></a>Changing the Decoration Layout</h3></div></div>
+<p>On rare occasions, you may want to change the decoration surrounding the rendering area. The <a name="idch10135"></a><a name="idch10136"></a><span class="bold"><b>SoXtWalkViewer</b></span> class, for example, adds an extra thumbwheel and label in the left-hand trim. To simplify the redefining of the decoration, the base class <a name="idch10137"></a><span class="bold"><b>SoXtFullViewer</b></span> constructs the decoration in many small and manageable steps. The following functions are used to create the decoration and can be redefined by subclasses at any level:</p>
+<p>Widget  <span class="bold"><b>buildWidget</b></span>(Widget <i>parent</i>);</p>
+<p>virtual void  <span class="bold"><b>buildDecoration</b></span>(Widget <i>parent</i>);</p>
+<p>virtual Widget  <span class="bold"><b>buildLeftTrim</b></span>(Widget <i>parent</i>);</p>
+<p>virtual Widget  <span class="bold"><b>buildBottomTrim</b></span>(Widget <i>parent</i>);</p>
+<p>virtual Widget  <span class="bold"><b>buildRightTrim</b></span>(Widget <i>parent</i>);</p>
+<p>virtual Widget  <span class="bold"><b>buildZoomSlider</b></span>(Widget <i>parent</i>);</p>
+<p>virtual Widget  <span class="bold"><b>buildViewerButtons</b></span>(Widget <i>parent</i>);</p>
+<p>virtual Widget  <span class="bold"><b>buildAppButtons</b></span>(Widget <i>parent</i>);</p>
+<p>void  <span class="bold"><b>setBottomWheelString</b></span>(const char *<i>name</i>);</p>
+<p>void  <span class="bold"><b>setLeftWheelString</b></span>(const char *<i>name</i>);</p>
+<p>void  <span class="bold"><b>setRightWheelString</b></span>(const char *<i>name</i>);</p>
+<p><a href="ch10.html#id13523">Example 10-5</a> contains pseudocode that shows how the decoration is built in the base class <span class="bold"><b>SoXtFullViewer</b></span>. Only important parts of the code are given to illustrate how the decoration is built.</p>
+<div class="example"><p><a name="id5482425"></a><b>Example 10-5. <a name="id13523"></a><a name="idch10138"></a>Building the Viewer Decoration in SoXtFullViewer</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+// Build the render area and the decoration trim within the
+// given parent widget.
+Widget
+SoXtFullViewer::buildWidget(Widget parent)
+{
+   // Create a form to hold everything together
+   mgrWidget = XtCreateWidget(getWidgetName(),
+                              xmFormWidgetClass, parent, 
+                              args, n);
+    
+   // Build the render area and the decoration
+   raWidget = SoXtRenderArea::buildWidget(mgrWidget);
+   if (decorationFlag)
+      	buildDecoration(mgrWidget);
+    
+   // Lay out and manage the render area and decoration
+   ...
+    
+   return mgrWidget;
+}
+
+// Build the viewer decoration (left, right and bottom trim)
+void
+SoXtFullViewer::buildDecoration(Widget parent)
+{
+   // Build the trim sides
+   leftTrimForm = buildLeftTrim(parent);
+   bottomTrimForm = buildBottomTrim(parent);
+   rightTrimForm = buildRightTrim(parent);
+    
+   // Lay out the trims but let the buildWidget() manage them
+   ...
+}
+
+// Build the left trim decoration
+Widget
+SoXtFullViewer::buildLeftTrim(Widget parent)
+{
+   // Create a form to hold all the parts
+   Widget form = XtCreateWidget(&quot;LeftTrimForm&quot;,
+                                 xmFormWidgetClass, parent,
+                                 NULL, 0);
+    
+   // Create all the parts
+   buildLeftWheel(form);
+   Widget butForm = buildAppButtons(form);
+   
+   // Lay out and manage the parts
+   ...
+    
+   return form;
+}
+</pre></td></tr></table><p><span class="bold"><b>SoXtWalkViewer<a name="idch10139"></a></b></span> redefines only the <span class="bold"><b>buildLeftTrim()</b></span> routine in order to build the default parts as well as the extra thumbwheel and label. The viewer then simply returns a form containing its new left trim to the <span class="bold"><b>buildDecoration()</b></span> routine, and everything works as before. Only the new trim has to be modified.</p>
+</div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5482546"></a><a name="id25227"></a>Creating a Constrained Viewer</h2></div></div>
+<p>The <a name="idch10140"></a><span class="bold"><b>SoXtConstrainedViewer</b></span> base class adds the notion of a world up-direction, with methods like <span class="bold"><b>setUpDirection()</b></span> and <span class="bold"><b>getUpDirection()</b></span>. New viewers that require the notion of an up-direction should be derived from this base class. With the notion of a world up-direction (which defaults to +y), a viewer can constrain the camera to prevent the user from looking upside down. This constraint is currently used in <a name="idch10141"></a><span class="bold"><b>SoXtFlyViewer</b></span> and <span class="bold"><b>SoXtWalkViewer</b></span>.</p>
+<p><span class="bold"><b>SoXtConstrainedViewer<a name="idch10142"></a></b></span> redefines some of the routines, such as <span class="bold"><b>saveHomePosition()</b></span> and <span class="bold"><b>resetToHomePosition()</b></span>, to save and restore the original camera up-direction. This base class redefines the <span class="bold"><b>paste()</b></span> and <span class="bold"><b>setCamera()</b></span> methods to guarantee that the original camera up-direction is preserved whenever new camera values are given. <span class="bold"><b>SoXtConstrainedViewer</b></span> also provides some convenience routines to allow the user to interactively specify the world up-direction (the<a name="idch10143"></a><span class="bold"><b> findUpDirection()</b></span> method) and constrain the camera to the current up-direction (the <span class="bold"><b>checkForCameraUpConstrain()</b></span> method).</p>
+<p>The world up-direction can be changed with the <span class="bold"><b>setUpDirection()</b></span> method and can also be changed interactively by the user while viewing a model using the <span class="bold"><b>findUpDirection()</b></span> method,  defined in <span class="bold"><b>SoXtConstrainedViewer</b></span>.</p>
+<p>The base class <span class="bold"><b>SoXtConstrainedViewer</b></span> also provides a convenient way to check that the current camera values are consistent with the up-direction and to tilt the camera up or down while constraining to +/- 90 degrees from the eye-level plane. This prevents the camera from ever looking upside down. Those protected methods are as follows:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term">void  <span class="bold"><b>checkForCameraUpConstrain</b></span>();</span></td><td width="10"> </td><td><p><br>
+checks the camera orientation and makes sure that the current right vector and ideal right vector (cross between the view vector and world up-direction) are the same and corrects it if they are not the same.  This method keeps the up-direction valid.</p>
+
+</td></tr><tr valign="top"><td><span class="term">virtual void  <span class="bold"><b>tiltCamera</b></span>(float <i>deltaAngle</i>);</span></td><td width="10"> </td><td><p><br>
+tilts the camera, restraining it to within 180 degrees from the up-direction.  A positive angle tilts the camera up.</p>
+
+</td></tr></table></div><p>For convenience, <span class="bold"><b>SoXtConstrainedViewer</b></span> defines the decoration thumbwheels, which can also be redefined by subclasses. These are defined as follows:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term">virtual void  <span class="bold"><b>bottomWheelMotion</b></span>(float <i>newVal</i>);</span></td><td width="10"> </td><td><p><br>
+rotates the camera around the world up-direction<i></i></p>
+
+</td></tr><tr valign="top"><td><span class="term">virtual void  <span class="bold"><b>leftWheelMotion</b></span>(float <i>newVal</i>);</span></td><td width="10"> </td><td><p><br>
+tilts the camera up and down, constraining it to within 180 degrees of the world up-direction</p>
+
+</td></tr><tr valign="top"><td><span class="term">virtual void  <span class="bold"><b>rightWheelMotion</b></span>(float <i>newVal</i>);</span></td><td width="10"> </td><td><p><br>
+moves the camera forward and backward</p>
+
+</td></tr></table></div><div class="note"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/note.png"></td><td align="left" valign="top"><b>Note: </b>A viewer that is constrained to a world up-direction should always rotate the camera around that world up-direction when rotating left and right. It is important to rotate around the world up-direction&#8212;as opposed to the current camera up-value, which is not the same if the camera is tilted up or down&#8212;to prevent rolling. This rolling disturbs the camera alignment and eventually causes the camera to look upside down.<a name="idch10144"></a>
+</td></tr></table><hr noshade="noshade"></div><br></div></div><!--CONTENT_END--><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Table of Contents</a></td><td width="40%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 9. Creating a Selection Highlight Style </td><td width="20%" align="center"> </td><td width="40%" align="right">Chapter 11. Creating an Event and Device </td></tr></table></div></body></html>

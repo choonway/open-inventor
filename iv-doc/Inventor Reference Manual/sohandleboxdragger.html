@@ -1,0 +1,123 @@
+<html>
+<body>
+SSooHHaannddlleeBBooxxDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoHandleBoxDragger -- box you can scale, stretch and translate by dragging with
+
+the mouse INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoInteractionKit &gt; SoDragger &gt;
+
+SoHandleBoxDragger DESCRIPTIONSoHandleBoxDragger is a dragger shaped like a wireframe box with small corner
+
+cubes mounted on each corner. Click and drag any of these cubes to scale the boxuniformly. Six other center cubes are centered on the sides of the box; white lines connect them to the center of the dragger. Drag one of the center cubes along itsline to stretch the box in that direction. Dragging a face of the box translates the dragger within that plane. While you drag a face of the box, purple feedback arrows display the possibledirections of motion. Press the &lt;Shift&gt; key to constrain the motion to one of the two major directions in the plane. The constraint direction is chosen based on the nextuser gesture. Press the &lt;ALT&gt; key and the dragger will translate perpendicular to that plane. The translation field is modified as the face is dragged. By default, dragging any of the small cubes scales about the center of the object.Pressing the &lt;ALT&gt; key changes this: A corner cube will scale about its opposite corner. A center cube will scale about the center of its opposite face. Dragging one ofthe small cubes will usually result in changes to both the scaleFactor and translation fields. This is because any scale about a point other than the origin hasa translation element.
+
+As with all draggers, if you change the fields the dragger will move to match thenew settings. Remember: This is not an SoTransform!. If you want to move other objects with thisdragger, you can either: [a] Use an SoHandleBoxManip, which is subclassed from SoTransform. It createsone of these draggers and uses it as the interface to change its fields. (see the SoHandleBoxManip reference page). [b] Use field-to-field connections to connect the fields of this dragger to those of anySoTransformation node.
+
+You can change the parts in any instance of this dragger using setPart(). The defaultpart geometries are defined as resources for this SoHandleBoxDragger class. They
+
+276 Open Inventor C++ Reference Pages<hr>
+
+SSooHHaannddlleeBBooxxDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh are detailed in the Dragger Resources section of the online reference page for thisclass. You can make your program use different default resources for the parts by copying the file /usr/share/data/draggerDefaults/handleBoxDragger.iv into yourown directory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory. FIELDS SoSFVec3f scaleFactor
+
+Scale of the dragger. SoSFVec3f translationPosition of the dragger.
+
+Fields from class SoDragger:
+
+isActive
+
+Fields from class SoInteractionKit:
+
+renderCaching, boundingBoxCaching, renderCulling, pickCulling
+
+PARTS Parts from class SoBaseKit:
+
+callbackList METHODS SoHandleBoxDragger()
+
+Constructor. static const SoNodekitCatalog *getClassNodekitCatalog() const
+
+Returns an SoNodekitCatalog for this class static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoDragger:
+
+addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback,
+
+addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+Methods from class SoInteractionKit:
+
+setPartAsPath
+
+277<hr>
+
+SSooHHaannddlleeBBooxxDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+Methods from class SoBaseKit:
+
+getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+MACROSMacros from class SoBaseKit:
+
+SO_GET_PART, SO_CHECK_PART CATALOG PARTSiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yessurroundScale SurroundScale -- yes translator1 Separator -- yestranslator1Active Separator -- yes translator2 Separator -- yestranslator2Active Separator -- yes translator3 Separator -- yestranslator3Active Separator -- yes translator4 Separator -- yestranslator4Active Separator -- yes translator5 Separator -- yestranslator5Active Separator -- yes translator6 Separator -- yestranslator6Active Separator -- yes iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc
+
+cc
+
+cc cc cc cc cc cc cc cc cc
+
+cc cc
+
+cc cc cc cc cc cc cc cc cc
+
+278 Open Inventor C++ Reference Pages<hr>
+
+SSooHHaannddlleeBBooxxDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts (continued)
+
+NULL byPart Name Part Type Default Type Default
+
+extruder1 Separator -- yesextruder1Active Separator -- yes extruder2 Separator -- yesextruder2Active Separator -- yes extruder3 Separator -- yesextruder3Active Separator -- yes extruder4 Separator -- yesextruder4Active Separator -- yes extruder5 Separator -- yesextruder5Active Separator -- yes extruder6 Separator -- yesextruder6Active Separator -- yes uniform1 Separator -- yesuniform1Active Separator -- yes uniform2 Separator -- yesuniform2Active Separator -- yes uniform3 Separator -- yesuniform3Active Separator -- yes uniform4 Separator -- yesuniform4Active Separator -- yes uniform5 Separator -- yesuniform5Active Separator -- yes uniform6 Separator -- yesuniform6Active Separator -- yes uniform7 Separator -- yesuniform7Active Separator -- yes uniform8 Separator -- yesuniform8Active Separator -- yes arrow1 Separator -- yesarrow2 Separator -- yes arrow3 Separator -- yesarrow4 Separator -- yes arrow5 Separator -- yesarrow6 Separator -- yes iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc
+
+cc
+
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+
+cc cc
+
+cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+
+279<hr> SSooHHaannddlleeBBooxxDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separatoriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiccc cc cc
+
+cc cc
+
+cc c
+
+FILE FORMAT/DEFAULTSHandleBoxDragger {
+
+renderCaching AUTOboundingBoxCaching AUTO renderCulling AUTOpickCulling AUTO isActive FALSEtranslation 0 0 0 scaleFactor 1 1 1}
+
+INCLUDE FILE#include &lt;Inventor/draggers/SoHandleBoxDragger.h&gt;
+
+NOTE Unlike most multi-function draggers, SoHandleBoxDragger is not a compound
+
+dragger made up of other draggers that perform its smaller tasks. This is not becauseit was inappropriate, but because was written before implementation of the methods that synchronize multiple child draggers. The younger SoTransformBoxDraggerhas similarities to the handle box dragger, but the transform box dragger is a compound dragger. SEE ALSOSoInteractionKit, SoDragger, SoCenterballDragger, SoDirectionalLightDragger,
+
+SoDragPointDragger, SoJackDragger, SoPointLightDragger,SoRotateCylindricalDragger, SoRotateDiscDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger,SoScaleUniformDragger, SoSpotLightDragger, SoTabBoxDragger, SoTabPlaneDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger,SoTranslate2Dragger
+</body>
+</html>

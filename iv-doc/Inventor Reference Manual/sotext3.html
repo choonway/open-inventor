@@ -1,0 +1,90 @@
+<html>
+<body>
+<p>SoText3
+<hr>
+<dl>
+<dt>NAME
+<dd>SoText3 -- 3D text shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; SoText3
+
+<dt>DESCRIPTION
+<dd>This node defines one or more strings of 3D text. In contrast with SoText2, 3D text can be rotated, scaled, lighted, and textured, just like all other 3D shapes. Eachcharacter in a 3D text string is created by extruding an outlined version of the character (in the current typeface) along the current profile, as defined by nodesderived from SoProfile. The default text profile, if none is specified, is a straight line segment one unit long. The text origin is at (0,0,0) after applying the current transformation. The scale ofthe text is affected by the size field of the current SoFont as well as the current transformation. SoText3 uses the current set of materials when rendering. If the material binding isOVERALL, then the whole text is drawn with the first material. If it is PER_PART or PER_PART_INDEXED, the front part of the text is drawn with the first material, thesides with the second, and the back with the third.
+
+<p>Textures are applied to 3D text as follows. On the front and back faces of the text,the texture origin is at the base point of the first string; the base point is at the lower left for justification LEFT, at the lower right for RIGHT, and at the lower center for CENTER. The texture is scaled equally in both S and T dimensions, with the font height representing 1 unit. S increases to the right on the front faces and to the lefton the back faces. On the sides, the texture is scaled the same as on the front and back. S is equal to 0 at the rear edge of the side faces. The T origin can occuranywhere along each character, depending on how that character's outline is defined.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFString string
+<dd>The text string(s) to display. Each string will appear on its own line. SoSFFloat spacingDefines the distance (in the negative y direction) between the base points of successive strings, measured with respect to the current font height. A valueof 1 indicates single spacing, a value of 2 indicates double spacing, and so on.
+
+<dt>SoSFBitMask parts
+<dd>Which parts of text are visible. Note that, for speed, the default for this field is FRONT only.
+
+<dt>SoSFEnum justification
+<dd>Indicates placement and alignment of strings. With LEFT justification, the left edge of the first line is at the (transformed) origin, and all left edges arealigned. RIGHT justification is similar. CENTER justification places the center of the first string at the (transformed) origin, with the centers of allremaining strings aligned under it.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoText3</b>()
+<dd>Creates a 3D text node with default settings. static SoType getClassTypeId()Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws text based on the current font, profiles, transformation, drawing style,material, texture, complexity, and so on.
+
+<dt>SoRayPickAction
+<dd>Performs a pick on the text. The string index and character position are available from the SoTextDetail.
+
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses the text.
+
+<dt>SoCallbackAction
+<dd>If any triangle callbacks are registered with the action, they will be invoked for each successive triangle used to approximate the text geometry.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Text3 {
+<dd>string &quot;&quot;
+<dd>spacing 1
+<dd>justification LEFT
+<dd>parts FRONT
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE#include &lt;Inventor/nodes/SoText3.h&gt;
+
+<dl>
+<dt>enum Justification {
+<dd>SoText3::LEFT Left edges of all strings are aligned
+<dd>SoText3::RIGHT Right edges of all strings are aligned
+<dd>SoText3::CENTER Centers of all strings are aligned 
+<dt>}
+
+<dt>enum Part {
+<dd>SoText3::FRONT Front faces of characters
+<dd>SoText3::SIDES Extruded sides of characters
+<dd>SoText3::BACK Back faces of characters
+<dd>SoText3::ALL All parts
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="sofont.html">SoFont</a>, <a href="soprofile.html">SoProfile</a>, <a href="sotext2.html">SoText2</a>, <a href="sotextdetail.html">SoTextDetail</a>
+
+</body>
+</html>

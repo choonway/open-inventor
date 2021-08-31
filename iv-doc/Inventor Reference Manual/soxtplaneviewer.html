@@ -1,0 +1,60 @@
+<html>
+<body>
+SoXtPlaneViewer
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtPlaneViewer -- viewer component which moves the camera in a plane
+<dt>INHERITS FROM
+<dd><a href="soxtcomponent.html">SoXtComponent</a> &gt; <a href="soxtglwidget.html">SoXtGLWidget</a> &gt; <a href="soxtrenderarea.html">SoXtRenderArea</a> &gt; <a href="soxtviewer.html">SoXtViewer</a> &gt; <a href="soxtfullviewer.html">SoXtFullViewer</a> &gt; SoXtPlaneViewer
+
+<dt>DESCRIPTION
+<dd>The Plane viewer component allows the user to translate the camera in the viewing plane, as well as dolly (move foward/backward) and zoom in and out. The vieweralso allows the user to roll the camera (rotate around the forward direction) and seek to objects which will specify a new viewing plane. This viewer could be used formodeling, in drafting, and architectural work. The camera can be aligned to the X, Y or Z axes.
+
+<dt>METHODS
+<dl>
+<dt><b>SoXtPlaneViewer</b>(Widget parent = NULL, const char *name = NULL, SbBool buildInsideParent = TRUE,SoXtFullViewer::BuildFlag flag = BUILD_ALL, SoXtViewer::Type type = BROWSER)
+<dt>~<b>SoXtPlaneViewer</b>()
+<dd>Constructor and destructor which specifies the viewer type. Please refer tothe SoXtViewer man pages for a description of the viewer types.
+
+<dt><b>Methods from class SoXtFullViewer</b>:
+<dd>setDecoration, isDecoration, setPopupMenuEnabled, isPopupMenuEnabled,getAppPushButtonParent, addAppPushButton, insertAppPushButton, removeAppPushButton, findAppPushButton, lengthAppPushButton,getRenderAreaWidget
+
+<dt><b>Methods from class SoXtViewer</b>:
+<dd>setCamera, getCamera, setCameraType, getCameraType, viewAll,saveHomePosition, resetToHomePosition, setHeadlight, isHeadlight, getHeadlight, setDrawStyle, getDrawStyle, setBufferingType,getBufferingType, setViewing, isViewing, setAutoClipping, isAutoClipping, setStereoViewing, isStereoViewing, setStereoOffset, getStereoOffset,setDetailSeek, isDetailSeek, setSeekTime, getSeekTime, addStartCallback, addFinishCallback, re moveStartCallback, removeFinishCallback, copyView,pasteView
+
+<dt><b>Methods from class SoXtRenderArea</b>:
+<dd>setSceneGraph, getSceneGraph, setOverlaySceneGraph,getOverlaySceneGraph, registerDevice, unregisterDevice, setBackgroundColor, getBackgroundColor, setBackgroundIndex,getBackgroundIndex, setOverlayBackgroundIndex, getOverlayBackgroundIndex, setColorMap, setOverlayColorMap,setViewportRegion, getViewportRegion, setTransparencyType, getTransparencyType, setAntialiasing, getAntialiasing, setClearBeforeRender,isClearBeforeRender, setClearBe foreOverlayRender, isClearBeforeOverlayRender, setAutoRedraw, isAutoRedraw,setRedrawPriority, getRedrawPriority, getDefaultRedrawPriority, render, renderOverlay, scheduleRedraw, scheduleOverlayRedraw,redrawOnSelectionChange, redrawOverlayOnSelectionChange, setEventCallback, setGLRenderAction, getGLRenderAction,setOverlayGLRenderAction, getOverlayGLRenderAction, setSceneManager, getSceneManager, setOverlaySceneManager, getOverlaySceneManager
+
+<dt><b>Methods from class SoXtGLWidget</b>:
+<dd>setBorder, isBorder, setDoubleBuffer, isDoubleBuffer, getNormalWindow,getOverlayWindow, getNormalContext, getOverlayContext, getNormalWidget, getOverlayWidget, setNormalVisual, getNormalVisual,setOverlayVisual, getOverlayVisual
+
+<dt><b>Methods from class SoXtComponent</b>:
+<dd>show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle, getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/viewers/SoXtPlaneViewer.h&gt;
+
+<dt>RESOURCES
+
+<ul>
+<li>SoXtPlaneViewer.decoration: on (on | off)
+<li>SoXtPlaneViewer.seekAnimationTime: 2.0 (float)
+<li>SoXtPlaneViewer.seekTo: point (point | object)
+<li>SoXtPlaneViewer.seekDistanceUsage: percentage (percentage | absolute)
+<li>SoXtPlaneViewer.zoomMin: 1.0 (float)
+<li>SoXtPlaneViewer.zoomMax: 179.0 (float)
+<li>SoXtPlaneViewer.autoClipping: on (on | off)
+<li>SoXtPlaneViewer.nearDistance: 2.4 (float, when autoClipping is off)
+<li>SoXtPlaneViewer.farDistance: 2.8 (float, when autoClipping is off)
+<li>SoXtPlaneViewer
+<li>BackgroundColor: black (color name or hex value)
+</ul>
+
+<dt>USAGE
+<dd>Left Mouse: Translate up, down, left and right. Ctrl + Left Mouse: Used for roll action (rotates around the viewer forward direction). &lt;s&gt; + Left Mouse: Alternative to the Seek button. Press (but do not hold down) the&lt;s&gt; key, then click on a target object. Middle Mouse: Dolly in and out (gets closer to and further away from the object). Right Mouse: Open the popup menu.
+
+<dt>SEE ALSO
+<dd><a href="soxtfullviewer.html">SoXtFullViewer</a>, <a href="soxtviewer.html">SoXtViewer</a>, <a href="soxtcomponent.html">SoXtComponent</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>, <a href="soxtwalkviewer.html">SoXtWalkViewer</a>, <a href="soxtexaminerviewer.html">SoXtExaminerViewer</a>, <a href="soxtflyviewer.html">SoXtFlyViewer</a>
+</body>
+</html>

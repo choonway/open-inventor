@@ -1,0 +1,808 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Chapter 6. Creating an Engine</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"><meta name="generator" content="SGI XSL DocBook Customization Stylesheets V1.0"><link rel="home" href="index.html" title="The Inventor Toolmaker"><link rel="up" href="index.html" title="The Inventor Toolmaker"><link rel="previous" href="ch05.html" title="Chapter 5. Creating an Element"><link rel="next" href="ch07.html" title="Chapter 7. Creating a Node Kit"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. Creating an Engine</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch07.html">Next</a></td></tr></table><hr></div><!--CONTENT_BEGIN--><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="id5457419"></a>Chapter 6. <a name="id11499"></a>Creating <a name="id16140"></a>an Engine</h2></div></div>
+<p>This chapter describes how to create new subclasses of <a name="idch061"></a><span class="bold"><b>SoEngine</b></span>. New concepts introduced in this chapter include how notification of changes in field data propagates through the scene graph and how to block notification if desired. Be sure you are familiar with Chapter 13 in <a name="idch062"></a><i>The Inventor Mentor</i> before you continue in this chapter.</p>
+<p>The first part of this chapter offers an overview of the steps required to create a new engine. When necessary, additional sections explain key concepts in further detail and list the relevant macros. Chapter examples show how to create six engine classes:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>A simple engine called <span class="bold"><b>MultFloatVec3f</b></span></p>
+</li>
+<li><p>An engine with multiple inputs called <span class="bold"><b>SoComposeVec2f</b></span></p>
+</li>
+<li><p>An engine with multiple outputs called <span class="bold"><b>SoDecomposeVec2f</b></span></p>
+</li>
+<li><p>An engine that simulates fanning in of multiple connections called <span class="bold"><b>FanIn</b></span></p>
+</li>
+<li><p>An engine that controls propagation of its output value called <span class="bold"><b>Ticker</b></span></p>
+</li>
+<li><p>A field converter engine called <span class="bold"><b>ConvertSFShortToSFFloat</b></span></p>
+</li>
+</ul></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5457566"></a><a name="id33054"></a>Overview</h2></div></div>
+<p>As described in <a name="idch063"></a><i>The Inventor Mentor</i>, all engines have at least one input and one output. The inputs are derived from <span class="bold"><b>SoField</b></span> (either <span class="bold"><b>SoSF</b></span> or <span class="bold"><b>SoMF</b></span> fields). Outputs are of type <a name="idch064"></a><span class="bold"><b>SoEngineOutput</b></span>. In addition, each engine has an <span class="bold"><b>evaluate()</b></span> method, which uses the current input values and produces new output values. The file SoSubEngine.h contains the macros for defining new engine classes. The SO_ENGINE_HEADER() macro declares type identifier and naming variables and methods that all engine classes must support. The  macro defines the static variables and methods declared in the SO_ENGINE_HEADER() macro.  Other macros useful in creating new engine classes are mentioned in the following sections.<a name="idch065"></a><a name="idch066"></a><a name="idch067"></a><a name="idch068"></a></p>
+<p>Creating a new engine requires these steps:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new engine class and determine what class it is derived from.</p>
+</li>
+<li><p>Define and name each input and output of the engine (see <a href="ch06.html#id16461">&#8220;Defining Inputs and Outputs&#8221;</a>).</p>
+</li>
+<li><p>Define an <span class="bold"><b>initClass()</b></span> method to initialize the type information (see <a href="ch06.html#id31333">&#8220;Initializing the Engine Class&#8221;</a>).</p>
+</li>
+<li><p>Define a constructor (see <a href="ch06.html#id91522">&#8220;Defining the Constructor&#8221;</a>).</p>
+</li>
+<li><p>Define a destructor.</p>
+</li>
+<li><p>Implement an <span class="bold"><b>evaluate()</b></span> method for the engine class (see <a href="ch06.html#id24733">&#8220;Notification and Evaluation&#8221;</a>).</p>
+</li>
+<li><p>If necessary, implement an <span class="bold"><b>inputChanged()</b></span> method (see <a href="ch06.html#id27359">&#8220;Creating a Fan-in Engine&#8221;</a> and <a href="ch06.html#id22851">&#8220;Creating a Second-Ticker Engine&#8221;</a>).</p>
+</li>
+<li><p>Implement a <span class="bold"><b>copy()</b></span> method if the engine contains any nonfield instance data (see Chapter 2, &#8220;Creating a Node,&#8221; for more information on implementing a <span class="bold"><b>copy()</b></span> method).</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5457886"></a><a name="id16461"></a>Defining Inputs and Outputs</h2></div></div>
+<p>Declare the inputs and outputs for the engine in the header file. For example:<a name="idch069"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoSFTrigger on;
+SoSFTrigger off;
+SoSFTrigger toggle;
+SoEngineOutput isOn;  // (SoSFBool)
+SoEngineOutput isOff; // (SoSFBool)
+</pre></td></tr></table><p>Note that, by convention, each output is commented with the field type for that output. The output type isn't formally specified in the header file, though. It's set up in the constructor in the source file.</p>
+<p>Also be sure to include the files for the field classes used by the inputs of your new engine.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5457930"></a><a name="id31333"></a>Initializing the Engine Class</h2></div></div>
+<p>Implement an <a name="idch0610"></a><span class="bold"><b>initClass()</b></span> method, as described in Chapter 1, <a href="ch01.html#id37738">&#8220;Runtime Types&#8221;</a>. The <span class="bold"><b>initClass()</b></span> method sets up the type identifier and file format name information for the class. This method must be called before the engine can be used in an application. Use the SO_ENGINE_INIT_CLASS() macro within the <a name="idch0611"></a><span class="bold"><b>initClass()</b></span> method. For example:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+FanIn::initClass()
+{
+   SO_ENGINE_INIT_CLASS(FanIn, SoEngine, &quot;Engine&quot;);
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5458046"></a><a name="id91522"></a>Defining the Constructor</h2></div></div>
+<p>Implement the constructor for the class.  Begin with the macro SO_ENGINE_CONSTRUCTOR(). Then use the macros SO_ENGINE_ADD_INPUT() and SO_ENGINE_ADD_OUTPUT() to add the engine inputs and outputs and to set default values for the outputs.  Perform any other class-specific initialization, if needed. For example:<a name="idch0612"></a><a name="idch0613"></a><a name="idch0614"></a><a name="idch0615"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoOnOff::SoOnOff()
+   {
+      SO_ENGINE_CONSTRUCTOR(SoOnOff);
+      SO_ENGINE_ADD_INPUT(on, ());     // no default value for
+                                       // trigger fields
+      SO_ENGINE_ADD_INPUT(off, ());    // no default value
+      SO_ENGINE_ADD_INPUT(toggle, ()); // no default value
+      SO_ENGINE_ADD_OUTPUT(isOn, SoSFBool);
+      SO_ENGINE_ADD_OUTPUT(isOff, SoSFBool);
+      state = FALSE;             // engine is off by default
+   }
+</pre></td></tr></table><p>Notice that this is where the outputs are bound to a particular field type.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5458104"></a><a name="id98586"></a>Implementing an evaluate() Method</h2></div></div>
+<p>The <span class="bold"><b>evaluate()</b></span> method is responsible for taking the input values and producing output values. The input values are read using the standard field <span class="bold"><b>getValue()</b></span> routines. You can use the SO_ENGINE_OUTPUT() macro to set the values in the engine's outputs.<a name="idch0616"></a></p>
+<div class="note"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/note.png"></td><td align="left" valign="top"><b>Note: </b>SO_ENGINE_OUTPUT() is used for setting values in outputs. Do not perform any calculation inside this macro. Side effects are not allowed, because this macro loops through each connection. You can, however, call SO_ENGINE_OUTPUT() multiple times, once for each output, as shown in the <a name="idch0617"></a><span class="bold"><b>SoComposeVec2f</b></span> class (Examples 6-3 and 6-4).
+</td></tr></table><hr noshade="noshade"></div><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5458181"></a>Creating a Simple Engine</h2></div></div>
+<p>The following examples illustrate the basic steps outlined in <a name="idch0618"></a><a href="ch06.html#id33054">&#8220;Overview&#8221;</a>. Example 6-1 shows the header file for a simple engine, <span class="bold"><b>MultFloatVec3f</b></span>, which multiplies a float value (<span class="bold"><b>SoSFFloat</b></span>) by a vector value (<span class="bold"><b>SoSFVec3f</b></span>) and produces an output of type <span class="bold"><b>SoSFVec3f</b></span>. Example 6-2 shows the source file for this class.</p>
+<div class="tip"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/tip.png"></td><td align="left" valign="top"><b>Tip: </b>The <a name="idch0619"></a><span class="bold"><b>SoCalculator</b></span> engine provides a built-in way of doing this type of simple arithmetic.
+</td></tr></table><hr noshade="noshade"></div><br><div class="example"><p><a name="id5458251"></a><b>Example 6-1. MultFloatVec3f.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/engines/SoSubEngine.h&gt;
+#include &lt;Inventor/fields/SoSFFloat.h&gt;
+#include &lt;Inventor/fields/SoSFVec3f.h&gt;
+
+class MultFloatVec3f : public SoEngine {
+
+   SO_ENGINE_HEADER(MultFloatVec3f);
+
+ public:
+
+   // Input fields: a scalar (float) and a vector
+   SoSFFloat       scalar;
+   SoSFVec3f       vector;
+
+   // The output is a vector
+   SoEngineOutput  product;  // (SoSFVec3f) product
+
+   // Initializes this class for use in scene graphs. This
+   // should be called after database initialization and before
+   // any instance of this engine is constructed.
+   static void initClass();
+
+   // Constructor
+   MultFloatVec3f();
+
+ private:
+   // Destructor. Since engines are never deleted explicitly,
+   // this can be private.
+   virtual ~MultFloatVec3f();
+
+   // Evaluation method
+   virtual void evaluate();
+};
+</pre></td></tr></table><br><div class="example"><p><a name="id5458303"></a><b>Example 6-2. MultFloatVec3f.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &quot;MultFloatVec3f.h&quot;
+
+SO_ENGINE_SOURCE(MultFloatVec3f);
+
+// Initializes the MultFloatVec3f class. This is a one-time
+// thing that is done after database initialization and before
+// any instance of this class is constructed.
+
+void
+MultFloatVec3f::initClass()
+{
+   // Initialize type id variables. The arguments to the macro
+   // are: the name of the engine class, the class this is
+   // derived from, and the name registered with the type
+   // of the parent class.
+   SO_ENGINE_INIT_CLASS(MultFloatVec3f, SoEngine, &quot;Engine&quot;);
+}
+
+// Constructor
+
+MultFloatVec3f::MultFloatVec3f()
+{
+   // Do standard constructor stuff
+   SO_ENGINE_CONSTRUCTOR(MultFloatVec3f);
+
+   // Define input fields and their default values
+   SO_ENGINE_ADD_INPUT(scalar,  (0.0));
+   SO_ENGINE_ADD_INPUT(vector,  (0.0, 0.0, 0.0));
+
+   // Define the output, specifying its type
+   SO_ENGINE_ADD_OUTPUT(product, SoSFVec3f);
+}
+
+// Destructor. Does nothing.
+
+MultFloatVec3f::~MultFloatVec3f()
+{
+}
+
+// This is the evaluation routine.
+
+void
+MultFloatVec3f::evaluate()
+{
+   // Compute the product of the input fields
+   SbVec3f  prod = scalar.getValue() * vector.getValue();
+
+   // &quot;Send&quot; the value to the output. In effect, we are setting
+   // the value in all fields to which this output is connected.
+   SO_ENGINE_OUTPUT(product, SoSFVec3f, setValue(prod));
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5458393"></a>Dealing with Multiple-Value Fields</h2></div></div>
+<p>This second engine has a slightly more complex <span class="bold"><b>evaluate()</b></span> method. Before creating the output, it determines the longest input field, and replicates the last value in short fields that need to be filled out to match the number of values in the longest field. The SO_ENGINE_OUTPUT() macro is used to set the number of values in the fields connected from the output, as well as to set the values.</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5458415"></a>Creating an Engine with Multiple Inputs</h3></div></div>
+<p>Examples 6-3 and 6-4 show the header and source files for <a name="idch0620"></a><span class="bold"><b>SoComposeVec2f</b></span>. This engine has two inputs, <span class="bold"><b>x</b></span> and <span class="bold"><b>y</b></span>, of type <span class="bold"><b>SoMFFloat</b></span>, and one output, an <span class="bold"><b>SoEngineOutput</b></span> of type <span class="bold"><b>SoMFVec2f</b></span>.<a name="idch0621"></a></p>
+<p>This engine illustrates a general policy for handling multiple-value inputs that is followed by all arithmetic engines in Inventor. This policy is useful for engines that process multiple-value inputs as &#8220;parallel&#8221; independent data sets, but it is not required. Because the <a name="idch0622"></a><a name="idch0623"></a><a name="idch0624"></a><span class="bold"><b>x</b></span> and <span class="bold"><b>y</b></span> inputs of the <span class="bold"><b>SoComposeVec2f</b></span> engine are multiple-value fields, they can each contain any number of values. <a href="ch06.html#id26667">Figure 6-1</a> illustrates a case where the last value of  <span class="bold"><b>y</b></span> is replicated to fill out the field with values to match up with the number of values provided in <span class="bold"><b>x </b></span>.  </p>
+<p><div class="figure"><p><a name="id5458605"></a><b>Figure 6-1. <a name="id26667"></a>Replicating Values in Fields with Fewer Values</b></p>
+<div class="mediaobject"><img src="figures/fig6.1ReplicatingValuesnew.gif"></div></div><br>
+</p>
+<p>Note that the constructor sets the default value for both input fields to 0.0.</p>
+<div class="example"><p><a name="id5458632"></a><b>Example 6-3. <a name="idch0625"></a><a name="idch0626"></a>SoComposeVec2f.h </b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/engines/SoSubEngine.h&gt;
+#include &lt;Inventor/fields/SoMFFloat.h&gt;
+#include &lt;Inventor/fields/SoMFVec2f.h&gt;
+
+class SoComposeVec2f : public SoEngine {
+
+   SO_ENGINE_HEADER(SoComposeVec2f);
+
+ public:
+
+   // Inputs:
+   SoMFFloat       x;
+   SoMFFloat       y;
+
+   // Output:
+   SoEngineOutput  vector;  // (SoMFVec2f)
+
+   // Initialization
+   static void initClass();
+
+   // Constructor
+   SoComposeVec2f();
+
+ private:
+   // Destructor
+   virtual ~SoComposeVec2f();
+
+   // Evaluation method
+   virtual void evaluate();
+};
+</pre></td></tr></table><br><div class="example"><p><a name="id5458700"></a><b>Example 6-4. SoComposeVec2f.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &quot;SoComposeVec2f.h&quot;
+
+SO_ENGINE_SOURCE(SoComposeVec2f);
+
+// Initializes the SoComposeVec2f class.
+
+void
+SoComposeVec2f::initClass()
+{
+   SO_ENGINE_INIT_CLASS(SoComposeVec2f, SoEngine, &quot;Engine&quot;);
+}
+
+// Constructor
+
+SoComposeVec2f::SoComposeVec2f()
+{
+   // Do standard constructor tasks
+   SO_ENGINE_CONSTRUCTOR(SoComposeVec2f);
+
+   // Define input fields and their default values
+   SO_ENGINE_ADD_INPUT(x,  (0.0));
+   SO_ENGINE_ADD_INPUT(y,  (0.0));
+
+   // Define the output, specifying its type
+   SO_ENGINE_ADD_OUTPUT(vector, SoMFVec2f);
+}
+
+// Destructor. Does nothing.
+SoComposeVec2f::~SoComposeVec2f()
+{
+}
+
+// This is the evaluation routine.
+void
+SoComposeVec2f::evaluate()
+{
+   // Figure out how many input values we have
+   int numX = x.getNum();
+   int numY = y.getNum();
+
+   // We will output as many values as there are in the input
+   // with the greater number of values
+   int numToOutput = (numX &gt; numY ? numX : numY);
+
+   // Make sure that all of the fields connected from the output
+   // have enough room for the results. The SoMField::setNum()
+   // method does this.
+   SO_ENGINE_OUTPUT(vector, SoMFVec2f, setNum(numToOutput));
+
+   // Now output the vectors composed from the input values
+   float xValue, yValue;
+   int   i;
+   for (i = 0; i &lt; numToOutput; i++) {
+
+     // If there are different numbers of values in the input
+     // fields, repeat the last value as necessary.
+     xValue = (i &lt; numX ? x[i] : x[numX - 1]);
+     yValue = (i &lt; numY ? y[i] : y[numY - 1]);
+
+     // Set the vector value in the indexed slot in all
+     // connected fields
+     SO_ENGINE_OUTPUT(vector, SoMFVec2f,
+                     set1Value(i, xValue, yValue));
+   }
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5458792"></a>Creating an Engine with Multiple Outputs</h3></div></div>
+<p>This engine class shows creating an engine with more than one output. Examples 6-5 and 6-6 illustrate an engine that decomposes a vector into its individual float values. The <a name="idch0627"></a><span class="bold"><b>evaluate()</b></span> method uses the <a name="idch0628"></a><span class="bold"><b>getNum()</b></span> method to determine how many input values there are.  Then it uses the <span class="bold"><b>SoMField::setNum()<a name="idch0629"></a></b></span> method to ensure that the fields connected from this engine have enough room for the results, as in the previous example.<a name="idch0630"></a></p>
+<div class="example"><p><a name="id5458844"></a><b>Example 6-5. <a name="idch0631"></a>SoDecomposeVec2f.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/engines/SoSubEngine.h&gt;
+#include &lt;Inventor/fields/SoMFFloat.h&gt;
+#include &lt;Inventor/fields/SoMFVec2f.h&gt;
+
+class SoDecomposeVec2f : public SoEngine {
+
+   SO_ENGINE_HEADER(SoDecomposeVec2f);
+
+ public:
+
+   // Input:
+   SoMFVec2f       vector;
+
+   // Outputs:
+   SoEngineOutput  x;       // (SoMFFloat)
+   SoEngineOutput  y;       // (SoMFFloat)
+
+   // Initialization
+   static void initClass();
+
+   // Constructor
+   SoDecomposeVec2f();
+
+ private:
+   // Destructor
+   virtual ~SoDecomposeVec2f();
+
+   // Evaluation method
+   virtual void evaluate();
+};
+</pre></td></tr></table><br><div class="example"><p><a name="id5458890"></a><b>Example 6-6. SoDecomposeVec2f.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &quot;SoDecomposeVec2f.h&quot;
+
+SO_ENGINE_SOURCE(SoDecomposeVec2f);
+
+// Initializes the SoDecomposeVec2f class.
+
+void
+SoDecomposeVec2f::initClass()
+{
+   SO_ENGINE_INIT_CLASS(SoDecomposeVec2f, SoEngine, &quot;Engine&quot;);
+}
+
+// Constructor
+
+SoDecomposeVec2f::SoDecomposeVec2f()
+{
+   // Do standard constructor tasks
+   SO_ENGINE_CONSTRUCTOR(SoDecomposeVec2f);
+
+   // Define input field and its default value
+   SO_ENGINE_ADD_INPUT(vector,  (0.0, 0.0));
+
+   // Define the outputs, specifying their types
+   SO_ENGINE_ADD_OUTPUT(x, SoMFFloat);
+   SO_ENGINE_ADD_OUTPUT(y, SoMFFloat);
+}
+
+// Destructor. Does nothing.
+
+SoDecomposeVec2f::~SoDecomposeVec2f()
+{
+}
+
+// This is the evaluation routine.
+
+void
+SoDecomposeVec2f::evaluate()
+{
+   // Figure out how many input values we have
+   int numToOutput = vector.getNum();
+
+   // Make sure that all of the fields connected from the
+   // outputs have enough room for the results. The
+   // SoMField::setNum() method does this.
+   SO_ENGINE_OUTPUT(x, SoMFFloat, setNum(numToOutput));
+   SO_ENGINE_OUTPUT(y, SoMFFloat, setNum(numToOutput));
+
+   // Now output the values extracted from the input vectors
+   for (int i = 0; i &lt; numToOutput; i++) {
+     SO_ENGINE_OUTPUT(x, SoMFFloat, set1Value(i, vector[i][0]));
+     SO_ENGINE_OUTPUT(y, SoMFFloat, set1Value(i, vector[i][1]));
+   }
+}
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5458963"></a><a name="id24733"></a>Notification and Evaluation</h2></div></div>
+<p>If you are creating new engine classes, you may need to understand the following details on how changed values are propagated through an Inventor scene graph and engine network. Because evaluation can be slow, Inventor uses &#8220;lazy&#8221; evaluation for data in its engine network. Engines are evaluated only when their values are needed, and they are not reevaluated unnecessarily. For some engines, you might want to know whether a certain input has changed, and then take some action based on that knowledge. In such cases, you write an <a name="idch0632"></a><a name="idch0633"></a><span class="bold"><b>inputChanged()<a name="idch0634"></a></b></span> method for the engine. This section provides important background information on how and when an engine calls its <span class="bold"><b>inputChanged()</b></span> and<span class="bold"><b> evaluate()<a name="idch0635"></a></b></span> methods. It also includes several examples of engines that implement an <span class="bold"><b>inputChanged()</b></span> method. </p>
+<p>Whenever a change is made to a field, notification propagates through the scene graph that the values dependent on this new value must be reevaluated. However, the evaluation does not occur until the value is requested through a call to <a name="idch0636"></a><a name="idch0637"></a><span class="bold"><b>getValue()</b></span> (or <span class="bold"><b>getNum()</b></span>, [ ], or <span class="bold"><b>getValues()</b></span>). In other words, notification of a changed value is <i>pushed</i> through the scene graph. Any values needing reevaluation are marked as needing evaluation. Since no evaluation is performed at this time, notification is an efficient process.</p>
+<p>Evaluation, by contrast, can be a slow process, depending on the nature of the engines.  For this reason, evaluation is <i>pulled</i> through the scene graph on demand. Whenever a <span class="bold"><b>getValue()</b></span> is called, if the field is connected to other fields or engines, those connections are traced, and fields marked as needing evaluation are evaluated before the new value is sent to its destination.</p>
+<p>For example, consider the scene graph and engine network shown in <a href="ch06.html#id22305">Figure 6-2</a>.  </p>
+<p><div class="figure"><p><a name="id5459184"></a><b>Figure 6-2. <a name="id22305"></a><a name="idch0638"></a>A Simple Engine Network</b></p>
+<div class="mediaobject"><img src="figures/fig6.2Enginenew.gif"></div></div><br>
+</p>
+<p>This scene graph contains four nodes: A, B, C, and D. Nodes B, C, and D contain fields that are connected to engines. For simplicity, assume that Nodes B, C, and D contain only one field, and Engines 1 and 2 have one input and one output each. Engine 1 adds 1 to its input and copies the result to its output. Engine 2 adds 2 to its input and copies the result to its output. The engines are connected to the nodes as shown in the diagram. If you change the value of the field in Node B from 1 to 3, the following things occur:</p>
+<div class="orderedlist"><ol type="1"><li><p>Node B notifies A that its field has changed. If the scene graph is contained within a render area, A, in turn, notifies the redraw sensor.<a name="idch0639"></a></p>
+</li>
+<li><p>Node B notifies Engine 1 that its field needs to be evaluated. Then Engine 1's <a name="idch0640"></a><span class="bold"><b>inputChanged()</b></span> method is called. </p>
+</li>
+<li><p>Engine 1 notifies the field in Node C, which is marked as needing evaluation. C notifies A, which notifies the redraw sensor.</p>
+</li>
+<li><p>Engine 2's field is marked as needing evaluation, then its <span class="bold"><b>inputChanged()</b></span> method is called.</p>
+</li>
+<li><p>Engine 2 notifies Node D, which is marked as needing evaluation. <br>
+D notifies A, which notifies the redraw sensor.</p>
+</li>
+</ol></div><p>Steps 1 through 5 illustrate the <i>push</i> model of notification.</p>
+<p>At this point, the value in Node B has changed to 3, but the value of the field in Node C is still 2, and the value of the field in Node D is still 4. When a <span class="bold"><b>getValue()</b></span> is called on the field in Node D, the fields and engines that have been marked as needing evaluation are evaluated, and the new values propagate through the scene graph. At this point, the value of the field in Node C becomes 4, and the value of the field in Node D becomes 6.</p>
+<p>If a <span class="bold"><b>getValue()</b></span> is called on the field in Node C instead of Node D, however, Node D remains out of date, because its value was not needed. </p>
+<p>An output, like a field connection, can be enabled and disabled. If an output is disabled, notification is not propagated through it, and none of the fields connected to it are marked as needing evaluation.<a name="idch0641"></a></p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5459367"></a>What Inventor Does behind the Scenes</h3></div></div>
+<p><a name="idch0642"></a><a href="ch06.html#id44156">Table 6-1</a> summarizes the process of notification and evaluation. Column 3 of the table provides some additional information about what Inventor does behind the scenes. Whenever <span class="bold"><b>setValue()</b></span> or anything that changes a field is called by the application, Inventor automatically calls the engine's<span class="bold"><b> inputChanged()</b></span> method.  Similarly, whenever <span class="bold"><b>getValue()</b></span> or any accessor of a field is called by the application, Inventor calls the engine's <span class="bold"><b>evaluate()</b></span> method. </p>
+<p>Note that the only time an engine knows when its input has changed is when Inventor calls its <span class="bold"><b>inputChanged()</b></span> method.  This notification is guaranteed to happen every time a <span class="bold"><b>setValue()</b></span> occurs on one of the engine's inputs. Also, note that <span class="bold"><b>inputChanged()</b></span> is always called before <span class="bold"><b>evaluate()</b></span>.  In fact, <span class="bold"><b>inputChanged()</b></span> could be called several times before <span class="bold"><b>evaluate()</b></span> is called (if several <span class="bold"><b>setValue()</b></span> calls occur before a <span class="bold"><b>getValue()</b></span> call occurs).<a name="id79706"></a></p>
+<div class="table"><p><a name="id5459540"></a><b>Table 6-1. <a name="id44156"></a>Sequence for Notification and Evaluation</b></p>
+<table summary="Sequence for Notification and Evaluation" border="1"><colgroup><col><col><col></colgroup><thead><tr valign="top"><th valign="top"><p>Program Calls</p>
+</th><th valign="top"><p>Effect</p>
+</th><th valign="top"><p>Inventor Calls</p>
+</th></tr></thead><tbody><tr valign="top"><td valign="top"><p>setValue()<a name="idch0643"></a></p>
+</td><td valign="top"><p>Notification of the change 
+is propagated through the 
+scene graph</p>
+</td><td valign="top"><p>inputChanged()<a name="idch0644"></a></p>
+</td></tr><tr valign="top"><td valign="top"><p>getValue()<a name="idch0645"></a></p>
+</td><td valign="top"><p>Updated values are pulled 
+through the scene graph 
+as each evaluate() method 
+produces new output 
+values</p>
+</td><td valign="top"><p>evaluate()<a name="idch0646"></a></p>
+</td></tr></tbody></table></div><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5459674"></a>Blocking Notification</h3></div></div>
+<p>An engine can implement the <a name="idch0647"></a><span class="bold"><b>inputChanged()</b></span> method so that it blocks notification under certain conditions.  An<span class="bold"><b> SoGate<a name="idch0648"></a></b></span> engine provides an example of blocking notification.  When its <span class="bold"><b>enable</b></span> field is set to FALSE (the default), notification of the <span class="bold"><b>setValue()</b></span> calls does not propagate through it to the rest of the scene graph. However, if the <span class="bold"><b>trigger</b></span> field is touched, the following occurs:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>Inventor automatically calls <a name="idch0649"></a><span class="bold"><b>inputChanged()</b></span>.  The <span class="bold"><b>inputChanged()</b></span> method for the gate engines sets the <a name="idch0650"></a><span class="bold"><b>enable</b></span> field to TRUE.</p>
+</li>
+</ul></div><p>When <a name="idch0651"></a><span class="bold"><b>getValue()</b></span> is called on a gate engine's output, the following occurs:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>Inventor automatically calls <a name="idch0652"></a><span class="bold"><b>evaluate()</b></span> on the gate engine. The gate engines' <span class="bold"><b>evaluate()</b></span> method outputs one value and sets the <span class="bold"><b>enable</b></span> field to FALSE.</p>
+</li>
+</ul></div><p>Here is the code for the gate engines' <a name="idch0653"></a><span class="bold"><b>inputChanged()</b></span> and <span class="bold"><b>evaluate()</b></span> methods:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+SoGate::inputChanged(SoField *whichInput)
+{
+   if (whichInput == &amp;enable) 
+      output.enable(enable.getValue());
+   else if (whichInput == &amp;trigger)
+      output.enable(TRUE);
+}
+
+void 
+SoGate::evaluate()
+{
+   trigger.getValue(); // Clears notification
+   SO_ENGINE_OUTPUT(output, type, 
+                    setValues(0, input.getNum(),
+                    input.getValues(0)));
+   // Get rid of any extra values in output
+   SO_ENGINE_OUTPUT(output, type, setNum(input.getNum()));
+   output.enable(enable.getValue());
+}
+</pre></td></tr></table><br><div class="note"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/note.png"></td><td align="left" valign="top"><b>Note: </b>Do not call <span class="bold"><b>setValue()</b></span> within an <span class="bold"><b>inputChanged()</b></span> method. You can call <span class="bold"><b>getValue()</b></span> within <span class="bold"><b>inputChanged()</b></span>, but be aware that doing this could slow down notification because <span class="bold"><b>getValue()</b></span> causes Inventor to pause and pull new values through the scene graph.
+</td></tr></table><hr noshade="noshade"></div><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5459972"></a><a name="id27359"></a>Creating a  Fan-in Engine</h3></div></div>
+<p>The following engine provides a simple example of how an<a name="idch0654"></a><span class="bold"><b> inputChanged() <a name="idch0655"></a></b></span>method is used to take different actions based on which input was touched. This engine accepts up to four inputs and produces one output (simulating fan-in of connections, which is not allowed directly).  It simply copies the most recently touched input to the output. Example 6-7 shows the header file for the fan-in engine. Example 6-8 shows the source file for this class. <a name="idch0656"></a></p>
+<div class="example"><p><a name="id5460042"></a><b>Example 6-7. <a name="idch0657"></a>FanIn.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/engines/SoSubEngine.h&gt;
+#include &lt;Inventor/fields/SoSFFloat.h&gt;
+
+// This engine class takes up to four inputs (input0 through
+// input3) and outputs the most recently changed one to the
+// output.
+
+class FanIn : public SoEngine {
+
+ public:
+
+   SO_ENGINE_HEADER(FanIn);
+
+   // Inputs:
+   SoSFFloat       input0;
+   SoSFFloat       input1;
+   SoSFFloat       input2;
+   SoSFFloat       input3;
+
+   // Output:
+   SoEngineOutput  output;  // (SoSFFloat)
+
+   // Initialization
+   static void initClass();
+
+   // Constructor
+   FanIn();
+
+ private:
+   // This saves a pointer to the field that changed most
+   // recently
+   SoSFFloat       *lastChangedField;
+
+   // Destructor
+   virtual ~FanIn();
+
+   // This is called when an input value changes - we will use
+   // it to figure out which input was changed most recently
+   virtual void inputChanged(SoField *whichField);
+
+   // Evaluation method
+   virtual void evaluate();
+};
+</pre></td></tr></table><br><div class="example"><p><a name="id5460118"></a><b>Example 6-8. FanIn.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &quot;FanIn.h&quot;
+
+SO_ENGINE_SOURCE(FanIn);
+
+// Initializes the FanIn class.
+
+void
+FanIn::initClass()
+{
+   SO_ENGINE_INIT_CLASS(FanIn, SoEngine, &quot;Engine&quot;);
+}
+
+// Constructor
+
+FanIn::FanIn()
+{
+   // Do standard constructor stuff
+   SO_ENGINE_CONSTRUCTOR(FanIn);
+
+   // Define input fields and their default values
+   SO_ENGINE_ADD_INPUT(input0,  (0.0));
+   SO_ENGINE_ADD_INPUT(input1,  (0.0));
+   SO_ENGINE_ADD_INPUT(input2,  (0.0));
+   SO_ENGINE_ADD_INPUT(input3,  (0.0));
+
+   // Define the output, specifying its type
+   SO_ENGINE_ADD_OUTPUT(output, SoSFFloat);
+
+   // Initialize the pointer that indicates which field changed
+   // most recently
+   lastChangedField = NULL;
+}
+
+// Destructor. Does nothing.
+
+FanIn::~FanIn()
+{
+}
+
+// This is called when one of our input fields changes. We will
+// use it to determine which input value to output.
+
+void
+FanIn::inputChanged(SoField *whichField)
+{
+   // Save a pointer to the field that changed; cast it to an
+   // SoSFFloat, since that's the only input field type we have
+   lastChangedField = (SoSFFloat *) whichField;
+}
+
+// This is the evaluation routine.
+
+void
+FanIn::evaluate()
+{
+   // If evaluate() is called, we must have been notified at
+   // some point of a change (including a new connection), so
+   // our lastChangedField should never be NULL here. Check it
+   // anyway, just for completeness
+   if (lastChangedField == NULL) {
+     fprintf(stderr, &quot;Uh-oh, there's a NULL lastChangedField&quot;
+             &quot;in FanIn::evaluate()!\n&quot;);
+     return;
+   }
+
+   // Output the value from the last changed field
+   float   value = lastChangedField-&gt;getValue();
+   SO_ENGINE_OUTPUT(output, SoSFFloat, setValue(value));
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5460193"></a><a name="id22851"></a>Creating a Second-Ticker Engine</h3></div></div>
+<p>As we saw with the gate engines, it's often convenient to enable and disable outputs in an <a name="idch0658"></a><a name="idch0659"></a><span class="bold"><b>inputChanged()</b></span> method in order to control propagation of notification. The following engine illustrates how disabling outputs can be useful. This engine has one input, <span class="bold"><b>timeIn</b></span>, and one output, <span class="bold"><b>timeOut</b></span>.  It outputs the time once a second and blocks notification in between &#8220;ticks.&#8221; This engine could be used if you want to render a scene only once a second. Because the <a name="idch0660"></a><a name="idch0661"></a><span class="bold"><b>realTime</b></span> global field changes 60 times per second, you could use this engine to block notification in between. Example 6-9 shows the header file for the Ticker engine. Example 6-10 shows the source file for this class.</p>
+<div class="note"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/note.png"></td><td align="left" valign="top"><b>Note: </b>Be careful when disabling outputs.  If all outputs are disabled, <span class="bold"><b>evaluate()</b></span> is never called. 
+</td></tr></table><hr noshade="noshade"></div><br><div class="example"><p><a name="id5460319"></a><b>Example 6-9. <a name="idch0662"></a><a name="idch0663"></a>Ticker.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/engines/SoSubEngine.h&gt;
+#include &lt;Inventor/fields/SoSFTime.h&gt;
+
+class Ticker : public SoEngine {
+
+ public:
+
+   SO_ENGINE_HEADER(Ticker);
+
+   // Input:
+   SoSFTime        timeIn;
+
+   // Output:
+   SoEngineOutput  timeOut;  // (SoSFTime)
+
+   // Initialization
+   static void initClass();
+
+   // Constructor
+   Ticker();
+
+ private:
+   // This saves the number of seconds of the last time this
+   // engine was notified of a change
+   double          lastSeconds;
+
+   // Destructor
+   virtual ~Ticker();
+
+   // This is called when our input value changes - we will use
+   // it to see if we need to output a new time value.
+   virtual void inputChanged(SoField *whichField);
+
+   // Evaluation method
+   virtual void evaluate();
+};
+</pre></td></tr></table><br><div class="example"><p><a name="id5460371"></a><b>Example 6-10. Ticker.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SoDB.h&gt;
+#include &quot;Ticker.h&quot;
+
+SO_ENGINE_SOURCE(Ticker);
+
+// Initializes the Ticker class.
+
+void
+Ticker::initClass()
+{
+   SO_ENGINE_INIT_CLASS(Ticker, SoEngine, &quot;Engine&quot;);
+}
+
+// Constructor
+
+Ticker::Ticker()
+{
+   // Do standard constructor stuff
+   SO_ENGINE_CONSTRUCTOR(Ticker);
+
+   // Define input field and its default value
+   SO_ENGINE_ADD_INPUT(timeIn,  (SbTime::zero()));
+
+   // Define the output, specifying its type
+   SO_ENGINE_ADD_OUTPUT(timeOut, SoSFTime);
+
+   // Initialize the variable that stores the number of seconds
+   // of the last time the input changed
+   lastSeconds = -1.0;
+
+   // Connect to the global &quot;realTime&quot; field by default. This
+   // way, users do not have to make this connection explicitly,
+   // and can change it if they want.
+   timeIn.connectFrom(SoDB::getGlobalField(&quot;realTime&quot;));
+}
+
+// Destructor. Does nothing.
+
+Ticker::~Ticker()
+{
+}
+
+// This is called when one of our input fields changes. We will
+// use it to determine whether to produce any output. Since we
+// have only 1 input field, we don't have to see which field
+// changed.
+
+void
+Ticker::inputChanged(SoField *)
+{
+
+   // Get the current input time and get rid of any fractional
+   // part, using the math library's floor() function
+   SbTime   currentTime = timeIn.getValue();
+   double   currentSeconds = floor(currentTime.getValue());
+
+   // If the new number of seconds is different from the last
+   // one we stored, enable the output. The next time this
+   // engine is evaluated, the time will be output.
+   if (currentSeconds != lastSeconds)
+     timeOut.enable(TRUE);
+
+   // Otherwise, make sure the output is disabled, since we
+   // don't want to output any values until we cross the next
+   // second barrier.
+   else
+     timeOut.enable(FALSE);
+}
+
+// This is the evaluation routine.
+
+void
+Ticker::evaluate()
+{
+   // Output the current number of seconds
+   SbTime   currentTime(lastSeconds);
+   SO_ENGINE_OUTPUT(timeOut, SoSFTime, setValue(currentTime));
+}
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5460500"></a>Creating a New Field Converter</h2></div></div>
+<p>Whenever a connection is made between fields, inputs, or outputs and the types aren't the same, Inventor tries to insert an engine to convert from the source type to the destination type. Inventor maintains a table that lists the class of engine that converts between a given pair of types.<a name="idch0664"></a><a name="idch0665"></a></p>
+<p>You can define new converters and add them to the table, either to support additional conversions between built-in field types, or to support conversions to or from new fields you have created (see Chapter 3). For convenience, a single class of engine can support several different types of conversions (for example, a single engine may be able to convert from a rational number field to a float, a short, or a long). When Inventor creates an instance of the field converter, it tells it the source and destination field types.</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5460585"></a>Overview</h3></div></div>
+<p>Creating a field converter is similar to creating other types of engines, with a few additional steps. The following checklist summarizes things you need to do when you create a new field converter.</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new field converter class and determine what class it is derived from.</p>
+</li>
+<li><p>Define and name each input and output for the engine, as for a standard engine.</p>
+</li>
+<li><p>Define the constructor, destructor, and <span class="bold"><b>evaluate()</b></span> method, as for a standard engine.</p>
+</li>
+<li><p>Declare two required virtual methods:</p>
+<p>virtual SoField *<span class="bold"><b>getInput</b></span>(SoType <i>type</i>);</p>
+<p>virtual SoEngineOutput *<span class="bold"><b>getOutput</b></span>(SoType <i>type</i>);</p>
+<p>These methods are called by Inventor to obtain the input and output it will connect to and from for a particular conversion.</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5460676"></a>Initializing the Field Converter Class</h3></div></div>
+<p>Implement the <a name="idch0666"></a><span class="bold"><b>initClass()<a name="idch0667"></a></b></span> method. For each conversion that the engine supports, after the SO_ENGINE_INIT_CLASS() macro, call<a name="idch0668"></a><a name="idch0669"></a></p>
+<p>SoDB::addConverter(typeIdOfSourceField, typeIdOfDestinationField,<br>
+YourEngine::getClassTypeId());</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5460717"></a>The evaluate() Method</h3></div></div>
+<p>If the converter has multiple inputs or outputs, its <a name="idch0670"></a><span class="bold"><b>evaluate(</b></span>) method can check <span class="bold"><b>input.isConnected()</b></span> and <span class="bold"><b>output.getNumConnections()</b></span> to find out which conversion needs to be done. Or, the <span class="bold"><b>getInput()</b></span> and <span class="bold"><b>getOutput()</b></span> methods can save their parameters in instance variables and the <span class="bold"><b>evaluate()</b></span> method can check them.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5460795"></a>The getInput() and getOutput() Methods</h3></div></div>
+<p>The <a name="idch0671"></a><span class="bold"><b>getInput()</b></span> and <a name="idch0672"></a><span class="bold"><b>getOutput()</b></span> methods check the passed type and return the appropriate input or output. It is guaranteed that Inventor will never call these methods except for pairs of types registered with <span class="bold"><b>SoDB::addConverter()<a name="idch0673"></a></b></span>.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5460869"></a>Sample Field Converter</h3></div></div>
+<p><a name="idch0674"></a><a href="ch06.html#id58036">Example 6-11</a> shows the header file for a new field converter, <span class="bold"><b>ConvertSFShortToSFFloat</b></span>.  <a href="ch06.html#id62928">Example 6-12</a> shows the source code for this class.</p>
+<div class="example"><p><a name="id5460906"></a><b>Example 6-11. <a name="id58036"></a><a name="idch0675"></a>ConvertSFShortToSFFloat.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/engines/SoFieldConverter.h&gt;
+#include &lt;Inventor/fields/SoSFShort.h&gt;
+#include &lt;Inventor/fields/SoSFFloat.h&gt;
+
+class ConvertSFShortToSFFloat : public SoFieldConverter {
+
+ public:
+
+   SO_ENGINE_HEADER(ConvertSFShortToSFFloat);
+
+   // Input:
+   SoSFShort        input;
+
+   // Output:
+   SoEngineOutput   output;  // (SoSFFloat)
+
+   // Initialization
+   static void initClass();
+
+   // Constructor
+   ConvertSFShortToSFFloat();
+
+ private:
+   // Destructor
+   virtual ~ConvertSFShortToSFFloat();
+
+   // Evaluation method
+   virtual void evaluate();
+
+   // These must be defined for a field converter. They return
+   // the input and output connections of the given types. In
+   // our case, we have only one input and one output, so we
+   // know that those will be the given types.
+   virtual SoField *        getInput(SoType type);
+   virtual SoEngineOutput * getOutput(SoType type);
+};
+</pre></td></tr></table><br><div class="example"><p><a name="id5460990"></a><b>Example 6-12. <a name="id62928"></a>ConvertSFShortToSFFloat.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SoDB.h&gt;
+#include &quot;ConvertSFShortToSFFloat.h&quot;
+
+SO_ENGINE_SOURCE(ConvertSFShortToSFFloat);
+
+// Initializes the ConvertSFShortToSFFloat class.
+
+void
+ConvertSFShortToSFFloat::initClass()
+{
+   SO_ENGINE_INIT_CLASS(ConvertSFShortToSFFloat,
+                        SoFieldConverter, &quot;FieldConverter&quot;);
+
+   // Register this converter's type with the Inventor database
+   // to convert from a field (or engine output) of type
+   // SoSFShort to a field of type SoSFFloat.
+   // We only call this once, since this engine offers only one
+   // type conversion.
+   SoDB::addConverter(SoSFShort::getClassTypeId(),
+                      SoSFFloat::getClassTypeId(),
+                      getClassTypeId());
+}
+
+// Constructor
+
+ConvertSFShortToSFFloat::ConvertSFShortToSFFloat()
+{
+   // Do standard constructor tasks
+   SO_ENGINE_CONSTRUCTOR(ConvertSFShortToSFFloat);
+
+   // Define input field and its default value
+   SO_ENGINE_ADD_INPUT(input,  (0));
+
+   // Define the output, specifying its type
+   SO_ENGINE_ADD_OUTPUT(output, SoSFFloat);
+}
+
+// Destructor. Does nothing.
+
+ConvertSFShortToSFFloat::~ConvertSFShortToSFFloat()
+{
+}
+
+// This is the evaluation routine.
+
+void
+ConvertSFShortToSFFloat::evaluate()
+{
+   // Get the input value as a short, convert it to a float, and
+   // output it
+   float    value = (float) input.getValue();
+   SO_ENGINE_OUTPUT(output, SoSFFloat, setValue(value));
+}
+
+// This returns the input field for the given type. Since we
+// have only one input field, we don't have to check the type.
+
+SoField *
+ConvertSFShortToSFFloat::getInput(SoType)
+{
+   return &amp;input;
+}
+
+// This does the same for the output.
+
+SoEngineOutput *
+ConvertSFShortToSFFloat::getOutput(SoType)
+{
+   return &amp;output;
+}
+</pre></td></tr></table><br></div></div></div><!--CONTENT_END--><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Table of Contents</a></td><td width="40%" align="right"> <a accesskey="n" href="ch07.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 5. Creating an Element </td><td width="20%" align="center"> </td><td width="40%" align="right">Chapter 7. Creating a Node Kit </td></tr></table></div></body></html>

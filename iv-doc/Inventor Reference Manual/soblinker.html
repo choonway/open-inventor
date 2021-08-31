@@ -1,0 +1,67 @@
+<html>
+<body>
+SoBlinker
+<hr>
+<dl>
+<dt>NAME
+<dt>SoBlinker -- animated cycling switch node
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoGroup &gt; SoSwitch &gt; SoBlinker
+
+<dt>DESCRIPTION
+<dd>The SoBlinker class is derived from SoSwitch, so it selects one of its children to traverse. Using engines connected to the realTime global field, the whichChild field is animated over time. If the node has only one child, whichChild toggles between SO_SWITCH_NONE and 0, causing the child to be switched on and off repeatedly. If the node has more than one child, they are cycled through continuously. 
+
+<dt>FIELDS
+<dl>
+<dt>SoSFFloat speed
+<dd>Defines the speed of the blinker, in cycles per second. 
+
+<dt>SoSFBool on
+<dd>Allows applications to enable or disable the blinking easily.
+
+<dt>Fields from class SoSwitch:
+<dd>whichChild
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoBlinker()
+<dd>Creates a blinker node with default settings.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoGroup:
+<dd>addChild, insertChild, getChild, findChild, getNumChildren, removeChild,removeChild, removeAllChildren, replaceChild, replaceChild
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoGetMatrixAction, SoHandleEventAction, SoRayPickAction, SoSearchAction
+<dd>Same as for SoSwitch.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Blinker {
+<dd>whichChild 0
+<dd>speed 1
+<dd>on TRUE
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoBlinker.h&gt;
+</dl>
+</body>
+</html>

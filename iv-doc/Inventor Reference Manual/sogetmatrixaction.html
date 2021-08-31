@@ -1,0 +1,31 @@
+<html>
+<body>
+SSooGGeettMMaattrriixxAAccttiioonnhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoGetMatrixAction -- computes transformation matrix for subgraph INHERITS FROMSoAction &gt; SoGetMatrixAction DESCRIPTIONThis action computes transformation matrices for a given subgraph. It computes the
+
+cumulative transformation matrix and its inverse, along with a cumulative texturetransformation matrix and its inverse.
+
+This action is unlike most others in that it does not traverse downwards fromgroups. When applied to a node, it computes the matrix for just that node. (This makes sense for transformation nodes, but not for others, really.) It is much moreuseful when applied to a path. When applied to a path, it gathers the transformation info for all nodes in the path and those that affect nodes in thepath, but it stops when it hits the last node in the path; it does not traverse downwards from it as other actions (such as rendering) do. This behavior makes themost sense for this action.
+
+METHODS SoGetMatrixAction(const SbViewportRegion &newRegion)
+
+Constructor takes viewport region to use for picking. Even though thematrix computation may not involve a window per se, some nodes need this information to determine their placement. void setViewportRegion(const SbViewportRegion &newRegion)const SbViewportRegion &
+
+getViewportRegion() constSets/returns current viewport region to use for action.
+
+SbMatrix & getMatrix()SbMatrix & getInverse()
+
+Returns cumulative transformation matrix and its inverse. SbMatrix & getTextureMatrix()SbMatrix & getTextureInverse()
+
+Returns cumulative texture transformation matrix and its inverse. Methods from class SoAction:
+
+apply, apply, apply, getClassTypeId, getTypeId, isOfType, invalidateState
+
+268 Open Inventor C++ Reference Pages<hr>
+
+SSooGGeettMMaattrriixxAAccttiioonnhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh INCLUDE FILE#include &lt;Inventor/actions/SoGetMatrixAction.h&gt;
+
+SEE ALSOSoGetBoundingBoxAction
+
+269<hr>
+</body>
+</html>

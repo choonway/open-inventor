@@ -1,0 +1,80 @@
+<html>
+<body>
+SoSearchAction
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSearchAction -- searches for nodes in a scene graph
+
+<dt>INHERITS FROM
+<dd><a href="soaction.html">SoAction</a> &gt; SoSearchAction
+
+<dt>DESCRIPTION
+<dd>This class is used to search scene graphs for specific nodes, nodes of a specific type, nodes with a specific name, or any combination of these. It can search for just thefirst or last node satisfying the criteria or for all such nodes. The actions return paths to each node found.
+
+<dt>METHODS
+<dl>
+<dt>SoSearchAction()
+<dd>Constructor.
+
+<dt>void setNode(SoNode *n)
+<dt>SoNode * getNode() const
+<dd>Sets/returns the node to search for.
+
+<dt>void setType(SoType t, int derivedIsOk = TRUE)
+<dt>SoType getType(int &derivedIsOk) const
+<dd>Sets/returns the node type to search for. If derivedIsOk is TRUE, a node that isof a type that is derived from t will pass this search criterion.
+
+<dt>void setName(const SbName &n)
+const SbName & getName() const
+<dd>Sets/returns the name of the node to search for.
+
+<dt>void setFind(int what)
+int getFind()
+<dd>Sets/returns what to look for; what is a bitmask of LookFor enum values.Default is no flags at all. Note that setting a node, type, and/or name to search for activates the relevant flag, so you may never need to call thismethod directly.
+
+<dt>void setInterest(Interest interest)
+<dt>Interest getInterest() const
+<dd>Sets/returns which paths to return. Default is FIRST.
+
+<dt>void setSearchingAll(SbBool flag)
+<dt>SbBool isSearchingAll() const
+
+<dd>Sets/returns whether searching uses regular traversal or whether it traversesevery single node. For example, if this flag is FALSE, an SoSwitch node will traverse only the child or children it would normally traverse for an action.<br>
+
+If the flag is TRUE, the switch would always traverse all of its children. Thedefault is FALSE.
+
+<dt>SoPath * getPath() const
+<dd>Returns resulting path, or NULL if no path was found. This should be used if the interest is FIRST or LAST.
+
+<dt>SoPathList & getPaths()
+<dd>Returns resulting path list. This should be used if the interest is ALL.
+
+<dt>void reset()
+<dd>Resets options back to default values; clears list of returned paths. This can be used to apply the action again with a different set of search criteria.
+
+<dt>Methods from class SoAction:
+<dd>apply, apply, apply, getClassTypeId, getTypeId, isOfType, invalidateState
+</dl>
+
+<dt>INCLUDE FILE
+<dl>
+<dt>#include &lt;Inventor/actions/SoSearchAction.h&gt;
+
+<dt>enum LookFor {
+<dd>SoSearchAction::NODE Search for a particular node (by pointer)
+<dd>SoSearchAction::TYPE Search for a particular type of node
+<dd>SoSearchAction::NAME Search for a node with a particular name
+<dt>}
+
+<dt>enum Interest {
+<dd>SoSearchAction::FIRST Return only the first path found
+<dd>SoSearchAction::LAST Return only the last path found
+<dd>SoSearchAction::ALL Return all paths found
+<dt>}
+</dl>
+<dt>SEE ALSO
+<dd><a href="sopath.html">SoPath</a>
+</dl>
+</body>
+</html>

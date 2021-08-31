@@ -1,0 +1,67 @@
+<html>
+<body>
+SoRotor
+<hr>
+</dl>
+<dt>NAME
+<dd>SoRotor -- animated rotation node
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoTransformation &gt; SoRotation &gt; SoRotor
+
+<dt>DESCRIPTION
+<dd>The SoRotor class is derived from SoRotation, so it applies a rotation to the current transformation. Using engines connected to the realTime global field, the rotation value is animated over time, achieving a spinning effect. The period of the rotation can be adjusted by changing the speed field. The current rotation at any time is available in the rotation field, inherited from SoRotation. This field can also be set to specify the axis of rotation. Note that unless a non-zero rotation is specified for the rotation, the node will not know which axis to use. For example, to set a rotor to spin about the y-axis, use the following:
+
+<dd>rotor-&gt;rotation.setValue(axis, 0.1); where axis is a vector containing (0,1,0). Any non-zero angle can be used in this code.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFFloat speed
+<dd>Defines the speed of the rotor, in revolutions per second. SoSFBool onAllows applications to enable or disable the motion easily.
+
+<dt>Fields from class SoRotation:
+<dd>rotation
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoRotor()
+<dd>Creates a rotor node with default settings.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Concatenates current rotation value with the current transformation matrix.
+
+<dt>SoGetMatrixAction
+<dd>Returns transformation matrix specified by the rotation.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Rotor {
+<dd>rotation 0 0 1 0
+<dd>speed 1
+<dd>on TRUE
+</dl>}
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoRotor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sopendulum.html">SoPendulum</a>, <a href="soshuttle.html">SoShuttle</a>
+</body>
+</html>

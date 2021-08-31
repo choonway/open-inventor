@@ -1,0 +1,53 @@
+<html>
+<body>
+SoEngine
+<hr>
+<dl>
+<dt>NAME
+<dd>SoEngine -- base class for all engines
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; SoEngine
+
+<dt>DESCRIPTION
+<dd>SoEngine is the abstract base class for all engines. Engines are objects used for animation and behavior. They are lightweight objects that are connected between nodes, the clock, and other engines to form interesting behaviorial objects (e.g., a spinning windmill). Engines are used to animate parts of a scene and/or to constrain one part of a scenein relation to some other part of the scene. An engine receives a number of input values, performs some operation on them, and then copies the results into one or more output fields. Both the inputs and the outputs can be connected to other fields or engines in the scene graph. When an engine's output values change, those new values are sent to any fields or engines connected to them.
+
+<dt>METHODS
+<dl>
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns the type identifier for the SoEngine class.
+
+<dt>virtual int <b>getOutputs</b>(SoEngineOutputList &list) const
+<dd>Returns a list of outputs in this engine. Use getOutputName to get the names of the outputs, and use SoEngineOutput::getConnectionType to determine their types.
+
+<dt>SoEngineOutput * <b>getOutput</b>(const SbName &outputName) const
+<dd>Returns a pointer to the engine output with the given name. If no such output exists, NULL is returned.
+
+<dt>SbBool <b>getOutputName</b>(const SoEngineOutput *output, SbName&outputName) const
+<dd>Returns (in outputName) the name of the engine output (output). Returns FALSE if the engine output is not contained within the engine instance.
+
+<dt>virtual SoEngine * <b>copy</b>(SbBool copyConnections = FALSE) const
+<dd>Creates and returns an exact copy of the engine. If the copy Connections flag is TRUE, any connections to input fields (but not to outputs) of the engine are also copied.
+
+<dt>static SoEngine * <b>getByName</b>(const SbName &name)
+<dt>static int <b>getByName</b>(const SbName &name, SoEngineList &list)
+<dd>Look up engine(s) by name.
+
+<dt><b>Methods from class SoFieldContainer:</b>
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get, getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase:</b>
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+<dt>FILE FORMAT/DEFAULTS
+<dd>This is an abstract class. See the man page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoEngine.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sobooloperation.html">SoBoolOperation</a>, <a href="socalculator.html">SoCalculator</a>, <a href="socomposematrix.html">SoComposeMatrix</a>, <a href="socomposerotation.html">SoComposeRotation</a>, <a href="socomposerotationfromto.html">SoComposeRotationFromTo</a>, <a href="socomposevec2f.html">SoComposeVec2f</a>, <a href="socomposevec3f.html">SoComposeVec3f</a>, <a href="socomposevec4f.html">SoComposeVec4f</a>, <a href="socomputeboundingbox.html">SoComputeBoundingBox</a>, <a href="soconcatenate.html">SoConcatenate</a>, <a href="socounter.html">SoCounter</a>, <a href="sodecomposematrix.html">SoDecomposeMatrix</a>, <a href="sodecomposerotation.html">SoDecomposeRotation</a>, <a href="sodecomposevec2f.html">SoDecomposeVec2f</a>, <a href="sodecomposevec3f.html">SoDecomposeVec3f</a>, <a href="sodecomposevec4f.html">SoDecomposeVec4f</a>, <a href="soelaspedtime.html">SoElapsedTime</a>, <a href="sogate.html">SoGate</a>, <a href="sointerpolate.html">SoInterpolate</a>, <a href="soonoff.html">SoOnOff</a>, <a href="sooneshot.html">SoOneShot</a>, <a href="soselectone.html">SoSelectOne</a>, <a href="sotimecounter.html">SoTimeCounter</a>, <a href="sotransformvec3f.html">SoTransformVec3f</a>, <a href="sotriggerany.html">SoTriggerAny</a>
+
+</dl>
+</body>
+</html>

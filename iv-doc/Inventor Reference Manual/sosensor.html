@@ -1,0 +1,38 @@
+<html>
+<body>
+SoSensor
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSensor -- abstract base class for Inventor sensors
+
+<dt>INHERITS FROM
+<dd>SoSensor
+
+<dt>DESCRIPTION
+<dd>Sensors detect changes either to time or to Inventor objects in a scene graph, and call a user-defined callback function. Sensors are scheduled when the thing they areattached to changes, and sometime after they are scheduled they are triggered, calling the user's callback function.
+
+<dt>METHODS
+<dl>
+<dt>void <b>setFunction</b>(SoSensorCB *callbackFunction)
+<dd>Sets the callback function that is called when the sensor is triggered. The function must take two arguments -- user-supplied callback data (of type void *) and a pointer to the sensor that is triggering the function (of typeSoSensor *).
+
+<dt>SoSensorCB * <b>getFunction</b>() const
+<dd>Returns the callback function that will be called when the sensor is triggered.
+
+<dt>void <b>setData</b>(void *callbackData)
+<dd>Sets the callback data passed to the callback function.
+
+<dt>void * <b>getData</b>() const
+<dd>Returns the user-supplied pointer that will be passed to the callback function.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/sensors/SoSensor.h&gt;
+<dd>typedef void SoSensorCB(void *data, SoSensor *sensor)
+
+<dt>SEE ALSO
+<dd><a href="soalarmsensor.html">SoAlarmSensor</a>, <a href="sodatasensor.html">SoDataSensor</a>, <a href="sofieldsensor.html">SoFieldSensor</a>, <a href="soidlesensor.html">SoIdleSensor</a>, <a href="sonodesensor.html">SoNodeSensor</a>, <a href="sopathsensor.html">SoPathSensor</a>, <a href="sosensormanager.html">SoSensorManager</a>
+</dl>
+</body>
+</html>

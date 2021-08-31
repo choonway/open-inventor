@@ -1,0 +1,77 @@
+<html>
+<body>
+SoShuttle
+<hr>
+<dl>
+<dt>NAME
+<dd>SoShuttle -- animated oscillating translation node
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoTransformation &gt; SoTranslation &gt; SoShuttle 
+
+<dt>DESCRIPTION
+<dd>The SoShuttle class is derived from SoTranslation, so it applies a translation to the current transformation. Using engines connected to the realTime global field, thetranslation value is animated over time between two fixed translations, achieving a shuttling effect. The period of the motion can be adjusted by changing the speedfield. The current translation at any time is available in the translation field, inherited from SoTranslation
+
+<dt>FIELDS
+<dl>
+<dt>SoSFVec3f translation0
+<dt>SoSFVec3f translation1
+
+<dd>These define the two fixed translations that are interpolated to create the shuttling motion.
+
+<dt>SoSFFloat speed
+<dd>Defines the speed of the shuttle, in cycles per second.
+
+<dt>SoSFBool on
+<dd>Allows applications to enable or disable the motion easily.
+
+<dt>Fields from class SoTranslation:
+<dd>translation
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoShuttle()
+<dd>Creates a shuttle node with default settings.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+
+<dd>Concatenates interpolated translation value with the current transformation matrix.
+
+<dt>SoGetMatrixAction
+<dd>Returns transformation matrix specified by the interpolated translation.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Shuttle {
+<dd>translation 0 0 0
+<dd>translation0 0 0 0
+<dd>translation1 0 0 0
+<dd>speed 1
+<dd>on TRUE
+<dt>}
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoShuttle.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sopendulum.html">SoPendulum</a>, <a href="sorotor.html">SoRotor</a>
+</dl>
+</body>
+</html>

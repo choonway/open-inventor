@@ -1,0 +1,43 @@
+<html>
+<body>
+SoMotion3Event
+<hr>
+<dl>
+<dt>NAME
+<dd>SoMotion3Event -- 3D motion events
+
+<dt>INHERITS FROM
+<dd>SoEvent &gt; SoMotion3Event
+
+<dt>DESCRIPTION
+
+<dd>SoMotion3Event represents 3D relative motion events in the Inventor event model.
+
+<dt>METHODS
+<dl>
+<dt>SoMotion3Event()
+<dd>Constructor.
+
+<dt>static SoType getClassTypeId()
+<dd>Return the type id for the SoMotion3Event class.
+
+<dt>void setTranslation(const SbVec3f &t)
+<dt>const SbVec3f & getTranslation() const
+
+<dd>Set and get the relative change in translation since the last translation event.
+
+<dt>void setRotation(const SbRotation &r)
+<dt>const SbRotation &amp; getRotation() const
+<dd>Set and get the relative change in rotation since the last rotation event.
+
+<dt>Methods from class SoEvent:
+<dd>getTypeId, isOfType, setTime, getTime, setPosition, getPosition, getPosition,getNormalizedPosition, setShiftDown, setCtrlDown, setAltDown, wasShiftDown, wasCtrlDown, wasAltDown
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/events/SoMotion3Event.h&gt;
+
+<dt>SEE ALSO
+<dd>SoEvent, SoButtonEvent, SoKeyboardEvent, SoLocation2Event, SoMouseButtonEvent, SoSpaceballButtonEvent, SoHandleEventAction,SoEventCallback, SoSelection, SoInteraction, SoXtDevice
+</body>
+</html>

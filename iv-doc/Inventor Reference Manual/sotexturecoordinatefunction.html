@@ -1,0 +1,33 @@
+<html>
+<body>
+SSooTTeexxttuurreeCCoooorrddiinnaatteeFFuunnccttiioonnhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoTextureCoordinateFunction -- abstract base class for texture coordinate function
+
+nodes INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoTextureCoordinateFunction
+
+DESCRIPTIONThis is an abstract base class for texture coordinate functions. The subclasses of this
+
+node enable texture coordinates to be created by mapping object-space points onthe surfaces of shapes into texture space, according to some function.
+
+METHODSstatic SoType getClassTypeId()
+
+Returns type identifier for this class. Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+FILE FORMAT/DEFAULTSTextureCoordinateFunction {
+
+} INCLUDE FILE#include &lt;Inventor/nodes/SoTextureCoordinateFunction.h&gt;
+
+SEE ALSOSoTexture2, SoTexture2Transform SoTextureCoordinate2,
+
+SoTextureCoordinateBinding, SoTextureCoordinateCube,SoTextureCoordinateCylinder, SoTextureCoordinateDefault, SoTextureCoordinateEnvironment, SoTextureCoordinatePlane,SoTextureCoordinateSphere
+</body>
+</html>

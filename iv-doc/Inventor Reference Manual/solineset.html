@@ -1,0 +1,82 @@
+<html>
+<body>
+SoLineSet
+<hr>
+<dl>
+<dt>NAME
+<dd>SoLineSet -- polyline shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; <a href="sovertexshape.html">SoVertexShape</a> &gt; <a href="sononindexedshape.html">SoNonIndexedShape</a> &gt; SoLineSet
+
+<dt>DESCRIPTION
+<dd>This node represents a 3D shape formed by constructing polylines from vertices located at the current coordinates. SoLineSet uses the current coordinates in order,starting at the index specified by the startIndex field. Each line has a number of vertices specified by a value in the numVertices field. For example, an SoLineSetwith a startIndex of 3 and numVertices of [3,4,2] would use coordinates 3, 4, and 5 for the first line, coordinates 6, 7, 8, and 9 for the second line, and coordinates 10and 11 for the third. If the last value in the numVertices field is SO_LINE_SET_USE_REST_OF_VERTICES (-1), all remaining coordinates in thecurrent coordinates are used as the vertices of the last line.
+
+The number of values in the numVertices field indicates the number of polylines inthe set. The coordinates of the line set are transformed by the current cumulativetransformation. The lines are drawn with the current light model and drawing style (drawing style FILLED is treated as LINES). Treatment of the current material and normal binding is as follows:
+
+<dl>
+<dd>The PER_PART binding specifies a material or normal for each segment of the line.
+<dd>The PER_FACE binding specifies a material or normal for each polyline.
+<dd>The _INDEXED bindings are equivalent to their non-indexed counterparts. The DEFAULT material binding is equal to OVERALL.
+<dd>The DEFAULT normal binding is equal to PER_VERTEX.
+</dl>
+
+<p>ThestartIndex is also used for materials, normals, or texture coordinates when the binding indicates that they should be used per vertex. The current complexity value has no effect on the rendering of line sets.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFLong numVertices
+<dd>Number of vertices per polyline.
+
+<dt>Fields from class SoNonIndexedShape:
+<dd>startIndex
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoLineSet</b>()
+<dd>Creates a line set node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws lines based on the current coordinates, normals, materials, drawingstyle, and so on.
+
+<dt>SoRayPickAction
+<dd>Picks lines based on the current coordinates and transformation. Details about the intersection are returned in an SoLineDetail.
+
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses all vertices of the line set with the current transformation applied to them. Sets the center to the average of thecoordinates of all vertices.
+
+<dt>SoCallbackAction
+<dd>If any line segment callbacks are registered with the action, they will be invoked for each successive segment in the line set.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>LineSet {
+<dd>startIndex 0
+<dd>numVertices -1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoLineSet.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socoordinate3.html">SoCoordinate3</a>, <a href="sodrawstyle.html">SoDrawStyle</a>, <a href="soindexedlineset.html">SoIndexedLineSet</a>, <a href="solinedetail.html">SoLineDetail</a>
+</body>
+</html>

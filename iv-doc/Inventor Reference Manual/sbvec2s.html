@@ -1,0 +1,80 @@
+<html>
+<body>
+<p>SbVec2s
+<hr>
+<dl>
+<dt>NAME
+<dd>SbVec2s -- 2D vector class
+
+<dt>INHERITS FROM
+<dd>SbVec2s
+
+<dt>DESCRIPTION
+<dd>2D vector class used to store 2D integer vectors and points. This class is used throughout Inventor for arguments and return values.
+
+<dt>METHODS
+<dl>
+
+<dt><b>SbVec2s</b>()
+<dd>Default constructor.
+
+<dt><b>SbVec2s</b>(const short v[2])
+<dt><b>SbVec2s</b>(short x, short y)
+<dd>Constructor given 2 components.
+
+<dt>long <b>dot</b>(const SbVec2f &v) const
+<dd>Returns dot (inner) product of vector and another vector.
+
+<dt>const short * <b>getValue</b>() const
+<dt>void <b>getValue</b>(short &x, short &y) const
+<dd>Returns vector components.
+
+<dt>void <b>negate</b>()
+<dd>Negates each component of vector in place.
+
+<dt>SbVec2s & <b>setValue</b>(const short v[2])
+<dt>SbVec2s & <b>setValue</b>(short x, short y)
+<dd>Sets vector components.
+
+<dt>short & <b>operator [ ]</b>(int i)const
+<dt>short & <b>operator [ ]</b>(int i)
+<dd>Accesses indexed component of vector.
+
+<dt>SbVec2s & <b>operator *=</b>(int d)
+<dt>SbVec2s & <b>operator *=</b>(double d)
+<dt>SbVec2s & <b>operator /=</b>(int d)
+<dt>SbVec2s & <b>operator /=</b>(double d)
+<dd>Component-wise scalar multiplication and division operators.
+
+<dt>SbVec2s & <b>operator +=</b>(const SbVec2s &u)
+<dt>SbVec2s & <b>operator -=</b>(const SbVec2s &u)
+<dd>Component-wise vector addition and subtraction operators.
+
+<dt>SbVec2s <b>operator -</b>() const
+<dd>Nondestructive unary negation -- returns a new vector.
+
+<dt>SbVec2s <b>operator *</b>(const SbVec2s &v, int d)
+<dt>SbVec2s <b>operator *</b>(const SbVec2s &v, double d)
+<dt>SbVec2s <b>operator *</b>(int d, const SbVec2s &v)
+<dt>SbVec2s <b>operator *</b>(double d, const SbVec2s &v)
+<dt>SbVec2s <b>operator /</b>(const SbVec2s &v, int d)
+<dt>SbVec2s <b>operator /</b>(const SbVec2s &v, double d)
+<dd>Component-wise binary scalar multiplication and division operators.
+
+<dt>SbVec2s <b>operator +</b>(const SbVec2s &v1, const SbVec2s &v2)
+<dt>SbVec2s <b>operator -</b>(const SbVec2s &v1, const SbVec2s &v2)
+<dd>Component-wise binary vector addition and subtraction operators.
+
+<dt>int <b>operator ==</b>(const SbVec2s &v1, const SbVec2s &v2)
+<dt>int <b>operator !=</b>(const SbVec2s &v1, const SbVec2s &v2)
+<dd>Equality comparison operators.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbLinear.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbvec3f.html">SbVec3f</a>, <a href="sbvec4f.html">SbVec4f</a>, <a href="sbvec2f.html">SbVec2f</a>
+</dl>
+</body>
+</html>

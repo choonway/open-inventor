@@ -1,0 +1,59 @@
+<html>
+<body>
+SoPathList
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPathList -- maintains a list of pointers to paths
+
+<dt>INHERITS FROM
+<dd><a href="sbplist.html">SbPList</a> &gt; <a href="sobaselist.html">SoBaseList</a> &gt; SoPathList
+
+<dt>DESCRIPTION
+<dd>This subclass of SoBaseList holds lists of pointers to SoPaths. It updates reference counts to paths in the list whenever adding or removing pointers.
+
+<dt>METHODS
+<dl>
+<dt>SoPathList()
+<dd>Constructor.
+
+<dt>SoPathList(int size)
+<dd>Constructor that pre-allocates storage for size pointers.
+
+<dt>SoPathList(const SoPathList &l)
+<dd>Constructor that copies the contents of another list.
+
+<dt>~SoPathList()
+<dd>Destructor.
+
+<dt>void append(SoPath *path)
+<dd>Adds a path to the end of the list.
+
+<dt>SoPath * operator [ ](int i) const
+<dd>Accesses an element of a list.
+
+<dt>SoPathList & operator =(const SoPathList &l)
+<dd>Copies a list, keeping all reference counts correct.
+
+<dt>int findPath(const SoPath &path)
+<dd>Returns the index of the matching path in the list, or -1 if not found.
+
+<dt>void sort()
+<dd>Sorts list in place based on (1) increasing address of head node, then (2)increasing indices of children.
+
+<dt>void uniquify()Given a sorted list, removes any path that (1) is a duplicate, or (2) goes through a node that is the tail of another path.
+
+<dt>Methods from class SoBaseList:
+<dd>insert, remove, truncate, copy, set, addReferences
+
+<dt>Methods from class SbPList:
+<dd>find, getLength, operator ==, operator !=
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoLists.h&gt;
+
+<dt>SEE ALSO
+<dd>SoPath
+</body>
+</html>

@@ -1,0 +1,87 @@
+<html>
+<body>
+SoNurbsSurface
+<hr>
+<dl>
+<dt>NAME
+<dd>SoNurbsSurface -- NURBS surface shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; SoNurbsSurface
+
+<dt>DESCRIPTION
+<dd>This shape node represents a NURBS surface based on the node's knot vectors and on control points constructed from the current coordinates. The current coordinatesare used in row-major order (the V direction corresponds to the rows). The number of coordinates used is determined by the numUControlPoints andnumVControlPoints fields. The uKnotVector and vKnotVector fields contain floating point arrays of non-decreasing values. The order of the surface in the U and V directions is defined as the number of knotsminus the number of control points in the particular direction. The largest order allowed for a NURBS surface is 8. The control points of the NURBS surface are transformed by the current cumulativetransformation. The surface is drawn with the current light model and drawing style. The coordinates, normals, and texture coordinates of a surface are generated,so you cannot bind explicit normals or texture coordinates to a NURBS surface. The first material in the state is applied to the entire surface. The surface is trimmed according to the currently defined profile's curves. When default texture coordinates are applied to a NURBS surface, the edges of thetexture square are stretched to fit the surface. The axes of the texture are called S and T; S is horizontal and T is vertical. The axes of the NURBS surface are called Uand V; U is horizontal and V is vertical. You can also define texture coordinates explicitly with the S,T location point, the knot vectors, and the current texture coordinates.
+
+<p>The approximation of the surface by polygons is affected by the current complexity value.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFLong numUControlPoints
+<dt>SoSFLong numVControlPoints
+<dd>Number of control points in the U and V directions.
+
+<dt>SoSFLong numSControlPoints
+<dt>SoSFLong numTControlPoints
+<dd>Number of control points in the S and T directions.
+
+<dt>SoMFFloat uKnotVector
+<dt>SoMFFloat vKnotVector
+<dd>The knot vectors in the U and V directions.
+
+<dt>SoMFFloat sKnotVector
+<dt>SoMFFloat tKnotVector
+<dd>The knot vectors in the S and T directions.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoNurbsSurface</b>()
+<dd>Creates a NURBS surface node with default settings. static SoType getClassTypeId()Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws the surface based on the current coordinates, material, and so on.
+
+<dt>SoRayPickAction
+<dd>Picks the surface based on the current coordinates and transformation.
+
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses all control points of the surface with the current transformation applied to them. Sets the center to theaverage of the control points.
+
+<dt>SoCallbackAction
+<dd>If any triangle callbacks are registered with the action, they will be invoked for each successive triangle approximating the surface.
+
+</dl>
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>NurbsSurface {
+<dd>numUControlPoints 0
+<dd>numVControlPoints 0
+<dd>numSControlPoints 0
+<dd>numTControlPoints 0
+<dd>uKnotVector 0
+<dd>vKnotVector 0
+<dd> sKnotVector 0
+<dd>tKnotVector 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoNurbsSurface.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soindexednurbssurface.html">SoIndexedNurbsSurface</a>, <a href="sonurbscurve.html">SoNurbsCurve</a>, <a href="soprofile.html">SoProfile</a>
+
+</body>
+</html>

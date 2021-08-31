@@ -1,0 +1,67 @@
+<html>
+<body>
+SSooSSuurrrroouunnddSSccaalleehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSurroundScale -- transformation node that adjusts the current matrix so a default
+
+cube will surround other objects INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoTransformation &gt; SoSurroundScale
+
+DESCRIPTIONWhen traversed by an action, this node appends a transformation to the current
+
+transformation matrix so that a default size cube will surround the objects specifiedby its fields. Transform manipulators, such as SoHandleBoxManip, use these nodes to make themselves surround other objects. This node only recalculates after the invalidate() method has been called.Otherwise it uses a saved scale and translation.
+
+When calculating what to surround, the SoSurroundScale looks at the current pathin the action and at its own field values. Then SoSurroundScale applies an SoGetBoundingBoxAction to the node that is numNodesUpToContainer nodesabove it on the path. SoSurroundScale also tells the action to reset the bounding box upon traversal of the node located numNodesUpToReset nodes above it in thepath. The SoSurroundScale then appends a translation and scale to the current transformation so that a default size SoCube will translate and scale to fit thisbounding box.
+
+For example, when an SoHandleBoxManip wants to surround the objects it isgoing to move, the scene graph will look something like this:
+
+RootNode------------------------- | |handleBoxManip movingStuff |handleBoxDragger |separator -----------------------------------| | | motionMatrix surroundScale cubeGeom The SoHandleBoxDragger wants to transform the cubeGeom so that it surrounds themovingStuff. So it sets the surroundScale fields to:
+
+numNodesUpToContainer = 4;numNodesUpToReset = 3;
+
+613<hr>
+
+SSooSSuurrrroouunnddSSccaalleehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+The SoBoundingBoxAction will then be applied to RootNode, with a reset aftertraversing the SoHandleBoxManip. So the SoSurroundScale will surround the objects below separator, and to the right of handleBoxManip, producing the desiredeffect.
+
+FIELDS SoSFLong numNodesUpToContainer
+
+When traversed by an action, if surroundScale needs to calculate a new box,surroundScale looks at the current path in the action. It travels up this path a distance of numNodesUpToContainer and applies anSoGetBoundingBoxAction to the node that it finds there.
+
+SoSFLong numNodesUpToResetBefore applying the SoGetBoundingBoxAction (see the
+
+numNodesUpToContainer field aove) the surroundScale node travels upthe path a distance of numNodesUpToReset and tells the action to reset the bounding box upon traversal of that node. METHODS SoSurroundScale()
+
+Creates a surround scale node with default settings. void invalidate()If you call this, then next time an action is applied the node will re-calculate
+
+it's cached translation and scale values. static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+ACTION BEHAVIORSoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+
+SoRayPickActionAccumulates scaling and translation transformations into the current
+
+transformation.
+
+614 Open Inventor C++ Reference Pages<hr>
+
+SSooSSuurrrroouunnddSSccaalleehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh SoGetMatrixActionReturns the matrix corresponding to the scaling and translation. FILE FORMAT/DEFAULTSSurroundScale {
+
+numNodesUpToContainer 0numNodesUpToReset 0 } INCLUDE FILE#include &lt;Inventor/nodes/SoSurroundScale.h&gt;
+
+SEE ALSOSoTransformation, SoTransformManip, SoCenterballDragger, SoCenterballManip,
+
+SoHandleBoxDragger, SoHandleBoxManip, SoJackDragger, SoJackManip,SoTabBoxDragger, SoTabBoxManip, SoTrackballDragger, SoTrackballManip, SoTransformBoxDragger, SoTransformBoxManip
+
+
+</body>
+</html>

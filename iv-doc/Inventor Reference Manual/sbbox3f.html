@@ -1,0 +1,76 @@
+<html>
+<body>
+<p>SbBox3f
+<hr>
+<dl>NAME
+<dt>SbBox3f -- 3D box class
+
+<dt>INHERITS FROM
+<dd>SbBox3f
+
+<dt>DESCRIPTION
+<dd>3D box which has planes parallel to the major axes and is specified by two points on a diagonal. This class is part of the standard Inventor datatype classes and is used asinput and output to geometry operations (see SoGetBoundingBoxAction).
+
+<dt>METHODS
+<dl>
+<dt><b>SbBox3f</b>()
+<dt><b>SbBox3f</b>(float xmin, float ymin, float zmin float xmax, floatymax, float zmax)
+<dt><b>SbBox3f</b>(const SbVec3f &min, const SbVec3f &max)
+<dt>void ~<b>SbBox3f</b>()
+
+<dd>Constructors and destructor for a 3D float box. xmin, ymin, zmin, xmax, ymaxand zmax are the bounds of the box. min and max are the corners of the diagonal that define the box. const SbVec3f & getMin()const SbVec3f & getMax()
+
+<p>Returns the minimum and maximum points of the box. The minimumpoint is the corner of the box with the lowest X, Y, and Z values. The maximum point is the corner of the box with the highest X, Y, and Z values. SbVec3f getCenter()Returns the center of the box.
+
+<dt>void <b>extendBy</b>(const SbVec3f &point)
+<dt>void <b>extendBy</b>(const SbBox3f &box)
+
+<dd>Extends this box (if necessary) to contain the specified point or other box. 
+<dt>SbBool <b>intersect</b>(const SbVec3f &point)
+<dt>SbBool <b>intersect</b>(const SbBox3f &box)
+
+<dd>Returns TRUE if the specified point or box intersects this box.
+
+<dt>void <b>setBounds</b>(float xmin, float ymin, float zmin, float xmax, floatymax, float zmax)
+<dt>void <b>setBounds</b>(const SbVec3f &min, const SbVec3f &max)
+<dd>Sets the corners of the box.
+
+
+<dt>void <b>getBounds</b>(float &xmin, float &ymin, float &zmin, float&xmax, float &ymax, float &zmax)
+<dt>void <b>getBounds</b>(SbVec3f &min, SbVec3f &max)
+<dd>Gets the corners of the box.
+
+<dt>void <b>getOrigin</b>(float &x0, float &y0, float &z0)
+<dd>Gets box origin which is the same as the minimum corner of the box.
+
+<dt>void <b>getSize</b>(float &x, float &y, float &z)
+<dd>Gets box size.
+
+<dt>void <b>makeEmpty</b>()
+<dd>Makes an empty box.
+
+<dt>SbBool <b>isEmpty</b>()
+<dd>Returns TRUE if the box is empty, and FALSE otherwise.
+
+<dt>SbBool <b>hasVolume</b>()
+<dd>Returns TRUE if all three dimensions of the box have positive size, and FALSE otherwise.
+
+<dt>void <b>getSpan</b>(SbVec3f &dir, float &dMin, float &dMax)
+<dd>Finds the span of a box along a specified direction. The span is the total distance the box occupies along a given direction. The total distance is returned in the form of a minimum and maximum distance from the origin of each of the corners of the box along the given direction. The difference between these two values is the span.
+
+<dt>void <b>transform</b>(const SbMatrix &mx)
+<dd>Transforms box by matrix, enlarging box to contain result.
+
+<dt>float <b>getVolume</b>()
+<dd>Returns the volume of the box.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbBox.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbxfbox3f.html">SbXfBox3f</a>, <a href="sbbox2f.html">SbBox2f</a>, <a href="sbbox2s.html">SbBox2s</a>, <a href="sbvec3f.html">SbVec3f</a>, <a href="sbvec2f.html">SbVec2f</a>, <a href="sbvec2s.html">SbVec2s</a>, <a href="sbmatrix.html">SbMatrix</a>, <a href="sogetboundingboxaction.html">SoGetBoundingBoxAction</a>
+
+</dl>
+</body>
+</html>

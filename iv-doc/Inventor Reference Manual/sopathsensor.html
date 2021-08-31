@@ -1,0 +1,47 @@
+<html>
+<body>
+SoPathSensor
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPathSensor -- sensor class that can be attached to Inventor paths
+
+<dt>INHERITS FROM
+<dd><a href="sosensor.html">SoSensor</a> &gt; <a href="sodelayqueuesensor.html">SoDelayQueueSensor</a> &gt; <a href="sodatasensor.html">SoDataSensor</a> &gt; SoPathSensor
+
+<dt>DESCRIPTION
+<dd>Path sensors detect changes to paths, calling a callback function whenever the path or any node in the path changes. The definition of &quot;in the path&quot; is the same as the definition used when applying an action to the path -- any node that can possibly affect the node at the end of the path chain is considered in the path. See the SoPath manual page for more information on paths.
+
+<dt>METHODS
+<dl>
+<dt><b>SoPathSensor</b>()
+<dt><b>SoPathSensor</b>(SoSensorCB *func, void *data)
+<dd>Creation methods. The second method takes the callback function and data to be called when the sensor is triggered.
+
+<dt>~<b>SoPathSensor</b>()
+<dd>Destroys the sensor, freeing up any memory associated with it after unscheduling it.
+
+<dt>void <b>attach</b>(SoPath *path)
+<dt>void <b>detach</b>()
+<dt>SoPath * <b>getAttachedPath</b>() const
+<dd>The attach() method makes this sensor detect changes to the given path. The detach() method unschedules this sensor (if it is scheduled) and makes it ignore changes to the scene graph. The getAttachedPath() method returns the path that this sensor is sensing, or NULL if it is not attached to any path.
+
+<dt><b>Methods from class SoDataSensor</b>:
+<dd>setDeleteCallback, getTriggerNode, getTriggerField, getTriggerPath,setTriggerPathFlag, getTriggerPathFlag
+
+<dt><b>Methods from class SoDelayQueueSensor</b>:
+<dd>setPriority, getPriority, getDefaultPriority, schedule, unschedule, isScheduled
+
+<dt><b>Methods from class SoSensor</b>:
+<dd>setFunction, getFunction, setData, getData
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/sensors/SoPathSensor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sonodesensor.html">SoNodeSensor</a>, <a href="sopathsensor.html">SoPathSensor</a>, <a href="sodatasensor.html">SoDataSensor</a>
+</dl>
+
+</body>
+</html>

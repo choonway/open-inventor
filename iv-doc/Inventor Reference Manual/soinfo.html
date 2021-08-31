@@ -1,0 +1,55 @@
+<html>
+<body>
+SoInfo
+<hr>
+<dl>
+<dt>NAME
+<dd>SoInfo -- node containing information text string
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoInfo
+
+<dd>DESCRIPTION
+<dt>This class defines a information node in the scene graph. This node has no effect during traversal. It is used to store information in the scene graph, typically forapplication-specific purposes, copyright messages, or other strings. This node differs from the SoLabel node in that it stores its information in an SbString instead of anSbName; the SbString is more efficient for storing long strings that don't have to be accessed very often. Use an SoLabel node for short strings that have to be accessed more often.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFString string
+<dd>Defines the info string value as an SbString.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoInfo</b>()
+<dd>Creates an info node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Info {
+<dd>string &quot;&lt;Undefined info&gt;&quot;
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoInfo.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbstring.html">SbString</a>, <a href="solabel.html">SoLabel</a>
+</dl>
+
+301<hr>
+</body>
+</html>

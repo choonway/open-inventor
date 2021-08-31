@@ -1,0 +1,52 @@
+<html>
+<body>
+SoNodeList
+<br>
+<dl>
+<dt>NAME
+<dd>SoNodeList -- maintains a list of pointers to nodes
+
+<dt>INHERITS FROM
+<dd><a href="sbplist.html">SbPList</a> &gt; <a href="sobaselist.html">SoBaseList</a> &gt; SoNodeList
+
+<dt>DESCRIPTION
+<dd>This subclass of SoBaseList holds lists of pointers to SoNodes. It updates reference counts to nodes in the list whenever adding or removing pointers.
+
+<dt>METHODS
+<dl>
+<dt><b>SoNodeList</b>()
+<dd>Constructor.
+
+<dt><b>SoNodeList</b>(int size)
+<dd>Constructor that pre-allocates storage for size pointers.
+
+<dt><b>SoNodeList</b>(const SoNodeList &l)
+<dd>Constructor that copies the contents of another list.
+
+<dt>~<b>SoNodeList</b>()
+<dd>Destructor.
+
+<dt>void <b>append</b>(SoNode *node)
+<dd>Adds a pointer to the end of the list.
+
+<dt>SoNode * <b>operator [ ]</b>(int i) const
+<dd>Accesses an element of a list.
+
+<dt>SoNodeList & <b>operator =</b>(const SoNodeList &l)
+<dd>Copies a list, keeping all reference counts correct.
+
+<dt><b>Methods from class SoBaseList</b>:
+<dd>insert, remove, truncate, copy, set, addReferences
+
+<dt><b>Methods from class SbPList</b>:
+<dd>find, getLength, operator ==, operator !=
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoLists.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sonode.html">SoNode</a>
+</dl>
+</body>
+</html>

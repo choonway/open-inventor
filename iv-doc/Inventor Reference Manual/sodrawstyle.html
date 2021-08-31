@@ -1,0 +1,82 @@
+<html>
+<body>
+SoDrawStyle
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDrawStyle -- node that defines the style to use when rendering
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoDrawStyle
+
+<dt>DESCRIPTION
+<dd>This node defines the current drawing style for all subsequent shape nodes in a scene graph. SoDrawStyle specifies how primitives should be rendered. The drawingstyle has no effect on picking or callback primitive generation.
+
+<p>Note that if the current drawing style is not filled, backface culling (as set up by theSoShapeHints node) will not be performed.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum style
+<dd>Drawing style.
+
+<dt>SoSFFloat point
+<dd>SizeRadius of points (for POINTS style).
+
+<dt>SoSFFloat lineWidth
+<dd>Width of lines (for LINES style).
+
+<dt>SoSFUShort linePattern
+<dd>Stipple pattern for lines (for LINES style). Values can range from 0 (invisible) to 0xffff (solid). This specifies how dashed or dotted lines will be drawn.</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoDrawStyle</b>()
+<dd>Creates a drawing style node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction
+<dd>Sets the current drawing style.
+</dl>
+</dt>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>DrawStyle {
+<dd>style FILLED
+<dd>pointSize 0
+<dd>lineWidth 0
+<dd>linePattern 0xffff
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoDrawStyle.h&gt;
+
+<dl>
+<dt>enum Style {
+<dd>SoDrawStyle::FILLED Draw filled regions
+<dd>SoDrawStyle::LINES Draw only outlines (wire frame)
+<dd>SoDrawStyle::POINTS Draw points at vertices
+<dd>SoDrawStyle::INVISIBLE Do not draw anything at all
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="solightmodel.html">SoLightModel</a>, <a href="sopickstyle.html">SoPickStyle</a>, <a href="soshapehints.html">SoShapeHints</a>
+</body>
+</html>

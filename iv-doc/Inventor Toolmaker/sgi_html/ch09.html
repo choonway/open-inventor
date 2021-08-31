@@ -1,0 +1,610 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Chapter 9. Creating a Selection Highlight Style</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"><meta name="generator" content="SGI XSL DocBook Customization Stylesheets V1.0"><link rel="home" href="index.html" title="The Inventor Toolmaker"><link rel="up" href="index.html" title="The Inventor Toolmaker"><link rel="previous" href="ch08.html" title="Chapter 8. Creating Draggers and Manipulators"><link rel="next" href="ch10.html" title="Chapter 10. Creating a Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 9. Creating a Selection Highlight Style</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch08.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch10.html">Next</a></td></tr></table><hr></div><!--CONTENT_BEGIN--><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="id5475280"></a>Chapter 9. <a name="id11499"></a>Creating a Selection Highlight Style</h2></div></div>
+<p>This chapter explains how you can provide your own style of selection highlighting by deriving a new highlight class. The first part of the chapter offers an overview of the steps required to create a new highlight class. When necessary, additional sections explain key concepts in further detail. The chapter examples show how to create two new highlight classes:<a name="idch091"></a></p>
+<div class="itemizedlist"><ul type="disc"><li><p>A highlight that renders selected objects as 2D rectangles in the overlay planes</p>
+</li>
+<li><p>A highlight that renders only the selected objects</p>
+</li>
+</ul></div><p>Before reading this chapter, be sure to read Chapter 10 in The Inventor Mentor.<a name="idch092"></a></p>
+<div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5475339"></a>Built-in Highlighting</h2></div></div>
+<p>Inventor provides built-in selection highlighting with the <a name="idch093"></a><span class="bold"><b>SoXtRenderArea</b></span> and with two classes derived from <a name="idch094"></a><span class="bold"><b>SoGLRenderAction</b></span>:  <span class="bold"><b>SoBoxHighlight</b></span>-<br>
+<span class="bold"><b>RenderAction</b></span> and <a name="idch095"></a><span class="bold"><b>SoLineHighlightRenderAction</b></span>. After a scene graph is rendered, the highlight action renders the path for each object in the selection list. The highlight action is provided to the render area by the application, which calls the <span class="bold"><b>setGLRenderAction()</b></span> method.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5475427"></a>Overview</h2></div></div>
+<p>Although Inventor provides predefined highlight styles, at times you may want to highlight selected objects with a different style. You can provide your own highlight style in two ways:  derive a new highlight class from <a name="idch096"></a><a name="idch097"></a><span class="bold"><b>SoGLRenderAction<a name="idch098"></a></b></span> (described here), or make changes directly to the scene graph whenever the selection changes (using <span class="bold"><b>SoSelection</b></span> callbacks, as described in Chapter 10 of The Inventor Mentor). If you're using manipulators, it's probably easiest to allow the manipulator to make changes to the scene graph through use of selection callbacks. In this case, the manipulator shows which objects are selected.<a name="idch099"></a></p>
+<p>Creating a new highlight style by deriving a class from <a name="idch0910"></a><span class="bold"><b>SoGLRenderAction</b></span> is basically the same as deriving any new action class, as described in Chapter 4. You can use the action-class macros found in SoSubAction.h. The SO_ACTION_HEADER() macro declares type identifier and naming variables and methods that all node classes must support. The SO_ACTION_SOURCE() macro defines the static variables and methods declared in the SO_ACTION_HEADER() macro.</p>
+<p>Creating a new highlight action class requires these steps:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new highlight class. It will be derived from <span class="bold"><b>SoGLRenderAction</b></span> or another highlight class.</p>
+</li>
+<li><p>Define an <span class="bold"><b>initClass()</b></span> method to initialize the type information. Use the SO_ACTION_INIT_CLASS() macro.</p>
+</li>
+<li><p>Define a constructor. Use the SO_ACTION_CONSTRUCTOR() macro.</p>
+</li>
+<li><p>Implement the virtual <span class="bold"><b>apply()</b></span> method (see <a href="ch09.html#id29354">&#8220;The apply() Method&#8221;</a>).</p>
+</li>
+<li><p>Implement other methods, if desired, to specify the appearance of the highlight. These optional methods include <a name="idch0911"></a><a name="idch0912"></a><span class="bold"><b>setColor()</b></span>, <span class="bold"><b>setLinePattern()<a name="idch0913"></a></b></span>, and <a name="idch0914"></a><span class="bold"><b>setLineWidth()</b></span>.</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5475668"></a><a name="id29354"></a>The apply() Method</h2></div></div>
+<p>The <a name="idch0915"></a><span class="bold"><b>apply()</b></span> method of the highlight action renders the scene graph in such a way that selected objects stand out. You could use a two-pass approach, in which the scene is rendered first, and the additional highlights are rendered second. Or your highlight action might render only the selected objects, or render selected objects in a totally different manner (for example, as boxes or spheres). As for any action, the <span class="bold"><b>apply()</b></span> method is an overloaded virtual function (it can take a node, a path, or a path list). The derived highlight class provides stubs for the path and path list forms of the <span class="bold"><b>apply()</b></span> method. Because selection makes the most sense in the context of a scene graph (since the selection list is a list of paths), highlighting paths and path lists is not defined. The function stubs simply call the corresponding <span class="bold"><b>apply()</b></span> method of <span class="bold"><b>SoGLRenderAction</b></span> for paths and path lists.</p>
+<p>It's also worth examining the <span class="bold"><b>apply()</b></span> method of the sample classes in more detail, since it uses caching for improved efficiency. As shown in <a name="idch0916"></a><a href="ch09.html#id41625">Example 9-2</a>, the <span class="bold"><b>apply()</b></span> method uses a search action to find the selection node and then caches this path. Paths from the root of the scene graph to the selected objects are constructed as follows:<a name="idch0917"></a><a name="idch0918"></a></p>
+<div class="orderedlist"><ol type="1"><li><p>The <span class="bold"><b>apply()</b></span> method first determines whether the cached path to the selection node is still valid.  If the root of the new path is the root of the scene graph and the tail is the selection node, it considers the cached path to be valid (since paths are automatically updated when nodes are added or removed).</p>
+</li>
+<li><p>Next, it checks to be sure that something is selected. The selection node keeps track of the paths to the selected objects. The path from the root to the selection node (in Figure 9-1, the path from Node A to Node B) is prepended to each of the paths maintained in the selection list. <a name="idch0919"></a></p>
+<p><div class="figure"><p><a name="id5475880"></a><b>Figure 9-1. <a name="id18258"></a><a name="idch0920"></a>Highlight Path</b></p>
+<div class="mediaobject"><img src="figures/fig9.1newsnap.gif"></div></div><br>
+</p>
+<p>If the selection path ends in a node kit, additional work is performed to extend the path all the way down to the selected object. In Figure 9-1, the selection path is from Node B to Node D (a node kit). First, the last kit in the node kit path is obtained (here, Node D). Then, the node kit path is cast to a full path, and the tail of that path is obtained (Node E). <a name="idch0921"></a><a href="ch09.html#id18258">Figure 9-1</a> shows the complete highlight path, which extends from the root of the scene graph to the selection node (Node A to Node B), and from the selection node to the selected object (Node B to Node E). </p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5475965"></a>Creating a Highlight in the Overlay Planes</h2></div></div>
+<p>The following two examples show a class derived from <a name="idch0922"></a><span class="bold"><b>SoGLRenderAction</b></span> that renders the selected objects as 2D rectangles in the overlay planes. This example illustrates several techniques you will probably use when deriving any new highlight class:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>Using function &#8220;stubs&#8221; to call the path and pathList forms of the <span class="bold"><b>apply()</b></span> method of the parent class</p>
+</li>
+<li><p>Caching the path to the selection node<a name="idch0923"></a></p>
+</li>
+</ul></div><p>In addition, the <a name="idch0924"></a><span class="bold"><b>OverlayHighlightRenderAction</b></span> class performs some work that is class-specific.  For efficiency, its constructor sets up a scene graph that contains a 2D rectangle. Later, the <span class="bold"><b>apply()</b></span> method changes the values of the rectangle so that it appears in the correct position for the highlighted object. The <span class="bold"><b>updateBbox()</b></span> method is specific to this highlight class.  It projects the 3D bounding box for the selected object onto the screen and renders it as a 2D rectangle.</p>
+<p>When the constructor creates an <span class="bold"><b>SoGLRenderAction</b></span>, it passes in a dummy viewport region. The <a name="idch0925"></a><span class="bold"><b>SoXtRenderArea</b></span> will pass the real viewport region to to <span class="bold"><b>SoGLRenderAction</b></span> before the render action's <span class="bold"><b>apply()</b></span> method is called.</p>
+<p>Example 9-1 shows the class declaration found in the include file OverlayHighlightRenderAction.h.</p>
+<div class="example"><p><a name="id5476118"></a><b>Example 9-1. <a name="idch0926"></a>OverlayHighlightRenderAction.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/actions/SoGLRenderAction.h&gt;
+
+class SoCamera;
+class SoCoordinate3;
+class SoOrthographicCamera;
+class SoSeparator;
+class OverlayHighlightRenderAction : public SoGLRenderAction {
+     SO_ACTION_HEADER(OverlayHighlightRenderAction);
+  public:
+   // Constructor and destructor
+   OverlayHighlightRenderAction();
+   ~OverlayHighlightRenderAction();
+   
+   // Applies action to the graph rooted by a node,
+   // only drawing selected objects.
+   virtual void    apply(SoNode *node);
+
+   // Applies action to the graph defined by a path or path
+   // list.
+   // These simply invoke the parent class apply() methods.
+   // These do NOT highlight the path, whether selected or not.
+   // They are implemented to keep the compiler happy.
+   virtual void    apply(SoPath *path);
+   virtual void    apply(const SoPathList &amp;pathList,
+                   SbBool obeysRules = FALSE);
+
+   // This must be called before this class is used.
+   static void initClass();
+   
+  protected:
+   void             updateBbox(SoPath *p, SoCamera *c);
+   
+   // Local scene graph
+   SoSeparator          *localRoot;
+   SoOrthographicCamera *orthoCam;
+   SoCoordinate3        *coords;
+   
+   // We will cache the path to the first selection node
+   SoPath               *selPath;
+};
+</pre></td></tr></table><p>Example 9-2 shows the class definition, found in the source file.</p>
+<div class="example"><p><a name="id5476177"></a><b>Example 9-2. <a name="id41625"></a>OverlayHL.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;limits.h&gt;
+#include &lt;math.h&gt;
+#include &lt;Inventor/SbBox.h&gt;
+#include &lt;Inventor/SoPath.h&gt;
+#include &lt;Inventor/SoNodeKitPath.h&gt;
+#include &lt;Inventor/actions/SoGetBoundingBoxAction.h&gt;
+#include &lt;Inventor/actions/SoSearchAction.h&gt;
+#include &lt;Inventor/nodekits/SoBaseKit.h&gt;
+#include &lt;Inventor/nodes/SoColorIndex.h&gt;
+#include &lt;Inventor/nodes/SoCoordinate3.h&gt;
+#include &lt;Inventor/nodes/SoDrawStyle.h&gt;
+#include &lt;Inventor/nodes/SoFaceSet.h&gt;
+#include &lt;Inventor/nodes/SoLightModel.h&gt;
+#include &lt;Inventor/nodes/SoOrthographicCamera.h&gt;
+#include &lt;Inventor/nodes/SoPickStyle.h&gt;
+#include &lt;Inventor/nodes/SoSelection.h&gt;
+#include &lt;Inventor/nodes/SoSeparator.h&gt;
+
+#include &quot;OverlayHighlightRenderAction.h&quot;
+
+SO_ACTION_SOURCE(OverlayHighlightRenderAction);
+
+//    Initializes the OverlayHighlightRenderAction class.
+void
+OverlayHighlightRenderAction::initClass()
+{
+   SO_ACTION_INIT_CLASS(OverlayHighlightRenderAction,
+                        SoGLRenderAction);
+}
+
+//  Constructor
+OverlayHighlightRenderAction::OverlayHighlightRenderAction()
+      : SoGLRenderAction(SbVec2s(1, 1)) // pass a dummy
+                                        // viewport region
+{
+   SO_ACTION_CONSTRUCTOR(OverlayHighlightRenderAction);
+
+   selPath = NULL;
+   
+   // Set up the local rendering graph
+   localRoot = new SoSeparator;
+   localRoot-&gt;ref();
+   
+   SoPickStyle *pickStyle = new SoPickStyle;
+   pickStyle-&gt;style = SoPickStyle::UNPICKABLE;
+   localRoot-&gt;addChild(pickStyle);
+   
+   // Set up camera to look at 0 &lt;= x,y &lt;= 1
+   orthoCam = new SoOrthographicCamera;
+   orthoCam-&gt;position.setValue(.5, .5, 1.);
+   orthoCam-&gt;height = 1.0;
+   localRoot-&gt;addChild(orthoCam);
+   
+   SoLightModel *lmodel = new SoLightModel;
+   lmodel-&gt;model = SoLightModel::BASE_COLOR;
+   localRoot-&gt;addChild(lmodel);
+
+   SoColorIndex *color = new SoColorIndex;
+   color-&gt;index = 1;
+   localRoot-&gt;addChild(color);
+
+   SoDrawStyle *drawStyle = new SoDrawStyle;
+   drawStyle-&gt;style = SoDrawStyle::LINES;
+   drawStyle-&gt;lineWidth = 3;
+   drawStyle-&gt;linePattern = 0xffff;
+   localRoot-&gt;addChild(drawStyle);
+   
+   coords = new SoCoordinate3;
+   coords-&gt;point.setNum(0);
+   localRoot-&gt;addChild(coords);
+   
+   SoFaceSet *fset = new SoFaceSet;
+   fset-&gt;numVertices = 4;
+   localRoot-&gt;addChild(fset);
+}    
+
+//  Destructor
+
+OverlayHighlightRenderAction::~OverlayHighlightRenderAction()
+{
+   localRoot-&gt;unref();
+   if (selPath != NULL)
+      selPath-&gt;unref();
+}    
+
+// Update the bbox to surround the projected bounding box of
+// the path.
+// Use: protected
+void
+OverlayHighlightRenderAction::updateBbox(SoPath *p, SoCamera
+                                       *camera)
+{
+   coords-&gt;point.deleteValues(0); // clear them all out
+   
+   if (camera == NULL) return;
+   
+   // Compute the 3d bounding box of the passed path
+   SoGetBoundingBoxAction bba(getViewportRegion());    
+   bba.apply(p); 
+   SbVec3f min, max;
+   bba.getBoundingBox().getBounds(min, max); 
+   
+   // Project points to (0 &lt;= x,y,z &lt;= 1) screen coordinates
+   SbViewVolume vv = camera-&gt;getViewVolume();
+   SbVec3f screenPoint[8];
+   vv.projectToScreen(SbVec3f(min[0], min[1], min[2]),
+                     screenPoint[0]);
+   vv.projectToScreen(SbVec3f(min[0], min[1], max[2]),
+                     screenPoint[1]);
+   vv.projectToScreen(SbVec3f(min[0], max[1], min[2]),
+                     screenPoint[2]);
+   vv.projectToScreen(SbVec3f(min[0], max[1], max[2]),
+                     screenPoint[3]);
+   vv.projectToScreen(SbVec3f(max[0], min[1], min[2]),
+                     screenPoint[4]);
+   vv.projectToScreen(SbVec3f(max[0], min[1], max[2]),
+                     screenPoint[5]);
+   vv.projectToScreen(SbVec3f(max[0], max[1], min[2]),
+                     screenPoint[6]);
+   vv.projectToScreen(SbVec3f(max[0], max[1], max[2]),
+                     screenPoint[7]);
+   
+   // Find the encompassing 2d box (0 &lt;= x,y &lt;= 1)
+   SbBox2f bbox2;
+   for (int i = 0; i &lt; 8; i++)
+      bbox2.extendBy(SbVec2f(screenPoint[i][0],
+                    screenPoint[i][1]));
+   
+   if (! bbox2.isEmpty()) {
+      float xmin, ymin, xmax, ymax;
+      bbox2.getBounds(xmin, ymin, xmax, ymax);
+                       
+      // Set up the coordinate node
+      coords-&gt;point.set1Value(0,  xmin, ymin, 0);
+      coords-&gt;point.set1Value(1,  xmax, ymin, 0);
+      coords-&gt;point.set1Value(2,  xmax, ymax, 0);
+      coords-&gt;point.set1Value(3,  xmin, ymax, 0);
+   }
+}
+
+//  beginTraversal - render highlights for our selection node.
+void
+OverlayHighlightRenderAction::apply(SoNode *renderRoot)
+{
+   // Do not render the scene - only render the highlights
+   
+   // Is our cached path still valid?
+   if ((selPath == NULL) ||
+      (selPath-&gt;getHead() != renderRoot) ||
+      (! selPath-&gt;getTail()-&gt;isOfType
+                            (SoSelection::getClassTypeId()))) {
+
+      // Find the selection node under the render root
+      SoSearchAction sa;
+      sa.setFind(SoSearchAction::TYPE);
+      sa.setInterest(SoSearchAction::FIRST);
+      sa.setType(SoSelection::getClassTypeId());
+      sa.apply(renderRoot);
+      
+      // Cache this path
+      if (selPath != NULL)
+         selPath-&gt;unref();
+      selPath = sa.getPath();
+      if (selPath != NULL) {
+         selPath = selPath-&gt;copy();
+         selPath-&gt;ref();
+      }
+   }
+   
+   if (selPath != NULL) {
+      // Make sure something is selected.
+      SoSelection *sel = (SoSelection *) selPath-&gt;getTail();
+      if (sel-&gt;getNumSelected() == 0) return;
+      
+      // Keep the length from the root to the selection
+      // as an optimization so we can reuse this data.
+      int reusablePathLength = selPath-&gt;getLength();
+
+      // For each selection path, create a new path rooted 
+      // under our localRoot.
+      for (int j = 0; j &lt; sel-&gt;getNumSelected(); j++) {
+         // Continue the path down to the selected object.
+         // No need to deal with p[0] since that is the sel
+         // node.
+         SoPath *p = sel-&gt;getPath(j);            
+         SoNode *pathTail = p-&gt;getTail();
+
+         if ( pathTail-&gt;isOfType(SoBaseKit::getClassTypeId())) {
+            // Find the last nodekit on the path.
+            SoNode *kitTail = ((SoNodeKitPath *)p)-&gt;getTail();
+
+            // Extend the selectionPath until it reaches this
+            // last kit.
+            SoFullPath *fp = (SoFullPath *) p;
+            int k = 0;
+            do {
+               selPath-&gt;append(fp-&gt;getIndex(++k));
+            } 
+            while ( fp-&gt;getNode(k) != kitTail );
+         }
+         else {
+            for (int k = 1; k &lt; p-&gt;getLength(); k++)
+               selPath-&gt;append(p-&gt;getIndex(k));
+         }
+   
+         // Find the camera used to render the selected object.
+         SoNode *camera;
+         SoSearchAction sa;
+         sa.setFind(SoSearchAction::TYPE);
+         sa.setInterest(SoSearchAction::LAST);
+         sa.setType(SoCamera::getClassTypeId());
+         sa.apply(selPath);
+         camera = (sa.getPath() == NULL ? NULL :
+                                  sa.getPath()-&gt;getTail());
+         
+         // Get the bounding box of the object and update the
+         // local highlight graph.
+         updateBbox(selPath, (SoCamera *)camera);
+         
+         // Make sure the box has some size.
+         if (coords-&gt;point.getNum() == 0) {
+           #ifdef DEBUG
+            SoDebugError::post
+                  (&quot;OverlayHighlightRenderAction::apply&quot;,
+                   &quot;selected object has no bounding box - cannot
+                   render a highlight&quot;);
+           #endif              
+         }
+         else {
+            // Render the highlight.
+            SoGLRenderAction::apply(localRoot);
+         }
+               
+         // Restore selPath for reuse.
+         selPath-&gt;truncate(reusablePathLength);
+      }
+   }
+}    
+// Function stubs: we do not highlight paths and pathLists.
+
+void
+OverlayHighlightRenderAction::apply(SoPath *path)
+{ SoGLRenderAction::apply(path); }
+
+void
+OverlayHighlightRenderAction::apply(const SoPathList &amp;pathList,
+                                    SbBool obeysRules)
+{ SoGLRenderAction::apply(pathList, obeysRules); }
+</pre></td></tr></table><p><a href="ch09.html#id13286">Example 9-3</a> shows a main program that uses this new highlight class. The highlight is drawn in the overlay planes, and the scene itself is drawn in the normal planes by a different render action.</p>
+<div class="example"><p><a name="id5476481"></a><b>Example 9-3. <a name="id13286"></a>Main Program Using OverlayHighlightRenderAction</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;X11/StringDefs.h&gt;
+#include &lt;X11/Intrinsic.h&gt;
+
+#include &lt;Inventor/SoDB.h&gt;
+#include &lt;Inventor/SoInput.h&gt;
+#include &lt;Inventor/Xt/SoXt.h&gt;
+#include &lt;Inventor/Xt/viewers/SoXtExaminerViewer.h&gt;
+#include &lt;Inventor/nodes/SoSelection.h&gt;
+
+#include &quot;OverlayHighlightRenderAction.h&quot;
+
+void
+main(int , char *argv[])
+{
+   // Initialization
+   Widget mainWindow = SoXt::init(argv[0]);
+   OverlayHighlightRenderAction::initClass();
+   
+   // Open the data file
+   SoInput in;   
+   char *datafile = &quot;monitor.iv&quot;;
+   if (! in.openFile(datafile)) {
+     fprintf(stderr, &quot;Cannot open %s for reading.\n&quot;, datafile);
+     return;
+   }
+
+   // Read the input file
+   SoNode *n;
+   SoSeparator *sep = new SoSeparator;
+   while ((SoDB::read(&amp;in, n) != FALSE) &amp;&amp; (n != NULL))
+     sep-&gt;addChild(n);
+   
+   // Create a selection root to show off our new highlight.
+   SoSelection *sel = new SoSelection;
+   sel-&gt;addChild(sep);
+
+   // Create a viewer.
+   SoXtExaminerViewer *viewer = new
+                                SoXtExaminerViewer(mainWindow);
+   viewer-&gt;setSceneGraph(sel);
+   
+   // Set the overlay scene graph same as normal. For viewers,
+   // we have to cast to render area graph.
+   viewer-&gt;setOverlaySceneGraph(viewer-&gt;
+                               SoXtRenderArea::getSceneGraph());
+   
+   viewer-&gt;setTitle(&quot;Overlay highlight&quot;);
+   viewer-&gt;redrawOverlayOnSelectionChange(sel);
+   viewer-&gt;setOverlayGLRenderAction(
+                              new OverlayHighlightRenderAction);
+
+   // Set up the overlay color map
+   SbColor red(1, 0, 0);
+   viewer-&gt;setOverlayColorMap(1, 1, &amp;red);
+   
+   viewer-&gt;show(); 
+   SoXt::show(mainWindow);
+   SoXt::mainLoop();
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5476556"></a>Rendering Only Selected Objects</h2></div></div>
+<p>Examples 9-3 and 9-4 show a new class that renders only the selected objects.  Rather than drawing a surrogate object as in Examples 9-1 and 9-2, these examples draw the selected objects themselves.<a name="idch0927"></a></p>
+<div class="example"><p><a name="id5476572"></a><b>Example 9-4. ShowSelectionRA.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/actions/SoGLRenderAction.h&gt;
+
+class SoPath;
+
+class ShowSelectionRenderAction : public SoGLRenderAction {
+   SO_ACTION_HEADER(ShowSelectionRenderAction);
+  public:
+   ShowSelectionRenderAction();
+   virtual ~ShowSelectionRenderAction();
+
+   // Applies action to the graph rooted by a node,
+   // only drawing selected objects.
+   virtual void    apply(SoNode *node);
+   
+   // Applies action to the graph defined by a path or path
+   // list.
+   // These simply invoke the parent class apply() methods.
+   // These do NOT highlight the path, whether selected or not.
+   // They are implemented to keep the compiler happy.
+   virtual void    apply(SoPath *path);
+   virtual void    apply(const SoPathList &amp;pathList,
+                         SbBool obeysRules = FALSE);
+   static void initClass();
+   
+  protected:
+   // We will cache the path to the first selection node.
+   SoPath           *selPath;
+};
+</pre></td></tr></table><br><div class="example"><p><a name="id5476617"></a><b>Example 9-5. ShowSelectionRA.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SoPath.h&gt;
+#include &lt;Inventor/actions/SoSearchAction.h&gt;
+#include &lt;Inventor/nodes/SoBaseColor.h&gt;
+#include &lt;Inventor/nodes/SoDrawStyle.h&gt;
+#include &lt;Inventor/nodes/SoLightModel.h&gt;
+#include &lt;Inventor/nodes/SoNode.h&gt;
+#include &lt;Inventor/nodes/SoSelection.h&gt;
+#include &lt;Inventor/nodes/SoSeparator.h&gt;
+#include &lt;Inventor/nodes/SoTexture2.h&gt;
+
+#include &quot;ShowSelectionRA.h&quot;
+
+SO_ACTION_SOURCE(ShowSelectionRenderAction);
+
+// Initializes the ShowSelectionRenderAction class.
+void
+ShowSelectionRenderAction::initClass()
+{
+   SO_ACTION_INIT_CLASS(ShowSelectionRenderAction,
+                        SoGLRenderAction);
+}
+
+//  Constructor
+
+ShowSelectionRenderAction::ShowSelectionRenderAction()
+      : SoGLRenderAction(SbVec2s(1, 1)) 
+                        // pass a dummy viewport region
+{
+   selPath = NULL;
+}    
+
+//  Destructor
+
+ShowSelectionRenderAction::~ShowSelectionRenderAction()
+{
+   if (selPath != NULL)
+     selPath-&gt;unref();
+}    
+
+//  Render the passed scene by searching for the first
+//  selection node, then rendering only the selected objects.
+
+void
+ShowSelectionRenderAction::apply(SoNode *node)
+{
+   node-&gt;ref();
+   
+   // Do we have to search for the selection node?
+   // Only if our cached path is NULL, 
+   // or the action is being applied to a different scene,
+   // or the tail of our existing path is no longer a selection
+   // node (for instance if that node was removed from the
+   // scene).
+   if ((selPath == NULL) ||
+      (selPath-&gt;getHead() != node) ||
+      (! selPath-&gt;getTail()-&gt;isOfType(
+           SoSelection::getClassTypeId()))) {
+   
+     // Find the first selection node under the passed root.
+     SoSearchAction sa;
+     sa.setFind(SoSearchAction::TYPE);
+     sa.setInterest(SoSearchAction::FIRST);
+     sa.setType(SoSelection::getClassTypeId());
+     sa.apply(node);
+   
+     // Cache this new path.
+     if (selPath != NULL)
+       selPath-&gt;unref();
+     selPath = sa.getPath();
+     if (selPath != NULL) {
+       selPath = selPath-&gt;copy();
+       selPath-&gt;ref();
+     }
+   }
+   
+   // Render the selected paths!
+   if (selPath != NULL) {       
+     SoSelection *sel = (SoSelection *) selPath-&gt;getTail();
+     if (sel-&gt;getNumSelected() &gt; 0) {
+       // Keep the length from the root to the selection
+       // as an optimization so we can reuse this data
+       int reusablePathLength = selPath-&gt;getLength();
+
+       // For each selection path, we need the full path from
+       // the passed root to render, else we may not have a
+       // camera.
+       for (int j = 0; j &lt; sel-&gt;getNumSelected(); j++) {
+         // Continue the path down to the selected object.
+         // No need to deal with p[0] since that is the sel
+         // node.
+         SoPath *p = sel-&gt;getPath(j);
+         for (int k = 1; k &lt; p-&gt;getLength(); k++)
+            selPath-&gt;append(p-&gt;getIndex(k));
+
+         // Render the selected shape.
+         SoGLRenderAction::apply(selPath);
+      
+         // Restore selPath for reuse.
+         selPath-&gt;truncate(reusablePathLength);
+       }
+     }
+   }
+   
+   node-&gt;unref();
+}    
+
+// Function stubs: we do not highlight paths and pathLists.
+
+void
+ShowSelectionRenderAction::apply(SoPath *path)
+{ SoGLRenderAction::apply(path); }
+
+void
+ShowSelectionRenderAction::apply(const SoPathList &amp;pathList, SbBool obeysRules)
+{ SoGLRenderAction::apply(pathList, obeysRules); }
+</pre></td></tr></table><p><a href="ch09.html#id17636">Example 9-6</a> shows a main program that uses this new highlight class. It creates two viewers that share the same selection node. One viewer uses the GLRenderAction, while the other uses the ShowSelectionRenderAction. Selection changes in one viewer are reflected in the other viewer as well.</p>
+<div class="example"><p><a name="id5476756"></a><b>Example 9-6. <a name="id17636"></a>Main Program for ShowSelectionRenderAction</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;X11/StringDefs.h&gt;
+#include &lt;X11/Intrinsic.h&gt;
+
+#include &lt;Inventor/SoDB.h&gt;
+#include &lt;Inventor/SoInput.h&gt;
+#include &lt;Inventor/Xt/SoXt.h&gt;
+#include &lt;Inventor/Xt/viewers/SoXtExaminerViewer.h&gt;
+#include &lt;Inventor/nodes/SoSelection.h&gt;
+
+#include &quot;ShowSelectionRA.h&quot;
+
+void
+main(int , char *argv[])
+{
+   // Initialization
+   Widget mainWindow = SoXt::init(argv[0]);
+   ShowSelectionRenderAction::initClass();
+   
+   // Open the data file
+   SoInput in;   
+   char *datafile = &quot;monitor.iv&quot;;
+   if (! in.openFile(datafile)) {
+     fprintf(stderr, &quot;Cannot open %s for reading.\n&quot;, datafile);
+     return;
+   }
+
+   // Read the input file
+   SoNode *n;
+   SoSeparator *sep = new SoSeparator;
+   while ((SoDB::read(&amp;in, n) != FALSE) &amp;&amp; (n != NULL))
+     sep-&gt;addChild(n);
+   
+   // Create a selection root to show off our new highlight.
+   SoSelection *sel = new SoSelection;
+   sel-&gt;addChild(sep);
+
+   // Create two viewers, one to show the scene, the other
+   // to show the selected objects.
+   SoXtExaminerViewer *viewer1 = 
+                             new SoXtExaminerViewer(mainWindow);
+   viewer1-&gt;setSceneGraph(sel);
+   viewer1-&gt;setTitle(&quot;Scene&quot;);
+
+   SoXtExaminerViewer *viewer2 = new SoXtExaminerViewer();
+   viewer2-&gt;setSceneGraph(sel);
+   viewer2-&gt;setGLRenderAction(new ShowSelectionRenderAction());    
+   viewer2-&gt;redrawOnSelectionChange(sel);
+   viewer2-&gt;setDecoration(FALSE);
+   viewer2-&gt;setTitle(&quot;Selection&quot;);
+
+   viewer1-&gt;show();
+   viewer2-&gt;show();
+   
+   SoXt::show(mainWindow);
+   SoXt::mainLoop();
+}
+
+</pre></td></tr></table><br></div></div><!--CONTENT_END--><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch08.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Table of Contents</a></td><td width="40%" align="right"> <a accesskey="n" href="ch10.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 8. Creating Draggers and Manipulators </td><td width="20%" align="center"> </td><td width="40%" align="right">Chapter 10. Creating a Component </td></tr></table></div></body></html>

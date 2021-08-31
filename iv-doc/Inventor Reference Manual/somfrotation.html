@@ -1,0 +1,63 @@
+<html>
+<body>
+SSooMMFFRRoottaattiioonnhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoMFRotation -- Multiple-value field containing any number of SbRotations. INHERITS FROMSoField &gt; SoMField &gt; SoMFRotation DESCRIPTIONmultiple-value field that contains any number of SbRotations.
+
+SoMFRotations are written to file as one or more sets of four floating point values.Each set of 4 values is an axis of rotation followed by the amount of right-handed rotation about that axis, in radians. When more than one value is present, all of the values are enclosed in squarebrackets and separated by commas; for example:
+
+[ 1 0 0 0, -.707 -.707 0 1.57 ]
+
+METHODSvoid set1Value(int index, const SbVec3f &axis, float angle)
+
+Sets the index'th value to the given axis/angle. void setValue(const SbVec3f &axis, float angle)Makes this field have exactly one value, given by axis and angle.
+
+void set1Value(int index, float q0, float q1, float q2, float q3)void set1Value(int index, const float q[4])
+
+Sets the index'th value to the given quaternion. void setValue(float q0, float q1, float q2, float q3)void setValue(float q[4])
+
+Makes this field have exactly one value, given by the quaternion. static SoType getClassTypeId()virtual void getTypeId() const
+
+Returns the type for this class or a particular object of this class. const SbRotation & operator [ ](int i) const
+
+Returns the i'th value of the field. Indexing past the end of the field (passingin i greater than getNum()) will return garbage.
+
+386 Open Inventor C++ Reference Pages<hr>
+
+SSooMMFFRRoottaattiioonnhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh const SbRotation * getValues(int start) const
+
+Returns a pointer into the array of values in the field, starting at index start.The values are read-only; see the startEditing()/finishEditing() methods for a way of modifying values in place. int find(const SbRotation & targetValue, SbBool addIfNotFound =FALSE)
+
+Finds the given value in the array and returns the index of that value in thearray. If the value is not found, -1 is returned. If addIfNotFound is set, then targetValue is added to the end of the array (but -1 is still returned). void setValues(int start, int num, const SbRotation *newValues)Sets num values starting at index start to the values in newValues. The array
+
+will be automatically be made larger to accomodate the new values, ifnecessary.
+
+void set1Value(int index, const SbRotation & newValue)Sets the index'th value in the array to newValue. The array will be
+
+automatically expanded, if necessary. const SbRotation & operator =(const SbRotation & newValue) void setValue(const SbRotation & newValue)Sets the first value in the array to newValue, and deletes the second and
+
+subsequent values. int operator ==(const SoMFRotation &f) constint operator !=(const SoMFRotation &f) const
+
+Returns TRUE if all of the values of this field equal (do not equal) those ofthe given field. If the fields are different types FALSE will always be returned (even if one field is an SoMFFloat with one value of 1.0 and the other is anSoMFInt with a value of 1, for example).
+
+SbRotation * startEditing()void finishEditing()
+
+startEditing() returns a pointer to the internally-maintained array that canbe modified. The values in the array may be changed, but values cannot be added or removed. It is illegal to call any other editing methods betweenstartEditing() and finishEditing() (e.g. set1Value(), setValue(), etc).
+
+Fields, engines or sensors connected to this field and sensors are not notifiedthat this field has changed until finishEditing() is called. Calling
+
+387<hr>
+
+SSooMMFFRRoottaattiioonnhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+finishEditing() always sets the isDefault() flag to FALSE and informsengines and sensors that the field changed, even if none of the values actually were changed. Methods from class SoMField:
+
+getNum, setNum, deleteValues, insertSpace, set1, get1
+
+Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer INCLUDE FILE#include &lt;Inventor/fields/SoMFRotation.h&gt;
+
+SEE ALSOSbRotation
+</body>
+</html>

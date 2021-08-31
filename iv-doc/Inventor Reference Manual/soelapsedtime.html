@@ -1,0 +1,75 @@
+<html>
+<body>
+SoElapsedTime
+<hr>
+<dl>
+<dt>NAME
+<dd>SoElapsedTime -- basic controllable time source
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoElapsedTime
+
+<dt>DESCRIPTION
+<dd>This engine functions as a stopwatch; it outputs the time that has elapsed since it started running. By default, the timeIn input is connected to the realTime globalfield. It can, however, be connected to any other time source.
+<dd>The ouput from the engine is the time that has elapsed since it started running, orsince the reset input was last triggered. You can affect the speed of the output time by setting the speed scale factor. A value greater than 1.0 will speed up the output,and a value less than 1.0 will slow it down.
+<dd>If you pause the engine, by setting the pause input to TRUE, it stops updating thetimeOut output. When you turn off the pause, it jumps to its current position without losing time. Alternatively, if you want to stop the engine for a while, andthen restart it from where it left off, use the on input field.
+
+<dt>INPUTS
+<dl>
+<dt>SoSFTime timeIn
+<dd>Running time.
+
+<dt>SoSFFloat speed
+<dd>Scale factor for time.
+
+<dt>SoSFBool on
+<dd>TRUE to start running, FALSE to stop.
+
+<dt>SoSFBool pause
+<dd>TRUE to freeze, FALSE to continue running.
+
+<dt>SoSFTrigger reset
+<dd>Reset the base time.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoSFTime) timeOut
+<dd>Time elapsed, modified by the speed factor.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoElapsedTime</b>()
+<dd>Constructor.
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>ElapsedTime {
+<dd>timeIn &lt;current time&gt;
+<dd>speed 1
+<dd>on TRUE
+<dd>pause FALSE
+<dd>reset
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoElapsedTime.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotimecounter.html">SoTimeCounter</a>, <a href="sooneshot.html">SoOneShot</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+</dl>
+
+</body>
+</html>

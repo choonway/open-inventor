@@ -1,0 +1,7 @@
+arcsorter.cxx ??? was not in build but added back in
+libNurbs.cxx
+ncurve.cxx
+npatch.cxx
+nurbsClient.cxx
+nurbserr.cxx
+nurbsinterfac.cxx ??? not in build but added back in

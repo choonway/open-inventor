@@ -1,0 +1,61 @@
+<html>
+<body>
+SoNode
+<hr>
+<dl>
+<dt>NAME 
+<dd>SoNode -- abstract base class for all database nodes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; SoNode
+
+<dt>DESCRIPTION
+<dd>This is the abstract base class from which all scene graph node classes are derived.
+
+<dt>METHODS
+<dl>
+<dt>void <b>setOverride</b>(SbBool state)
+<dd>Turns override flag on or off.
+
+<dt>SbBool <b>isOverride()</b> const
+<dd>Returns the state of the override flag.
+
+<dt>virtual SoNode * <b>copy</b>(SbBool copyConnections = FALSE) const
+<dd>Creates and returns an exact copy of the node. If the node is a group, it copies the children as well. If copyConnections is TRUE (it is FALSE bydefault), any connections to (but not from) fields of the node are copied, as well. virtual SbBool affectsState() constReturns TRUE if a node has an effect on the state during traversal. The default method returns TRUE. Node classes (such as SoSeparator) thatisolate their effects from the rest of the graph override this method to return FALSE.
+
+<dt>static SoNode * <b>getByName</b>(const SbName &amp;name)
+<dt>static int <b>getByName</b>(const SbName &amp;name, SoNodeList &amp;list)
+<dd>A node's name can be set using SoBase::setName(). These methods allownodes to be looked up by name. The first one returns the last node given the specified name. The second one returns the number of nodes with the givenname, and adds to list pointers to those nodes.
+
+<dt>static SoType <b>getClassTypeId()</b>
+<dd>Returns type identifier for the SoNode class.
+
+<dt><b>Methods from class SoFieldContainer:</b>
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase:</b>
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>ACTION BEHAVIOR
+
+<dl>
+<dt>SoSearchAction
+<dd>If the node pointer, type, or name matches the search criteria, returns a pathto the node.
+<dt>SoWriteAction
+<dd>Writes the contents of the node to the current SoOutput.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dd>This is an abstract class. See the reference page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoNode.h&gt;
+
+<dt>SEE ALSO
+<dd> <a href="sopath.html">SoPath</a>, <a href="soaction.html">SoAction</a>, <a href="sonodekit.html">SoNodeKit</a>
+
+</dl>
+</body>
+</html>

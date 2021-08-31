@@ -1,0 +1,98 @@
+<html>
+<body>
+SbXfBox3f
+<hr>
+<dl>
+<dt>NAME
+<dd>SbXfBox3f -- 3D box with an associated transformation matrix
+
+<dt>INHERITS FROM
+<dd><a href="sbbox3f.html">SbBox3f</a> &gt; SbXfBox3f
+
+<dt>DESCRIPTION
+<dd>A 3D box with an arbitrary transformation applied. This class is useful when a box will be transformed frequently; if an SbBox3f is used for this purpose it will expand each time it is transformed in order to keep itself axis-aligned. Transformations can be accumulated on an SbXfBox3f without expanding the box, and after all transformations have been done, the box can be expanded to an axis-aligned box if necessary.
+
+<dt>METHODS
+<dl>
+<dt><b>SbXfBox3f</b>()
+<dt><b>SbXfBox3f</b>(const SbVec3f &_min, const SbVec3f &_max)
+<dt><b>SbXfBox3f</b>(const SbBox3f &box)
+<dt><b>~SbXfBox3f</b>()
+<dd>Constructors and destructor.
+
+<dt>void <b>setTransform</b>(const SbMatrix &m)
+<dd>Sets the transformation on the box
+
+<dt>const SbMatrix & <b>getgetXf</b>() const
+<dt>const SbMatrix & <b>getInverse</b>() const
+<dd>Gets the transformation on the box, and its inverse.
+
+<dt>SbVec3f <b>getCenter</b>() const
+<dd>Returns the center of the box.
+
+<dt>void extendBy(const SbVec3f &pt)
+<dd>Extends the box (if necessary) to contain the given 3D point.
+
+<dt>void extendBy(const SbBox3f &bb)
+<dd>Extends the box (if necessary) to contain the given SbBox3f.
+
+<dt>void extendBy(const SbXfBox3f &bb)
+<dd>Extends the box (if necessary) to contain the given SbXfBox3f.
+
+<dt>SbBool intersect(const SbVec3f &pt) const
+<dd>Returns TRUE if intersection of given point and this box is not empty.
+
+<dt>SbBool intersect(const SbBox3f &bb) const
+<dd>Returns TRUE if intersection of given box and this box is not empty.
+
+<dt>void setBounds(float xmin, float ymin, float zmin, float xmax, floatymax, float zmax)
+<dt>void setBounds(const SbVec3f &_min, const SbVec3f &_max)
+<dt>void getBounds(float &xmin, float &ymin, float &zmin, float &xmax, float &ymax, float &zmax) const
+<dt>void getBounds(SbVec3f &_min, SbVec3f &_max) const
+<dd>Set and get the bounds of the box.
+
+<dt>void getOrigin(float &originX, float &originY, float &originZ)
+<dd>Returns origin (minimum point) of the box.
+
+<dt>void getSize(float &sizeX, float &sizeY, float &sizeZ)
+<dd>Returns size of the box.
+
+<dt>float getVolume() const
+<dd>Gives the volume of the box (0 for an empty box).
+
+<dt>void makeEmpty()
+<dd>Sets the box to contain nothing.
+
+<dt>SbBool isEmpty() const
+<dd>Checks if the box is empty (degenerate).
+
+<dt>SbBool hasVolume() const
+<dd>Checks if the box has volume; i.e., all three dimensions have positive size.
+<dt>void getSpan(const SbVec3f &direction, float &dMin, float &dMax)const
+<dd>Finds the extent of the box along a particular direction.
+
+<dt>void transform(const SbMatrix &m)
+<dd>Transforms the box by the given matrix.
+
+<dt>SbBox3f project() const
+<dd>Projects an SbXfBox3f to an SbBox3f int operator ==(const SbXfBox3f &b1, const SbXfBox3f &b2)
+
+<dt>int operator !=(const SbXfBox3f &b1, const SbXfBox3f &b2)
+
+<dd>Equality comparisons.
+
+<dt>Methods from class SbBox3f:
+<dd>getMin, getMax
+
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbBox.h&gt;
+
+<dt>SEE ALSO
+<dd>SbBox3f, SbBox2f, SbBox2s, SbVec3f, SbVec2f, SbVec2s, SbMatrix,
+SoGetBoundingBoxAction
+
+</dl>
+</body>
+</html>

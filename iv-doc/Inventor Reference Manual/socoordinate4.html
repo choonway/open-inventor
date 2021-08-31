@@ -1,0 +1,60 @@
+<html>
+<body>
+SoCoordinate4
+<hr>
+<dl>
+<dt>NAME
+<dd>SoCoordinate4 -- rational coordinate point node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoCoordinate4
+
+<dt>DESCRIPTION
+<dd>This node defines a set of 3D coordinates to be used by subsequent vertex-based shape nodes (those derived from SoVertexShape) or shape nodes that use them ascontrol points (such as NURBS curves and surfaces). Coordinates are specifed as rational 4-vectors; the corresponding 3D point is computed by dividing the firstthree components by the fourth. This node does not produce a visible result during rendering; it simply replaces the current coordinates in the rendering state forsubsequent nodes to use.
+
+<p>This node exists primarily for use with NURBS curves and surfaces. However, it canbe used to define coordinates for any vertex-based shape.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFVec4f point
+<dd>Coordinate point(s).
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoCoordinate4</b>()
+<dd>Creates a coordinate node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Sets coordinates in current traversal state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Coordinate4 {
+<dd>point 0 0 0 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoCoordinate4.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socoordinate3.html">SoCoordinate3</a>, <a href="soindexednurbscurve.html">SoIndexedNurbsCurve</a>, <a href="soindexednurbssurface.html">SoIndexedNurbsSurface</a>, <a href="sonurbscurve.html">SoNurbsCurve</a>, <a href="sonurbsprofile.html">SoNurbsProfile</a>, <a href="sonurbssurface.html">SoNurbsSurface</a>, <a href="sovertexshape.html">SoVertexShape</a>
+</body>
+</html>

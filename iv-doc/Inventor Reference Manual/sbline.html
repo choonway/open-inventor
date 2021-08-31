@@ -1,0 +1,41 @@
+<html>
+<body>
+SbLine
+<hr>
+<dl>
+<dt>NAME
+<dd>SbLine -- directed line in 3D
+
+<dt>INHERITS FROM
+<dd>SbLine
+
+<dt>DESCRIPTION
+<dd>Represents a directed line in 3D. This is a basic Inventor datatype that is used for representing a 3D line. It is used as input and output by a variety of Inventor classes.
+
+<dt>METHODS
+<dl>
+<dt><b>SbLine</b>()
+<dt><b>SbLine</b>(const SbVec3f &p0, const SbVec3f &p1)
+<dd>Constructors. To construct a line from a position and direction, use: SbLine(p0, p0 + dir). The line is directed from p0 to p1.
+
+<dt>void <b>setValue</b>(const SbVec3f &p0, const SbVec3f &p1)
+<dd>Sets line to pass through points p0 and p1.
+
+<dt>SbBool <b>getClosestPoints</b>(const SbLine &line2, SbVec3f &ptOnThis,SbVec3f &ptOnLine2 ) const
+<dd>Finds the two closest points between this line and line2, and loads them intoptOnThis and ptOnLine2. Returns FALSE if the lines are parallel (results undefined), and returns TRUE otherwise.
+
+<dt>SbVec3f <b>getClosestPoint</b>(const SbVec3f &point) const
+<dd>Returns the closest point on the line to the given point.
+
+<dt>const SbVec3f & <b>getPosition</b>() const
+<dt>const SbVec3f & <b>getDirection</b>() const
+<dd>Returns position of line origin point and direction vector of line.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbLinear.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbvec3f.html">SbVec3f</a>, <a href="sbplane.html">SbPlane</a>
+</body>
+</html>

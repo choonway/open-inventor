@@ -1,0 +1,47 @@
+<html>
+<body>
+SoNodeSensor
+<hr>
+<dl>
+<dt>NAME
+<dd>SoNodeSensor -- sensor class that can be attached to Inventor nodes
+
+<dt>INHERITS FROM
+<dd><a href="sosensor.html">SoSensor</a> &gt; <a href="sodelayqueuesensor.html">SoDelayQueueSensor</a> &gt; <a href="sodatasensor.html">SoDataSensor</a> &gt; SoNodeSensor
+
+<dt>DESCRIPTION
+<dd>Node sensors detect changes to nodes, calling a callback function whenever any field of the node or, if the node is a group node, any children of the node change.
+
+<dt>METHODS
+<dl>
+<dt><b>SoNodeSensor</b>()
+<dt><b>SoNodeSensor</b>(SoSensorCB *func, void *data)
+<dd>Creation methods. The second method takes the callback function and data to be called when the sensor is triggered.
+
+<dt>~<b>SoNodeSensor</b>()
+<dd>Destroys the sensor, freeing up any memory associated with it after unscheduling it.
+
+<dt>void <b>attach</b>(SoNode *node)
+<dt>void <b>detach</b>()
+<dt>SoNode * <b>getAttachedNode</b>() const
+<dd>The attach() method makes this sensor detect changes to the given node. The detach() method unschedules this sensor (if it is scheduled) and makes it ignore changes to the scene graph. The getAttachedNode() method returns the node that this sensor is sensing, or NULL if it is not attached to any node.
+
+<dt><b>Methods from class SoDataSensor</b>:
+<dd>setDeleteCallback, getTriggerNode, getTriggerField, getTriggerPath,setTriggerPathFlag, getTriggerPathFlag
+
+<dt><b>Methods from class SoDelayQueueSensor</b>:
+<dd>setPriority, getPriority, getDefaultPriority, schedule, unschedule, isScheduled
+
+<dt><b>Methods from class SoSensor</b>:
+<dt>setFunction, getFunction, setData, getData
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/sensors/SoNodeSensor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sofieldsensor.html">SoFieldSensor</a>, <a href="sopathsensor.html">SoPathSensor</a>, <a href="sodatasensor.html">SoDataSensor</a>
+</dl>
+
+</body>
+</html>

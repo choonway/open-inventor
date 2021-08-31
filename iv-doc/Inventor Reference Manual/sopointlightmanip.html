@@ -1,0 +1,71 @@
+<html>
+<body>
+SSooPPooiinnttLLiigghhttMMaanniipphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoPointLightManip -- point light node with 3D interface for editing location INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoLight &gt; SoPointLight &gt; SoPointLightManip DESCRIPTIONSoPointLightManip is the base class for all SoPointLight nodes that have a built-in
+
+3D user interface (this is the only such class provided with the Inventor toolkit).Since it is derived from SoPointLight, any changes to its fields result in a change of lighting for nodes that follow it in the scene graph. In this case, the interface editsthe location field. Also, the color of the manipulator's geometry will reflect the color of the light (but you can not edit the color using this manipulator). Typically, you will want to replace a regular SoPointLight with anSoPointLightManip (as when the user selects a light to be edited), or vice versa (as when the user is done moving the light and the interface should go away). Use thereplaceNode() method to insert a manipulator into a scene graph, and the replaceManip() method to remove it when done. The SoPointLightManip utilizes an SoPointLightDragger to provide a 3Dinterface. However, the manipulator differs from the dragger; it lights other objects in the scene because, as an SoPointLight, it alters the state. The fields values andmovement of the dragger, on the other hand, affect only the dragger itself. To find out more about how the interface works and what each part will do, see thereference page for SoPointLightDragger. The interfaces of the dragger and the manipulator are identical. The SoPointLightManip utilizes its dragger by adding it as a hidden child. When anaction is applied to the manipulator, such as rendering or handling events, the manipulator first traverses the dragger, and then the manipulator adds its lightingparameters to the state. When you click-drag-release over the manipulator, it passes these events down to the dragger, which moves as a result (&quot;I can't help it, I'm adragger!&quot;).
+
+The manipulator maintains consistency between the fields of the dragger and itsown fields. Let's say you use the mouse to translate the dragger. Callbacks insure that the location field of the manipulator will change by the same amount, thuschanging the lighting of nodes which follow in the scene graph. Similarly, if you set the location field of the SoPointLightManip, the manipulator will place thedragger accordingly.
+
+Because the dragger is a hidden child, you can see the dragger on screen and interactwith it, but the dragger does not show up when you write the manipulator to file.
+
+482 Open Inventor C++ Reference Pages<hr>
+
+SSooPPooiinnttLLiigghhttMMaanniipphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh Also, any SoPath will end at the manipulator. (See the Actions section of thisreference page for a complete description of when the dragger is traversed). If you want to get a pointer to the dragger you can get it from the manipulatorusing the getDragger() method. You will need to do this if you want to change the geometry of a manipulator, since the geometry actually belongs to the dragger. FIELDS Fields from class SoPointLight:
+
+location Fields from class SoLight:
+
+on, intensity, color
+
+METHODS SoPointLightManip()
+
+Constructor. SoDragger * getDragger()Returns a pointer to the dragger being used by this manipulator. Given this
+
+pointer, you can customize the dragger just like you would any otherdragger. You can change geometry using the setPart() method, or add callbacks using the methods found in the SoDragger reference page. SbBool replaceNode(SoPath *p )Replaces the tail of the path with this manipulator. The tail of the path must
+
+be an SoPointLight node (or subclass thereof). If the path has a nodekit, thiswill try to use setPart() to insert the manipulator. Otherwise, the manipulator requires that the next to last node in the path chain be a group. The field values from the point light node will be copied to thismanipulator, and the light node will be replaced.
+
+The manipulator will not call ref() on the node it is replacing. The old nodewill disappear if it has no references other than from the input path p and its parent, since this manipulator will be replacing it in both of those places.Nor will the manipulator make any changes to field connections of the old node. The calling process is thus responsible for keeping track of its ownnodes and field connections.
+
+SbBool replaceManip(SoPath *p, SoPointLight *newOne ) constReplaces the tail of the path, which must be this manipulator, with the
+
+given SoPointLight node. If the path has a nodekit, this will try to use
+
+483<hr>
+
+SSooPPooiinnttLLiigghhttMMaanniipphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+setPart() to insert the new node. Otherwise, the manipulator requires thatthe next to last node in the path chain be a group. The field values from the manipulator will be copied to the point light node,and the manipulator will be replaced. The manipulator will not call ref() or unref() on the node which isreplacing it, nor will it make any changes to field connections. The calling process is thus responsible for keeping track of its own nodes and fieldconnections.
+
+static SoType getClassTypeId()Returns type identifier for this class. Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+ACTION BEHAVIORSoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+
+SoGetMatrixAction, SoHandleEventAction, SoRayPickActionFirst, traverses the dragger the way an SoGroup would. All draggers place
+
+themselves in space, but leave the current transformation unchanged whenfinished. Then the SoPointLightManip adds a point light into the state, just like its base class, SoPointLight. SoSearchActionSearches just like an SoPointLight. Does not search the dragger, which is a
+
+hidden child. SoWriteActionWrites out just like an SoPointLight. Does not write the dragger, which is a
+
+hidden child. If you really need to write valuable information about thedragger, such as customized geometry, you can retrieve the dragger with the getDragger() method and then write it out separately.
+
+484 Open Inventor C++ Reference Pages<hr>
+
+SSooPPooiinnttLLiigghhttMMaanniipphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh FILE FORMAT/DEFAULTSPointLightManip {
+
+on TRUEintensity 1 color 1 1 1location 0 0 1 } INCLUDE FILE#include &lt;Inventor/manips/SoPointLightManip.h&gt;
+
+SEE ALSOSoDragger, SoPointLight, SoPointLightDragger, SoDirectionalLightManip,
+
+SoSpotLightManip
+</body>
+</html>

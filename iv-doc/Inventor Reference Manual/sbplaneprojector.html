@@ -1,0 +1,54 @@
+<html>
+<body>
+<p>SbPlaneProjector
+<hr>
+<dl>
+<dt>NAME SbPlaneProjector -- plane projector
+
+<dt>INHERITS FROM
+<dd><a href="sbprojector.html">SbProjector</a> &gt; SbPlaneProjector
+
+<dt>DESCRIPTION
+<dd>SbPlaneProjector projects the mouse onto a plane. This is typically used to write interactive 3D manipulators and viewers.
+
+<dt>METHODS
+<dl>
+<dt><b>SbPlaneProjector</b>(SbBool orient = FALSE)
+
+<dd>Constructor. The default plane passes through the origin and is orientedperpendicular to the Z axis.
+
+<dt><b>SbPlaneProjector</b>(const SbPlane &plane, SbBool orient =FALSE)
+<dd>Constructor which is passed a plane. If orient to eye is TRUE, the plane willbe reoriented to the eye.
+
+<dt>~<b>SbPlaneProjector</b>()
+<dd>Destructor.
+
+<dt>void <b>setPlane</b>(const SbPlane &plane)const SbPlane & getPlane() const
+<dd>Set and get the plane to use.
+
+<dt>void <b>setOrientToEye</b>(SbBool orientToEye)
+<dt>SbBool <b>isOrientToEye</b>() const
+
+<dd>Set and get whether the projector should be oriented towards the eye. IforientToEye is set to TRUE, the given plane's direction is ignored, and the plane will be oriented to the eye. It will pass through the same point fromthe origin defined by the original dir * dist. Set to FALSE if the plane's direction should remain in working space.
+
+<dt>virtual SbVec3f <b>getVector</b>(const SbVec2f &mousePosition1, const SbVec2f&mousePosition2)
+<dd>Get a vector on this plane given two normalized mouse positions. virtual SbVec3f getVector(const SbVec2f &mousePosition)Get a vector given the current mouse point. Uses the last point on this projector from the previous call to getVector() or setStartPostion(). Do notuse this if the working space transform is changing since the new point will be in a different space than the old one.
+
+<dt>void <b>setStartPosition</b>(const SbVec2f &mousePosition)
+<dd>Set the initial mouse position.
+
+<dt>void <b>setStartPosition</b>(const SbVec3f &point)
+<dd>Set the initial position from a point on the projector.
+
+<dt><b>Methods from class SbProjector</b>:
+<dd>project, setViewVolume, getViewVolume, setWorkingSpace,getWorkingSpace, copy
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/projectors/SbPlaneProjector.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbcylinderprojector.html">SbCylinderProjector</a>, <a href="sbcylinderplaneprojector.html">SbCylinderPlaneProjector</a>, <a href="sbcylindersectionprojector.html">SbCylinderSectionProjector</a>, <a href="sbcylindersheetprojector.html">SbCylinderSheetProjector</a>, <a href="sblineprojector.html">SbLineProjector</a>, <a href="sbsphereplaneprojector.html">SbSpherePlaneProjector</a>, <a href="sbsphereprojector.html">SbSphereProjector</a>, <a href="sbspheresectionprojector.html">SbSphereSectionProjector</a>, <a href="sbspheresheetprojector.html">SbSphereSheetProjector</a>
+</dl>
+</body>
+</html>

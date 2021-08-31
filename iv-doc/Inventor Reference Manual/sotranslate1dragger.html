@@ -1,0 +1,107 @@
+<html>
+<body>
+SoTranslate1Dragger
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTranslate1Dragger -- object you can translate along a line by dragging With the mouse
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sobasekit.html">SoBaseKit</a> &gt; <a href="sointeractionkit.html">SoInteractionKit</a> &gt; <a href="sodragger.html">SoDragger</a> &gt; SoTranslate1Dragger
+
+<dt>DESCRIPTION
+<dd>SoTranslate1Dragger is a simple dragger that translates in one dimension when dragged with the mouse. It moves along the x axis of its local space, determined byits location in the scene graph. Transformation nodes placed before it will affect both the dragger and the direction of motion. This node has a translation field which always reflects its position in local space. Ifyou set the field, the dragger will move accordingly. You can also connect fields of other nodes or engines from this one to make them follow the dragger's motion. This dragger contains four parts, translator, translatorActive, feedback, andfeedbackActive.
+
+<p>Each of these is set by default from a resource described in the Dragger Resourcessection of the online reference page for this class. You can change the parts in any instance of this dragger using setPart(). You can make your program use different default resources for the parts by copyingthe file /usr/share/data/draggerDefaults/translate1Dragger.iv into your own directory, editing the file, and then setting the environment variableSO_DRAGGER_DIR to be a path to that directory.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFVec3f translation
+<dd>Position of the dragger.
+
+<dt>Fields from class SoDragger:
+<dd>isActive
+
+<dt>Fields from class SoInteractionKit:
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+</dl>
+
+<dt>PARTS
+<dl>
+<dt>Parts from class SoBaseKit:
+<dd>callbackList
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoTranslate1Dragger()
+<dd>Constructor.
+
+<dt>static const SoNodekitCatalog *getClassNodekitCatalog() const
+<dd>Returns an SoNodekitCatalog for this class
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoDragger:
+<dd>addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback, addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+<dt>Methods from class SoInteractionKit:
+<dd>setPartAsPath
+
+<dt>Methods from class SoBaseKit:
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+<dd>SO_GET_PART, SO_CHECK_PART
+</dl>
+
+<dt>CATALOG PARTS
+<table border=1>
+<tr><td colspan=4>All parts
+
+<tr><td>Part Name <td>Part Type <td>Default Type <td>NULL by Default
+<tr><td>callbackList <td>NodeKitListPart <td>-- <td>yes
+<tr><td>translator <td>Separator <td>-- <td>yes
+<tr><td>translatorActive <td>Separator <td>-- <td>yes
+<tr><td>feedback <td>Separator <td>-- <td>yes
+<tr><td>feedbackActive <td>Separator <td>-- <td>yes
+</table>
+
+<table border=1>
+<tr><td colspan=3>Extra information for list parts from above table
+<tr><td>Part Name <td>Container Type <td>Permissible Types
+<tr><td>Callback <td>Separator <td>EventCallbackcallbackList
+</table>
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Translate1Dragger {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO
+<dd>isActive FALSE
+<dd>translation 0 0 0
+<dt>}
+</dl>
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/draggers/SoTranslate1Dragger.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sointeractionkit.html">SoInteractionKit</a>, <a href="sodragger.html">SoDragger</a>, <a href="socenterballdragger.html">SoCenterballDragger</a>, <a href="sodirectionallightdragger.html">SoDirectionalLightDragger</a>, <a href="sodragpointdragger.html">SoDragPointDragger</a>, <a href="sohandleboxdragger.html">SoHandleBoxDragger</a>, <a href="sojackdragger.html">SoJackDragger</a>, SoPointLightDragger,SoRotateCylindricalDragger, SoRotateDiscDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger,SoScaleUniformDragger, SoSpotLightDragger, SoTabBoxDragger, SoTabPlaneDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate2Dragger
+</dl>
+</body>
+</html>

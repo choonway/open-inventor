@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Chapter 4. Creating an Action</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"><meta name="generator" content="SGI XSL DocBook Customization Stylesheets V1.0"><link rel="home" href="index.html" title="The Inventor Toolmaker"><link rel="up" href="index.html" title="The Inventor Toolmaker"><link rel="previous" href="ch03.html" title="Chapter 3. Creating a Field"><link rel="next" href="ch05.html" title="Chapter 5. Creating an Element"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Creating an Action</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch05.html">Next</a></td></tr></table><hr></div><!--CONTENT_BEGIN--><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="id5452775"></a>Chapter 4. <a name="id11499"></a>Creating an Action</h2></div></div>
+<p>In this chapter, you'll learn how to create a subclass of <a name="idch041"></a><span class="bold"><b>SoAction</b></span>. Make sure you understand the material in Chapters 1 and 2 before reading this chapter.</p>
+<p>The chapter examples show creating and using an action class called <span class="bold"><b>GetVolumeAction</b></span>.</p>
+<div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5452812"></a>Overview</h2></div></div>
+<p>The file SoSubAction.h contains the macros for defining new action classes. The SO_ACTION_HEADER() macro declares type identifier and naming variables and methods that all action classes must support. The SO_ACTION_SOURCE() macro defines the static variables and methods declared in the SO_ACTION_HEADER() macro.<a name="idch042"></a><a name="idch043"></a><a name="idch044"></a><a name="idch045"></a></p>
+<p>Creating a new action requires these steps:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new action class and determine what class it is derived from.</p>
+</li>
+<li><p>Define an <span class="bold"><b>initClass()</b></span> method to initialize the runtime type information for the class (see <a href="ch04.html#id58637">&#8220;Initializing the Action Class&#8221;</a>).</p>
+<p>a. Enable elements in the state that are used by nodes when the action<br>
+    is applied to them (see <a href="ch04.html#id94388">&#8220;Enabling Elements in the State&#8221;</a>).</p>
+<p>b.  Register a static method for each node class that supports this action<br>
+     (see <a href="ch04.html#id83629">&#8220;Registering Static Methods&#8221;</a>).</p>
+</li>
+<li><p>Write the constructor for the action (see <a href="ch04.html#id49946">&#8220;Defining the Constructor&#8221;</a>).</p>
+</li>
+<li><p>Write the destructor for the action (see <a href="ch04.html#id16930">&#8220;Defining the Destructor&#8221;</a>).</p>
+</li>
+<li><p>If necessary, override the <a name="idch046"></a><span class="bold"><b>beginTraversal()</b></span> method to implement a different traversal behavior or to perform special initialization before traversal.  The <span class="bold"><b>apply()</b></span> methods all call <span class="bold"><b>beginTraversal()</b></span> (see <a href="ch04.html#id25374">&#8220;Traversal Behavior&#8221;</a>).</p>
+</li>
+<li><p>Implement the methods that you registered in step 2b of this list (see <a href="ch04.html#id87083">&#8220;Implementing Static Methods&#8221;</a>).</p>
+</li>
+</ol></div><div class="tip"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/tip.png"></td><td align="left" valign="top"><b>Tip: </b>An easy way to create a new action is to derive it from the callback action. The callback action provides generic traversal of the scene graph and enables all standard elements. Note that deriving a new action class requires more work than simply registering callback functions with the callback action. In many cases, this latter approach will suffice.<a name="idch047"></a>
+</td></tr></table><hr noshade="noshade"></div><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5453114"></a><a name="id58637"></a>Initializing the Action Class</h2></div></div>
+<p>All action classes must have a static method to initialize the class (just like node classes). In this method, typically called <a name="idch048"></a><span class="bold"><b>initClass()<a name="idch049"></a></b></span>, the type identifier information for the class is set up. This method must be called for all action classes to set up the method list correctly before an instance of the action can be created. The required work of this method is done by the SO_ACTION_INIT_CLASS() macro.<a name="idch0410"></a></p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5453203"></a><a name="id94388"></a>Enabling Elements in the State</h3></div></div>
+<p>Your action may also need to enable certain elements in the state. For example, the <a name="idch0411"></a><span class="bold"><b>SoRayPickAction</b></span> enables the <span class="bold"><b>SoPickRayElement</b></span> in its <span class="bold"><b>initClass()</b></span> routine:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+enableElement(SoPickRayElement::getClassTypeId());
+</pre></td></tr></table><p>Recall from Chapter 2 that you can also enable elements in node class initialization methods using the SO_ENABLE() macro. All elements enabled by a parent action class are automatically enabled in a derived class.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5453261"></a><a name="id83629"></a>Registering Static Methods</h3></div></div>
+<p>In addition, you need to explicitly register a static method for each supported node class with the method list for your new action. At a minimum, register a method for <a name="idch0412"></a><a name="idch0413"></a><span class="bold"><b>SoNode</b></span>, which can be inherited by other nodes. Use the SO_ACTION_ADD_METHOD() macro to register methods with the method list. For example:<a name="idch0414"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_ACTION_ADD_METHOD(SoCube, cubeVolume);
+</pre></td></tr></table><p>See <a href="ch04.html#id87083">&#8220;Implementing Static Methods&#8221;</a> for information on implementing new static methods.</p>
+</div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5453325"></a><a name="id49946"></a>Defining the Constructor</h2></div></div>
+<p>Use the SO_ACTION_CONSTRUCTOR() to perform the basic work for you. For example:<a name="idch0415"></a><a name="idch0416"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+GetVolumeAction::GetVolumeAction()
+{
+   SO_ACTION_CONSTRUCTOR(GetVolumeAction);
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5453379"></a><a name="id16930"></a>Defining the Destructor</h2></div></div>
+<p>There is no macro for defining a destructor.  Use the destructor to free up anything you created in the constructor or in any other methods for the class. For example:<a name="idch0417"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoWriteAction::~SoWriteAction()
+{
+   // Get rid of the SoOutput if we created it in the
+   // constructor
+   if (createdOutput)
+      delete output;
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5453412"></a><a name="id25374"></a>Traversal Behavior</h2></div></div>
+<p>The <a name="idch0418"></a><a name="idch0419"></a><a name="idch0420"></a><span class="bold"><b>apply()</b></span> method on <span class="bold"><b>SoAction</b></span> always calls <span class="bold"><b>beginTraversal()<a name="idch0421"></a></b></span> to begin traversal of the graph. The default behavior of <span class="bold"><b>beginTraversal()</b></span> is simply to call <span class="bold"><b>SoAction::traverse</b></span>(). If you need to initialize the action every time it is applied, you can implement a <span class="bold"><b>beginTraversal()</b></span> method for your action class. For example, the <span class="bold"><b>SoGetBoundingBoxAction</b></span> sets the bounding box to be empty each time before it begins traversing the scene graph. Afterwards, it calls <span class="bold"><b>SoAction::traverse()</b></span>. Note that <span class="bold"><b>beginTraversal()</b></span> is passed a node, which is either the root of the graph the action is being applied to or the head of a path. Regardless of whether the action is applied to a node, a path, or a path list, the <span class="bold"><b>traverse()</b></span> method handles the traversal appropriately.</p>
+<p>For certain classes, you may also want to perform certain operations after traversal, or you may want to change the traversal behavior itself. For example, the render action performs multiple passes for antialiasing.<a name="idch0422"></a></p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5453584"></a><a name="id87083"></a>Implementing Static Methods</h2></div></div>
+<p>Chapter 2 provides important background material on implementing static methods and on <a name="idch0423"></a><span class="bold"><b>doAction()</b></span>. If you are creating a new node class, the static methods are typically included in the new node class. If you are creating a new action class, the static methods are included in the new action class. In the end, the new class (whether node or action) registers these static methods with the action class. </p>
+<p>First, for <span class="bold"><b>SoNode</b></span>, you will usually want to register the <a name="idch0424"></a><span class="bold"><b>nullAction()</b></span> method (defined on <span class="bold"><b>SoAction</b></span>). This method will be used for any node classes that do not have a specific method registered for them. </p>
+<p>For the node classes that actually do something for your action, you need to implement a static method.  You'll probably choose one of two approaches:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>Implement a new method for the class to handle the method in its unique way. </p>
+</li>
+<li><p>Implement a simple method that calls the <a name="idch0425"></a><span class="bold"><b>doAction()</b></span> method for that class if you want it to perform the action in its typical manner (for example, group nodes traverse their children in a specified order, property nodes affect elements in the state, and so on). </p>
+</li>
+</ul></div><p>In our example class, the <span class="bold"><b>GetVolumeAction</b></span> registers the <span class="bold"><b>nullAction()</b></span> method for <span class="bold"><b>SoNode</b></span>. This method, defined on <span class="bold"><b>SoAction</b></span>, will be inherited by nodes that do not implement their own <span class="bold"><b>GetVolumeAction</b></span>:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_ACTION_ADD_METHOD(SoNode, nullAction);
+</pre></td></tr></table><p><span class="bold"><b>GetVolumeAction</b></span> implements specific methods for the <span class="bold"><b>SoCube</b></span> and <span class="bold"><b>SoSphere</b></span> classes. For purposes of example, only the cube and sphere classes implement the <span class="bold"><b>GetVolumeAction</b></span>. If you were actually creating and using such an action, you would probably want to be able to obtain the volume of any shape.</p>
+<p>For <span class="bold"><b>GetVolumeAction</b></span>, the group and relevant property classes (such as the coordinate, transformation, and complexity classes) all call <span class="bold"><b>doAction()</b></span>, since they perform their &#8220;typical&#8221; action behavior:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+GetVolumeAction::callDoAction(SoAction *action, SoNode *node)
+{
+   node-&gt;doAction(action);
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5453854"></a><a name="id35046"></a>Creating a New Action</h2></div></div>
+<p>The example presented here defines <a name="idch0426"></a><span class="bold"><b>GetVolumeAction<a name="idch0427"></a></b></span>, an action class that computes the volume of shapes. Each shape adds its volume (in world space) to the volume collected so far.</p>
+<p>Since the standard shape classes know nothing about <span class="bold"><b>GetVolumeAction</b></span>, we have to register the appropriate methods for them with the method list. This is illustrated in the example by adding methods for the <span class="bold"><b>SoCube</b></span> and <span class="bold"><b>SoSphere</b></span> classes to compute volume. </p>
+<p>When you create a new action, you have to decide which elements to enable. You must go through the list of elements and decide which ones have a bearing on the action being performed. Since the <a name="idch0428"></a><span class="bold"><b>GetVolumeAction</b></span> is concerned solely with geometry and coordinate spaces, we enable only elements that are relevant to these properties. We ignore material, textures, and other appearance properties. Note that we also enable <a name="idch0429"></a><span class="bold"><b>SoSwitchElement</b></span>, since it is vital to correct traversal of graphs with switch nodes; all actions doing traversal should enable this element.</p>
+<p>Example 4-1 shows the header file for the <a name="idch0430"></a><a name="idch0431"></a><span class="bold"><b>GetVolumeAction</b></span> class.</p>
+<div class="example"><p><a name="id5453966"></a><b>Example 4-1. GetVolumeAction.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/actions/SoSubAction.h&gt;
+
+class GetVolumeAction : public SoAction {
+
+   SO_ACTION_HEADER(GetVolumeAction);
+
+ public:
+   // Initializes this action class for use with scene graphs
+   static void    initClass();
+
+   // Constructor and destructor
+   GetVolumeAction();
+   virtual ~GetVolumeAction();
+
+   // Returns computed volume after action is applied
+   float          getVolume() const { return volume; }
+
+ protected:
+   // Initiates action on graph
+   virtual void   beginTraversal(SoNode *node);
+
+ private:
+   float          volume;      // Computed volume
+
+   // These are the methods that are used to apply the action
+   // to various node classes. The third method is registered
+   // for all relevant non-shape nodes. The calling sequence for
+   // these methods is that used for all methods in the global
+   // action table.
+   static void    cubeVolume(SoAction *, SoNode *);
+   static void    sphereVolume(SoAction *, SoNode *);
+   static void    callDoAction(SoAction *, SoNode *);
+
+   // This adds the given object-space volume to the total. It
+   // first converts the volume to world space, using the
+   // current model matrix.
+   void           addVolume(float objectSpaceArea);
+};
+</pre></td></tr></table><p>Example 4-2 shows the source code for the <span class="bold"><b>GetVolumeAction</b></span> class.</p>
+<div class="example"><p><a name="id5454075"></a><b>Example 4-2. GetVolumeAction.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/elements/SoComplexityElement.h&gt;
+#include &lt;Inventor/elements/SoComplexityTypeElement.h&gt;
+#include &lt;Inventor/elements/SoCoordinateElement.h&gt;
+#include &lt;Inventor/elements/SoElements.h&gt;
+#include &lt;Inventor/elements/SoFontNameElement.h&gt;
+#include &lt;Inventor/elements/SoFontSizeElement.h&gt;
+#include &lt;Inventor/elements/SoModelMatrixElement.h&gt;
+#include &lt;Inventor/elements/SoProfileCoordinateElement.h&gt;
+#include &lt;Inventor/elements/SoProfileElement.h&gt;
+#include &lt;Inventor/elements/SoSwitchElement.h&gt;
+#include &lt;Inventor/elements/SoUnitsElement.h&gt;
+#include &lt;Inventor/elements/SoViewVolumeElement.h&gt;
+#include &lt;Inventor/elements/SoViewingMatrixElement.h&gt;
+#include &lt;Inventor/elements/SoViewportRegionElement.h&gt;
+#include &lt;Inventor/nodes/SoCamera.h&gt;
+#include &lt;Inventor/nodes/SoComplexity.h&gt;
+#include &lt;Inventor/nodes/SoCoordinate3.h&gt;
+#include &lt;Inventor/nodes/SoCoordinate4.h&gt;
+#include &lt;Inventor/nodes/SoCube.h&gt;
+#include &lt;Inventor/nodes/SoFont.h&gt;
+#include &lt;Inventor/nodes/SoGroup.h&gt;
+#include &lt;Inventor/nodes/SoProfile.h&gt;
+#include &lt;Inventor/nodes/SoProfileCoordinate2.h&gt;
+#include &lt;Inventor/nodes/SoProfileCoordinate3.h&gt;
+#include &lt;Inventor/nodes/SoSphere.h&gt;
+#include &lt;Inventor/nodes/SoTransformation.h&gt;
+#include &quot;GetVolumeAction.h&quot;
+
+SO_ACTION_SOURCE(GetVolumeAction);
+
+// Initializes the GetVolumeAction class. This is a one-time
+// thing that is done after database initialization and before
+// any instance of this class is constructed.
+
+void
+GetVolumeAction::initClass()
+{
+   // Initialize the runtime type variables
+   SO_ACTION_INIT_CLASS(GetVolumeAction, SoAction);
+
+   // Enable elements that are involved in volume computation.
+   // Most of these deal with geometrix properties
+   // (coordinates, profiles) or transformations (model matrix,
+   // units). Some are needed for certain groups (switches,
+   // level-of-detail) to function correctly.
+   SO_ENABLE(GetVolumeAction, SoModelMatrixElement);
+   SO_ENABLE(GetVolumeAction, SoComplexityElement);
+   SO_ENABLE(GetVolumeAction, SoComplexityTypeElement);
+   SO_ENABLE(GetVolumeAction, SoCoordinateElement);
+   SO_ENABLE(GetVolumeAction, SoFontNameElement);
+   SO_ENABLE(GetVolumeAction, SoFontSizeElement);
+   SO_ENABLE(GetVolumeAction, SoProfileCoordinateElement);
+   SO_ENABLE(GetVolumeAction, SoProfileElement);
+   SO_ENABLE(GetVolumeAction, SoSwitchElement);
+   SO_ENABLE(GetVolumeAction, SoUnitsElement);
+   SO_ENABLE(GetVolumeAction, SoViewVolumeElement);
+   SO_ENABLE(GetVolumeAction, SoViewingMatrixElement);
+   SO_ENABLE(GetVolumeAction, SoViewportRegionElement);
+
+   // Now we need to register methods to implement this action
+   // for various node classes. We have created implementations
+   // for two specific shape nodes, SoCube and SoSphere, so we
+   // can register specific methods for those two classes. We
+   // also want to make sure that group classes traverse their
+   // children correctly for this action, so we will use a
+   // method that calls doAction() to handle groups. Finally,
+   // we need to make sure that relevant property nodes set up
+   // the state correctly; we can use the same method that
+   // calls doAction() for these classes, as well. We will use
+   // the SO_ACTION_ADD_METHOD() macro to make this easier.
+
+   // This registers a method to call for SoNode, so it will be
+   // used for any node class that does not have a more
+   // specific method registered for it. This makes sure that
+   // there is always a method to call for any node. The
+   // &quot;nullAction&quot; method is defined on SoAction for use in
+   // cases like this.
+   SO_ACTION_ADD_METHOD(SoNode, nullAction);
+
+   // These register methods for the two shapes that can
+   // really handle the action
+   SO_ACTION_ADD_METHOD(SoCube, cubeVolume);
+   SO_ACTION_ADD_METHOD(SoSphere, sphereVolume);
+
+   // Register the method that calls doAction() for all group
+   // classes and for relevant properties (transformations,
+   // coordinates, profiles, and so on).
+   SO_ACTION_ADD_METHOD(SoCamera,             callDoAction);
+   SO_ACTION_ADD_METHOD(SoComplexity,         callDoAction);
+   SO_ACTION_ADD_METHOD(SoCoordinate3,        callDoAction);
+   SO_ACTION_ADD_METHOD(SoCoordinate4,        callDoAction);
+   SO_ACTION_ADD_METHOD(SoFont,               callDoAction);
+   SO_ACTION_ADD_METHOD(SoGroup,              callDoAction);
+   SO_ACTION_ADD_METHOD(SoProfile,            callDoAction);
+   SO_ACTION_ADD_METHOD(SoProfileCoordinate2, callDoAction);
+   SO_ACTION_ADD_METHOD(SoProfileCoordinate3, callDoAction);
+   SO_ACTION_ADD_METHOD(SoTransformation,     callDoAction);
+}
+
+// Constructor
+
+GetVolumeAction::GetVolumeAction()
+{
+   SO_ACTION_CONSTRUCTOR(GetVolumeAction);
+}
+
+// Destructor. Does nothing.
+
+GetVolumeAction::~GetVolumeAction()
+{
+}
+
+// Initiates action on a graph. This is called when the action
+// is applied to a node, a path, or a path list. It gives us a
+// chance to initialize things before beginning traversal.
+
+void
+GetVolumeAction::beginTraversal(SoNode *node)
+{
+   // Initialize volume to 0
+   volume = 0.0;
+
+   // Begin traversal at the given root node.
+   traverse(node);
+}
+
+// This method implements the action for an SoCube node.
+
+void
+GetVolumeAction::cubeVolume(SoAction *action, SoNode *node)
+{
+   // The action is really an instance of GetVolumeAction
+   GetVolumeAction *volumeAct = (GetVolumeAction *) action;
+
+   // And the node pointer is really a cube:
+   const SoCube    *cube = (const SoCube *) node;
+
+   // Find the dimensions of the cube
+   float width    = (cube-&gt;width.isIgnored()  ? 2.0 :
+                     cube-&gt;width.getValue());
+   float height   = (cube-&gt;height.isIgnored() ? 2.0 :
+                     cube-&gt;height.getValue());
+   float depth    = (cube-&gt;depth.isIgnored()  ? 2.0 :
+                     cube-&gt;depth.getValue());
+
+   // ...and the volume
+   float cubeVol = width * height * depth;
+
+   // Add the volume to the accumulated volume in the action
+   volumeAct-&gt;addVolume(cubeVol);
+}
+
+// This method implements the action for an SoSphere node.
+
+void
+GetVolumeAction::sphereVolume(SoAction *action, SoNode *node)
+{
+   // The action is really an instance of GetVolumeAction
+   GetVolumeAction *volumeAct = (GetVolumeAction *) action;
+
+   // And the node pointer is really a sphere:
+   const SoSphere  *sphere = (const SoSphere *) node;
+
+   // Find the radius of the sphere
+   float radius = (sphere-&gt;radius.isIgnored() ? 1.0 :
+                   sphere-&gt;radius.getValue());
+
+   // Compute the volume using our favorite formula that we all
+   // remember from our math classes, right?
+   float sphereVol = 4./3. * M_PI * radius * radius * radius;
+
+   // Add the volume to the accumulated volume in the action
+   volumeAct-&gt;addVolume(sphereVol);
+}
+
+// This method implements the action for all of the relevant
+// non-shape node classes.
+
+void
+GetVolumeAction::callDoAction(SoAction *action, SoNode *node)
+{
+   node-&gt;doAction(action);
+}
+
+// This adds the given object-space volume to the total, first
+// converting it to world space using the current model matrix.
+
+void
+GetVolumeAction::addVolume(float objectSpaceVolume)
+{
+   // Find the current modeling matrix
+   const SbMatrix &amp;modelMatrix =
+     SoModelMatrixElement::get(state);
+
+   // The determinant of the upper-left 3x3 of this matrix is
+   // the conversion factor we need to go from object-space
+   // volume to world space. Pretty cool, indeed.
+   float objectToWorldFactor = modelMatrix.det3();
+
+   // Add in the converted volume to our current volume
+   volume += objectToWorldFactor * objectSpaceVolume;
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5454371"></a>Using New Action Classes</h2></div></div>
+<p>Like nodes, action classes must be initialized before any instances can be constructed. Also note that before you can add a method to the method list, you must initialize both the action class and the node class involved.<a name="idch0432"></a></p>
+<p>Example 4-3 reads in a scene graph from the file volume.iv and applies the <span class="bold"><b>GetVolumeAction</b></span> action to it, printing the resulting volume.</p>
+<div class="example"><p><a name="id5454402"></a><b>Example 4-3. <a name="idch0433"></a>PrintVolume.c++ </b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SoDB.h&gt;
+#include &lt;Inventor/SoInput.h&gt;
+#include &lt;Inventor/SoInteraction.h&gt;
+#include &lt;Inventor/nodes/SoSeparator.h&gt;
+
+// Header file for new action class
+#include &quot;GetVolumeAction.h&quot;
+
+main()
+{
+   // Initialize Inventor
+   SoInteraction::init();
+
+   // Initialize the new action class
+   GetVolumeAction::initClass();
+
+   // Open the file and read the scene
+   SoInput      myInput;
+   SoSeparator  *root;
+   if (! myInput.openFile(&quot;volume.iv&quot;)) {
+     fprintf(stderr, &quot;Can't open \&quot;volume.iv\&quot; for reading\n&quot;);
+     return 1;
+   }
+   root = SoDB::readAll(&amp;myInput);
+   if (root == NULL) {
+     printf(&quot;Couldn't read scene from \&quot;volume.iv\&quot;\n&quot;);
+     return 2;
+   }
+   root-&gt;ref();
+
+   // Compute the volume: apply a GetVolumeAction to the root
+   GetVolumeAction va;
+   va.apply(root);
+
+   // Print the result
+   printf(&quot;Total volume = %g\n&quot;, va.getVolume());
+
+   return 0;
+}
+
+</pre></td></tr></table><br></div></div><!--CONTENT_END--><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Table of Contents</a></td><td width="40%" align="right"> <a accesskey="n" href="ch05.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 3. Creating a Field </td><td width="20%" align="center"> </td><td width="40%" align="right">Chapter 5. Creating an Element </td></tr></table></div></body></html>

@@ -1,0 +1,65 @@
+<html>
+<body>
+SoMFPath
+<hr>
+<dl>
+<dt>NAME SoMFPath -- multiple-value field containing any number of pointers to paths
+
+<dt>INHERITS FROM
+<dd>SoField &gt; SoMField &gt; SoMFPath
+
+<dt>DESCRIPTION
+<dd>This field maintains a set of pointers to SoPath instances, correctly maintaining their reference counts. SoMFPaths are written to file as one or more paths (see the SoPath manual page fora description of the file format for a path). When more than one value is present, all of the values are enclosed in square brackets and separated by commas. 
+
+<dt>METHODS
+<dl>
+<dt>static SoType getClassTypeId()
+<dt>virtual void getTypeId() const
+<dd>Returns the type for this class or a particular object of this class.
+
+<dt>SoPath * operator [ ](int i) const
+<dd>Returns the i'th value of the field. Indexing past the end of the field (passing in i greater than getNum()) will return garbage.
+<dt>const SoPath * * getValues(int start) const
+<dd>Returns a pointer into the array of values in the field, starting at index start.
+
+<p>The values are read-only; see the startEditing()/finishEditing() methods fora way of modifying values in place.
+
+<dt>int find(SoPath * targetValue, SbBool addIfNotFound = FALSE)
+<dd>Finds the given value in the array and returns the index of that value in the array. If the value is not found, -1 is returned. If addIfNotFound is set, then targetValue is added to the end of the array (but -1 is still returned).
+
+<dt>void setValues(int start, int num, const SoPath * *newValues)
+<dd>Sets num values starting at index start to the values in newValues. The array will be automatically be made larger to accomodate the new values, if necessary.
+
+<dt>void set1Value(int index, SoPath * newValue)
+<dd>Sets the index'th value in the array to newValue. The array will be automatically expanded, if necessary.
+
+<dt>SoPath * operator =(SoPath * newValue)
+<dt>void setValue(SoPath * newValue)
+
+<dd>Sets the first value in the array to newValue, and deletes the second andsubsequent values.
+
+<dt>int operator ==(const SoMFPath &f) const
+<dt>int operator !=(const SoMFPath &f) const
+
+<dd>Returns TRUE if all of the values of this field equal (do not equal) those ofthe given field. If the fields are different types FALSE will always be returned (even if one field is an SoMFFloat with one value of 1.0 and the other is anSoMFInt with a value of 1, for example).
+
+<dt>SoPath * * startEditing()
+<dt>void finishEditing()
+
+<dd>startEditing() returns a pointer to the internally-maintained array that canbe modified. The values in the array may be changed, but values cannot be added or removed. It is illegal to call any other editing methods betweenstartEditing() and finishEditing() (e.g. set1Value(), setValue(), etc).
+
+<p>Fields, engines or sensors connected to this field and sensors are not notifiedthat this field has changed until finishEditing() is called. Calling finishEditing() always sets the isDefault() flag to FALSE and informsengines and sensors that the field changed, even if none of the values actually were changed.
+
+<dt>Methods from class SoMField:
+
+<dd>getNum, setNum, deleteValues, insertSpace, set1, get1
+
+<dt>Methods from class SoField:
+
+<dd>setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField, getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoMFPath.h&gt;
+</body>
+</html>

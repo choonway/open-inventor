@@ -1,0 +1,81 @@
+<html>
+<body>
+SoCounter
+<hr>
+<dl>
+<dt>NAME
+<dd>SoCounter -- triggered integer counter
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoCounter
+
+<dt>DESCRIPTION
+<dd><p>This engine is a counter that outputs numbers, starting at a minimum value, increasing by a step value, and ending with a number that does not exceed the maximum value. It outputs the next number whenever the trigger input is touched. When the maximum number is reached, it starts counting from the beginning again.
+
+<p>At any time the counter can be reset to a specific value by setting the reset inputfield to that value. The next time the counter is triggered it will start counting from there. Note that the counter will always output numbers based on the min, max and step values, and setting the reset value does not affect those input fields. If the reset value is not a legal counter value, the counter will still behave as though it is.
+
+<p>If reset is greater than max, the counter is set to max.If reset is less than min, the counter is set to min. If reset is between steps, the counter is set to the lower step value.
+
+<p>Each time a counting cycle is started, the syncOut output is triggered. This output can be used to synchronize some other event with the counting cycle.
+
+<dt>INPUTS
+<dl>
+<dt>SoSFShort min
+<dd>Minimum value for the counter.
+
+<dt>SoSFShort max
+<dd>Maximum value for the counter.
+
+<dt>SoSFShort step
+<dd>Counter step value.
+
+<dt>SoSFTrigger trigger
+<dd>Go to the next step.
+
+<dt>SoSFShort reset
+<dd>At the next trigger, reset the counter to the specified value.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoSFShort) output
+<dd>Counts min-to-max in step increments.
+
+<dt>(SoSFTrigger) syncOut
+<dd>Triggers at cycle start.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoCounter()
+<dd>Constructor
+
+<dt>Methods from class SoEngine:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Counter {
+<dd>min 0
+<dd>max 1
+<dd>step 1
+<dd>trigger
+<dd>reset 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCounter.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotimecounter.html">SoTimeCounter</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<html>
+<body>
+SoAntiSquish
+<hr>
+<dl>
+<dt>NAME
+<dd>SoAntiSquish -- transformation node that undoes non-uniform 3D scales
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sotransformation.html">SoTransformation</a> &gt; SoAntiSquish
+
+<dt>DESCRIPTION
+<dd>This node removes nonuniform 3D scaling from the current transformation matrix when traversed by an action. It is used by draggers such as the SoTrackballDraggerthat need to stay uniformly scaled no matter where they are located in the scene graph. The magnitude of the new scale is determined by the current transformation matrixand the sizing field. This node does not change the translation or rotation in the matrix.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum sizing
+<dd>Determines which of the algorithms enumerated by the type Sizing will beused to select the new scale when the x,y, and z scales are not equal.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoAntiSquish</b>()
+<dd>Creates an anti-squish node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoGetMatrixAction, SoRayPickAction
+<dd>Replaces the current transformation with an unsquished one.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>AntiSquish {
+<dd>sizing AVERAGE_DIMENSION
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+
+<dl>
+<dt>#include &lt;Inventor/nodes/SoAntiSquish.h&gt;
+
+<dt>enum Sizing {
+<dd>SoAntiSquish::AVERAGE_DIMENSION uses average of 3 scales in the matrix
+<dd>SoAntiSquish::BIGGEST_DIMENSION uses biggest of 3 scales in the matrix
+<dd>SoAntiSquish::SMALLEST_DIMENSION uses smallest of 3 scales in the matrix
+<dd>SoAntiSquish::LONGEST_DIAGONAL accounts for shearing; transforms a cube by the matrix and thenuses length of longest diagonal
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="socenterballdragger.html">SoCenterballDragger</a>, <a href="sojackdragger.html">SoJackDragger</a>, <a href="sotrackballdragger.html">SoTrackballDragger</a>, <a href="sotransformation.html">SoTransformation</a>, <a href="sotransformboxdragger.html">SoTransformBoxDragger</a>
+</dl>
+</body>
+</html>

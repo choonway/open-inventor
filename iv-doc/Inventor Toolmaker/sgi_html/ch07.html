@@ -1,0 +1,724 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Chapter 7. Creating a Node Kit</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"><meta name="generator" content="SGI XSL DocBook Customization Stylesheets V1.0"><link rel="home" href="index.html" title="The Inventor Toolmaker"><link rel="up" href="index.html" title="The Inventor Toolmaker"><link rel="previous" href="ch06.html" title="Chapter 6. Creating an Engine"><link rel="next" href="ch08.html" title="Chapter 8. Creating Draggers and Manipulators"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 7. Creating a Node Kit</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch08.html">Next</a></td></tr></table><hr></div><!--CONTENT_BEGIN--><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="id5461085"></a>Chapter 7. <a name="id11499"></a>Creating a <a name="id29973"></a>Node Kit</h2></div></div>
+<p>This chapter describes how to create a node-kit class. The examples show how to create a new subclass and how to customize the node-kit catalog. Creating a node kit is essentially the same as creating a node, except you use special node-kit macros found in SoSubKit.h. In addition, you use special macros for defining the node-kit catalog.<a name="idch071"></a></p>
+<p>Before reading this chapter, be sure to read Chapter 14 in <a name="idch072"></a><i>The Inventor Mentor</i>, as well as Chapter 2 in this book.</p>
+<p>The first part of this chapter offers an overview of the steps required to create a new node kit. When necessary, additional sections explain key concepts in further detail and list the relevant macros. The chapter examples show how to create three node-kit classes:</p>
+<div class="itemizedlist"><ul type="disc"><li><p><span class="bold"><b>SoAppearanceKit</b></span>, a node kit in the Inventor library, which is a simple grouping of properties</p>
+</li>
+<li><p><span class="bold"><b>PyramidKit</b></span>, a node kit that uses an existing node-kit class and changes one of its parts</p>
+</li>
+<li><p><span class="bold"><b>JumpingJackKit</b></span>, a node kit that adds new parts to the parent class, including a built-in event callback that moves the parts when the user selects the object with the mouse</p>
+</li>
+</ul></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5461181"></a>Overview</h2></div></div>
+<p>Node kits are nodes that organize their children into a particular structure. This structure is defined by parts in a catalog. To define a new node-kit class, the main task is to create a catalog for the class (in addition to the standard tasks for deriving a &#8220;regular&#8221; node). Once a catalog is established, the rest of the functionality, such as <a name="idch073"></a><a name="idch074"></a><a name="idch075"></a><span class="bold"><b>setPart()</b></span>, <span class="bold"><b>getPart()</b></span>, and <span class="bold"><b>createPathToPart()</b></span>, is provided by the base class for all node kits, <span class="bold"><b>SoBaseKit</b></span>.</p>
+<p><a name="id38839"></a><a name="idch076"></a><span class="bold"><b>SoBaseKit</b></span> is a direct descendant of <a name="idch077"></a><span class="bold"><b>SoNode</b></span>. Therefore, when creating new node kits, you follow the standard procedure for creating and using new classes of nodes, except that you use the node-kit macros in the file SoSubKit.h. (Since you have to derive from at least <a name="idch078"></a><a name="idch079"></a><span class="bold"><b>SoBaseKit</b></span>, you never need to include this file directly.) The SO_KIT_HEADER() macro declares type identifier and naming variables and methods that all node-kit classes must support. It also defines the private variable <a name="idch0710"></a><a name="idch0711"></a><span class="bold"><b>nodekitCatalog</b></span> and a protected virtual method for retrieving it, <a name="idch0712"></a><span class="bold"><b>getNodekitCatalog()</b></span>. It defines the static method <span class="bold"><b>getClassNodekitCatalog()</b></span> as well. The SO_KIT_SOURCE() macro defines the static variables and methods declared in the SO_KIT_HEADER() macro. Other macros useful in creating new node-kit classes are mentioned in the following sections.<a name="idch0713"></a></p>
+<p>Beyond this, most of the work for making a node kit focuses on creating the node-kit catalog. This catalog is a static variable and is therefore shared by all instances of the class. Whenever a user requests that a part should be added or retrieved (through <a name="idch0714"></a><span class="bold"><b>getPart()</b></span>, <span class="bold"><b>setPart()</b></span>, and so on), the node-kit catalog is consulted. The node-kit catalog for any given class is created once when the first instance of that class is created.</p>
+<p>Creating a new node kit requires these steps:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new node-kit class and determine what class it is derived from.</p>
+</li>
+<li><p>If the node kit has fields, define and name each field.</p>
+</li>
+<li><p>Design each part in the catalog. Use the <br>
+SO_KIT_CATALOG_ENTRY_HEADER() macro to declare a name for the part in the header file (see <a href="ch07.html#id25998">&#8220;Defining and Naming Catalog Entries&#8221;</a>). The parts themselves are described in the constructor.</p>
+</li>
+<li><p>Define an <span class="bold"><b>initClass()</b></span> method to initialize the type information (see <a href="ch07.html#id16241">&#8220;Initializing the Node-Kit Class&#8221;</a>).</p>
+</li>
+<li><p>Define a constructor (see <a href="ch07.html#id32544">&#8220;Defining the Constructor&#8221;</a>).</p>
+</li>
+<li><p>Implement actions, if necessary. Typically, you won't need to implement additional actions for a node kit. You may, however, want to redefine the <span class="bold"><b>setDefaultOnNonWritingFields()</b></span> method (see <a href="ch07.html#id31934">&#8220;Writing Information About Parts&#8221;</a>).</p>
+</li>
+<li><p>Implement a <span class="bold"><b>copy()</b></span> method if the node kit contains any non-field instance data (see Chapter 2).</p>
+</li>
+<li><p>Implement an <span class="bold"><b>affectsState()</b></span> method if this method cannot be inherited from the parent class (see Chapter 2).</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5461676"></a><a name="id25998"></a>Defining and Naming Catalog Entries</h2></div></div>
+<p>In the header file, use the macro SO_KIT_CATALOG_ENTRY_HEADER() for each part in the catalog. For example:<a name="idch0715"></a><a name="idch0716"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_KIT_CATALOG_ENTRY_HEADER(lightModel);
+SO_KIT_CATALOG_ENTRY_HEADER(environment);
+SO_KIT_CATALOG_ENTRY_HEADER(drawStyle);
+</pre></td></tr></table><br><div class="note"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/note.png"></td><td align="left" valign="top"><b>Note: </b>This macro creates a protected <a name="idch0717"></a><span class="bold"><b>SoSFNode</b></span> field for each part in the node kit. Since the nodes are stored this way, we can use the field mechanisms to write the parts out by name. Node kit parts are hidden children and are written out differently from public children. They are written out as the part name, followed by the node being used.<a name="idch0718"></a>
+</td></tr></table><hr noshade="noshade"></div><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5461737"></a><a name="id16241"></a>Initializing the Node-Kit Class</h2></div></div>
+<p>In the <a name="idch0719"></a><span class="bold"><b>initClass()</b></span> routine for your class, use the macro SO_KIT_INIT_CLASS(). For example:<a name="idch0720"></a><a name="idch0721"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+JumpingJackKit::initClass()
+{
+   SO_KIT_INIT_CLASS(JumpingJackKit, SoBaseKit, &quot;BaseKit&quot;);
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5461803"></a><a name="id32544"></a>Defining the Constructor</h2></div></div>
+<p>In the constructor for the node-kit class, you define the new parts for the node-kit catalog and create the node-kit parts list for each instance (as well as performing the standard node subclass construction). Some parts may be created in the constructor as well.<a name="idch0722"></a></p>
+<p>A series of macros is used to define a node-kit catalog. They are described in <a name="idch0723"></a><a href="ch07.html#id46102">&#8220;Defining a Node-Kit Part&#8221;</a>. Initially, the catalog is the same as that of the parent class and is set up with the macro</p>
+<p>SO_KIT_CONSTRUCTOR()</p>
+<p>Next, you can modify the catalog by adding new parts. A new part is entered in the catalog using one of three macros:</p>
+<p>SO_KIT_ADD_CATALOG_ENTRY()</p>
+<p>SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY()</p>
+<p>SO_KIT_ADD_CATALOG_LIST_ENTRY()</p>
+<p>Attributes of existing parts may be modified using these macros:</p>
+<p>SO_KIT_ADD_LIST_ITEM_TYPE()</p>
+<p>SO_KIT_CHANGE_ENTRY_TYPE()</p>
+<p>SO_KIT_CHANGE_NULL_BY_DEFAULT()</p>
+<p>The node-kit parts list is created by the macro SO_KIT_INIT_INSTANCE(). The parts list is a protected member containing pointers to all the existing parts in this instance of the node kit. This macro also creates any parts that are created by default, such as the &#8220;shape&#8221; part in the <a name="idch0724"></a><a name="idch0725"></a><span class="bold"><b>SoShapeKit</b></span> (a cube) and the &#8220;light&#8221; part in the <span class="bold"><b>SoLightKit</b></span> (a directional light). </p>
+<p>The  <a name="idch0726"></a><span class="bold"><b>setUpConnections()</b></span> method can be redefined by the class. If so, it is called at the end of the constructor. This method attaches or detaches sensors, callback functions, and field connections. It is called at the beginning and end of <span class="bold"><b>SoBaseKit::readInstance()<a name="idch0727"></a></b></span> and at the beginning and end of <span class="bold"><b>SoBaseKit::copy()<a name="idch0728"></a></b></span>. For each of these operations, it turns the sensors and field connections off, performs the operation, and then turns the sensors and field connections on again. See Chapter 8 for an example of using <span class="bold"><b>setUpConnections()</b></span>.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5462063"></a><a name="id33511"></a>About Parts</h2></div></div>
+<p>This section describes the parameters that define a part. <a href="ch07.html#id41104">&#8220;Case Study: The Parts of SoSeparatorKit&#8221;</a> shows the values for these parameters as they are used in the catalog for <span class="bold"><b>SoSeparatorKit</b></span>.</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5462095"></a>Anatomy of a Part<a name="idch0729"></a></h3></div></div>
+<p>Node-kit catalogs are made up of parts in a particular arrangement. A part is completely described by the following parameters:<a name="idch0730"></a></p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term">SbName </span></td><td width="10"> </td><td><p><a name="idch0731"></a><i>name<br>
+</i>This parameter is the name used to refer to this part, such as &#8220;shape,&#8221; &#8220;material,&#8221; &#8220;leg,&#8221; and so on. The part corresponding to the node kit itself is always given the name &#8220;this&#8221; in its own catalog.</p>
+
+</td></tr><tr valign="top"><td><span class="term">SoType </span></td><td width="10"> </td><td><p><i>type<a name="idch0732"></a></i> 	<br>
+This parameter is the node type identifier for this part, such as <span class="bold"><b>SoTransform::getClassTypeId()</b></span>. The <i>type</i> may be the type of an abstract node. It is checked whenever a user attempts to get or set a part. For example, if a user calls </p>
+
+</td></tr><tr valign="top"><td><span class="term"><tt></tt>
+</span></td><td width="10"> </td><td><p><tt>
+
+
+setPart(&quot;partName&quot;, newNode)</tt>, </p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p>the <span class="bold"><b>setPart()</b></span> method first checks that <span class="bold"><b>newNode</b></span> belongs to a class derived from <i>type</i>. The node is only installed as &#8220;partName&#8221; if it passes this type-checking test.</p>
+
+</td></tr><tr valign="top"><td><span class="term">SoType </span></td><td width="10"> </td><td><p><a name="idch0733"></a><i>defaultType</i> <br>
+This parameter is used only when the node kit needs to build a part, but that part's <i>type</i> is the type of an abstract node. For example, in <span class="bold"><b>SoShapeKit</b></span>, the part &#8220;shape&#8221; has a <i>type</i> equal to that of <span class="bold"><b>SoShape</b></span> (an abstract class), but the <i>defaultType</i> is <span class="bold"><b>SoCube</b></span>. If the user calls <span class="bold"><b>getPart()</b></span>, but the part has not yet been created, then the kit creates and returns an <span class="bold"><b>SoCube</b></span> (the <i>defaultType</i>). However, when calling <a name="idch0734"></a><span class="bold"><b>setPart()</b></span>, any node of a type derived from <span class="bold"><b>SoShape</b></span> (the value of <i>type</i>) is permissible.</p>
+
+</td></tr><tr valign="top"><td><span class="term">SbBool</span></td><td width="10"> </td><td><p><a name="idch0735"></a><i>nullByDefault<br>
+</i>This parameter specifies whether a part is NULL by default. If FALSE, the part is always created by the SO_KIT_INIT_INSTANCE() macro for the node kit that uses this catalog.</p>
+
+</td></tr><tr valign="top"><td><span class="term">SbBool </span></td><td width="10"> </td><td><p><a name="idch0736"></a><i>isLeaf<br>
+</i>This parameter is not explicitly set by you as the designer of the node kit. It is calculated automatically as you add parts to the node-kit catalog. If <i>isLeaf</i> is TRUE, then the part has no children within the catalog. So in the <span class="bold"><b>SoAppearanceKit</b></span> shown in <a href="ch07.html#id28177">Figure 7-5</a>, all parts except for &#8220;this&#8221; would have <i>isLeaf</i> set to TRUE. </p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p>Leaf parts are the only ones in the catalog that the end user of the node kit can retrieve through calls like <a name="idch0737"></a><span class="bold"><b>getPart()</b></span> and <span class="bold"><b>createPathToPart()</b></span>. All other parts are considered internal to the node kit. (Of course, not every leaf part can be returned. See <a name="idch0738"></a><i>isPublic</i> on <a href="ch07.html#id35879">page 131</a>.)</p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p>Note that a part can still have children in a scene graph without having children within the catalog. For example, any public leaf part in the catalog whose type is derived from <span class="bold"><b>SoGroup</b></span> can be retrieved with <span class="bold"><b>getPart()</b></span>. Following this, children can be added. The result is that in the scene graph, this part is not a leaf node. But it is still a leaf part in the catalog.</p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p>Some parts, such as the &#8220;childList&#8221; part in <span class="bold"><b>SoSeparatorKit</b></span>, are <a name="idch0739"></a><i>list parts</i>. A list part is always of type <span class="bold"><b>SoNodeKitList</b></span>, a special type of group node, and the node kit ensures that only certain types of nodes are added to it as children. So, in a scene graph, it may very well have children. But in the catalog, it does not.</p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p>Finally, imagine using an <span class="bold"><b>SoAppearanceKit</b></span> as a leaf part in a higher level node kit such as an <span class="bold"><b>SoSeparatorKit</b></span>. Children may be added to the &#8220;appearance&#8221; part through calls such as:</p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p> <tt>myKit-&gt;setPart(&quot;appearance.material&quot;, myMtl) </tt></p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p>This could add a child to the part &#8220;appearance,&#8221; but the appearance part would remain a leaf part in the catalog.</p>
+
+</td></tr><tr valign="top"><td><span class="term">SbName</span></td><td width="10"> </td><td><p><a name="idch0740"></a><i>parentName<br>
+<a name="idch0741"></a></i>This parameter is the name of the catalog part that is the parent of this part. The <i>parentName</i> of the part &#8220;this&#8221; is always the empty string (&quot;&quot;).</p>
+
+</td></tr><tr valign="top"><td><span class="term">SbName</span></td><td width="10"> </td><td><p><a name="idch0742"></a><i>rightSiblingName<br>
+<a name="idch0743"></a></i>This parameter is the name of the catalog part that is the right sibling of this part. If a part does not have any right siblings in the catalog, then the <i>rightSiblingName</i> is the empty string (&quot;&quot;).</p>
+
+</td></tr><tr valign="top"><td><span class="term">SbBool</span></td><td width="10"> </td><td><p><i>isList<br>
+<a name="idch0744"></a><a name="idch0745"></a></i>If this parameter is TRUE, then the part is treated as a list and will be an <a name="idch0746"></a><span class="bold"><b>SoNodeKitList</b></span> node. The children of this part are restricted to certain classes of nodes. Whenever you add a child to a node-kit list, it checks to see if that child is of the correct type. If the type is not allowed, the child is not added. Use the standard methods for adding, removing, replacing, and inserting children in the node-kit list.</p>
+
+</td></tr><tr valign="top"><td><span class="term">SoType</span></td><td width="10"> </td><td><p><i>listContainerType<br>
+<a name="idch0747"></a></i>This parameter has meaning only if <i>isList</i> is TRUE. The <span class="bold"><b>SoNodeKitList</b></span> keeps a hidden child of type <span class="bold"><b>SoGroup</b></span> below itself and above its children. This extra node is the container node, and its type is given by the <i>listContainerType</i> parameter. The container node can be any <span class="bold"><b>SoGroup</b></span> (for example, separator, switch, or group).</p>
+
+</td></tr><tr valign="top"><td><span class="term">SbPList</span></td><td width="10"> </td><td><p><i>listItemTypes<br>
+<a name="idch0748"></a><a name="idch0749"></a></i>This parameter has meaning only if <i>isList</i> is TRUE. It is a list of the types permitted as children of the part. For example,<span class="bold"><b> </b></span></p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b></b></span>
+</span></td><td width="10"> </td><td><p><span class="bold"><b></b></span><tt>addChild(&quot;myList&quot;, newChild) </tt></p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p>works only if <i>newChild</i> is derived from one of the types in the <i>listItemTypes</i> for the part &#8220;myList.&#8221;</p>
+
+</td></tr><tr valign="top"><td><span class="term"><a name="id35879"></a>SbBool</span></td><td width="10"> </td><td><p><i>isPublic<br>
+<a name="idch0750"></a></i>This parameter indicates whether a user can request this part. If <i>isPublic</i> is TRUE, then the part can be accessed. Otherwise, it is considered internal to the node kit. Note that if the part is not a leaf part, then <a name="idch0751"></a><i>isPublic</i> is always FALSE.</p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p>For example, consider the hypothetical <span class="bold"><b>PublicSpherePrivateSphereKit</b></span> illustrated in <a href="ch07.html#id26684">Figure 7-1</a>. If &#8220;privateAppearance&#8221; were a private part of type <span class="bold"><b>SoAppearanceKit</b></span>, then the user could not call</p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p><tt>setPart(&quot;privateAppearance.material&quot;, newNode)</tt></p>
+
+</td></tr><tr valign="top"><td><span class="term"></span></td><td width="10"> </td><td><p>because both &#8220;privateAppearance&#8221; and its material part are considered private.</p>
+<p><div class="figure"><p><a name="id5463172"></a><b>Figure 7-1. <a name="id26684"></a>Hypothetical PublicSpherePrivateSphereKit</b></p>
+<div class="mediaobject"><img src="figures/7-2new.gif"></div></div><br>
+</p>
+
+</td></tr></table></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5463217"></a><a name="id41104"></a>Case Study: The Parts of SoSeparatorKit</h3></div></div>
+<p><a href="ch07.html#id96096">Figure 7-2</a> and Tables 7-1 through 7-3 show the parts of <a name="idch0752"></a><span class="bold"><b>SoSeparatorKit</b></span>. This kit is the base class for <a name="idch0753"></a><span class="bold"><b>SoShapeKit</b></span> and <a name="idch0754"></a><span class="bold"><b>SoWrapperKit</b></span>. Both subclasses inherit the parts in the <span class="bold"><b>SoSeparatorKit</b></span>'s catalog. The parts in this catalog are as follows:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term">&#8220;callbackList&#8221;</span></td><td width="10"> </td><td><p>a list part that can contain either <span class="bold"><b>SoCallback</b></span> or <span class="bold"><b>SoEventCallback</b></span> nodes. If you want to make your instance of an <span class="bold"><b>SoSeparatorKit</b></span> respond to events, you can create callback nodes and add them to this list. This part is inherited from <span class="bold"><b>SoBaseKit</b></span>.</p>
+
+</td></tr><tr valign="top"><td><span class="term">&#8220;topSeparator&#8221;</span></td><td width="10"> </td><td><p>a separator node that is required to prevent the property nodes from influencing nodes outside the node kit.</p>
+
+</td></tr></table></div><p>The &#8220;pickStyle,&#8221; &#8220;appearance,&#8221; &#8220;units,&#8221; &#8220;transform,&#8221; and &#8220;texture2Transform&#8221; parts are all  composed of property nodes. Note that &#8220;appearance&#8221; is, in turn, a node kit.</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term">&#8220;childList&#8221;</span></td><td width="10"> </td><td><p>a list of <span class="bold"><b>SoSeparatorKits</b></span>. By using the &#8220;childList&#8221; and the &#8220;transform&#8221; parts, you can create motion hierarchies.</p>
+<p><div class="figure"><p><a name="id5463424"></a><b>Figure 7-2. <a name="id96096"></a><a name="idch0755"></a>Catalog Diagram for SoSeparatorKit</b></p>
+<div class="mediaobject"><img src="figures/fig7.3new.gif"></div></div><br>
+</p>
+<div class="table"><p><a name="id5463486"></a><b>Table 7-1. Type Parameters of SoSeparatorKit Parts</b></p>
+<table summary="Type Parameters of SoSeparatorKit Parts" border="1"><colgroup><col><col><col></colgroup><thead><tr valign="top"><th valign="top"><p>name</p>
+</th><th valign="top"><p>type</p>
+</th><th valign="top"><p>defaultType</p>
+</th></tr></thead><tbody><tr valign="top"><td valign="top"><p>&#8220;this&#8221;</p>
+</td><td valign="top"><p>SoSeparatorKit</p>
+</td><td valign="top"><p>same</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;callbackList&#8221;</p>
+</td><td valign="top"><p>SoNodeKitList</p>
+</td><td valign="top"><p>same</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;topSeparator&#8221;</p>
+</td><td valign="top"><p>SoSeparator</p>
+</td><td valign="top"><p>same</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;pickStyle&#8221;</p>
+</td><td valign="top"><p>SoPickStyle</p>
+</td><td valign="top"><p>same</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;appearance&#8221;</p>
+</td><td valign="top"><p>SoAppearanceKit</p>
+</td><td valign="top"><p>same</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;units&#8221;</p>
+</td><td valign="top"><p>SoUnits</p>
+</td><td valign="top"><p>same</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;transform&#8221;</p>
+</td><td valign="top"><p>SoTransform</p>
+</td><td valign="top"><p>same</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;texture2Transform&#8221;</p>
+</td><td valign="top"><p>SoTexture2Transform</p>
+</td><td valign="top"><p>same</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;childList&#8221;</p>
+</td><td valign="top"><p>SoNodeKitList</p>
+</td><td valign="top"><p>same</p>
+</td></tr></tbody></table></div><br>
+</td></tr></table></div><p><span class="bold"><b></b></span></p>
+<div class="table"><p><a name="id5463810"></a><b>Table 7-2. <a name="idch0756"></a>Catalog Layout Parameters of SoSeparatorKit Parts</b></p>
+<table summary="Catalog Layout Parameters of SoSeparatorKit Parts" border="1"><colgroup><col><col><col><col></colgroup><thead><tr valign="top"><th valign="top"><p>name</p>
+</th><th valign="top"><p>isLeaf</p>
+</th><th valign="top"><p>parentName</p>
+</th><th valign="top"><p>rightSibling</p>
+</th></tr></thead><tbody><tr valign="top"><td valign="top"><p>&#8220;this&#8221;</p>
+</td><td valign="top"><p>FALSE</p>
+</td><td valign="top"><p>&#8220; &#8221;</p>
+</td><td valign="top"><p>&#8220; &#8221;</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;callbackList&#8221;</p>
+</td><td valign="top"><p>TRUE</p>
+</td><td valign="top"><p>&#8220;this&#8221;</p>
+</td><td valign="top"><p>&#8220;topSeparator&#8221;</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;topSeparator&#8221;</p>
+</td><td valign="top"><p>FALSE</p>
+</td><td valign="top"><p>&#8220;this&#8221;</p>
+</td><td valign="top"><p>&#8220; &#8221;</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;pickStyle&#8221;</p>
+</td><td valign="top"><p>TRUE</p>
+</td><td valign="top"><p>&#8220;topSeparator&#8221;</p>
+</td><td valign="top"><p>&#8220;appearance&#8221;</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;appearance&#8221;</p>
+</td><td valign="top"><p>TRUE</p>
+</td><td valign="top"><p>&#8220;topSeparator&#8221;</p>
+</td><td valign="top"><p>&#8220;units&#8221;</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;units&#8221;</p>
+</td><td valign="top"><p>TRUE</p>
+</td><td valign="top"><p>&#8220;topSeparator&#8221;</p>
+</td><td valign="top"><p>&#8220;transform&#8221;</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;transform&#8221;</p>
+</td><td valign="top"><p>TRUE</p>
+</td><td valign="top"><p>&#8220;topSeparator&#8221;</p>
+</td><td valign="top"><p>&#8220;texture2Transform&#8221;</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;texture2Transform&#8221;</p>
+</td><td valign="top"><p>TRUE</p>
+</td><td valign="top"><p>&#8220;topSeparator&#8221;</p>
+</td><td valign="top"><p>&#8220;childList&#8221;</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;childList&#8221;</p>
+</td><td valign="top"><p>TRUE</p>
+</td><td valign="top"><p>&#8220;topSeparator&#8221;</p>
+</td><td valign="top"><p>&#8220; &#8221;</p>
+</td></tr></tbody></table></div><br><div class="table"><p><a name="id5464192"></a><b>Table 7-3. <a name="idch0757"></a>Behavior Parameters of SoSeparatorKit Parts</b></p>
+<table summary="Behavior Parameters of SoSeparatorKit Parts" border="1"><colgroup><col><col><col><col><col></colgroup><thead><tr valign="top"><th valign="top"><p>name</p>
+</th><th valign="top"><p>isList</p>
+</th><th valign="top"><p>listContainer- 
+Type</p>
+</th><th valign="top"><p>listItemTypes</p>
+</th><th valign="top"><p>isPublic</p>
+</th></tr></thead><tbody><tr valign="top"><td valign="top"><p>&#8220;this&#8221;</p>
+</td><td valign="top"><p>FALSE</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>FALSE</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;callbackList&#8221;</p>
+</td><td valign="top"><p>TRUE</p>
+</td><td valign="top"><p>SoSeparator</p>
+</td><td valign="top"><p>SoCallback and</p>
+<p>SoEventCallback</p>
+</td><td valign="top"><p>TRUE</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;topSeparator&#8221;</p>
+</td><td valign="top"><p>FALSE</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>FALSE</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;pickStyle&#8221;</p>
+</td><td valign="top"><p>FALSE</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>TRUE</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;appearance&#8221;</p>
+</td><td valign="top"><p>FALSE</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>TRUE</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;units&#8221;</p>
+</td><td valign="top"><p>FALSE</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>TRUE</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;transform&#8221;</p>
+</td><td valign="top"><p>FALSE</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>TRUE</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;texture2-</p>
+<p>Transform&#8221;</p>
+</td><td valign="top"><p>FALSE</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>--</p>
+</td><td valign="top"><p>TRUE</p>
+</td></tr><tr valign="top"><td valign="top"><p>&#8220;childList&#8221;</p>
+</td><td valign="top"><p>TRUE</p>
+</td><td valign="top"><p>SoSeparator</p>
+</td><td valign="top"><p>SoSeparatorKit</p>
+</td><td valign="top"><p>TRUE</p>
+</td></tr></tbody></table></div><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5464712"></a><a name="id46102"></a>Defining a Node-Kit Part</h2></div></div>
+<p>As mentioned in <a name="idch0758"></a><a href="ch07.html#id38839">&#8220;Overview&#8221;</a>, node-kit catalogs are defined within the constructor.  Three macros assist you in defining new parts for the node-kit catalog:<a name="idch0759"></a></p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term">SO_KIT_ADD_CATALOG_ENTRY()</span></td><td width="10"> </td><td><p><br>
+adds a part to the catalog</p>
+
+</td></tr><tr valign="top"><td><span class="term">SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY()</span></td><td width="10"> </td><td><p><br>
+adds a part that is an abstract type to the catalog</p>
+
+</td></tr><tr valign="top"><td><span class="term">SO_KIT_ADD_CATALOG_LIST_ENTRY()</span></td><td width="10"> </td><td><p><br>
+adds a list part to the catalog</p>
+
+</td></tr></table></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5464789"></a>Adding a Catalog Entry</h3></div></div>
+<p>To add new parts to a catalog, use the following macro:</p>
+<p>SO_KIT_ADD_CATALOG_ENTRY(<a name="idch0760"></a><i>name, className, nullByDefault,<br>
+	parentName, rightSiblingName, isPublicPart) </i></p>
+<p>If your new part is a list part, or if the type is going to be an abstract type, see <a href="ch07.html#id38087">&#8220;Adding a List Entry&#8221;</a> or <a href="ch07.html#id31977">&#8220;Adding an Entry of Abstract Type&#8221;</a>. Note that the <i>rightSiblingName</i> may change if entries are added to the catalog. If you add another part later, it is possible that the <i>rightSiblingName</i> will change. Figures 7-3 and 7-4 illustrate this.</p>
+<p><div class="figure"><p><a name="id5464870"></a><b>Figure 7-3. <a name="id38513"></a>Right Sibling Names Before Adding the &#8220;middle&#8221; Part</b></p>
+<div class="mediaobject"><img src="figures/7-3snap.gif"></div></div><br>
+<div class="figure"><p><a name="id5464890"></a><b>Figure 7-4. <a name="id32402"></a>Right Sibling Names After Adding the &#8220;middle&#8221; Part</b></p>
+<div class="mediaobject"><img src="figures/7-4.snap.gif"></div></div><br>
+</p>
+<p>Suppose you want to add a part as the middle child in <a href="ch07.html#id38513">Figure 7-3</a>. If the new part is a public label node that is NULL by default, you use the following macro:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_KIT_ADD_CATALOG_ENTRY(middle, SoLabel, TRUE, this,
+                         right, TRUE);
+</pre></td></tr></table><p>Notice that part names are not quoted in macros. <a href="ch07.html#id32402">Figure 7-4</a> shows how the right sibling names change after this part has been added to the node kit.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5464956"></a><a name="id38087"></a>Adding a List Entry</h3></div></div>
+<p>If the part you wish to add is a list part, use the following macro, which adds the argument listItemClassName. This parameter is used for type-checking when the user attempts to add new nodes as children of the list parts.<a name="idch0761"></a></p>
+<p>SO_KIT_ADD_CATALOG_LIST_ENTRY(<a name="idch0762"></a><i>name, listContainerClassName,<br>
+	nullByDefault, parentName,<br>
+	rightName,</i> <i>listItemClassName,<br>
+	isPublicPart</i>)</p>
+<p>If you want your list to accept more than one type of node, then use the macro SO_KIT_ADD_LIST_ITEM_TYPE(), described in <a href="ch07.html#id11252">&#8220;Adding a Type to a List Entry&#8221;</a>. Note that the list container class name must be a subclass of <a name="idch0763"></a><span class="bold"><b>SoGroup</b></span>.</p>
+<p>The &#8220;childList&#8221; part of <span class="bold"><b>SoSeparatorKit</b></span> is a list of other <span class="bold"><b>SoSeparatorKits</b></span>. The part itself is an <span class="bold"><b>SoNodeKitListPart</b></span> node, and it is the rightmost part in the catalog below &#8220;topSeparator.&#8221; The container is an <span class="bold"><b>SoSeparator</b></span> node.</p>
+<p> The following code adds &#8220;childList&#8221; to the catalog:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_KIT_ADD_CATALOG_LIST_ENTRY(childList, SoSeparator, TRUE, 
+	topSeparator,  , SoSeparatorKit,
+	TRUE);
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5465180"></a><a name="id31977"></a>Adding an Entry of Abstract Type</h3></div></div>
+<p>If you wish to add a part of abstract type, you also need to provide the parameter <a name="idch0764"></a><i>defaultType</i>, to be used when the kit has to construct the part on demand. This macro adds one parameter to the regular part-creation macro. Its syntax is</p>
+<p>SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(<a name="idch0765"></a><i>name, className,<br>
+	defaultClassName, nullByDefault, parentName,<br>
+	rightName, isPublicPart</i>)</p>
+<p>For example, suppose you want to add an abstract part &#8220;anyKit&#8221; as the rightmost child of &#8220;this.&#8221; This part can be any node kit, but the <i>defaultType</i> is an appearance kit. To create this part:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(anyKit, SoBaseKit,
+	 SoAppearanceKit, TRUE, this, , TRUE);
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5465251"></a>Changing a Defined Part</h2></div></div>
+<p>Three macros assist you in changing parts that have already been defined in the node kit (either in this class or in a parent class):</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term">SO_KIT_CHANGE_ENTRY_TYPE()</span></td><td width="10"> </td><td><p><br>
+changes the type or default type of a part inherited from the parent class</p>
+
+</td></tr><tr valign="top"><td><span class="term">SO_KIT_ADD_LIST_ITEM_TYPE()</span></td><td width="10"> </td><td><p><br>
+adds a type to the list of accepted child types (for list types only)</p>
+
+</td></tr><tr valign="top"><td><span class="term">SO_KIT_CHANGE_NULL_BY_DEFAULT()</span></td><td width="10"> </td><td><p><br>
+changes whether a part is NULL by default. If TRUE, the part is NULL by default. If FALSE, the part is always created during the SO_KIT_INIT_INSTANCE() macro for the node kit that uses this catalog.</p>
+
+</td></tr></table></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5465361"></a>Changing the Type of a Part<a name="idch0766"></a><a name="idch0767"></a></h3></div></div>
+<p>If you wish to change the <a name="idch0768"></a><i>type</i> or <i>defaultType</i> of a part that is inherited from the parent class, use the following macro. If you change the <i>type</i>, the new type must be a subclass of the inherited type. This is useful if the part has an abstract type in the parent class, but you wish to narrow this parameter in the child class. If you change the <i>defaultType</i>, any subclass of <i>type</i> is allowable. The syntax of this macro is</p>
+<p>SO_KIT_CHANGE_ENTRY_TYPE(<a name="idch0769"></a><i>name, newClassName,<br>
+	newDefaultClassName</i> )</p>
+<p>In this chapter, <span class="bold"><b>PyramidKit</b></span> changes the <i>type</i> of the &#8220;shape&#8221; part from <span class="bold"><b>SoShape</b></span> to <span class="bold"><b>Pyramid</b></span>, and it changes the <i>defaultType</i> from <span class="bold"><b>SoCube</b></span> to <span class="bold"><b>Pyramid</b></span>:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_KIT_CHANGE_ENTRY_TYPE(shape, Pyramid, Pyramid);
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5465500"></a><a name="id11252"></a>Adding a Type to a List Entry</h3></div></div>
+<p>When you want a list part to accept more than one type of node as a child, use this macro to add to the <i>listItemTypes</i>:</p>
+<p>SO_KIT_ADD_LIST_ITEM_TYPE(<a name="idch0770"></a><i>name, newClass</i>)</p>
+<p>For example, if you wanted &#8220;childList&#8221; to also accept <span class="bold"><b>SoCube</b></span> nodes, you'd add:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_KIT_ADD_LIST_ITEM_TYPE(childList, SoCube);
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5465554"></a><a name="id31934"></a>Writing Information About Parts</h2></div></div>
+<p>If you don't want a part to be written out, you can override the <span class="bold"><b>setDefaultOnNonWritingFields()</b></span> method to call the base class version first. Then, for any part you don't want written out, call</p>
+<p><i>partName</i>.<span class="bold"><b>setDefault</b></span>(TRUE);</p>
+<p>Be aware, though, that the part may write out anyway under certain conditions. For example, if the part lies on a path that is being written to a file, the part will write out regardless of this setting.</p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5465599"></a><a name="id28662"></a>SoAppearanceKit</h2></div></div>
+<p><span class="bold"><b>SoAppearanceKit<a name="idch0771"></a></b></span> is a subclass of <span class="bold"><b>SoBaseKit</b></span>, provided as part of the standard Inventor library. It is a collection of all property nodes that affect the appearance of a rendered shape. Eight parts are added as direct children of the node kit. A diagram of the catalog's structure is shown in <a href="ch07.html#id28177">Figure 7-5</a>.</p>
+<p><div class="figure"><p><a name="id5465692"></a><b>Figure 7-5. <a name="id28177"></a><a name="idch0772"></a>Catalog Diagram for SoAppearanceKit</b></p>
+<div class="mediaobject"><img src="figures/fig7.1new.gif"></div></div><br>
+</p>
+<p>Examples 7-1 and 7-2 show the complete header and source files for the <a name="idch0773"></a><span class="bold"><b>SoAppearanceKit</b></span> class. For brevity's sake, comments are omitted.</p>
+<div class="example"><p><a name="id5465772"></a><b>Example 7-1. <a name="id38669"></a><a name="id39749"></a><a name="idch0774"></a><a name="idch0775"></a><a name="idch0776"></a>SoAppearanceKit.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/nodekits/SoBaseKit.h&gt;
+
+class SoAppearanceKit : public SoBaseKit {
+
+   SO_KIT_HEADER(SoAppearanceKit);
+
+   // Defines fields for the new parts in the catalog
+   SO_KIT_CATALOG_ENTRY_HEADER(lightModel);
+   SO_KIT_CATALOG_ENTRY_HEADER(environment);
+   SO_KIT_CATALOG_ENTRY_HEADER(drawStyle);
+   SO_KIT_CATALOG_ENTRY_HEADER(material);
+   SO_KIT_CATALOG_ENTRY_HEADER(complexity);
+   SO_KIT_CATALOG_ENTRY_HEADER(texture2);
+   SO_KIT_CATALOG_ENTRY_HEADER(font);
+
+  public:
+   // Constructor
+   SoAppearanceKit();
+
+  SoINTERNAL public:
+   static void initClass();
+
+  private:
+
+   // Destructor
+   virtual ~SoAppearanceKit();
+};
+</pre></td></tr></table><br><div class="example"><p><a name="id5465832"></a><b>Example 7-2. SoAppearanceKit.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SoDB.h&gt;
+#include &lt;Inventor/nodekits/SoAppearanceKit.h&gt;
+#include &lt;Inventor/nodes/SoLightModel.h&gt;
+#include &lt;Inventor/nodes/SoEnvironment.h&gt;
+#include &lt;Inventor/nodes/SoDrawStyle.h&gt;
+#include &lt;Inventor/nodes/SoMaterial.h&gt;
+#include &lt;Inventor/nodes/SoComplexity.h&gt;
+#include &lt;Inventor/nodes/SoTexture2.h&gt;
+#include &lt;Inventor/nodes/SoFont.h&gt;
+
+SO_KIT_SOURCE(SoAppearanceKit);
+
+void
+SoAppearanceKit::initClass()
+{
+   SO_KIT_INIT_CLASS(SoAppearanceKit, SoBaseKit, &quot;BaseKit&quot;);
+}
+
+//    Constructor
+SoAppearanceKit::SoAppearanceKit()
+{
+   SO_KIT_CONSTRUCTOR(SoAppearanceKit);
+
+   isBuiltIn = TRUE;
+
+   // Initialize children catalog and add entries to it
+   // These are the macros you use to make a catalog.
+   // Use combinations of ...ADD_CATALOG_ENTRY 
+   // and ...ADD_CATALOG_LIST_ENTRY.  See SoSubKit.h for more
+   // info on syntax of these macros.
+   SO_KIT_ADD_CATALOG_ENTRY(lightModel,  SoLightModel, TRUE,
+                            this, ,TRUE );
+   SO_KIT_ADD_CATALOG_ENTRY(environment, SoEnvironment,TRUE,
+                            this, ,TRUE );
+   SO_KIT_ADD_CATALOG_ENTRY(drawStyle,   SoDrawStyle,  TRUE,
+                            this, ,TRUE );
+   SO_KIT_ADD_CATALOG_ENTRY(material,    SoMaterial,   TRUE,
+                            this, ,TRUE );
+   SO_KIT_ADD_CATALOG_ENTRY(complexity,  SoComplexity, TRUE,
+                            this, ,TRUE );
+   SO_KIT_ADD_CATALOG_ENTRY(texture2,    SoTexture2,   TRUE,
+                            this, ,TRUE );
+
+   SO_KIT_ADD_CATALOG_ENTRY(font, SoFont, TRUE, this, ,TRUE );
+
+   SO_KIT_INIT_INSTANCE();
+}
+
+// Destructor (necessary since inline destructor is too
+// complex)
+
+// Use: public
+
+SoAppearanceKit::~SoAppearanceKit()
+{
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5465929"></a>PyramidKit</h2></div></div>
+<p>The next two examples show <a name="idch0777"></a><span class="bold"><b>PyramidKit</b></span>, a new subclass of <a name="idch0778"></a><span class="bold"><b>SoShapeKit</b></span> that uses the <span class="bold"><b>Pyramid</b></span> node created in Chapter 2. By making it a subclass of <span class="bold"><b>SoShapeKit</b></span>, this new kit inherits all the parts, such as &#8220;appearance,&#8221; &#8220;transform,&#8221; and &#8220;units,&#8221; used by all the other shape kits. This class changes the <i>type</i> and <i>defaultType</i> of one of the parts in the parent class, <span class="bold"><b>SoShapeKit</b></span>.</p>
+<p><a href="ch07.html#id32409">Example 7-3</a> shows the header file for <span class="bold"><b>PyramidKit</b></span>. <a href="ch07.html#id18606">Example 7-4</a> shows the source code for this new node-kit class.</p>
+<div class="example"><p><a name="id5466072"></a><b>Example 7-3. <a name="id32409"></a><a name="idch0779"></a>PyramidKit.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/nodekits/SoShapeKit.h&gt;
+
+class PyramidKit : public SoShapeKit {
+   SO_KIT_HEADER(PyramidKit);
+  public:
+   PyramidKit();
+   static void initClass();
+  private:
+   virtual ~PyramidKit();
+};
+</pre></td></tr></table><br><div class="example"><p><a name="id5466105"></a><b>Example 7-4. <a name="id18606"></a>PyramidKit.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SoDB.h&gt;
+
+// Include files for new classes
+#include &quot;Pyramid.h&quot;
+#include &quot;PyramidKit.h&quot;
+
+SO_KIT_SOURCE(PyramidKit);
+
+void
+PyramidKit::initClass()
+{
+   SO_KIT_INIT_CLASS(PyramidKit, SoShapeKit, &quot;ShapeKit&quot;);
+}
+
+PyramidKit::PyramidKit()
+{
+   SO_KIT_CONSTRUCTOR(PyramidKit);
+
+   // Change the 'shape' part to be a Pyramid node.
+   SO_KIT_CHANGE_ENTRY_TYPE(shape, Pyramid, Pyramid );
+
+   SO_KIT_INIT_INSTANCE();
+
+}
+
+PyramidKit::~PyramidKit()
+{
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5466136"></a>JumpingJackKit</h2></div></div>
+<p>This section describes one more new class of node kit, <a name="idch0780"></a><span class="bold"><b>JumpingJackKit</b></span>. It is a stick figure of a man that responds to mouse events by moving his arms and legs back and forth. <a href="ch07.html#id26289">Figure 7-6</a> shows a diagram of Jack's catalog. </p>
+<p>All parts of the body (&#8220;head,&#8221; &#8220;body,&#8221; &#8220;leftArm,&#8221; &#8220;rightArm,&#8221; &#8220;leftLeg,&#8221; &#8220;rightLeg&#8221;) are of type <span class="bold"><b>SoShapeKit</b></span>, so that users can replace them with any shape they want. </p>
+<p>An <a name="idch0781"></a><span class="bold"><b>SoEventCallback</b></span> node is added as a child of the &#8220;callbackList&#8221; part. When the mouse goes down over Jack, this node's callback animates the body by editing the transforms of the arm and leg body parts.</p>
+<p><div class="figure"><p><a name="id5466224"></a><b>Figure 7-6. <a name="id26289"></a>Catalog Diagram for JumpingJackKit</b></p>
+<div class="mediaobject"><img src="figures/fig7.6new.gif"></div></div><br>
+</p>
+<p><a href="ch07.html#id35537">Example 7-5</a> shows the header file for <a name="idch0782"></a><span class="bold"><b>JumpingJackKit.<a name="idch0783"></a></b></span></p>
+<div class="example"><p><a name="id5466269"></a><b>Example 7-5. <a name="id35537"></a>JumpingJackKit.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/nodekits/SoBaseKit.h&gt;
+
+class SoEventCallback;
+
+class JumpingJackKit : public SoBaseKit {
+
+   SO_KIT_HEADER(JumpingJackKit);
+
+   SO_KIT_CATALOG_ENTRY_HEADER(body);
+   SO_KIT_CATALOG_ENTRY_HEADER(head);
+   SO_KIT_CATALOG_ENTRY_HEADER(leftArm);
+   SO_KIT_CATALOG_ENTRY_HEADER(rightArm);
+   SO_KIT_CATALOG_ENTRY_HEADER(leftLeg);
+   SO_KIT_CATALOG_ENTRY_HEADER(rightLeg);
+
+  public:
+     JumpingJackKit();
+
+     // Overrides default method. All the parts are shapeKits,
+     // so this node will not affect the state.
+     virtual SbBool affectsState() const;
+
+   static void initClass();
+
+  private:
+
+   // Constructor calls to build and set up parts.
+   void createInitialJack();
+
+   // An SoEventCallback will be inserted into the 
+   // &quot;callbackList&quot; (inherited from SoBaseKit) as the part 
+   // &quot;callbackList[0]&quot;. This routine jumpJackJump() will be 
+   // set as the callback function for that part. It is this 
+   // routine which changes the angles in the joints.
+   static void jumpJackJump(void *userData, 
+     SoEventCallback *eventCB);
+
+   virtual ~JumpingJackKit();
+};
+</pre></td></tr></table><p>The constructor for <a name="idch0784"></a><span class="bold"><b>JumpingJackKit</b></span> calls <span class="bold"><b>createInitialJack()</b></span>. This routine, shown in <a href="ch07.html#id10193">Example 7-6</a>, constructs the man, moves the parts to a starting position, and creates an <span class="bold"><b>SoEventCallback</b></span> node, which it installs as &#8220;callbackList[0].&#8221; The constructor also creates the node-kit catalog and performs other standard construction tasks.</p>
+<p>The callback is called &#8220;jumpJackJump.&#8221; Basically, it sees if the mouse-down event occurred over the object. If so, then the limbs are rotated.</p>
+<div class="example"><p><a name="id5466434"></a><b>Example 7-6. <a name="id10193"></a> JumpingJackKit.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SoPickedPoint.h&gt;
+#include &lt;Inventor/events/SoMouseButtonEvent.h&gt;
+#include &lt;Inventor/nodekits/SoShapeKit.h&gt;
+#include &lt;Inventor/nodes/SoCube.h&gt;
+#include &lt;Inventor/nodes/SoCylinder.h&gt;
+#include &lt;Inventor/nodes/SoEventCallback.h&gt;
+#include &lt;Inventor/nodes/SoSphere.h&gt;
+#include &lt;Inventor/nodes/SoTransform.h&gt;
+
+#include &quot;JumpingJackKit.h&quot;
+
+SO_KIT_SOURCE(JumpingJackKit);
+
+void
+JumpingJackKit::initClass()
+{
+   SO_KIT_INIT_CLASS(JumpingJackKit,SoBaseKit, &quot;BaseKit&quot;);
+}
+
+JumpingJackKit::JumpingJackKit()
+{
+   SO_KIT_CONSTRUCTOR(JumpingJackKit);
+
+   // Add the body parts to the catalog...
+   SO_KIT_ADD_CATALOG_ENTRY(body, SoShapeKit, 
+                            TRUE, this,, TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(head, SoShapeKit, 
+                            TRUE, this,, TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(leftArm, SoShapeKit, 
+                            TRUE, this,, TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(rightArm, SoShapeKit, 
+                            TRUE, this,, TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(leftLeg, SoShapeKit, 
+                            TRUE, this,, TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(rightLeg, SoShapeKit, 
+                            TRUE, this,, TRUE);
+
+   SO_KIT_INIT_INSTANCE();
+
+   createInitialJack();
+}
+
+JumpingJackKit::~JumpingJackKit()
+{
+}
+
+// This kit is made up entirely of SoShapeKits.
+// Since SoShapeKits do not affect state, neither does this.
+SbBool
+JumpingJackKit::affectsState() const
+{
+   return FALSE;
+}
+
+// Set up parts for default configuration of the jumping jack
+void
+JumpingJackKit::createInitialJack()
+{
+   // Create the head.
+   SoSphere *headSphere = new SoSphere;
+   setPart(&quot;head.shape&quot;, headSphere);
+
+   // Create the body.
+   SoCube *bodyCube = new SoCube;
+   setPart(&quot;body.shape&quot;, bodyCube);
+
+   // Create the limbs
+   SoCylinder *limbCylinder = new SoCylinder;
+   setPart(&quot;leftLeg.shape&quot;,  limbCylinder);
+   setPart(&quot;leftArm.shape&quot;,  limbCylinder);
+   setPart(&quot;rightLeg.shape&quot;, limbCylinder);
+   setPart(&quot;rightArm.shape&quot;, limbCylinder);
+
+   // Place the body and head
+   set(&quot;body.transform&quot;, &quot;scaleFactor 1 2 1&quot;);
+   set(&quot;head.transform&quot;, &quot;translation 0 3 0&quot;);
+
+   // Place the limbs
+   set(&quot;leftArm.transform&quot;,  &quot;scaleFactor 0.5 1.5 0.5&quot;);
+   set(&quot;leftLeg.transform&quot;,  &quot;scaleFactor 0.5 1.5 0.5&quot;);
+   set(&quot;rightArm.transform&quot;, &quot;scaleFactor 0.5 1.5 0.5&quot;);
+   set(&quot;rightLeg.transform&quot;, &quot;scaleFactor 0.5 1.5 0.5&quot;);
+   set(&quot;leftArm.transform&quot;,  &quot;center 0 1 0&quot;);
+   set(&quot;leftLeg.transform&quot;,  &quot;center 0 1 0&quot;);
+   set(&quot;rightArm.transform&quot;, &quot;center 0 1 0&quot;);
+   set(&quot;rightLeg.transform&quot;, &quot;center 0 1 0&quot;);
+   set(&quot;leftArm.transform&quot;,  &quot;translation -1  1   0.5&quot;);
+   set(&quot;leftLeg.transform&quot;,  &quot;translation -1 -2.5 0.5&quot;);
+   set(&quot;rightArm.transform&quot;, &quot;translation  1  1   0.5&quot;);
+   set(&quot;rightLeg.transform&quot;, &quot;translation  1 -2.5 0.5&quot;);
+
+   // Create the Event Callback to make jack jump.
+   // When it receives a mouse button event, it will
+   // call the method jumpJackJump.
+   SoEventCallback *myEventCB = new SoEventCallback;
+   myEventCB-&gt;addEventCallback(
+           SoMouseButtonEvent::getClassTypeId(), 
+           JumpingJackKit::jumpJackJump, this);
+   setPart(&quot;callbackList[0]&quot;, myEventCB);
+}
+
+// Animates the jumping jack (called by the &quot;eventCallback[0]&quot; 
+// part when a left mouse button press occurs).
+void
+JumpingJackKit::jumpJackJump(void *userData, 
+                             SoEventCallback *myEventCB)
+{
+   const SoEvent *myEvent = myEventCB-&gt;getEvent();
+
+   // See if it's a left mouse down event
+   if (SO_MOUSE_PRESS_EVENT(myEvent, BUTTON1)) {
+     JumpingJackKit *myJack = (JumpingJackKit *) userData;
+
+     // See if the jumping jack was picked.
+     const SoPickedPoint *myPickedPoint;
+     myPickedPoint = myEventCB-&gt;getPickedPoint();
+     if (myPickedPoint &amp;&amp; myPickedPoint-&gt;getPath() &amp;&amp;
+         myPickedPoint-&gt;getPath()-&gt;containsNode(myJack)) {
+
+       // The jumping jack was picked. Make it jump!
+       SoTransform *myXf;
+       SbVec3f zAxis(0,0,1);
+       SbRotation noRot = SbRotation::identity();
+
+       myXf = SO_GET_PART(myJack,
+                          &quot;leftArm.transform&quot;,SoTransform);
+       if (myXf-&gt;rotation.getValue() == noRot)
+         myXf-&gt;rotation.setValue(zAxis ,-1.6);
+       else
+         myXf-&gt;rotation.setValue(noRot);
+
+       myXf = SO_GET_PART(myJack,
+                          &quot;leftLeg.transform&quot;,SoTransform);
+       if (myXf-&gt;rotation.getValue() == noRot)
+         myXf-&gt;rotation.setValue(zAxis ,-1.2);
+       else
+         myXf-&gt;rotation.setValue(noRot);
+       myXf = SO_GET_PART(myJack,
+                          &quot;rightArm.transform&quot;,SoTransform);
+       if (myXf-&gt;rotation.getValue() == noRot)
+         myXf-&gt;rotation.setValue(zAxis , 1.6);
+       else
+         myXf-&gt;rotation.setValue(noRot);
+
+       myXf = SO_GET_PART(myJack,
+                          &quot;rightLeg.transform&quot;,SoTransform);
+       if (myXf-&gt;rotation.getValue() == noRot)
+         myXf-&gt;rotation.setValue(zAxis , 1.2);
+       else
+         myXf-&gt;rotation.setValue(noRot);
+       myEventCB-&gt;setHandled();
+     }
+   }
+}
+</pre></td></tr></table><p><a href="ch07.html#id42562">Example 7-7</a> shows a short program to create a jumping jack that responds to user events. Notice how it calls <a name="idch0785"></a><a name="idch0786"></a><span class="bold"><b>initClass()</b></span> for <span class="bold"><b>JumpingJackKit</b></span> before it creates an instance of this new node-kit class.</p>
+<div class="example"><p><a name="id5466626"></a><b>Example 7-7. <a name="id42562"></a>JumpingJackTest.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/Xt/SoXt.h&gt;
+#include &lt;Inventor/Xt/viewers/SoXtExaminerViewer.h&gt;
+
+// Header files for new node class
+#include &quot;JumpingJackKit.h&quot;
+
+main(int, char **argv)
+{
+   // Initialize Inventor and Xt
+   Widget myWindow = SoXt::init(argv[0]);
+   if (myWindow == NULL) exit(1);
+
+   // Initialize the new node class
+   JumpingJackKit::initClass();
+
+   JumpingJackKit *jackyBaby = new JumpingJackKit;
+   jackyBaby-&gt;ref();
+
+   SoXtExaminerViewer *viewer = 
+     new SoXtExaminerViewer(myWindow);
+   viewer-&gt;setSceneGraph(jackyBaby);
+   viewer-&gt;setTitle(&quot;JumpingJackKit&quot;);
+   viewer-&gt;show();
+   viewer-&gt;viewAll();
+
+   SoXt::show(myWindow);
+   SoXt::mainLoop();
+}
+</pre></td></tr></table><br></div></div><!--CONTENT_END--><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Table of Contents</a></td><td width="40%" align="right"> <a accesskey="n" href="ch08.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 6. Creating an Engine </td><td width="20%" align="center"> </td><td width="40%" align="right">Chapter 8. Creating Draggers and Manipulators </td></tr></table></div></body></html>

@@ -1,0 +1,73 @@
+<html>
+<body>
+SbString
+<hr>
+<dl>
+<dt>NAME
+<dd>SbString -- class for smart character strings
+
+<dt>INHERITS FROM
+<dd>SbString
+
+<dt>DESCRIPTION
+<Dd>Strings which have many convenience methods to make string manipulation easier.
+
+<dt>METHODS
+<dl>
+<dt><b>SbString</b>()
+<dt><b>SbString</b>(const char *str)
+<dt><b>SbString</b>(const char *str, int start, int end)
+<dt><b>SbString</b>(const SbString &str)
+<dt><b>SbString</b>(int digitString)
+<dt>~<b>SbString</b>()
+<dd>Constructors and destructor. Constructors take a character string, the subset of a character string from start to end (inclusive), or an integer to be turnedinto a string. For example, SbString(1234) creates the string &quot;1234&quot;. SbString(&quot;Testing&quot;,1,3) creates the string &quot;est&quot;.
+
+<dt>u_long <b>hash</b>()
+<dd>Returns a reasonable hash key for string.
+
+<dt>int <b>getLength</b>() const
+<dd>Returns length of string.
+
+<dt>void <b>makeEmpty</b>(SbBool freeOld = TRUE)
+<dd>Sets string to be the empty string (&quot;&quot;). If freeOld is TRUE (default), any old storage is freed up.
+
+<dt>const char * <b>getString</b>() const
+<dd>Returns pointer to the character string.
+
+<dt>SbString <b>getSubString</b>(int startChar, int endChar = -1) const
+<dd>Returns new string representing sub-string from startChar to endChar, inclusive. If endChar is -1 (the default), the sub-string from startChar untilthe end is returned.
+
+<dt>void <b>deleteSubString</b>(int startChar, int endChar = -1)
+<dd>Deletes the characters from startChar to endChar, inclusive, from the string. If endChar is -1 (the default), all characters from startChar until the end aredeleted.
+
+<dt>SbString & <b>operator =</b>(const char *str)
+<dt>SbString & <b>operator =</b>(const SbString &str)
+<dd>Assignment operators for character string, SbString.
+
+<dt>SbString & <b>operator +=</b>(const char *str)
+<dt>SbString & <b>operator +=</b>(const SbString &str)
+<dd>Concatenation operators &quot;+=&quot; for string, SbString.
+
+<dt>int <b>operator !</b>() const
+<dd>Unary &quot;not&quot; operator; returns TRUE if string is empty (&quot;&quot;).
+
+<dt>int <b>operator ==</b>(const char *s, const SbString &str)
+<dt>int <b>operator ==</b>const SbString &str, const char *s)
+<dt>int <b>operator ==</b>(const SbString &str1, const SbString &str2)
+<dd>Equality operator for SbString/char* and SbString/SbString comparison.
+
+<dt>int <b>operator !=</b>(const char *s, const SbString &str)
+<dt>int <b>operator !=</b>(const SbString &str, const char *s)
+<dt>int <b>operator !=</b>(const SbString &str1, const SbString &str2)
+<dd>Inequality operator for SbString/char* and SbString/SbString comparison.
+
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbString.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbname.html">SbName</a>
+</dl>
+</body>
+</html>

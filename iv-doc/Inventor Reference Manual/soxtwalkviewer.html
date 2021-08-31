@@ -1,0 +1,68 @@
+<html>
+<body>
+SoXtWalkViewer
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtWalkViewer -- viewer component which moves the camera in a plane
+
+<dt>INHERITS FROM
+<dd><a href="soxtcomponent.html">SoXtComponent</a> &gt; <a href="soxtglwidget.html">SoXtGLWidget</a> &gt; <a href="soxtrenderarea.html">SoXtRenderArea</a> &gt; <a href="soxtviewer.html">SoXtViewer</a> &gt; <a href="soxtfullviewer.html">SoXtFullViewer</a> &gt; <a href="soxtconstrainedviewer.html">SoXtConstrainedViewer</a> &gt; SoXtWalkViewer
+
+<dt>DESCRIPTION
+<dd>The paradigm for this viewer is a walkthrough of an architectural model. Its primary behavior is forward, backward, and left/right turning motion while maintaining aconstant &quot;eye level&quot;. It is also possible to stop and look around at the scene. The eye level plane can be disabled, allowing the viewer to proceed in the &quot;look at&quot; direction,as if on an escalator. The eye level plane can also be translated up and down -- similar to an elevator.
+
+<dt>METHODS
+<dl>
+<dt><b>SoXtWalkViewer</b>(Widget parent = NULL, const char *name =
+
+NULL, SbBool buildInsideParent = TRUE,SoXtFullViewer::BuildFlag flag = BUILD_ALL, SoXtViewer::Type type = BROWSER)
+<dt>~<b>SoXtWalkViewer</b>()
+
+<dd>Constructor and destructor which specifies the viewer type. Please refer tothe SoXtViewer man pages for a description of the viewer types.
+
+<dt><b>Methods from class SoXtConstrainedViewer</b>:
+<dd>setUpDirection, getUpDirection
+
+<dt><b>Methods from class SoXtFullViewer</b>:
+<dd>setDecoration, isDecoration, setPopupMenuEnabled, isPopupMenuEnabled,getAppPushButtonParent, addAppPushButton, insertAppPushButton, removeAppPushButton, findAppPushButton, lengthAppPushButton,getRenderAreaWidget
+
+<dt><b>Methods from class SoXtViewer</b>:
+<dd>setCamera, getCamera, setCameraType, getCameraType, viewAll,saveHomePosition, resetToHomePosition, setHeadlight, isHeadlight, getHeadlight, setDrawStyle, getDrawStyle, setBufferingType,getBufferingType, setViewing, isViewing, setAutoClipping, isAutoClipping, setStereoViewing, isStereoViewing, setStereoOffset, getStereoOffset,setDetailSeek, isDetailSeek, setSeekTime, getSeekTime, addStartCallback, addFinishCallback, re moveStartCallback, removeFinishCallback, copyView,pasteView
+
+<dt><b>Methods from class SoXtRenderArea</b>:
+<dd>setSceneGraph, getSceneGraph, setOverlaySceneGraph,getOverlaySceneGraph, registerDevice, unregisterDevice, setBackgroundColor, getBackgroundColor, setBackgroundIndex,getBackgroundIndex, setOverlayBackgroundIndex, getOverlayBackgroundIndex, setColorMap, setOverlayColorMap,setViewportRegion, getViewportRegion, setTransparencyType, getTransparencyType, setAntialiasing, getAntialiasing, setClearBeforeRender,isClearBeforeRender, setClearBe foreOverlayRender, isClearBeforeOverlayRender, setAutoRedraw, isAutoRedraw,setRedrawPriority, getRedrawPriority, getDefaultRedrawPriority, render, renderOverlay, scheduleRedraw, scheduleOverlayRedraw,redrawOnSelectionChange, redrawOverlayOnSelectionChange, setEventCallback, setGLRenderAction, getGLRenderAction,setOverlayGLRenderAction, getOverlayGLRenderAction, setSceneManager, getSceneManager, setOverlaySceneManager, getOverlaySceneManager
+
+<dt><b>Methods from class SoXtGLWidget</b>:
+<dd>setBorder, isBorder, setDoubleBuffer, isDoubleBuffer, getNormalWindow,getOverlayWindow, getNormalContext, getOverlayContext, getNormalWidget, getOverlayWidget, setNormalVisual, getNormalVisual,setOverlayVisual, getOverlayVisual
+
+<dt><b>Methods from class SoXtComponent</b>:
+<dd>show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle, getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/viewers/SoXtWalkViewer.h&gt;
+
+<dt>RESOURCES
+<ul>
+<li>SoXtWalkViewer.decoration: on (on | off)
+<li>SoXtWalkViewer.seekAnimationTime: 2.0 (float)
+<li>SoXtWalkViewer.seekTo: point (point | object)
+<li>SoXtWalkViewer.seekDistanceUsage: percentage (percentage | absolute)
+<li>SoXtWalkViewer.zoomMin: 1.0 (float)
+<li>SoXtWalkViewer.zoomMax: 179.0 (float)
+<li>SoXtWalkViewer.autoClipping: on (on | off)
+<li>SoXtWalkViewer.nearDistance: 2.4 (float, when autoClipping is off)
+<li>SoXtWalkViewer.farDistance: 2.8 (float, when autoClipping is off)
+<li>SoXtWalkViewer*BackgroundColor: black (color name or hex value)
+</ul>
+
+<dt>USAGE
+<dd>Left Mouse: Click down and move up and down for fowards and backwards motion. Move right and left for turning. Speed increases exponentially with the distancefrom the mouse-down origin. Ctrl + Left Mouse: Allows motion in the &quot;look at&quot; direction, which is not necessarilyin the &quot;eye level&quot; plane (&quot;Escalator&quot; mode). &lt;s&gt; + Left Mouse: Alternative to the Seek button. Press (but do not hold down) the&lt;s&gt; key, then click on a target object. &lt;u&gt; + Left Mouse: Press (but do not hold down) the &lt;u&gt; key, then click on a targetobject to set the &quot;up&quot; direction to the surface normal. By default +y is the &quot;up&quot; direction. Middle Mouse: Rotate the viewpoint. This allows you to look around while stopped. Right Mouse: Open the popup menu.
+
+<dt>SEE ALSO
+<dd><a href="soxtfullviewer.html">SoXtFullViewer</a>, <a href="soxtviewer.html">SoXtViewer</a>, <a href="soxtcomponent.html">SoXtComponent</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>, <a href="soxtplaneviewer.html">SoXtPlaneViewer</a>, <a href="soxtexaminerviewer.html">SoXtExaminerViewer</a>, <a href="soxtflyviewer.html">SoXtFlyViewer</a>
+</dl>
+
+</body>
+</html>

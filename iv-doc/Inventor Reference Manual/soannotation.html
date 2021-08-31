@@ -1,0 +1,70 @@
+<html>
+<body>
+<p>SoAnnotation
+<hr>
+<dl>
+<dt>NAME
+<dd>SoAnnotation -- Annotation group node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sogroup.html">SoGroup</a> &gt; <a href="soseparator.html">SoSeparator</a> &gt; SoAnnotation
+
+<dt>DESCRIPTION
+<dd>This group node delays rendering its children until all other nodes have been traversed, turning off depth buffer comparisons first. The result is that the shapes under the annotation node are rendered on top of the rest of the scene. This node is derived from SoSeparator, so it saves and restores traversal state for all actions. Note that if more than one annotation node is present in a graph, the order in which they are traversed determines the stacking order -- later nodes are rendered on top of earlier ones. Also note that since depth buffer comparisons are disabled, complex 3D objects may not be rendered correctly when used under annotation nodes.
+
+<dt>FIELDS
+<dl>
+<dt>Fields from class SoSeparator:
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoAnnotation</b>()
+<dd>Creates an annotation node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoSeparator</b>:
+<dd>setNumRenderCaches, getNumRenderCaches
+
+<dt><b>Methods from class SoGroup</b>:
+<dd>addChild, insertChild, getChild, findChild, getNumChildren, removeChild,removeChild, removeAllChildren, replaceChild, replaceChild
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Delays rendering its children until all other nodes have been traversed,turning off depth buffer comparisons first.
+
+<dt>SoCallbackAction, SoGetBoundingBoxAction, SoGetMatrixAction,SoRayPickAction, SoSearchAction
+<dd>Same as SoSeparator
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Annotation {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling
+<dd>AUTOpickCulling AUTO
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoAnnotation.h&gt;
+
+
+</body>
+</html>

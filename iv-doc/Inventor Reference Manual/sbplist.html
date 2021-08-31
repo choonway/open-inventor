@@ -1,0 +1,60 @@
+<html>
+<body>
+SbPList
+<hr>
+<dl>
+<dt>NAME
+<dd>SbPList -- list of generic (void *) pointers
+
+<dt>INHERITS FROM
+<dd>SbPList
+
+<dt>DESCRIPTION
+<dd>This class manages a dynamic list of generic void * pointers. This class allows random access, insertion, and removal.
+
+<dt>METHODS
+<dl>
+<dt><b>SbPList</b>()
+<dt><b>SbPList</b>(const SbPList &amp;pl)
+<dt><b>SbPList</b>(int initSize)
+<dt>~<b>SbPList</b>()
+<dd>Constructors and destructor. initSize specifies an initial size for the list, which is useful as an optimization if you can estimate the length of the list before you construct it. If another SbPList is given, it returns a copy of that list.
+
+<dt>void <b>append</b>(void * ptr)
+<dd>Adds given pointer to end of list.
+
+<dt>int <b>find</b>(const void *ptr) const
+<dd>Returns index of given pointer in list, or -1 if not found.
+
+<dt>void <b>insert</b>(void *ptr, int addBefore)
+<dd>Inserts given pointer in list before pointer with given index.
+
+<dt>void <b>remove</b>(int which)
+<dd>Removes pointer with given index.
+
+<dt>int <b>getLength</b>() const
+<dd>Returns number of pointers in list.
+
+<dt>void <b>truncate</b>(int start)
+<dd>Removes all pointers after one with given index, inclusive.
+
+<dt>void <b>copy</b>(const SbPList &amp;pl)
+<dd>Copy a list.
+
+<dt>SbPList & operator <b>=</b>(const SbPList &amp;pl)
+<dd>Assignment operator; copies list into this list.
+
+<dt>void *&amp; operator <b>[ ]</b>(int i) const
+<dd>Returns pointer with given index.
+
+<dt>int operator <b>==</b>(const SbPList &amp;pl) const
+<dt>int operator <b>!=</b>(const SbPList &amp;pl) const
+<dd>Equality and inequality operators.
+</dl>
+
+INCLUDE FILE
+<dd>#include &lt;Inventor/SbPList.h&gt;
+</dl>
+
+</body>
+</html>

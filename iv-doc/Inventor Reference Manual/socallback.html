@@ -1,0 +1,70 @@
+<html>
+<body>
+SoCallback
+<hr>
+<dl>
+<dt>NAME
+<dd>SoCallback -- provides custom behavior during actions
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoCallback
+
+<dt>DESCRIPTION
+<dd>This node provides a general mechanism for inserting callback functions into a scene graph. The callback function registered with the node is called each time the node is traversed while performing any scene graph action. The callback function is passed a pointer to the action being performed and a user data pointer registeredwith the callback function. You can use this node to make nonstandard OpenGL calls while rendering. If you do, be careful not to interfere with Inventor's use ofOpenGL.
+
+<p>If you use a callback node for GL rendering, you should be careful to follow rendercaching rules. If your callback node can make different rendering calls each time it is traversed, it cannot be cached. In such a case, the node should invalidate anyopen caches, as in the following example:
+
+<dl>
+<dt>void myCallbackFunc(void *d, SoAction *action) {
+<dl>
+<dt>if (action-&gt;isOfType(SoGLRenderAction::getClassTypeId())) {
+<dd>// Make my custom GL calls
+<dd>((MyClass *) d)-&gt;myRender();
+<dd>// Invalidate the state so that a cache is not made
+<dd>SoCacheElement::invalidate(action-&gt;getState()); }
+</dl>
+<dt>}
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoCallback</b>()
+<dd>Creates a callback node with default settings.
+
+<dt>void <b>setCallback</b>(SoCallbackCB *func, void *userData = NULL)
+<dd>Sets pointer to callback function and user data. By default, the function pointer in the node is NULL and does nothing.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoBoundingBoxAction, SoPickAction
+<dd>Calls the specified callback function for all actions.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Callback {
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoCallback.h&gt;
+<dd>typedef void SoCallbackCB(void *userData, SoAction *action)
+
+<dt>SEE ALSO
+<dd><a href="soaction.html">SoAction</a>, <a href="socallbackaction.html">SoCallbackAction</a>, <a href="soeventcallback.html">SoEventCallback</a>
+</dl>
+</body>
+</html>

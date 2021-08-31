@@ -1,0 +1,72 @@
+<html>
+<body>
+SoNormalBinding
+<hr>
+<dl>
+<dt>NAME
+<dd>SoNormalBinding -- node that specifies how multiple surface normals are bound to shapes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoNormalBinding
+
+<dt>DESCRIPTION
+<dd>This node specifies how the current normals are bound to shapes that follow in the scene graph. Each shape node may interpret bindings differently. The bindings for faces and vertices are meaningful only for shapes that are madefrom faces and vertices. Similarly, the indexed bindings are only used by the shapes that allow indexing. For bindings that require multiple normals, be sure to have atleast as many normals defined as are necessary; otherwise, errors will occur.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum value
+<dd>Specifies how to bind normals to shapes.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoNormalBinding</b>()
+<dd>Creates a normal binding node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoRayPickAction
+<dd>Sets the current normal binding type.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>NormalBinding {
+<dd>value DEFAULT
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoNormalBinding.h&gt;
+
+<dl>
+<dt>enum Binding {
+<dd>SoNormalBinding::DEFAULT Use default binding
+<dd>SoNormalBinding::OVERALL Whole object has same normal
+<dd>SoNormalBinding::PER_PART One normal for each part of object
+<dd>SoNormalBinding::PER_PART_INDEXED One normal for each part, indexed
+<dd>SoNormalBinding::PER_FACE One normal for each face of object
+<dd>SoNormalBinding::PER_FACE_INDEXED One normal for each face, indexed
+<dd>SoNormalBinding::PER_VERTEX One normal for each vertex of object
+<dd>SoNormalBinding::PER_VERTEX_INDEXED One normal for each vertex, indexed
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="somaterialbinding.html">SoMaterialBinding</a>, <a href="sonormal.html">SoNormal</a>, <a href="sotexturecoordinatebinding.html">SoTextureCoordinateBinding</a>, <a href="sovertexshape.html">SoVertexShape</a>
+</dl>
+</body>
+</html>

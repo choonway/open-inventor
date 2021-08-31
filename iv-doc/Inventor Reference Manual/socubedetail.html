@@ -1,0 +1,48 @@
+<html>
+<body>
+SoCubeDetail
+<hr>
+<dl>
+<dt>NAME
+<dd>SoCubeDetail -- stores detail information about the SoCube node
+
+<dt>INHERITS FROM
+<dd>SoDetail &gt; SoCubeDetail
+
+<dt>DESCRIPTION
+<dd>This class contains detail information about a point on a cube. It contains the part of the cube that was hit.
+
+<dl>
+<dt>Part values are as follows:
+<dd>0 Front
+<dd>1 Back
+<dd>2 Left
+<dd>3 Right
+<dd>4 Top
+<dd>5 Bottom
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoCubeDetail()
+<dt>virtual ~SoCubeDetail()
+<dd>Constructor and destructor.
+
+<dt>int getPart() const
+<dd>Returns the part in the detail.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoDetail:
+<dd>copy, getTypeId, isOfType
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/details/SoCubeDetail.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socube.html">SoCube</a>, <a href="sodetail.html">SoDetail</a>, <a href="sopickedpoint.html">SoPickedPoint</a>, <a href="soprimitivevertex">SoPrimitiveVertex</a>
+</dl>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<html>
+<body>
+SoMaterialBinding
+<hr>
+<dl>
+<dt>NAME
+<dd>SoMaterialBinding -- node that specifies how multiple materials are bound toshapes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoMaterialBinding
+
+<dt>DESCRIPTION
+<dd>This node specifies how the current materials are bound to shapes that follow in the scene graph. Each shape node may interpret bindings differently. The currentmaterial always has a base value, which is defined by the first value of all material fields. Since material fields may have multiple values, the binding determines howthese values are distributed over a shape.
+
+<p>The bindings for faces and vertices are meaningful only for shapes that are madefrom faces and vertices. Similarly, the indexed bindings are only used by the shapes that allow indexing. When multiple material values are bound, the values are cycled through, based onthe period of the material component with the most values. For example, the following table shows the values used when cycling through (or indexing into) amaterial with 2 ambient colors, 3 diffuse colors, and 1 of all other components in the current material. (The period of this material cycle is 3):
+
+<p><table>
+<tr>
+<th>Material</th>
+<th>Ambient color</th>
+<th>Diffuse color</th>
+<th>Other</th>
+</tr>
+
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>3 (same as 0)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</table>
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum value
+<dd>Specifies how to bind materials to shapes.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoMaterialBinding</b>()
+<dd>Creates a material binding node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction
+<dd>Sets the current material binding type.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>MaterialBinding {
+<dd>value DEFAULT
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoMaterialBinding.h&gt;
+
+<dl>
+<dt>enum Binding {
+<dd>SoMaterialBinding::DEFAULT Use default binding
+<dd>SoMaterialBinding::OVERALL Whole object has same material
+<dd>SoMaterialBinding::PER_PART One material for each part of object
+<dd>SoMaterialBinding::PER_PART_INDEXED One material for each part, indexed
+<dd>SoMaterialBinding::PER_FACE One material for each face of object
+<dd>SoMaterialBinding::PER_FACE_INDEXED One material for each face, indexed
+<dd>SoMaterialBinding::PER_VERTEX One material for each vertex of object
+<dd>SoMaterialBinding::PER_VERTEX_INDEXED One material for each vertex, indexed
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="somaterial.html">SoMaterial</a>, <a href="sonormalbinding.html">SoNormalBinding</a>, <a href="soshape.html">SoShape</a>, <a href="sotexturecoordinatebinding.html">SoTextureCoordinateBinding</a>
+</dl>
+
+</body>
+</html>

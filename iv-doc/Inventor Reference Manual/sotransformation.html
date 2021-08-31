@@ -1,0 +1,42 @@
+<html>
+<body>
+<p>SoTransformation
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTransformation -- Abstract base class for all geometric transformation nodes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoTransformation
+
+<dt>DESCRIPTION
+<dd>This is the abstract base class for all nodes that perform geometric transformations.
+
+<p>It exists only to make it easy for applications to test whether a particular node is atransformation node (that is, is derived from this class).
+
+<dt>METHODS
+<dl>
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dd>This is an abstract class. See the reference page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE#
+<dd>include &lt;Inventor/nodes/SoTransformation.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soantisquish.html">SoAntiSquish</a>, <a href="somatrixtransform.html">SoMatrixTransform</a>, <a href="soresettransform.html">SoResetTransform</a>, <a href="sorotation.html">SoRotation</a>, <a href="sorotationxyz.html">SoRotationXYZ</a>, <a href="soscale.html">SoScale</a>, <a href="sosurroundscale.html">SoSurroundScale</a>, <a href="sotransform.html">SoTransform</a>, <a href="sotransformmanip.html">SoTransformManip</a>, <a href="sotransformseparator.html">SoTransformSeparator</a>, <a href="sotranslation.html">SoTranslation</a>, <a href="sounits.html">SoUnits</a>
+</dl>
+</body>
+</html>

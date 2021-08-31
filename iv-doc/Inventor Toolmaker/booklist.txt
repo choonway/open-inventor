@@ -1,0 +1,1 @@
+<BOOK NAME="Inventor_TM" ALIAS="The Inventor Toolmaker (Addison-Wesley Publishing Company)" SGITYPE="sgi_html" SGIVERSION="860-0107-002" SGIBKADDR="techpubs@sgi.com" SGIGROUP="HTML">

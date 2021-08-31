@@ -1,0 +1,47 @@
+<html>
+<body>
+SoButtonEvent
+<hr>
+<dl>
+<dt>NAME
+<dd>SoButtonEvent -- base class for all button events
+
+<dt>INHERITS FROM
+<dd><a href="soevent.html">SoEvent</a> &gt; SoButtonEvent
+
+<dt>DESCRIPTION
+<dd>SoButtonEvent represents generic button press and release events in the Inventor event model. It is the base class for device-specific button events, namelySoKeyboardEvent, SoMouseButtonEvent, and SoSpaceballButtonEvent. This class stores the down/up state of the button when the event occurred.
+
+<dt>METHODS
+<dl>
+<dt><b>SoButtonEvent</b>()
+<dd>Constructor.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Return the type id for the SoButtonEvent class.
+
+<dt>void <b>setState</b>(SoButtonEvent::State s)
+<dt>SoButtonEvent::State <b>getState</b>() const
+<dd>Set and get the state of the button.
+
+<dt><b>Methods from class SoEvent</b>:
+<dd>getTypeId, isOfType, setTime, getTime, setPosition, getPosition, getPosition,getNormalizedPosition, setShiftDown, setCtrlDown, setAltDown, wasShiftDown, wasCtrlDown, wasAltDown
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/events/SoButtonEvent.h&gt;
+
+<dl>
+<dt>enum State {
+<dd>SoButtonEvent::UP Button up
+<dd>eventSoButtonEvent::DOWN Button down
+<dd>eventSoButtonEvent::UNKNOWN
+<dd>Button in unknown state
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soevent.html">SoEvent</a>, <a href="sokeyboardevent.html">SoKeyboardEvent</a>, <a href="solocation2event.html">SoLocation2Event</a>, <a href="somotion3event.html">SoMotion3Event</a>, <a href="somousebuttonevent.html">SoMouseButtonEvent</a>, <a href="sospaceballbuttonevent.html">SoSpaceballButtonEvent</a>, <a href="sohandleeventaction.html">SoHandleEventAction</a>, <a href="soeventcallback.html">SoEventCallback</a>, <a href="soselection.html">SoSelection</a>, <a href="sointeraction.html">SoInteraction</a>, <a href="soxtdevice.html">SoXtDevice</a>
+</dl>
+</body>
+</html>

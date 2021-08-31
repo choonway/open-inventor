@@ -1,0 +1,70 @@
+<html>
+<body>
+SoProfile
+<hr>
+<dl>
+<dt>NAME
+<dd>SoProfile -- abstract base class for all profile nodes
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoProfile
+
+<dt>DESCRIPTION
+<dd>This node is the abstract base class for all profile nodes, which define 2D curves. A profile is not itself geometry, but is used to change or delimit the geometry ofsomething else. For an SoText3 node, the profile determines the cross-section of the side of each text character. For an SoNurbsSurface node, the profile is used tospecify trim curves for the surface.
+
+<p>The current profile state can consist of one or more profiles, each of which can bemade up of one or more instances of SoProfile subclass nodes. Each profile node specifies (in the index field) a set of indices that refer to the current set of profilecoordinates, specified using either an SoProfileCoordinate2 or an SoProfileCoordinate3 node. No profile curve should intersect itself or anotherprofile curve.
+
+<p>Profiles are part of the state, just like all other properties. The state contains acurrent list of profiles. Depending on the linkage field, a profile can clear the list and begin a new profile, begin a new profile at the end of those already in the list,or append to the last profile in the current list. Note that when appending profile B to the end of profile A, B must begin at the same 2D point at which A ends.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFLong index
+<dd>Indices into profile coordinates.
+
+<dt>SoSFEnum linkage
+<dd>Specifies connectivity of profile curve with respect to profiles in current list in state.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Adds profile to current traversal state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dd>This is an abstract class. See the reference page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoProfile.h&gt;
+
+<dl>
+<dt>enum Profile {
+<dt>SoProfile::START_FIRST
+<dd>Start a new profile and remove any existing profiles from the current list
+<dt>SoProfile::START_NEW
+<dd>Start a new profile and add it to the current list
+<dt>SoProfile::ADD_TO_CURRENT
+<dd>Add to end of the last profile in the current list
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="solinearprofile.html">SoLinearProfile</a>, <a href="sonurbsprofile.html">SoNurbsProfile</a>, <a href="sonurbssurface.html">SoNurbsSurface</a>, <a href="soprofilecoordinate2.html">SoProfileCoordinate2</a>, <a href="soprofilecoordinate3.html">SoProfileCoordinate3</a>, <a href="sotext3.html">SoText3</a>
+</dl>
+</body>
+</html>

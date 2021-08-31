@@ -1,0 +1,44 @@
+<html>
+<body>
+<p>SoShape
+<hr>
+<dl>
+<dt>NAME
+<dd>SoShape -- abstract base class for all shape nodes
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoShape
+
+<dt>DESCRIPTION
+<dd>This node is the abstract base class for all shape (geometry) nodes. All classes derived from SoShape draw geometry during render traversal.
+
+<dt>METHODS
+
+<dl>
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+
+<dd>This is an abstract class. See the reference page of a derived class for the format and default values.
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoShape.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socone.html">SoCone</a>, <a href="socube.html">SoCube</a>, <a href="socylinder.html">SoCylinder</a>, <a href="soindexednurbscurve.html">SoIndexedNurbsCurve</a>, <a href="soindexednurbssurface.html">SoIndexedNurbsSurface</a>,
+<a href="sonurbscurve.html">SoNurbsCurve</a>, <a href="sonurbssurface.html">SoNurbsSurface</a>, <a href="soshapehints.html">SoShapeHints</a>, <a href="soshapekit.html">SoShapeKit</a>, <a href="sosphere.html">SoSphere</a>, <a href="sotext2.html">SoText2</a>, <a href="sotext3.html">SoText3</a>, <a href="sovertexshape.html">SoVertexShape</a>
+</dl>
+
+</body>
+</html>

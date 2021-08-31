@@ -1,0 +1,64 @@
+<html>
+<body>
+SoMFLong
+<hr>
+
+<dl>
+<dt>NAME
+<dd>SoMFLong -- multiple-value field containing any number of long integers
+<dt>INHERITS FROM
+<dd><a href="sofield.html">SoField</a> &gt; <a href="somfield.html">SoMField</a> &gt; SoMFLong
+
+<dt>DESCRIPTION
+<dd>A multiple-value field that contains any number of long (32-bit) integers.<br>
+SoMFLongs are written to file as one or more integer values, in decimal,hexadecimal or octal format. When more than one value is present, all of the values are enclosed in square brackets and separated by commas; for example:<br>
+
+[ 17, -0xE20, -518820 ]<br>
+
+<dt>METHODS
+<dl>
+<dt>static <b>SoType getClassTypeId</b>()
+<dt>virtual <b>void getTypeId</b>() const
+<dd>Returns the type for this class or a particular object of this class.
+
+<dt>long <b>operator [ ]</b>(int i) const
+<dd>Returns the i'th value of the field. Indexing past the end of the field (passing in i greater than getNum()) will return garbage.
+
+<dt>const long * <b>getValues</b>(int start) const
+<dd>Returns a pointer into the array of values in the field, starting at index start.<br>
+The values are read-only; see the startEditing()/finishEditing() methods for a way of modifying values in place.
+
+<dt>int <b>find</b>(long targetValue, SbBool addIfNotFound = FALSE)
+<dd>Finds the given value in the array and returns the index of that value in the array. If the value is not found, -1 is returned. If addIfNotFound is set, thentargetValue is added to the end of the array (but -1 is still returned).
+
+<dt>void <b>setValues</b>(int start, int num, const long *newValues)
+<dd>Sets num values starting at index start to the values in newValues. The array will be automatically be made larger to accomodate the new values, ifnecessary.
+
+<dt>void <b>set1Value</b>(int index, long newValue)
+<dd>Sets the index'th value in the array to newValue. The array will be automatically expanded, if necessary.
+
+<dt>long <b>operator =</b>(long newValue)
+<dt>void setValue(long newValue)
+<dd>Sets the first value in the array to newValue, and deletes the second and subsequent values.
+
+<dt>int <b>operator ==</b>(const SoMFLong &f) const
+<dt>int <b>operator !=</b>(const SoMFLong &f) const
+<dd>Returns TRUE if all of the values of this field equal (do not equal) those ofthe given field. If the fields are different types FALSE will always be returned (even if one field is an SoMFFloat with one value of 1.0 and the other is anSoMFInt with a value of 1, for example).
+
+<dt>long * <b>startEditing</b>()
+<dt>void <b>finishEditing</b>()
+<dd>startEditing() returns a pointer to the internally-maintained array that canbe modified. The values in the array may be changed, but values cannot be added or removed. It is illegal to call any other editing methods betweenstartEditing() and finishEditing() (e.g. set1Value(), setValue(), etc).<br>
+Fields, engines or sensors connected to this field and sensors are not notifiedthat this field has changed until finishEditing() is called. Calling finishEditing() always sets the isDefault() flag to FALSE and informsengines and sensors that the field changed, even if none of the values actually were changed.
+
+<dt><b>Methods from class SoMField</b>:
+<dd>getNum, setNum, deleteValues, insertSpace, set1, get1
+
+<dt><b>Methods from class SoField</b>:
+<dd>setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField, getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoMFLong.h&gt;
+</dl>
+</body>
+</html>

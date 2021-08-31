@@ -1,0 +1,71 @@
+<html>
+<body>
+SoTexture2Transform
+<dl>
+<dt>NAME
+<dd>SoTexture2Transform -- 2D texture transformation node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoTexture2Transform
+
+<dt>DESCRIPTION
+<dd>This node defines a 2D transformation applied to texture coordinates. This affects the way textures are applied to the surfaces of subsequent shapes. Thetransformation consists of (in order) a non-uniform scale about an arbitrary center point, a rotation about that same point, and a translation. (Note: while thetransformations can be thought of as being applied in that order, the GL matrices are actually premultiplied in the opposite order. Therefore, the operations are listedin the reverse order throughout this reference page.) This allows a user to change the size and position of the textures on objects.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFVec2f translation
+<dd>Translation in S and T.
+
+<dt>SoSFFloat rotation
+<dd>Counter-clockwise rotation of the coordinate space, in radians. This results in a clockwise rotation of the texture on the object.
+
+<dt>SoSFVec2f scaleFactor
+<dd>Scaling factors in S and T.
+
+<dt>SoSFVec2f center
+<dd>Center point used for scaling and rotation.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoTexture2Transform</b>()
+<dd>Creates a texture transformation node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction
+<dd>Concatenates transformation with the current texture transformation.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Texture2Transform {
+<dd>translation 0 0
+<dd>rotation 0
+<dd>scaleFactor 1 1
+<dd>center 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoTexture2Transform.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotexture2.html">SoTexture2</a>, <a href="sotexturecoordinate2.html">SoTextureCoordinate2</a>, <a href="sotexturecoordinatefunction.html">SoTextureCoordinateFunction</a>
+
+</dl>
+</body>
+</html>

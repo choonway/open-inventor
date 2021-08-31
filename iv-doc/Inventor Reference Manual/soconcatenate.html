@@ -1,0 +1,64 @@
+<html>
+<body>
+SoConcatenate
+<hr>
+<dl>
+<dt>NAME
+<dd>SoConcatenate -- joins separate fields into a single multiple-value field
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoConcatenate
+
+<dt>DESCRIPTION
+<dd>This engine joins up to 10 separate fields of a type into a single multiple-valued field of the same type. The type of the input fields can be any subclass of SoMField The type is specified when an instance of the class is created. For example, SoConcatenate(SoMFFloat::getClassTypeId()) creates an engine that concatenatesfloating-point values.
+
+<p>The input field is a 10-element array, where each element can be connected tosingle- or multiple-valued fields. All the values in the input are concatenated together to form one multiple-value field. For example, if input[0] contains 10 values and input[1] contains 3 values, the output will contain 13 values.
+
+<p>Note that, unlike the output of most engines, output is a pointer. Note also that by default input does not contain any values, and no value is output from the engine.
+
+<dt>INPUTS
+<dd>&lt;inputType&gt; input[10]
+
+<dt>OUTPUTS
+<dd>(&lt;outputType&gt;) output
+
+<dt>METHODS
+<dl>
+<dt><b>SoConcatenate</b>(SoType inputType)
+<dd>Constructor. The argument specifies the type of values to concatenate.
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Concatenate {
+<dd>type &lt;inputType&gt;
+<dd>input0 []
+<dd>input1 []
+<dd>input2 []
+<dd>input3 []
+<dd>input4 []
+<dd>input5 []
+<dd>input6 []
+<dd>input7 []
+<dd>input8 []
+<dd>input9 []
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoConcatenate.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>, <a href="sogate.html">SoGate</a>, <a href="soselectone.html">SoSelectOne</a>
+
+</body>
+</html>

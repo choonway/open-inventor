@@ -1,0 +1,134 @@
+<html>
+<body>
+SoField
+<hr>
+<dl>
+<dt>NAME
+<dd>SoField -- base class for all fields
+
+<dt>INHERITS FROM
+<dd>SoField
+
+<dt>DESCRIPTION
+<dd>SoField is the abstract base class for all fields. Fields are the data elements contained within nodes and are the input values for engines. Each node or engine class specifies a set of fields and associates a name with each. These names define the semantics of the field (e.g., the SoCube node contains three float fields named width, height, and depth). Field classes provide the access methods that indirectly allow editing and querying of data within nodes. There are two abstract subclasses of SoField: SoSField is the base class for all single-valued field classes and SoMField is the base class for all multiple-valued fields, which contain dynamic arrays of values. Subclasses of SoSField have an SoSF prefix,and subclasses of SoMField have an SoMF prefix. See the reference pages for SoSField and SoMField for additional methods. Fields are typically constructed only within node or engine instances; if you need afield that is not part of a node or engine, you can create a GlobalField; see the methods on SoDB for creating global fields. Fields can be connected either directly to another field, or can be connected to theoutput of an engine. The value of a field with a connection will change when the thing it is connected to changes. For example, consider a field &quot;A&quot; that is connected from &quot;B&quot; (by A-&gt;connectFrom(B)). When B's value is changed, A's value will also change. Note that A and B may have different values, even if they are connected: ifA's value is set after B's value, A's value will be different from B's until B's value is set. A field can be connected to several other fields, but can be connected from only onesource.
+
+<p>It is possible (and often useful) to create loops of field connections (for example, Aconnected from B and B connected from A). If there are loops, then the rule is that the last setValue() done overrides any connections in to that value. You can thinkof setting the value of a field as immediately propagating that value forward into all the fields it is connected to, with the propagation stopping at the place where the original setValue() occurred if there is a connection loop. (Actually, a more efficient mechanism than this is used, but the semantics are the same.)
+
+<p>If you try to connect two fields of differing types, Inventor will automatically try to insert a field converter engine between them to convert values from one type into the other. Inventor has most reasonable conversions built-in (multiple-valued field to single-valued and vice versa, anything to SoSFString, anything to SoSFTrigger, float/short/unsigned short/long/unsigned long/etc numeric conversions, etc). You can add field converters using SoDB's extender method addConverter(); see the SoDB.h header file for details. You can also find out if a converter is available withthe SoDB::getConverter() method.
+
+<p>Fields each define their own file format for reading and being written to files, but allfields follow the same conventions: Fields in a node or engine are written as the name of the field followed by the field'svalue; fields are not written if they have not been modified since they were created (if they have their default value). The ignored flag is written as a &quot;~&quot; character after the field's value (if the field's valueis its default value, just the &quot;~&quot; is written).
+
+<p>Field connections are written as an &quot;=&quot; followed by the container of the field orengine output that the field is connected to, followed by a &quot;.&quot; and the name of the field or engine output. For example:
+
+<dl>
+<dt>DEF node1 Transform {
+<dd>translation 1 1 1
+<dt>}
+<dt>DEF node2 Scale {
+<dd>scaleFactor 1 1 1 = USE node1.translation
+<dt>}
+</dl>
+
+<p>Global fields are written as part of an internal SoFieldContainer class calledGlobalField, which writes out an SoSFName field named type whose value is the type of the global field, followed by a field of that type whose name is the name of the global field. For example, a global unsigned long field called &quot;FrameCounter&quot; whose value is 494 would be written as:
+
+<dl>
+<dt>GlobalField {
+<dd>type SoSFULong FrameCounter 494
+<dt>}
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>void <b>setIgnored</b>(SbBool ignore)
+<dt>SbBool <b>isIgnored</b>() const
+<dd>Sets/gets the ignore flag for this field. When a field's ignore flag is set to TRUE, the field is not used during traversal for rendering and other actions.The default value for this flag is FALSE.
+
+<dt>SbBool isDefault() const
+<dd>Gets the state of default flag of the field. This flag will be TRUE for any field whose value is not modified after construction and will be FALSE for thosethat have changed (each node or engine determines what the default values for its fields are). Note: the state of this flag should not be set explicitly fromwithin applications.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Return the type identifier for this field class.
+
+<dt>virtual SoType <b>getTypeId</b>() const
+<dd>Return the type identifier for this field instance (SoField *).
+
+<dt>virtual SbBool <b>isOfType</b>(SoType type) const
+<dd>Returns TRUE if this field is the given type or derived from that type. This is typically used with the getClassTypeId() method to determine the type of anSoField * at run-time:
+
+<code>
+<p>SoField *field = ....;<br>
+if (field-&gt;isOfType(SoSFFloat::getClassTypeId())) {<br>
+SoSFFloat *floatField = (SoSFFloat *)field);<br>
+floatField-&gt;setValue(4.5);<br>
+}
+</code>
+
+<dt>SbBool <b>set</b>(const char *valueString)
+<dd>Sets the field to the given value, which is an ASCII string in the Inventor file format. Each field subclass defines its own file format; see their referencepages for information on their file format. The string should contain only the field's value, not the field's name (e.g., &quot;1.0&quot;, not &quot;width 1.0&quot;). This method returns TRUE if the string is valid, FALSE if it is not.
+
+<dt>void <b>get</b>(SbString &valueString)
+<dd>Returns the value of the field in the Inventor file format, even if the field has its default value.
+
+<dt>int operator <b>==</b>(const SoField &f) const
+<dt>int operator <b>!=</b>(const SoField &f) const
+<dd>Return TRUE (FALSE) if this field is of the same type and has the same valueas f.
+
+<dt>void <b>touch</b>()
+<dd>Simulates a change to the field, causing attached sensors to fire, connected fields and engines to be marked as needing evaluation, and so forth. Calling touch() on an instance of a derived field class is equivalent to calling setValue(getValue()) using the derived class's methods, except that the field's isDefault() status remains unchanged.
+
+<dt>SbBool <b>connectFrom</b>(SoField *fromField)
+<dt>SbBool <b>connectFrom</b>(SoEngineOutput *fromEngine)
+<dd>Connects this field to another field or from an engine output. If the field was connected to something before, it will be automatically disconnected (a field may have only one connection writing into it at a time). Unless connections to the field are disabled (see enableConnection()), the field's value will be set to the value of the thing it is connected to.
+
+<dt>void <b>disconnect</b>()
+<dd>Disconnect the field from whatever it was connected to. This does nothing id the field was not connected.
+
+<dt>SbBool <b>isConnected</b>() const
+<dd>Returns TRUE if the field is connected to anything.
+
+<dt>SbBool <b>isConnectedFromField</b>() const
+<dd>Returns TRUE if the field is connected to another field.
+
+<dt>SbBool <b>getConnectedField</b>(SoField *&writingField) const
+<dd>Returns TRUE if this field is being written into by another field, and returns the field it is connected to in writingField. Returns FALSE and does not modify writingField if it is not connected to a field.
+
+<dt>SbBool <b>isConnectedFromEngine</b>() const
+<dd>Returns TRUE if the field is connected to an engine's output.
+
+<dt>SbBool <b>getConnectedEngine</b>(SoEngineOutput *&engineOutput) const
+<dd>Returns TRUE if this field is being written into by an engine, and returns the engine output it is connected to in engineOutput. Returns FALSE and does notmodify engineOutput if it is not connected to an engine.
+
+<dt>void <b>enableConnection</b>(SbBool flag)
+<dd>Field connections may be enabled and disabled. Disabling a field's connection is almost exactly like disconnecting it; the only difference is thatyou can later re-enable the connection by calling enableConnection(TRUE). Note that disconnecting an engine output can cause the engine's referencecount to be decremented and the engine to be deleted, but disabling the connection does not decrement its reference count.
+
+<p>Re-enabling a connection will cause the value of the field to be changed tothe engine output or field to which it is connected. A field's connection-enabled status is maintained even if the field isdisconnected or reconnected. By default, connections are enabled.
+
+<dt>SbBool <b>isConnectionEnabled</b>() const
+<dd>Returns FALSE if connections to this field are disabled. Note that this may return FALSE even if the field is not connected to anything.
+
+<dt>int <b>getForwardConnections</b>(SoFieldList &list) const
+<dd>Adds pointers to all of the fields that this field is writing into (either fields in nodes, global fields or engine inputs) to the given field list, and returns thenumber of forward connections.
+
+<dt>SoFieldContainer * <b>getContainer</b>() const
+<dd>Returns the object that contains this field. The type of the object will beeither SoNode, SoEngine, or will be a global field container (note that the global field container class is internal to Inventor; see the methods forcreating and accessing global fields on SoDB). For example:
+
+<code>
+<p>SoFieldContainer *f = field-&gt;getContainer();<br>
+if (f-&gt;isOfType(SoNode::getClassTypeId())) {<br>
+... do something ...<br>
+} else if (f-&gt;isOfType(SoEngine::getClassTypeId())) { <br>
+... do someting else ...<br>} else {<br>
+... it must be a global field. We can figure out its name, but that is about it:<br>
+const SbName &globalFieldName = f-&gt;getName();<br>
+}<br>
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoField.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sosfield.html">SoSField</a>, <a href="somfield.html">SoMField</a>, <a href="sonode.html">SoNode</a>, <a href="sodb.html">SoDB</a>
+</dl>
+
+</body>
+</html>

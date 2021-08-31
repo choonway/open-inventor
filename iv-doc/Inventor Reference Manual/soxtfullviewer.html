@@ -1,0 +1,73 @@
+<html>
+<body>
+<p>SoXtFullViewer
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtFullViewer -- base viewer class which adds a decoration around the rendering area
+
+<dt>INHERITS FROM
+<dd><a href="soxtcomponent.html">SoXtComponent</a> &gt; <a href="soxtglwidget.html">SoXtGLWidget</a> &gt; <a href="soxtrenderarea.html">SoXtRenderArea</a> &gt; <a href="soxtviewer.html">SoXtViewer</a> &gt; SoXtFullViewer
+
+<dt>DESCRIPTION
+<dd>This is a base class used by all viewer components. The class adds a decoration around the rendering area which includes thumb wheels, a zoom slider and pushbuttons. This base class also includes a viewer popup menu and a preference sheet with generic viewing functions. The constructors for the various subclasses ofSoXtFullViewer provide a flag for specifying whether the decoration and popup menus should be built.
+
+<dt>METHODS
+<dl>
+<dt>void <b>setDecoration</b>(SbBool onOrOff)
+<dt>SbBool <b>isDecoration</b>
+<dd>()Show/hide the viewer component trim (default on). See the viewer constructor to prevent the decoration from being built.
+
+<dt>void <b>setPopupMenuEnabled</b>(SbBool trueOrFalse)
+<dt>SbBool <b>isPopupMenuEnabled</b>()
+<dd>Enable/disable the viewer popup menu (default enabled). See the viewerconstructor to prevent the popup menu from being built.
+
+<dt>Widget <b>getAppPushButtonParent</b>() const
+<dd>Returns the parent widget, which is needed when creating new buttons.
+
+<p>Note: that if the decoration is not created in the constructor, this will be NULL until the decoration is shown.
+
+<dt>void <b>addAppPushButton</b>(Widget newButton)
+<dt>void <b>insertAppPushButton</b>(Widget newButton, int index)
+<dt>void <b>removeAppPushButton(Widget oldButton)</b>
+<dt>int <b>findAppPushButton</b>(Widget oldButton)
+<dt>int <b>lengthAppPushButton</b>()
+<dd>Add/remove push buttons for the application, which will be placed in the left hand side decoration trim. Adding buttons appends them to the end ofthe list, while inserting them places them at the desired index.
+
+<p>Note: the button pixmaps should be 24-by-24 pixels size to nicely fit intothe decoration trim like the other viewer buttons.
+
+<dt>Widget <b>getRenderAreaWidget</b>()
+<dd>Returns the render area widget.
+
+<dt><b>Methods from class SoXtViewer</b>:
+<dd>setCamera, getCamera, setCameraType, getCameraType, viewAll,saveHomePosition, resetToHomePosition, setHeadlight, isHeadlight, getHeadlight, setDrawStyle, getDrawStyle, setBufferingType,getBufferingType, setViewing, isViewing, setAutoClipping, isAutoClipping, setStereoViewing, isStereoViewing, setStereoOffset, getStereoOffset,setDetailSeek, isDetailSeek, setSeekTime, getSeekTime, addStartCallback, addFinishCallback, removeStartCallback, removeFinishCallback, copyView,pasteView
+
+<dt><b>Methods from class SoXtRenderArea</b>:
+<dd>setSceneGraph, getSceneGraph, setOverlaySceneGraph,getOverlaySceneGraph, registerDevice, unregisterDevice, setBackgroundColor, getBackgroundColor, setBackgroundIndex,getBackgroundIndex, setOverlayBackgroundIndex, getOverlayBackgroundIndex, setColorMap, setOverlayColorMap,setViewportRegion, getViewportRegion, setTransparencyType, getTransparencyType, setAntialiasing, getAntialiasing, setClearBeforeRender,isClearBeforeRender, setClearBe foreOverlayRender, isClearBeforeOverlayRender, setAutoRedraw, isAutoRedraw,setRedrawPriority, getRedrawPriority, getDefaultRedrawPriority, render, renderOverlay, scheduleRedraw, scheduleOverlayRedraw,redrawOnSelectionChange, redrawOverlayOnSelectionChange, setEventCallback, setGLRenderAction, getGLRenderAction,setOverlayGLRenderAction, getOverlayGLRenderAction, setSceneManager, getSceneManager, setOverlaySceneManager, getOverlaySceneManager
+
+<dt><b>Methods from class SoXtGLWidget</b>:
+<dd>setBorder, isBorder, setDoubleBuffer, isDoubleBuffer, getNormalWindow,getOverlayWindow, getNormalContext, getOverlayContext, getNormalWidget, getOverlayWidget, setNormalVisual, getNormalVisual,setOverlayVisual, getOverlayVisual
+
+<dt><b>Methods from class SoXtComponent</b>:
+<dd>show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle, getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/viewers/SoXtFullViewer.h&gt;
+
+<dl>
+<dt>enum BuildFlag {
+<dd>SoXtFullViewer::BUILD_NONE doesn't build anything extra
+<dd>SoXtFullViewer::BUILD_DECORATION build the decoration only
+<dd>SoXtFullViewer::BUILD_POPUP build the popup menu only
+<dd>SoXtFullViewer::BUILD_ALL build everything by default
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soxtviewer.html">SoXtViewer</a>, <a href="soxtcomponent.html">SoXtComponent</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>, <a href="soxtexaminerviewer.html">SoXtExaminerViewer</a>, <a href="soxtwalkviewer.html">SoXtWalkViewer</a>, <a href="soxtflyviewer.html">SoXtFlyViewer</a>, <a href="soxtplaneviewer.html">SoXtPlaneViewer</a>
+</dl>
+
+</body>
+</html>

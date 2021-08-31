@@ -1,0 +1,44 @@
+<html>
+<body>
+<p>SoByteStream
+<hr>
+<dl>
+<dt>NAME
+<dd>SoByteStream -- converts scene graph objects to character byte streams
+
+<dt>INHERITS FROM
+<dd>SoByteStream
+
+<dt>DESCRIPTION
+<dd>This class creates a byte stream representation of a scene graph, using an SoWriteAction to write path lists to an in-memory buffer. Byte streams are commonly used to transfer data in copy and paste operations. (The SoXtClipboard class passes SoByteStream data during copy and paste.)
+
+<dt>METHODS
+<dl>
+<dt><b>SoByteStream</b>()
+<dt>~<b>SoByteStream</b>()
+<dd>Constructor and destructor.
+
+<dt>void <b>convert</b>(SoNode *node, SbBool binaryFormat = TRUE)
+<dt>void <b>convert</b>(SoPath *path, SbBool binaryFormat = TRUE)
+<dt>void <b>convert</b>(SoPathList *pathList, SbBool binaryFormat = TRUE)
+<dd>These convert the passed scene graph object(s) into a byte stream. The caller may specify whether the byte stream is written in binary (TRUE) or ASCII (FALSE) format, and can pass the object(s) by node, path, or pathList.
+
+<dt>void * <b>getData</b>()
+<dt>unsigned long <b>getNumBytes</b>()
+<dd>These return the data and number of bytes from the last convert() operation. This byte stream format is well suited to data transfers, like copy and paste.
+
+<dt>static SoPathList * <b>unconvert</b>(SoByteStream *byteStream)
+<dt>static SoPathList * <b>unconvert</b>(void *data, unsigned long numBytes)
+
+<dd>These take byte stream data and unconvert it back to scene graph objects. The objects are returned in a path list.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/misc/SoByteStream.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soxtclipboard.html">SoXtClipboard</a>
+</dl>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<html>
+<body>
+<p>SoTransformManip
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTransformManip -- base class for all transform Nodes with built-in 3D user interfaces
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sotransformation.html">SoTransformation</a> &gt; <a href="sotransform.html">SoTransform</a> &gt; SoTransformManip
+
+<dt>DESCRIPTION
+<dd>SoTransformManip is the base class for all SoTransform nodes that have a built-in 3D user interface. Since it is derived from SoTransform, any changes to its fieldsresult in the rotation, scaling, and/or translation of nodes that follow it in the scene graph. Typically, you will want to replace a regular SoTransform with anSoTransformManip (as when the user selects an object to be moved), or vice versa (as when the object is deselected, and the motion interface should go away). Use thereplaceNode() method to insert a manipulator into a scene graph, and the replaceManip() method to remove it when done. Every subclass of SoTransformManip utilizes a dragger of some sort to provide a 3Dinterface. (This class does not have dragger; but all the subclasses do.) However a manipulator differs from a dragger; it influences other objects in the scene because,as an SoTransform, it alters the state. The fields values and movement of a dragger, on the other hand, affect only the dragger itself. Each SoTransformManip subclass utilizes its dragger by adding it as a hidden child.When an action is applied to the manipulator, such as rendering or handling events, the manipulator first traverses the dragger, and then the manipulator addsits transformation matrix to the state. When you click-drag-release over the manipulator, it passes these events down to the dragger, which moves as a result (&quot;Ican't help it, I'm a dragger!&quot;).
+
+<p>The manipulator maintains consistency between the fields of the dragger and its own fields. Let's say you use the mouse to rotate the dragger. Callbacks insure that the rotation field of the manipulator will change by the same amount, resulting inthe rotation of nodes which follow in the scene graph. Similarly, if you set any of the SoTransformManip fields the manipulator will move the dragger accordingly.You can use this feature to impose contraints on a manipulator: If the user moves the manipulator so that a field value becomes too large, you can set the field back toyour desired maximum, and the whole thing will move back to where you specified.
+
+<p>Since each SoTransformManip uses a dragger to provide its interface, you will generally be told to look at the dragger's reference page for details of how it moves and what the different parts are for. The interface for the dragger and the manipulator will always be exactly the same. Usually, a SoTransformManip will surround the objects that it influences (i.e., those that move along with it). This is because the manipulator turns on the surroundScale part of its dragger; so the dragger geometry expands to envelope the other objects (see the reference page for SoSurroundScale).
+
+<p>Because the dragger is a hidden child, you can see the dragger on screen and interact with it, but the dragger does not show up when you write the manipulator to file. Also, any SoPath will end at the manipulator. (See the Actions section of this reference page for a complete description of when the dragger is traversed).
+
+<p>If you want to get a pointer to the dragger you can get it from the manipulator using the getDragger() method. You will need to do this if you want to change the geometry of a manipulator, since the geometry actually belongs to the dragger.
+
+<dt>FIELDS
+<dl>
+<dt>Fields from class SoTransform:
+<dd>translation, rotation, scaleFactor, scaleOrientation, center
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoTransformManip()
+<dd>Constructor.
+
+<dt>SoDragger * getDragger()
+<dd>Returns a pointer to the dragger being used by this manipulator. Given this pointer, you can customize the dragger just like you would any otherdragger. You can change geometry using the setPart() method, or add callbacks using the methods found in the SoDragger reference page.
+
+<dt>SbBool replaceNode(SoPath *p )
+<dd>Replaces the tail of the path with this manipulator. The tail of the path must be an SoTransform node (or subclass thereof). If the path has a nodekit, thiswill try to use setPart() to insert the manipulator. Otherwise, the manipulator requires that the next to last node in the path chain be a group. The field values from the transform node will be copied to this manipulator,and the transform will be replaced.
+
+<p>The manipulator will not call ref() on the node it is replacing. The old nodewill disappear if it has no references other than from the input path p and its parent, since this manipulator will be replacing it in both of those places.Nor will the manipulator make any changes to field connections of the old node. The calling process is thus responsible for keeping track of its ownnodes and field connections.
+
+<dt>SbBool replaceManip(SoPath *p, SoTransform *newOne ) const
+<dd>Replaces the tail of the path, which must be this manipulator, with the given SoTransform node. If the path has a nodekit, this will try to usesetPart() to insert the new node. Otherwise, the manipulator requires that the next to last node in the path chain be a group. The field values from the manipulator will be copied to the transform node,and the manipulator will be replaced.
+
+<p>The manipulator will not call ref() or unref() on the node which isreplacing it, nor will it make any changes to field connections. The calling process is thus responsible for keeping track of its own nodes and fieldconnections.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+<dt>Methods from class SoTransform:
+<dd>pointAt, getScaleSpaceMatrix, getRotationSpaceMatrix,getTranslationSpaceMatrix, multLeft, multRight, combineLeft, combineRight, setMatrix, recenter
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoGetMatrixAction, SoHandleEventAction, SoRayPickAction
+<dd>First, traverses the dragger the way an SoGroup would. All draggers place themselves in space, but leave the current transformation unchanged when finished. Then the SoTransformManip accumulates a transformation into the current transformation just like its base class, SoTransform.
+
+<dt>SoSearchAction
+<dd>Searches just like an SoTransform. Does not search the dragger, which is a hidden child. SoWriteActionWrites out just like an SoTransform. Does not write the dragger, which is a hidden child. If you really need to write valuable information about thedragger, such as customized geometry, you can retrieve the dragger with the getDragger() method and then write it out separately.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>TransformManip {
+<dd>translation 0 0 0
+<dd>rotation 0 0 1 0
+<dd>scaleFactor 1 1 1
+<dd>scaleOrientation 0 0 1 0
+<dd>center 0 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/manips/SoTransformManip.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodragger.html">SoDragger</a>, <a href="sotransform.html">SoTransform</a>, <a href="spcenterballmanip.html">SoCenterballManip</a>, <a href="sohandleboxmanip.html">SoHandleBoxManip</a>, <a href="sojackmanip.html">SoJackManip</a>, <a href="sosurroundscale.html">SoSurroundScale</a>, <a href="sotabboxmanip.html">SoTabBoxManip</a>, <a href="sotrackballmanip.html">SoTrackballManip</a>, <a href=sotransformboxmanip.html">SoTransformBoxManip</a>
+</dl>
+</body>
+</html>

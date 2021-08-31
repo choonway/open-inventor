@@ -1,0 +1,27 @@
+<html>
+<body>
+SSooSSFFUULLoonngghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSFULong -- field containing an unsinged long integer INHERITS FROMSoField &gt; SoSField &gt; SoSFULong DESCRIPTIONA single-value field containg an unsigned 32-bit integer, representing a number
+
+from 0 to 4,294,967,295. SoSFULongs are written to file as a single unsigned long (32-bit) integer in decimal,hexadecimal or octal format.
+
+METHODSstatic SoType getClassTypeId()
+
+virtual void getTypeId() constReturns the type for this class or a particular object of this class.
+
+long unsigned long getValue() const
+
+Returns this field's value. long unsigned long operator =(long unsigned long newValue)
+
+void setValue(long unsigned long newValue)Sets this field to newValue.
+
+int operator ==(const SoSFULong &f) constint operator !=(const SoSFULong &f) const
+
+Returns TRUE if f is of the same type and has the same value as this field. Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer INCLUDE FILE#include &lt;Inventor/fields/SoSFULong.h&gt;
+
+SEE ALSOSoField, SoSField, SoMFULong
+</body>
+</html>

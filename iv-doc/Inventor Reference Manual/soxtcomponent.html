@@ -1,0 +1,97 @@
+<html>
+<body>
+<p>SoXtComponent
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtComponent -- abstract base class for all Inventor Xt components
+
+<dt>INHERITS FROM
+<dd>SoXtComponent
+
+<dt>DESCRIPTION
+<dd>Abstract base class from which all Inventor Xt components are derived. This class provides a basic C++ protocol for building and displaying Motif components.Components are used to encapsulate some function or task into a reusable package in the form of a Motif widget that can be used in any Inventor Xt program. See the Example section on how to build and use SoXtComponents.
+
+<dt>METHODS
+<dl>
+<dt>virtual void <b>show</b>()
+<dt>virtual void <b>hide</b>()
+<dd>This shows and hides the component. If this is a topLevelShell component, then show() will Realize and Map the window, otherwise it will simply Manage the widget. hide() calls the appropriate unmap or unmanage routines. In addition, show() will also pop the component window to the top andde-iconify if necessary, to make sure the component is visible by the user.
+
+<dt>SbBool <b>isVisible</b>()Returns TRUE if this component is mapped onto the screen. For a component to be visible, it's widget and the shell containing this widgetmust be mapped (which is FALSE when the component is iconified).
+
+<p>Subclasses should call this routine before redrawing anything and in anysensor trigger methods. Calling this will check the current visibility (which is really cheap) and invoke the visibility changed callbacks if the statechanges (see addVisibilityChangeCallback()).
+
+<dt>Widget <b>getWidget</b>() const
+This returns the base widget for this component. If the component created its own shell, this returns the topmost widget beneath the shell. CallgetShellWidget() to obtain the shell.
+
+<dt>SbBool <b>isTopLevelShell</b>() const
+<dt>Widget <b>getShellWidget</b>() const
+
+<dd>Returns TRUE if this component is a top level shell component (has its ownwindow). Subclasses may use this to decide if they are allowed to resize themselves. Also method to return the shell widget (NULL if the shell hasn'tbeen created by this component).
+
+<dt>Widget <b>getParentWidget</b>() const
+<dd>Return the parent widget, be it a shell or not
+
+<dt>void <b>setSize</b>(const SbVec2s &size)
+<dt>SbVec2s <b>getSize</b>()
+<dd>Convenience routines on the widget -- setSize calls XtSetValue
+
+<dt>Display * <b>getDisplay()</b>
+<dd>Returns the X display associated with this components widget.
+
+<dt>void <b>setTitle</b>(const char *newTitle)
+<dt>const char * <b>getTitle</b>() const
+<dt>void <b>setIconTitle</b>(const char *newIconTitle)
+<dt>const char * <b>getIconTitle</b>() const
+
+<dd>The window and icon title can be set for topLevelShell components orcomponents which are directly under a shell widget (i.e. components which have their own window).
+
+<dt>void <b>setWindowCloseCallback</b>(SoXtComponentCB *func, void*data = NULL)
+<dd>Sets which callback to call when the user closes this component (doubleclick in the upper left corner) -- by default hide() is called on this component, unless a callback is set to something other than NULL. Apointer to this class will be passed as the callback data.
+
+<p>Note: this callback is supplied because the user may wish to delete thiscomponent when it is closed.
+
+<dt>static SoXtComponent *<b>getComponent</b>(Widget w)
+<dd>This returns the SoXtComponent for this widget. If the widget is not anInventor component, then NULL is returned.
+
+<dt>const char * <b>getWidgetName</b>() const
+<dt>const char * <b>getClassName()</b> const
+<dd>Routines which return the widget name and the class name. The widgetname is passed to the build method. The class name is predefined by each component. These names are used when retrieving X resource values for thecomponent.
+
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/SoXtComponent.h&gt;
+
+<dd>typedef void SoXtComponentCB(void *userData, SoXtComponent *comp)
+
+<dt>EXAMPLE
+<dd>This example shows how an Inventor component can be built inside a program using the Xt widget set. The example uses the SoXtExaminerViewer widget to viewsome simple geometry.
+
+<dl>
+<dt>#include &lt;Inventor/Xt/SoXt.h&gt;
+<dt>#include &lt;Inventor/nodes/SoCone.h&gt;
+<dt>#include &lt;Inventor/Xt/viewers/SoXtExaminerViewer.h&gt;
+
+<dl>
+<dt>void main(int, char **argv){
+<dd>// Initialize Inventor and Xt, which must be done
+<dd>// before any Inventor calls are made.
+<dd>Widget myWindow = SoXt::init(argv[0]);
+<dd>// create the viewer in the toplevel window
+<dd>// and set some scene to display
+<dd>SoXtExaminerViewer *myViewer = new SoXtExaminerViewer(myWindow);
+<dd>myViewer-&gt;setSceneGraph( new SoCone() );
+
+<dd>// manage and map window on screen
+<dd>myViewer-&gt;show(); SoXt::show(myWindow); // calls XtRealizeWidget() 
+<dd>// Loop forever
+<dd>SoXt::mainLoop();
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd> <a href="soxt.html">SoXt</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>, <a href="soxtviewer.html">SoXtViewer</a>, <a href="soxtmaterialeditor.html">SoXtMaterialEditor</a>
+</body>
+</html>

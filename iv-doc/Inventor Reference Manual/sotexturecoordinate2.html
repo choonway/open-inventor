@@ -1,0 +1,63 @@
+<html>
+<body>
+SoTextureCoordinate2
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTextureCoordinate2 -- 2D texture coordinate node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoTextureCoordinate2
+
+<dt>DESCRIPTION
+<dd>This node defines a set of 2D coordinates to be used to map textures to subsequent vertex-based shapes (those derived from SoVertexShape). It replaces the currenttexture coordinates in the rendering state for the shapes to use.
+
+<p>The current texture coordinate binding (see SoTextureCoordinateBinding)determines how texture coordinates are mapped to vertices of shapes. An alternative to using explicit texture coordinates is to generate them using a function; see SoTextureCoordinateFunction.
+
+<p>Texture coordinates range from 0 to 1 across the texture. The horizontal coordinate,called S, is specified first, followed by the vertical coordinate, T.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFVec2f point
+<dd>Texture coordinate points.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoTextureCoordinate2</b>()
+<dd>Creates a texture coordinate node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction
+<dd>Sets the current texture coordinates in the state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>TextureCoordinate2 {
+<dd>point 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoTextureCoordinate2.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotexture2.html">SoTexture2</a>, <a href="sotexturecoordinatebinding.html">SoTextureCoordinateBinding</a>, <a href="sotexturecoordinatefunction.html">SoTextureCoordinateFunction</a>, <a href="sovertexshape.html">SoVertexShape</a>
+
+</body>
+</html>

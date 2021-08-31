@@ -1,0 +1,29 @@
+<html>
+<body>
+SSooBBaasseeLLiisstthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoBaseList -- maintains a list of pointers to instances of the SoBase classes INHERITS FROMSbPList &gt; SoBaseList DESCRIPTIONThis subclass of SbPList holds lists of pointers to instances of classes derived from
+
+SoBase (an abstract class). A flag indicates whether adding an instance pointer tothe list should add a reference to the instance. If this flag is TRUE, then adding and removing pointers from the list updates reference counts in the correspondinginstances.
+
+METHODS SoBaseList()
+
+Constructor.
+
+SoBaseList(int size)Constructor that pre-allocates storage for size pointers.
+
+SoBaseList(const SoBaseList &l)Constructor that copies the contents of another list. ~SoBaseList()Destructor. void append(SoBase *ptr)Adds a pointer to the end of the list. void insert(SoBase *ptr, int addBefore)Inserts given pointer in list before pointer with given index. void remove(int which)Removes pointer with given index. void truncate(int start)Removes all pointers after one with given index, inclusive. void copy(const SoBaseList &l)Copies a list, keeping all reference counts correct. SoBaseList & operator =(const SoBaseList &l)Copies a list, keeping all reference counts correct.
+
+110 Open Inventor C++ Reference Pages<hr>
+
+SSooBBaasseeLLiisstthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh SoBase * operator [ ](int i) constAccesses an element of a list. void set(int i, SoBase *ptr)Sets an element of a list. void addReferences(SbBool flag)Indicates whether to call ref() and unref() for bases in the list when
+
+adding/removing them. The default value is TRUE. Methods from class SbPList:
+
+find, getLength, operator ==, operator !=
+
+INCLUDE FILE#include &lt;Inventor/SoLists.h&gt;
+
+SEE ALSOSoBase, SoNodeList, SoPathList
+
+111<hr>
+</body>
+</html>

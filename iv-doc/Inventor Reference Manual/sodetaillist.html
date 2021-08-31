@@ -1,0 +1,27 @@
+<html>
+<body>
+SSooDDeettaaiillLLiisstthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoDetailList -- maintains a list of instances of details INHERITS FROMSbPList &gt; SoDetailList DESCRIPTIONThis subclass of SbPList holds lists of instances of classes derived from SoDetail. METHODS SoDetailList()
+
+Constructor.
+
+SoDetailList(int size)Constructor that pre-allocates storage for size pointers.
+
+SoDetailList(const SoDetailList &l)Constructor that copies the contents of another list. ~SoDetailList()Destructor. void append(SoDetail *detail)Adds a detail to the end of the list. void insert(SoDetail *detail, int addBefore)Inserts given detail in list before detail with given index. void truncate(int start)Removes all details after one with given index, inclusive. Removed detail
+
+instances are deleted. void copy(const SoDetailList &l)Copies a list, making a copy of each detail instance in the list.
+
+SoDetailList & operator =(const SoDetailList &l)Copies a list, making a copy of each detail instance in the list. SoDetail * operator [ ](int i) constAccesses an element of a list. void set(int i, SoDetail *detail)Sets an element of a list, deleting the old entry first.
+
+204 Open Inventor C++ Reference Pages<hr>
+
+SSooDDeettaaiillLLiisstthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh Methods from class SbPList:
+
+find, remove, getLength, operator ==, operator !=
+
+INCLUDE FILE#include &lt;Inventor/SoLists.h&gt;
+
+SEE ALSOSoDetail
+
+205<hr>
+</body>
+</html>

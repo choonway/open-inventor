@@ -1,0 +1,48 @@
+<html>
+<body>
+SbLineProjector
+<hr>
+<dl>
+<dt>NAME
+<dd>SbLineProjector -- line projector
+
+<dt>INHERITS FROM
+<dd><a href="sbprojector.html">SbProjector</a> &gt; SbLineProjector
+
+<dt>DESCRIPTION
+<dd>SbLineProjector projects a 2D point, typically the location of the cursor, onto a 3D line.
+
+<dt>METHODS
+<dl>
+<dt><b>SbLineProjector</b>()
+<dt>~<b>SbLineProjector</b>()
+<dd>Constructor and destructor. The default line passes through the origin and is aligned with the Y axis.
+
+<dt>void <b>setLine</b>(const SbLine &amp;line)
+<dt>const SbLine &amp; getLine() const
+<dd>Set and get the line on which to project 2D points.
+
+<dt>virtual SbVec3f <b>getVector</b>(const SbVec2f &amp;mousePosition1, const SbVec2f &amp;mousePosition2)
+<dd>Get a vector on this line given two normalized mouse points.
+
+<dt>virtual SbVec3f <b>getVector</b>(const SbVec2f &amp;mousePosition)
+<dd>Get a vector given the current mouse point. Uses the last point on this projector from the previous call to getVector() or setStartPostion(). Do not use this if the working space transform is changing since the new point will be in a different space than the old one.
+
+<dt>void <b>setStartPosition</b>(const SbVec2f &amp;mousePosition)
+<dd>Set the initial position from a mouse position.
+
+<dt>void <b>setStartPosition</b>(const SbVec3f &amp;point)
+<dd>Set the initial position from a point on the projector.
+
+<dt><b>Methods from class SbProjector</b>:
+<dd>project, setViewVolume, getViewVolume, setWorkingSpace,getWorkingSpace, copy
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/projectors/SbLineProjector.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbcylinderprojector.html">SbCylinderProjector</a>, <a href="sbcylinderplaneprojector.html">SbCylinderPlaneProjector</a>, <a href="sbcylindersectionprojector.html">SbCylinderSectionProjector</a>, <a href="sbcylindersheetprojector.html">SbCylinderSheetProjector</a>, <a href="sbplaneprojector.html">SbPlaneProjector</a>, <a href="sbsphereplaneprojector.html">SbSpherePlaneProjector</a>, <a href="sbsphereprojector.html">SbSphereProjector</a>, <a href="sbspheresectionprojector.html">SbSphereSectionProjector</a>, <a href="sbspheresheetprojector.html">SbSphereSheetProjector</a>
+</dl>
+</body>
+</html>

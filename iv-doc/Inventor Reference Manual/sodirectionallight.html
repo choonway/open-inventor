@@ -1,0 +1,39 @@
+<html>
+<body>
+SSooDDiirreeccttiioonnaallLLiigghhtthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoDirectionalLight -- node representing a directional light source INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoLight &gt; SoDirectionalLight DESCRIPTIONThis node defines a directional light source that illuminates along rays parallel to a
+
+given 3-dimensional vector. FIELDS SoSFVec3f direction
+
+Illumination direction vector. Fields from class SoLight:
+
+on, intensity, color
+
+METHODS SoDirectionalLight()
+
+Creates a directional light source node with default settings. static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+ACTION BEHAVIORSoGLRenderAction
+
+Activates this light (if so specified) during traversal. All shape nodes thatcome after this light in the scene graph are illuminated by this light. The light's direction is affected by the current transformation.
+
+206 Open Inventor C++ Reference Pages<hr>
+
+SSooDDiirreeccttiioonnaallLLiigghhtthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh FILE FORMAT/DEFAULTSDirectionalLight {
+
+on TRUEintensity 1 color 1 1 1direction 0 0 -1 } INCLUDE FILE#include &lt;Inventor/nodes/SoDirectionalLight.h&gt;
+
+SEE ALSOSoPointLight, SoSpotLight
+</body>
+</html>

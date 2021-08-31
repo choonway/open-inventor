@@ -1,0 +1,56 @@
+<html>
+<body>
+SoMouseButtonEvent
+<hr>
+<dl>
+<dt>NAME 
+<dd>SoMouseButtonEvent -- mouse button press and release events
+
+<dt>INHERITS FROM
+<dd><a href="soevent.html">SoEvent</a> &gt; <a href="sobuttonevent.html">SoButtonEvent</a> &gt; SoMouseButtonEvent
+
+<dt>DESCRIPTION
+<dd>SoMouseButtonEvent represents mouse button press and release events in the Inventor event model.
+
+<dt>METHODS
+<dl>
+<dt><b>SoMouseButtonEvent</b>()
+<dd>Constructor.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Return the type id for the SoMouseButtonEvent class.
+
+<dt>void <b>setButton</b>(SoMouseButtonEvent::Button b)
+<dt>SoMouseButtonEvent::Button <b>getButton</b>() const
+<dd>Set and get which mouse button generated the event.
+
+<dt>static SbBool <b>isButtonPressEvent</b>(const SoEvent *e,SoMouseButtonEvent::Button whichButton)
+<dt>static SbBool <b>isButtonReleaseEvent</b>(const SoEvent *e,SoMouseButtonEvent::Button whichButton)
+<dd>Returns whether the passed event is a mouse button press or release event ofthe passed button.
+When SoMouseButtonEvent::ANY is passed, this returns TRUE if the event represents a button press or release of any mouse button.
+
+<dt><b>Methods from class SoButtonEvent</b>:
+<dd>setState, getState
+
+<dt><b>Methods from class SoEvent</b>:
+<dd>getTypeId, isOfType, setTime, getTime, setPosition, getPosition, getPosition,getNormalizedPosition, setShiftDown, setCtrlDown, setAltDown, wasShiftDown, wasCtrlDown, wasAltDown
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/events/SoMouseButtonEvent.h&gt;
+
+<dd>#define SO_MOUSE_PRESS_EVENT(EVENT,BUTTON) \(SoMouseButtonEvent::isButtonPressEvent(EVENT,SoMouseButtonEvent::BUTTON))
+<dd>#define SO_MOUSE_RELEASE_EVENT(EVENT,BUTTON) \(SoMouseButtonEvent::isButtonReleaseEvent(EVENT,SoMouseButtonEvent::BUTTON))
+
+<dl>
+<dt>enum Button {
+<dd>SoMouseButtonEvent::ANY Any button
+<dd>SoMouseButtonEvent::BUTTON1 First mouse button
+<dd>SoMouseButtonEvent::BUTTON2 Second mouse button
+<dd>SoMouseButtonEvent::BUTTON3 Third mouse button
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soevent.html">SoEvent</a>, <a href="sobuttonevent.html">SoButtonEvent</a>, <a href="sokeyboardevent.html">SoKeyboardEvent</a>, <a href="solocation2event.html">SoLocation2Event</a>, <a href="somotion3event.html">SoMotion3Event</a>, <a href="sospaceballbuttonevent.html">SoSpaceballButtonEvent</a>, <a href="sohandleeventaction.html">SoHandleEventAction</a>, <a href="soeventcallback.html">SoEventCallback</a>, <a href="soselection.html">SoSelection</a>, <a href="sointeraction.html">SoInteraction</a>, <a href="soxtdevice.html">SoXtDevice</a>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<html>
+<body>
+SoLabel
+<hr>
+<dl>
+<dt>NAME
+<dd>SoLabel -- node containing label text string
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoLabel
+
+<dt>DESCRIPTION
+<dd>This class defines a label node in the scene graph. This node has no effect during traversal. It is used to store text labels in the scene graph, typically for application-specific identification of subgraphs when node naming is not appropriate.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFName label
+<dd>Defines the label string value as an SbName.
+</dl>
+
+<dt>METHODS
+
+<dl>
+<dt><b>SoLabel</b>()
+<dd>Creates a label node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><B>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Label {
+<dd>label &quot;&lt;Undefined label&gt;&quot;
+<dt}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoLabel.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbname.html">SbName</a>, <a href="soinfo.html">SoInfo</a>
+</dl>
+</body>
+</html>

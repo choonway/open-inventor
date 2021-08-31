@@ -1,0 +1,86 @@
+<html>
+<body>
+SoTriangleStripSet
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTriangleStripSet -- triangle strip set shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; <a href="sovertexshape.html">SoVertexShape</a> &gt; <a href="sononindexedshape.html">SoNonIndexedShape</a> &gt; SoTriangleStripSet
+
+<dt>DESCRIPTION
+<dd>This shape node constructs triangle strips out of vertices located at the current coordinates. It is one of the fastest ways of drawing polygonal objects in Inventor.SoTriangleStripSet uses the current coordinates, in order, starting at the index specified by the startIndex field. The values in the numVertices field indicate thenumber of vertices to use for each triangle strip in the set. The number of values in this field determines the number of strips. For example, if the startIndex field contains the value 3 and numVertices has thevalues [3,5], coordinates 3, 4, and 5 would be used for the first triangle strip and coordinates 6, 7, 8, 9, and 10 would be used for the second strip. This would resultin 1 triangle in the first strip and 3 in the second.
+
+<p>If the last value in the numVertices field is SO_TRI_STRIP_SET_USE_REST_OF_VERTICES (-1), all remaining values in the current coordinates are used as the vertices of the last triangle strip. The coordinates of the strips are transformed by the current cumulative transformation. The strips are drawn with the current light model and drawing style. Treatment of the current material and normal binding is as follows: 
+
+<dl>
+<dd>The PER_PART binding specifies a material or normal for each strip of the set.
+<dd>The PER_FACE binding specifies a material or normal for each triangle.
+<dd>The _INDEXED bindings areequivalent to their non-indexed counterparts.
+<dd>The DEFAULT material binding is equal to OVERALL.
+<dd>The DEFAULT normal binding is equal to PER_VERTEX.
+</dl>
+
+<p>ThestartIndex is also used for materials, normals, or texture coordinates when the binding indicates that they should be used per vertex. If the current complexity value is less than 0.5, some strips will be skipped duringrendering.
+
+<dt>FIELDS
+
+<dl>
+<dt>SoMFLong numVertices
+<dd>Number of vertices in each triangle strip. The number of strips is equal tothe number of values in this field.
+
+<dt>Fields from class SoNonIndexedShape:
+<dd>startIndex
+</dl>
+
+<dt>METHODS
+
+<dl>
+<dt><b>SoTriangleStripSet</b>()
+<dd>Creates a triangle strip set node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws a strip set based on the current coordinates, normals, materials,drawing style, and so on.
+
+<dt>SoRayPickAction
+<dd>Picks on the strip set based on the current coordinates and transformation. Details about the intersection are returned in an SoFaceDetail.
+
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses all vertices of the strip set with the current transformation applied to them. Sets the center to the average ofthe coordinates of all vertices.
+
+<dt>SoCallbackAction
+<dd>If any triangle callbacks are registered with the action, they will be invoked for each successive triangle forming the strips of the set.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>TriangleStripSet {
+<dd>startIndex 0
+<dd>numVertices -1
+<dt>}
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoTriangleStripSet.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socoordinate3.html">SoCoordinate3</a>, <a href="sodrawstyle.html">SoDrawStyle</a>, <a href="sofacedetail.html">SoFaceDetail</a>, <a href="sofaceset.html">SoFaceSet</a>, <a href="soindexedtrianglestripset.html">SoIndexedTriangleStripSet</a>, <a href="soquadmesh.html">SoQuadMesh</a>
+
+</dl>
+</body>
+</html>

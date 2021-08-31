@@ -1,0 +1,41 @@
+<html>
+<body>
+SSooTTeexxttuurreeCCoooorrddiinnaatteeEEnnvviirroonnmmeenntthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoTextureCoordinateEnvironment -- node that specifies texture coordinates by
+
+projection from a environment INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoTextureCoordinateFunction &gt;
+
+SoTextureCoordinateEnvironment DESCRIPTIONThis node creates texture coordinates by projecting points on an object's surface to
+
+the interior of a surrounding sphere, along the reflection across the surface normalof the vector from the camera point to the surface. If the current texture image represents a spherical reflection map of the current surrounding environment,subsequent shapes will appear to reflect that environment.
+
+METHODS SoTextureCoordinateEnvironment()
+
+Creates a texture function node with default settings. static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+ACTION BEHAVIORSoGLRenderAction, SoCallbackAction, SoRayPickAction
+
+Sets the current texture function in the state.
+
+FILE FORMAT/DEFAULTSTextureCoordinateEnvironment {
+
+} INCLUDE FILE#include &lt;Inventor/nodes/SoTextureCoordinateEnvironment.h&gt;
+
+647<hr>
+
+SSooTTeexxttuurreeCCoooorrddiinnaatteeEEnnvviirroonnmmeenntthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh SEE ALSOSoTexture2, SoTexture2Transform, SoTextureCoordinateCube,
+
+SoTextureCoordinateCylinder, SoTextureCoordinateDefault,SoTextureCoordinatePlane, SoTextureCoordinateSphere
+</body>
+</html>

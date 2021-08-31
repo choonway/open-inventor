@@ -1,0 +1,37 @@
+<html>
+<body>
+SoDetail
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDetail -- base class for describing detail information about a shape node
+
+<dt>INHERITS FROM
+<dd>SoDetail
+
+<dt>DESCRIPTION
+<dd>SoDetail is the abstract base class for all detail classes. A detail contains shapespecific information about a particular shape during picking and primitivegeneration. Subclasses store information based on the particular type of shape.
+<dt>METHODS
+<dl>
+<dt><b>SoDetail</b> * copy() const
+<dd>Returns an instance that is a copy of this instance. The caller is responsiblefor deleting the copy when it is no longer needed.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt>virtual SoType <b>getTypeId</b>() const
+<dd>Returns the type identifier for a specific instance.
+
+<dt>SbBool <b>isOfType</b>(SoType type) const
+<dd>Returns TRUE if this object is of the type specified in type or is derived from that type. Otherwise, it returns FALSE.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/details/SoDetail.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soconedetail.html">SoConeDetail</a>, <a href="socubedetail.html">SoCubeDetail</a>, <a href="socylinderdetail.html">SoCylinderDetail</a>, <a href="sodetaillist.html">SoDetailList</a>, <a href="sofacedetail.html">SoFaceDetail</a>, <a href="solinedetail.html">SoLineDetail</a>, <a href="sonodekitdetail.html">SoNodeKitDetail</a>, <a href="sopickedpoint.html">SoPickedPoint</a>, <a href="sopointdetail.html">SoPointDetail</a>, <a href="soprimitivevertex.html">SoPrimitiveVertex</a>, <a href="sotextdetail.html">SoTextDetail</a>
+</dl>
+
+</body>
+</html>

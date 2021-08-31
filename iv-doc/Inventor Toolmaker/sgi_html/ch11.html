@@ -1,0 +1,580 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Chapter 11. Creating an Event and Device</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"><meta name="generator" content="SGI XSL DocBook Customization Stylesheets V1.0"><link rel="home" href="index.html" title="The Inventor Toolmaker"><link rel="up" href="index.html" title="The Inventor Toolmaker"><link rel="previous" href="ch10.html" title="Chapter 10. Creating a Component"><link rel="next" href="ix01.html" title="Index"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 11. Creating an Event and Device</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ix01.html">Next</a></td></tr></table><hr></div><!--CONTENT_BEGIN--><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="id5482975"></a>Chapter 11. <a name="id11499"></a>Creating <a name="id27606"></a>an Event and Device</h2></div></div>
+<p>This chapter describes how to create a new event and a new Xt device. The examples show how to subclass events and Xt devices and how to translate X events into Inventor events.</p>
+<p>This chapter focuses on translating X events into Inventor events. This general process can be applied to the translation of any window-specific events into Inventor events, which are independent of the window system. Examples 11-1 and 11-2 show how to create the <span class="bold"><b>DialEvent</b></span>, which is used by the dial and button device.</p>
+<p>The details of setting up an <span class="bold"><b>SoXt</b></span> device to work with a render area are also explained here. Note that new devices can be added only if you are using the Inventor Component Library. Examples 11-4 and 11-5 use the <a name="idch111"></a><span class="bold"><b>DialNButton</b></span> device to show how to translate events and communicate with the render area.</p>
+<p>Note that new events will not automatically be understood by existing manipulators. You can create new manipulators (or other objects that respond to events) to recognize the new events. Or you can register a new static method for an existing manipulator in the method list for the <a name="idch112"></a><span class="bold"><b>SoHandleEventAction<a name="idch113"></a></b></span>. Then your new method for the manipulator can handle the new events appropriately (see Chapter 4).</p>
+<p><a name="id65050"></a>Before reading this chapter, be sure to read Chapters 10 and 16 in <a name="idch114"></a><i>The Inventor Mentor</i>.</p>
+<div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5483144"></a>Creating an Event</h2></div></div>
+<p>This section describes creating a new event and offers background information on translating an event. For information on creating a new device, see <a name="idch115"></a><a href="ch11.html#id38597">&#8220;Creating a Device&#8221;</a>. The device's main responsibility is translating events, which is described in more detail in <a href="ch11.html#id22049">&#8220;Dispatching Events&#8221;</a>. </p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5483180"></a>Overview</h3></div></div>
+<p>The file SoSubEvent.h contains the macros for defining new event classes. The SO_EVENT_HEADER() macro declares type identifier and naming variables and methods that all event classes must support. The SO_EVENT_SOURCE() macro defines the static variables and methods declared in the SO_EVENT_HEADER() macro.<a name="idch116"></a><a name="idch117"></a><a name="idch118"></a></p>
+<p>Creating a new event requires these steps:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new event class and determine what class it is derived from.</p>
+</li>
+<li><p>Define an <a name="idch119"></a><span class="bold"><b>initClass()</b></span> method to initialize the type information. Use the SO_EVENT_INIT_CLASS() macro. The application needs to call the event's <a name="idch1110"></a><span class="bold"><b>initClass()</b></span> method immediately after <a name="idch1111"></a><span class="bold"><b>SoXt::init</b></span>.</p>
+</li>
+<li><p>Define a constructor.</p>
+</li>
+<li><p>Define a destructor.</p>
+</li>
+<li><p>Implement <span class="bold"><b>set()</b></span> and <span class="bold"><b>get()</b></span> methods for the additional information your event provides. For example, the dial event needs to include information on which dial was turned, and what its value is.</p>
+</li>
+<li><p>Write convenience routines for the event to perform common queries and tasks (optional step). For the dial box, the convenience routine is <span class="bold"><b>isDialEvent()<a name="idch1112"></a></b></span>.</p>
+</li>
+<li><p>Write convenience macros for the event (optional step). These are static functions that are used in event callback functions. For the dial, the macro is DIAL_EVENT(). Note that it uses the convenience routines defined in step 6.</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5483383"></a><a name="id32393"></a>Translating Events</h3></div></div>
+<p>When an event is dispatched, the event translator creates an Inventor event from an X event and sets its values (see <a name="idch1113"></a><a href="ch11.html#id22049">&#8220;Dispatching Events&#8221;</a>). It provides all the information about the event, including the following:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>Time the event occurred</p>
+</li>
+<li><p>Position of the locator when the event occurred</p>
+</li>
+<li><p>State of the modifier keys (Shift, Control, Alt) when the event occurred</p>
+</li>
+<li><p>Any additional information required by the event (for example, if a keyboard key is pressed, which key is it?)</p>
+</li>
+</ul></div><p>Inventor includes three subclasses of <a name="idch1114"></a><span class="bold"><b>SoEvent. SoButtonEvent<a name="idch1115"></a></b></span> includes additional information about the button state (is it up or down?). Subclasses of <span class="bold"><b>SoButtonEvent</b></span> provide information about which button was pressed. <span class="bold"><b>SoMotion3Event<a name="idch1116"></a></b></span> includes information on translation and rotation values generated by an input device such as the spaceball. <a name="idch1117"></a><a name="idch1118"></a><span class="bold"><b>SoLocation2Event</b></span> includes information on the absolute location of the cursor in window coordinates.<a name="idch1119"></a></p>
+<p>A value such as the event's time or position is read-only during event traversal because the event is passed as a <span class="bold"><b>const</b></span> pointer. Only the creator of an event can set its values.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5483573"></a>Creating a Dial Event</h3></div></div>
+<p>The dial and button input device generates two X events that need to be translated into Inventor events and handled by the database:<a name="idch1120"></a><a name="idch1121"></a></p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>XDeviceMotionEvent<a name="idch1122"></a></b></span></span></td><td width="10"> </td><td><p><br>
+provides value changes of the eight dials</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>XDeviceButtonEvent<a name="idch1123"></a></b></span>
+</span></td><td width="10"> </td><td><p>
+
+
+<br>
+provides information about the state of the device's 32 buttons</p>
+
+</td></tr></table></div><p>The information provided by <span class="bold"><b>XDeviceMotionEvent</b></span> is translated into a <span class="bold"><b>DialEvent<a name="idch1124"></a></b></span>. The <span class="bold"><b>XDeviceButtonEvent</b></span> is translated into a <span class="bold"><b>ButtonBoxEvent<a name="idch1125"></a></b></span>, which is subclassed from <span class="bold"><b>SoButtonEvent</b></span> and has button information specific to the button box.<a name="idch1126"></a></p>
+<p>This section discusses the code for the <span class="bold"><b>DialEvent</b></span>, which describes the state of any of the eight dials. Note, however, that you could instead choose to create a more generic event that could be used for other devices in addition to the dial box. For example, you could create a <span class="bold"><b>ResetToHomePositionEvent</b></span> that would be used when the user presses a button box button, clicks on a Home button on the screen, or performs some other designated action.</p>
+<div class="tip"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/tip.png"></td><td align="left" valign="top"><b>Tip: </b>Be sure to call <span class="bold"><b>initClass()</b></span> on the event after initializing Inventor.
+</td></tr></table><hr noshade="noshade"></div><p><a href="ch11.html#id54858">Example 11-1</a> shows the code for the dial event include file.</p>
+<div class="example"><p><a name="id5483848"></a><b>Example 11-1. <a name="id54858"></a>DialEvent.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/SbBasic.h&gt;
+#include &lt;Inventor/events/SoEvent.h&gt;
+#include &lt;Inventor/events/SoSubEvent.h&gt;
+
+// Convenience macro for determining if an event matches
+#define DIAL_EVENT(EVENT, WHICH) \
+   (DialEvent::isDialEvent(EVENT, WHICH))
+
+class DialEvent : public SoEvent {
+
+   SO_EVENT_HEADER();
+   
+  public:
+   // Constructor
+   DialEvent();
+   
+   // Which dial generated the event, 1-8
+   void     setDial(int d)   { dial = d; }
+   int      getDial() const  { return dial; }
+   
+   // Value of the dial turned
+   void     setValue(int v)  { value = v; }
+   int      getValue() const { return value; }
+   
+   // Convenience routines to see if an SoEvent is a turn of
+   // the passed dial. Passing -1 matches any button.
+   static SbBool        isDialEvent(const SoEvent *e, 
+                                   int which = -1);
+   
+     static void          initClass();
+   
+  private:
+   int                  dial;               // Which dial
+   int                  value;              // Value of dial
+};
+</pre></td></tr></table><p><a href="ch11.html#id29650">Example 11-2</a> shows the complete source code for the dial event.</p>
+<div class="example"><p><a name="id5483942"></a><b>Example 11-2. <a name="id29650"></a>DialEvent.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &quot;DialEvent.h&quot;
+
+SO_EVENT_SOURCE(DialEvent);
+
+// Class initialization
+void
+DialEvent::initClass()
+
+{
+   SO_EVENT_INIT_CLASS(DialEvent, SoEvent);
+}
+
+// Constructor
+DialEvent::DialEvent()
+{
+   dial = 0;
+   value = 0;
+}
+
+// Convenience routine - this returns TRUE if the event is a
+// dial turn event matching the passed dial.
+SbBool
+DialEvent::isDialEvent(const SoEvent *e, int whichDial)
+{
+   SbBool isMatch = FALSE;
+   
+   // is it a dial event?
+   if (e-&gt;isOfType(DialEvent::getClassTypeId())) {
+     const DialEvent *de = (const DialEvent *) e;
+   
+     // did the caller want any dial turn? or do they match?
+     if ((whichDial == -1) ||
+        (de-&gt;getDial() == whichDial))
+       isMatch = TRUE;
+   }
+   
+   return isMatch;
+}
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5483982"></a><a name="id22049"></a>Dispatching Events</h2></div></div>
+<p>Using the <a name="idch1127"></a><span class="bold"><b>DialNButton</b></span> device as an example, this section outlines in more detail how the event translator works with the X Server and the <a name="idch1128"></a><a name="idch1129"></a><span class="bold"><b>SoXt</b></span> main loop to obtain X events and translate them into Inventor events.</p>
+<div class="note"><hr noshade="noshade"><table border="0"><tr><td align="center" valign="top" width="25"><img src="figures/note.png"></td><td align="left" valign="top"><b>Note: </b>The way <span class="bold"><b>SoXt</b></span> main loop works with the event translator is slightly complex, for the following reasons. The X Window System provides compile-time event types only for the mouse and keyboard devices. The X input extension provides events for all other devices. The complication arises because the Xt Library ignores the X input extension. For this reason, we must get the complete list of events at runtime. <a name="idch1130"></a><a name="idch1131"></a><a name="idch1132"></a><span class="bold"><b>SoXt</b></span> sets up its own event handler to dispatch the extension events, and Xt dispatches the standard events (see <a href="ch11.html#id37072">&#8220;SoXt Main Loop&#8221;</a>). For more information, see the MIT X Consortium Standard, &#8220;X11 Input Extension Library Specification,&#8221; X Version 11, Release 5.
+</td></tr></table><hr noshade="noshade"></div><br><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5484076"></a><a name="id17835"></a>Translating an Event</h3></div></div>
+<p><a href="ch11.html#id42071">Figure 11-1</a> shows the general sequence for translating an event. (Because the device's main responsibility is to translate events, it is referred to here simply as <i>the translator</i>.) Before events can be translated, certain information must be conveyed:</p>
+<div class="orderedlist"><ol type="1"><li><p>The application registers its software devices with the render area. (See <a name="idch1133"></a><i>The Inventor Mentor</i>, Chapter 16.) Mouse and keyboard devices are handled automatically. All additional devices must be explicitly registered using the <a name="idch1134"></a><span class="bold"><b>SoXtRenderArea::registerDevice()<a name="idch1135"></a></b></span> method.</p>
+</li>
+<li><p>The translator tells the X Server which event classes it is interested in.</p>
+</li>
+<li><p>The translator tells the <span class="bold"><b>SoXt</b></span> main loop which event types it is interested in.</p>
+<p>After these entities have been notified, the translator is ready to receive and translate events. The following steps describe this process. Remember that the dispatching of events is slightly complicated because X input extensions must be dealt with separately in the main loop routine:</p>
+<p><div class="figure"><p><a name="id5484265"></a><b>Figure 11-1. <a name="id42071"></a><a name="idch1136"></a>Sequence for Translating an Event</b></p>
+<div class="mediaobject"><img src="figures/fig11.1snap.gif"></div></div><br>
+</p>
+</li>
+<li><p>The physical input device generates events.</p>
+</li>
+<li><p>If these are X events, they are sent to the <span class="bold"><b>SoXt</b></span> main loop for dispatching. (If the device doesn't generate X events, your event translator needs to do some extra work.)</p>
+</li>
+<li><p>Within the <span class="bold"><b>SoXt</b></span> main loop, Xt dispatches standard X events to the appropriate widget (the corresponding render area will then use the correct translator). <span class="bold"><b>SoXt</b></span> dispatches the X input extension events to the render area, which in turn employs the translators to translate the event.</p>
+</li>
+<li><p>The translator translates the event into an Inventor <a name="idch1137"></a><span class="bold"><b>SoEvent</b></span> subclass.</p>
+</li>
+<li><p>The <span class="bold"><b>SoEvent</b></span> is sent to the scene manager, which uses a handle event action to traverse the scene database until a node is found to handle the event (typically a manipulator or selection node).<a name="idch1138"></a><a name="idch1139"></a></p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5484404"></a><a name="id37072"></a>SoXt Main Loop</h3></div></div>
+<p>The code for the <a name="idch1140"></a><span class="bold"><b>SoXt</b></span> main loop is shown in <a href="ch11.html#id18482">Example 11-3</a> so that you can see how the main loop dispatches both standard X events and X input extension events. You shouldn't have to modify this code.</p>
+<div class="example"><p><a name="id5484438"></a><b>Example 11-3. <a name="id18482"></a>SoXtMainLoop</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+SoXt::mainLoop()
+{
+   XtAppContext context = getAppContext();
+   XEvent event;
+   
+   for (;;) {
+      SoXt::nextEvent(context, &amp;event);
+      SoXt::dispatchEvent(&amp;event);
+   }
+}
+
+void
+SoXt::nextEvent(XtAppContext appContext, XEvent *event)
+{
+   XtAppNextEvent(appContext, event);
+}
+
+Boolean
+SoXt::dispatchEvent(XEvent *event)
+{
+   Boolean success = True;
+    
+   if (event-&gt;type &gt;= LASTEvent) {
+      XtEventHandler proc;
+      XtPointer clientData;
+      Widget w;
+      Boolean dummy;
+      
+      // Get the event handling function which was
+      // registered with Inventor for handling this
+      // event type in this widget
+      SoXt::getExtensionEventHandler(event, w, proc, clientData);
+      
+      // Call the event handler!
+      if (proc == NULL)
+         success = False;
+      else
+         (*proc)(w, clientData, event, &amp;dummy);
+      
+   }
+   
+   // else it is not an extension event - let Xt dispatch it
+   else 
+      success = XtDispatchEvent(event);
+   
+   return success;
+}
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5484532"></a><a name="id38597"></a>Creating a Device</h2></div></div>
+<p>This section provides detailed information on creating a new device, using  the dial and button box as a sample.</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5484566"></a>Overview<a name="idch1141"></a></h3></div></div>
+<p>Creating a new <span class="bold"><b>SoXt</b></span> device class requires these steps:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new device class and determine what class it is derived from.</p>
+</li>
+<li><p>Define a constructor (see <a href="ch11.html#id26883">&#8220;Constructor&#8221;</a>).</p>
+</li>
+<li><p>Define a destructor.</p>
+</li>
+<li><p>Define an <a name="idch1142"></a><span class="bold"><b>enable()</b></span> method, which enables the device for a certain widget or render area (see <a href="ch11.html#id15469">&#8220;Enable Method&#8221;</a>).</p>
+</li>
+<li><p>Define a <a name="idch1143"></a><span class="bold"><b>disable()</b></span> method, which disables the device when the widget is destroyed.</p>
+</li>
+<li><p>Define a <a name="idch1144"></a><span class="bold"><b>translateEvent()</b></span> method, which translates X events into Inventor events (see <a href="ch11.html#id13976">&#8220;Translate Event Method&#8221;</a>).</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5484716"></a><a name="id26883"></a>Constructor</h3></div></div>
+<p>First, the constructor for the device obtains a list of the input devices currently attached to the display. In our example, it loops through the list and looks for a device named &#8220;dial+buttons.&#8221; If found, it opens that device (using <a name="idch1145"></a><a name="idch1146"></a><span class="bold"><b>XOpenDevice</b></span>).</p>
+<p>Next, the device queries the X Server for the event types it generates. (Recall that these <a name="idch1147"></a><span class="bold"><b>const</b></span> values are available only at runtime because they are part of the X input extension.) The <a name="idch1148"></a><span class="bold"><b>DeviceMotionNotify()</b></span> function returns the event class and event type for motion events. The <a name="idch1149"></a><span class="bold"><b>DeviceButtonPress()</b></span> and <span class="bold"><b>DeviceButtonRelease()<a name="idch1150"></a></b></span> functions return the event class and event type for the button-press and button-release events.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5484834"></a><a name="id15469"></a>Enable Method</h3></div></div>
+<p>In its <a name="idch1151"></a><span class="bold"><b>enable()</b></span> method, the <span class="bold"><b>DialNButton</b></span> device calls <span class="bold"><b>XSelectExtensionEvent()<a name="idch1152"></a></b></span> to register interest in its event classes with the X Server. </p>
+<p>The device also must inform Inventor's main loop about the extension events it is prepared to translate. To do this, it calls <span class="bold"><b>addExtensionEventHandler()<a name="idch1153"></a></b></span> on <span class="bold"><b>SoXt</b></span> main loop and passes in the event types (obtained earlier with <span class="bold"><b>DeviceMotionNotify()</b></span>, <span class="bold"><b>DeviceButtonPress()</b></span>, and <span class="bold"><b>DeviceButtonRelease()</b></span>).</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5484944"></a><a name="id13976"></a>Translate Event Method</h3></div></div>
+<p>The <span class="bold"><b>DialNButton</b></span> <a name="idch1154"></a><span class="bold"><b>translateEvent()</b></span> method contains two routines: </p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>translateMotionEvent()<a name="idch1155"></a></b></span>
+</span></td><td width="10"> </td><td><p>
+
+
+<br>
+translates an <span class="bold"><b>XDeviceMotionEvent</b></span> into a <a name="idch1156"></a><span class="bold"><b>DialEvent</b></span></p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>translateButtonEvent()<a name="idch1157"></a></b></span>
+</span></td><td width="10"> </td><td><p>
+
+
+<br>
+translates an <span class="bold"><b>XDeviceButtonEvent</b></span> into a <span class="bold"><b>ButtonBoxEvent<a name="idch1158"></a></b></span></p>
+
+</td></tr></table></div><p>First, the <span class="bold"><b>translateMotionEvent()</b></span> sets the position, time, and the state of the Shift, Control, and Alt keys at the time of the event. Then, it sets the dial and value. The variables in the <a name="idch1159"></a><span class="bold"><b>XDeviceMotionEvent</b></span> are stored differently for different devices. Check the documentation for your device driver for information on how data is stored in this event. The <span class="bold"><b>XDeviceMotionEvent</b></span> for the dial box stores which dial was turned in its <span class="bold"><b>first_axis</b></span> field, and the value of that dial in its <span class="bold"><b>axis_data[0]</b></span> variable.</p>
+<p>As described in <a href="ch11.html#id32393">&#8220;Translating Events&#8221;</a>, the <span class="bold"><b>translateEvent()</b></span> method creates the <span class="bold"><b>SoEvent</b></span> and then sets the time, state of the modifier keys, and so on.</p>
+<p><a href="ch11.html#id70005">Example 11-4</a> shows the code for DialNButton.h.</p>
+<div class="example"><p><a name="id5480493"></a><b>Example 11-4. <a name="id70005"></a><a name="idch1160"></a>DialNButton.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;X11/X.h&gt;
+#include &lt;X11/extensions/XInput.h&gt;
+#include &lt;Inventor/Xt/devices/SoXtDevice.h&gt;
+#include &lt;Inventor/events/SoButtonEvent.h&gt;
+
+class ButtonBoxEvent;
+class DialEvent;
+
+class DialNButton : public SoXtDevice {
+  public:
+   // The first constructor uses the display set when 
+   // SoXt::init is called.
+   DialNButton();
+   DialNButton(Display *d);
+   ~DialNButton();
+   
+   // These functions will enable/disable this device for the 
+   // widget. The callback function f will be invoked when 
+   // events occur in w. data is the clientData which will be
+   // passed.
+   virtual void        enable(Widget w, XtEventHandler f,
+                          XtPointer data, Window win = NULL);
+   virtual void        disable(Widget w, XtEventHandler f,
+                          XtPointer data);
+   
+   // This converts an X event into an SoEvent,
+   // returning NULL if the event is not from this device.
+   //
+      virtual const SoEvent * translateEvent(XAnyEvent *xevent);
+   
+   // Return whether or not the dial+button device exists for use.
+   // The first uses the display set when SoXt::init is called.
+   static SbBool        exists() 
+                           { return exists(SoXt::getDisplay()); }
+   static SbBool        exists(Display *d);
+   
+  protected:
+   // Initialize the device.
+   static void          init(Display *d);
+   static SbBool        firstTime;
+   
+   // These event types are retrieved from the X server at run
+   // time.
+   static int           motionEventType;
+   static int           buttonPressEventType;
+   static int           buttonReleaseEventType;
+   
+   // Event classes passed to XSelectExtensionEvent.
+   static XEventClass   eventClasses[3];//max of 3 event classes
+   static int           eventTypes[3]; // max of 3 event types
+   
+   // Device id is set at runtime.
+   static XDevice       *device;
+   
+   // Inventor events generated by this device.
+   ButtonBoxEvent       *buttonEvent;
+   DialEvent            *dialEvent;
+
+   // Event translators!
+   DialEvent       *translateMotionEvent(XDeviceMotionEvent *me);
+   ButtonBoxEvent  *translateButtonEvent(
+                       XDeviceButtonEvent *be,
+                       SoButtonEvent::State whichState);
+};
+</pre></td></tr></table><p><a href="ch11.html#id90363">Example 11-5</a> shows the source code for DialNButton.c++.</p>
+<div class="example"><p><a name="id5480547"></a><b>Example 11-5. <a name="id90363"></a>DialNButton.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;X11/Xlib.h&gt;
+#include &lt;X11/extensions/XI.h&gt;
+
+#include &lt;Inventor/SbTime.h&gt;
+#include &lt;Inventor/Xt/SoXt.h&gt;
+#include &lt;Inventor/events/SoButtonEvent.h&gt;
+
+#include &quot;ButtonBoxEvent.h&quot;
+#include &quot;DialEvent.h&quot;
+#include &quot;DialNButton.h&quot;
+
+extern &quot;C&quot; {
+XDeviceInfo *XListInputDevices(Display *, int *);
+XDevice     *XOpenDevice(Display *, XID);
+int         XSelectExtensionEvent(Display *, Window, XEventClass *, int);
+}
+
+#define DEVICE_NAME &quot;dial+buttons&quot;
+
+// There are 3 event classes for this device:
+// motion, button down, button up.
+static const int numEventClasses = 3;
+
+// Static members
+SbBool DialNButton::firstTime = TRUE;
+int DialNButton::motionEventType;
+int DialNButton::buttonPressEventType;
+int DialNButton::buttonReleaseEventType;
+XEventClass DialNButton::eventClasses[3];
+int DialNButton::eventTypes[3];
+XDevice *DialNButton::device;
+
+// Description:
+//  Initialize the dial+button device. 
+//  We only need to do this once.
+
+void
+DialNButton::init(Display *display)
+{    
+   // If already initialized, return.
+   if (! firstTime) 
+      return;
+   
+   firstTime = FALSE;
+   
+   // Get the list of input devices that are attached to the
+   // display now.
+   XDeviceInfoPtr  list;
+   int              numDevices;
+   
+   list = (XDeviceInfoPtr) XListInputDevices(display, &amp;numDevices);
+   
+   // Now run through the list looking for the dial+button
+   // device.
+   device = NULL;
+   for (int i = 0; (i &lt; numDevices) &amp;&amp; (device == NULL); i++) {
+     // Open the device - the device id is set at runtime.
+     if (strcmp(list[i].name, DEVICE_NAME) == 0) {
+       device = XOpenDevice(display, list[i].id);
+     }
+   }
+   
+   // Make sure we found the device
+   if (device == NULL) {
+     fprintf(stderr, &quot;DialNButton::init&quot;,
+       &quot;Sorry there is no dial and button attached to this display&quot;);
+     return;
+   }
+   
+   // Query the event types and classes
+   unsigned long eventClass;
+   
+   DeviceMotionNotify(device, motionEventType, eventClass);
+   eventClasses[0] = eventClass;
+   eventTypes[0] = motionEventType;
+   
+   DeviceButtonPress(device, buttonPressEventType, eventClass);
+   eventClasses[1] = eventClass;
+   eventTypes[1] = buttonPressEventType;
+
+   DeviceButtonRelease(device, buttonReleaseEventType, 
+                       eventClass);
+   eventClasses[2] = eventClass;
+   eventTypes[2] = buttonReleaseEventType; 
+   
+   // Init all dial values to 0
+   static int vals[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+   XSetDeviceValuators(display, device, vals, 0, 8);  
+}
+
+// Constructor using default display
+DialNButton::DialNButton()
+{    
+   init(SoXt::getDisplay());
+
+   buttonEvent = new ButtonBoxEvent;
+   dialEvent = new DialEvent;
+}
+   
+// Constructor
+DialNButton::DialNButton(Display *d)
+{    
+   init(d);
+
+   buttonEvent = new ButtonBoxEvent;
+   dialEvent = new DialEvent;
+}
+   
+// Destructor
+DialNButton::~DialNButton()
+{
+   delete buttonEvent;
+   delete dialEvent;
+}
+
+// Returns whether the dial+button device exists for use or
+// not.
+SbBool
+DialNButton::exists(Display *display)
+{
+   // Get the list of input devices that are attached to the
+   // display now.
+   XDeviceInfoPtr  list;
+   int              numDevices;
+   
+   list = (XDeviceInfoPtr) XListInputDevices(display, &amp;numDevices);
+   
+   // Now run through the list looking for the dial + button
+   // device.
+   for (int i = 0; (i &lt; numDevices) &amp;&amp;
+               (strcmp(list[i].name, DEVICE_NAME) != 0); i++)
+     ; // keep looping
+
+   // If we broke out of the loop before i reached numDevices,
+   // then the dial + button does in fact exist. 
+   return (i &lt; numDevices);
+}
+
+// This selects input for dial + button device events which
+// occur in w.
+// The callback routine is proc, and the callback data is
+// clientData.
+void
+DialNButton::enable(
+   Widget w,
+   XtEventHandler proc, 
+   XtPointer clientData,
+   Window window)
+{
+   if (numEventClasses == 0) 
+      return;
+   
+   Display *display = XtDisplay(w);
+   if (display == NULL) {
+     fprintf(stderr, &quot;DialNButton::enable&quot;,
+             &quot;SoXt::init not properly called (Display is NULL).&quot;);
+     return;
+   }
+   
+   if (w == NULL) {
+     fprintf(stderr, &quot;DialNButton::enable&quot;,
+             &quot;widget is NULL.&quot;);
+     return;
+   }
+   
+   if (window == NULL) {
+     fprintf(stderr, &quot;DialNButton::enable&quot;,
+             &quot;widget must be realized (Window is NULL).&quot;);
+     return;
+   }
+   
+   // Select extension events for the dial + button which the
+   // user wants.
+   XSelectExtensionEvent(display, window,
+                         eventClasses, numEventClasses);
+   
+   // Tell Inventor about these extension events!
+   for (int i = 0; i &lt; numEventClasses; i++)
+     SoXt::addExtensionEventHandler(
+       w, eventTypes[i], proc, clientData);
+}
+
+// This unselects input for dial + button device events which
+// occur in w,
+// i.e. dial + button events will no longer be recognized.
+void
+DialNButton::disable(
+   Widget w,
+   XtEventHandler proc, 
+   XtPointer clientData)
+{
+   // Tell Inventor to forget about these classes.
+   for (int i = 0; i &lt; numEventClasses; i++)
+     SoXt::removeExtensionEventHandler(
+       w, eventTypes[i], proc, clientData);
+}
+
+// Translate X events into Inventor events.
+const SoEvent *
+DialNButton::translateEvent(XAnyEvent *xevent)
+{
+   SoEvent *event = NULL;
+   
+   // See if this is a dial + button event.
+   if (xevent-&gt;type == motionEventType) {
+     XDeviceMotionEvent *me = (XDeviceMotionEvent *) xevent;
+     if (me-&gt;deviceid == device-&gt;device_id)
+       event = translateMotionEvent(me);
+   }
+   else if (xevent-&gt;type == buttonPressEventType) {
+     XDeviceButtonEvent *be = (XDeviceButtonEvent *) xevent;
+     if (be-&gt;deviceid == device-&gt;device_id)
+       event = translateButtonEvent(be, SoButtonEvent::DOWN);
+   }
+   else if (xevent-&gt;type == buttonReleaseEventType) {
+     XDeviceButtonEvent *be = (XDeviceButtonEvent *) xevent;
+     if (be-&gt;deviceid == device-&gt;device_id)
+       event = translateButtonEvent(be, SoButtonEvent::UP);
+   }
+   
+   return event;
+}
+
+// This returns a DialEvent for the passed X event.
+DialEvent *
+DialNButton::translateMotionEvent(XDeviceMotionEvent *me)
+{
+   setEventPosition(dialEvent, me-&gt;x, me-&gt;y);
+   dialEvent-&gt;setTime(SbTime(0, 1000*me-&gt;time));
+   dialEvent-&gt;setShiftDown(me-&gt;state &amp; ShiftMask);
+   dialEvent-&gt;setCtrlDown(me-&gt;state &amp; ControlMask);
+   dialEvent-&gt;setAltDown(me-&gt;state &amp; Mod1Mask);
+   
+   // the dial that turned is stored as first_axis in the X event.
+   // the value is always in axis_data[0].
+   dialEvent-&gt;setDial(me-&gt;first_axis);
+   dialEvent-&gt;setValue(me-&gt;axis_data[0]);
+   
+   return dialEvent;
+}
+
+// This returns a ButtonBoxEvent for the passed X event.
+ButtonBoxEvent *
+DialNButton::translateButtonEvent(
+   XDeviceButtonEvent *be,
+   SoButtonEvent::State whichState)
+{
+   setEventPosition(buttonEvent, be-&gt;x, be-&gt;y);
+   buttonEvent-&gt;setTime(SbTime(0, 1000*be-&gt;time));
+   buttonEvent-&gt;setShiftDown(be-&gt;state &amp; ShiftMask);
+   buttonEvent-&gt;setCtrlDown(be-&gt;state &amp; ControlMask);
+   buttonEvent-&gt;setAltDown(be-&gt;state &amp; Mod1Mask);
+   
+   // Set which button along with its state.
+   buttonEvent-&gt;setButton(be-&gt;button);
+   buttonEvent-&gt;setState(whichState);
+   
+   return buttonEvent;
+}
+</pre></td></tr></table><p> </p>
+</div></div></div><!--CONTENT_END--><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Table of Contents</a></td><td width="40%" align="right"> <a accesskey="n" href="ix01.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 10. Creating a Component </td><td width="20%" align="center"> </td><td width="40%" align="right">Index </td></tr></table></div></body></html>

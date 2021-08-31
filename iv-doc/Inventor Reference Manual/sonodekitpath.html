@@ -1,0 +1,45 @@
+<html>
+<body>
+SSooNNooddeeKKiittPPaatthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoNodeKitPath -- path that points to a list of hierarchical nodekits INHERITS FROMSoBase &gt; SoPath &gt; SoNodeKitPath DESCRIPTIONSoNodeKitPath is a subclass of SoPath that lets you look at nodekits below the top
+
+nodekit in the path. Since nodekits have hidden children, when you call getTail()on a regular path, it returns the top-most nodekit on the path. This occurs even though the path might contain extra internal information leading to a node fardeeper in the scene graph. For example, when picking an object inside an SoSceneKit, the regular path would end at the scenekit. But a nodekit path wouldcontinue further down listing the other nodekits below it in the path.
+
+Intermediary (private) nodes between nodekits are not included in the nodekit path. Note that there is no constructor for an SoNodeKitPath, so you can not create one.Rather, you cast an (SoPath *) into an (SoNodeKitPath *), which returns nodekitstyle values from all the same questions as SoPath. Also, some methods of SoPath may not be called on an SoNodeKitPath. Anymethods which take a regular SoNode as an argument (except for setHead()) are not
+
+accessible, and replaced by methods that take an SoBaseKit as an argument instead.Methods which allow the programmer to refer to the child index of a node beneath its parent are also inaccessible; since a SoNodeKitPath only shows nodekits andhides any private parts, successive nodekits in the path may not actually be parent and child. METHODSvoid append(SoBaseKit *childKit)
+
+Adds childKit to end of chain; uses first occurrence of childKit as a part withincurrent last nodekit. If the path is empty, this is equivalent to setHead(childKit). void append(const SoNodeKitPath *fromPath)Adds all nodekits in fromPath's chain to end of chain; the head node of
+
+fromPath must be the same as or a child of the current tail node. void pop()Pops the last nodekit off the end of the path.
+
+424 Open Inventor C++ Reference Pages<hr>
+
+SSooNNooddeeKKiittPPaatthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh SoNode * getTail() constReturn the last nodekit in a path chain. Note that getHead() is not redefined
+
+from SoPath, since an SoNodeKitPath need not begin with a nodekit; therestriction is placed only on successive nodes on the path.
+
+SoNode * getNode(int i) constReturns a pointer to the i'th node in the nodekit path. SoNode * getNodeFromTail(int i) constReturns a pointer to the i'th nodekit in the chain, counting backward from
+
+the tail nodekit. Passing 0 for i returns the tail nodekit. int getLength() constReturns length of path chain (number of nodekits).
+
+void truncate(int start)Truncates the path chain, removing all nodes from index start on. Calling
+
+truncate(0) empties the path entirely. SbBool containsNode(const SoNodeKit *nodeKit) constReturns TRUE if the passed nodekit is found anywhere in the path chain.
+
+int findFork(const SoNodeKitPath *path) constIf the two paths have different head nodes, this returns -1. Otherwise, it
+
+returns the path chain index of the last nodekit (starting at the head) that isthe same for both paths.
+
+friend int operator ==(const SoNodeKitPath &p1, const SoNodeKitPath&p2)
+
+Returns TRUE if all node pointers in the two nodekit path chains are equal. Methods from class SoPath:
+
+setHead, getHead, containsPath, copy, getByName, getByName
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getClassTypeId, getTypeId, isOfType,setName, getName
+
+INCLUDE FILE#include &lt;Inventor/SoNodeKitPath.h&gt; SEE ALSOSoBaseKit, SoPath, SoRayPickAction, SoSearchAction
+</body>
+</html>

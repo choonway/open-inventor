@@ -1,0 +1,39 @@
+<html>
+<body>
+SoIdleSensor
+<hr>
+<dl>
+<dt>NAME
+<dd>SoIdleSensor -- sensor for one-time only callbacks when the application is idle
+
+<dt>INHERITS FROM
+<dd><a href="sosensor.html">SoSensor</a> &gt; <a href="sodelayqueuesensor.html">SoDelayQueueSensor</a> &gt; SoIdleSensor
+
+<dt>DESCRIPTION
+<dd>An idle sensor is almost exactly like an SoOneShotSensor, except that it is only triggered when there are no timer queue sensors waiting to be triggered and there are no events waiting to be processed; that is, idle sensors will not be triggered if the delay queue is processed because the delay queue timeout expires. If the delay queue timeout is disabled (see SoDB::setDelaySensorTimeout().), idle and one-shot sensors are exactly the same. Note that idle sensors do not reschedule themselves. Inventor 1 idle sensors were always scheduled; call schedule() in the callback function to duplicate that behavior. See the SoOneShotSensor manual page for more information.
+
+<dt>METHODS
+<dl>
+<dt><b>SoIdleSensor</b>()
+<dt><b>SoIdleSensor</b>(SoSensorCB *func, void *data)
+<dd>Creation methods. The second method takes the callback function and data to be called when the sensor is triggered.
+
+<dt>~<b>SoIdleSensor</b>()
+<dd>Destroys the sensor, freeing up any memory associated with it after unscheduling it.
+
+<dt><b>Methods from class SoDelayQueueSensor</b>:
+<dd>setPriority, getPriority, getDefaultPriority, schedule, unschedule, isScheduled
+
+<dt><b>Methods from class SoSensor</b>:
+<dd>setFunction, getFunction, setData, getData
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/sensors/SoIdleSensor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sooneshotsensor.html">SoOneShotSensor</a>, <a href="sodelayqueuesensor.html">SoDelayQueueSensor</a>
+</dl>
+
+</body>
+</html>

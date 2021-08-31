@@ -1,0 +1,29 @@
+<html>
+<body>
+SSooSSFFNNaammeehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSFName -- field containg a name INHERITS FROMSoField &gt; SoSField &gt; SoSFName DESCRIPTIONA field containing a name. Names are short series of characters generally used for
+
+labels or names, and are stored in a special table designed to allow fast lookup andcomparison. For most purposes, an SoSFString field is probably more appropriate.
+
+SoSFNames are written to file as a string of characters. Names must begin with anunderscore or alphabetic character, and must consist entirely of underscores, alphabetic characters, or numbers. METHODSvoid setValue(const char *string)
+
+Set this field to the name equivalent to the given string. static SoType getClassTypeId()virtual void getTypeId() const
+
+Returns the type for this class or a particular object of this class. const SbName & getValue() constReturns this field's value.
+
+const SbName & operator =(const SbName & newValue)void setValue(const SbName & newValue)
+
+Sets this field to newValue. int operator ==(const SoSFName &f) constint operator !=(const SoSFName &f) const
+
+Returns TRUE if f is of the same type and has the same value as this field. Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+
+569<hr>
+
+SSooSSFFNNaammeehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh INCLUDE FILE#include &lt;Inventor/fields/SoSFName.h&gt;
+
+SEE ALSOSoField, SoSField, SoMFName
+</body>
+</html>

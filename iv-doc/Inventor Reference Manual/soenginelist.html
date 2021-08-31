@@ -1,0 +1,23 @@
+<html>
+<body>
+SSooEEnnggiinneeLLiisstthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoEngineList -- maintains a list of pointers to engines INHERITS FROMSbPList &gt; SoBaseList &gt; SoEngineList DESCRIPTIONThis subclass of SoBaseList holds lists of pointers to SoEngines. It updates reference
+
+counts to engines in the list whenever adding or removing pointers. METHODS SoEngineList()
+
+Constructor.
+
+SoEngineList(int size)Constructor that pre-allocates storage for size pointers.
+
+SoEngineList(const SoEngineList &l)Constructor that copies the contents of another list. ~SoEngineList()Destructor. void append(SoEngine *engine)Adds an engine to the end of the list. SoEngine * operator [ ](int i) constAccesses an element of a list. SoEngineList & operator =(const SoEngineList &l)Copies a list, keeping all reference counts correct. Methods from class SoBaseList:
+
+insert, remove, truncate, copy, set, addReferences
+
+Methods from class SbPList:
+
+find, getLength, operator ==, operator !=
+
+INCLUDE FILE#include &lt;Inventor/SoLists.h&gt;
+
+SEE ALSOSoEngine
+</body>
+</html>

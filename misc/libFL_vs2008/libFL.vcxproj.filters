@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{dd5f7876-ff41-441f-a525-0ce53c46541c}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{2db1972f-b1ca-4b83-976d-0322e1cf4237}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="fl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="flclient.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="flfreetype.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="flclient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="flfreetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

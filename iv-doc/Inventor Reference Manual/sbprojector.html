@@ -1,0 +1,40 @@
+<html>
+<body>
+SbProjector
+<hr>
+<dl>
+<dt>NAME
+<dd>SbProjector -- base class for representing projectors
+
+<dt>INHERITS FROM
+<dd>SbProjector
+
+<dt>DESCRIPTION
+<dd>SbProjector is the base class for all projector classes. Projector classes are used to convert from window space (usually based on the mouse location) into a 3D point. This is done by projecting the window coordinate as a 3D vector onto a geometric function in 3-space, and computing the intersection point. Most projectors actually compute incremental changes and produce incremental rotations and translation as needed. Projectors are used to write 3D interactive manipulators and viewers.
+
+<dt>METHODS
+<dl>
+<dt>virtual SbVec3f <b>project</b>(const SbVec2f &point)
+<dd>Apply the projector using the given point, returning the point in threedimensions that it projects to. The point should be normalized (lie in the range [0.0,1.0]), with (0,0) at the lower-left.
+
+<dt>virtual void <b>setViewVolume</b>(const SbViewVolume &vol)
+<dt>const SbViewVolume & getViewVolume() const
+<dd>Set and get the view volume to use for the projection. This is typically supplied from SoCamera::getViewVolume().
+
+<dt>virtual void <b>setWorkingSpace</b>(const SbMatrix &space)
+<dt>const SbMatrix & getWorkingSpace() const
+<dd>Set and get the transform space to work in. This matrix should transform working space coordinates into world space. The default matrix is identity, meaning that the default working space is world space.
+
+<dt>virtual SbProjector * <b>copy</b>() const
+<dd>Creates and returns an exact copy of the projector.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/projectors/SbProjector.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbcylinderprojector.html">SbCylinderProjector</a>, <a href="sbcylinderplaneprojector.html">SbCylinderPlaneProjector</a>, <a href="sbcylindersectionprojector.html">SbCylinderSectionProjector</a>, <a href="sbcylindersheetprojector.html">SbCylinderSheetProjector</a>, <a href="sblineprojector.html">SbLineProjector</a>, <a href="sbplaneprojector.html">SbPlaneProjector</a>, <a href="sbsphereplaneprojector.html">SbSpherePlaneProjector</a>, <a href="sbsphereprojector.html">SbSphereProjector</a>, <a href="sbspheresectionprojector.html">SbSphereSectionProjector</a>, <a href="sbspheresheetprojector.html">SbSphereSheetProjector</a>
+</dl>
+
+</body>
+</html>

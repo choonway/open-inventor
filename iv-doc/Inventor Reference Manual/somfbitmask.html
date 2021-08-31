@@ -1,0 +1,59 @@
+<html>
+<body>
+SSooMMFFBBiittMMaasskkhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoMFBitMask -- multiple-value field containing any number of masks of bit flags INHERITS FROMSoField &gt; SoMField &gt; SoMFEnum &gt; SoMFBitMask DESCRIPTIONA multiple-value field that contains any number of masks of bit flags, stored as ints.
+
+Nodes or engines that use this field class define mnemonic names for the bit flags.These names should be used when setting or testing the values of the field, even though the values are treated as integers in the methods. The bit-wise &quot;&&quot; and &quot;|&quot; operators should be used when testing and setting flags in amask.
+
+SoMFBitMasks are written to file as one or more mnemonic enumerated typenames, in this format:
+
+( flag1 | flag2 | ... ) If only one flag is used in a mask, the parentheses are optional. These names differamong uses of this field in various node or engine classes. See the reference pages for specific nodes or engines for the names. The field values may also be represented as integers, but this is not guaranteed to beportable.
+
+When more than one value is present, all of the values are enclosed in squarebrackets and separated by commas. METHODSstatic SoType getClassTypeId()
+
+virtual void getTypeId() constReturns the type for this class or a particular object of this class.
+
+int operator [ ](int i) constReturns the i'th value of the field. Indexing past the end of the field (passing
+
+in i greater than getNum()) will return garbage. const int * getValues(int start) constReturns a pointer into the array of values in the field, starting at index start.
+
+The values are read-only; see the startEditing()/finishEditing() methods fora way of modifying values in place.
+
+357<hr>
+
+SSooMMFFBBiittMMaasskkhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+int find(int targetValue, SbBool addIfNotFound = FALSE)Finds the given value in the array and returns the index of that value in the
+
+array. If the value is not found, -1 is returned. If addIfNotFound is set, thentargetValue is added to the end of the array (but -1 is still returned).
+
+void setValues(int start, int num, const int *newValues)Sets num values starting at index start to the values in newValues. The array
+
+will be automatically be made larger to accomodate the new values, ifnecessary.
+
+void set1Value(int index, int newValue)Sets the index'th value in the array to newValue. The array will be
+
+automatically expanded, if necessary. int operator =(int newValue)void setValue(int newValue)
+
+Sets the first value in the array to newValue, and deletes the second andsubsequent values.
+
+int operator ==(const SoMFBitMask &f) constint operator !=(const SoMFBitMask &f) const
+
+Returns TRUE if all of the values of this field equal (do not equal) those ofthe given field. If the fields are different types FALSE will always be returned (even if one field is an SoMFFloat with one value of 1.0 and the other is anSoMFInt with a value of 1, for example).
+
+int * startEditing()void finishEditing()
+
+startEditing() returns a pointer to the internally-maintained array that canbe modified. The values in the array may be changed, but values cannot be added or removed. It is illegal to call any other editing methods betweenstartEditing() and finishEditing() (e.g. set1Value(), setValue(), etc).
+
+Fields, engines or sensors connected to this field and sensors are not notifiedthat this field has changed until finishEditing() is called. Calling finishEditing() always sets the isDefault() flag to FALSE and informsengines and sensors that the field changed, even if none of the values actually were changed. Methods from class SoMField:
+
+getNum, setNum, deleteValues, insertSpace, set1, get1
+
+358 Open Inventor C++ Reference Pages<hr>
+
+SSooMMFFBBiittMMaasskkhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer INCLUDE FILE#include &lt;Inventor/fields/SoMFBitMask.h&gt;
+</body>
+</html>

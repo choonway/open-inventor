@@ -1,0 +1,73 @@
+<html>
+<body>
+SoPendulum
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPendulum -- animated oscillating rotation node
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoTransformation &gt; SoRotation &gt; SoPendulum
+
+<dt>DESCRIPTION
+<dd>The SoPendulum class is derived from SoRotation, so it applies a rotation to the current transformation. Using engines connected to the realTime global field, therotation value is animated over time between two fixed rotations, achieving the effect of a swinging pendulum. The period of the swing can be adjusted by changingthe speed field. The current rotation at any time is available in the rotation field, inherited from SoRotation
+
+<dt>FIELDS
+<dl>
+<dt>SoSFRotation rotation0
+<dt>SoSFRotation rotation1
+<dd>These define the two fixed rotations that are interpolated to create the pendular motion.
+
+<dt>SoSFFloat speed
+<dd>Defines the speed of the pendulum, in cycles per second.
+
+<dt>SoSFBool on
+<dd>Allows applications to enable or disable the motion easily.
+
+<dt>Fields from class SoRotation:
+<dd>rotation
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoPendulum()
+<dd>Creates a pendulum node with default settings. static SoType getClassTypeId()Returns type identifier for this class.
+
+<dt>Methods from class SoNode:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+
+<dd>Concatenates interpolated rotation value with the current transformation matrix.
+
+<dt>SoGetMatrixAction
+<dd>Returns transformation matrix specified by the interpolated rotation.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Pendulum {
+<dd>rotation 0 0 1 3.14159
+<dd>rotation0 0 0 1 3.14159
+<dd>rotation1 0 0 1 3.14159
+<dd>speed 1
+<dd>on TRUE
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoPendulum.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sorotor.html">SoRotor</a>, <a href="soshuttle.html">SoShuttle</a>
+</body>
+</html>

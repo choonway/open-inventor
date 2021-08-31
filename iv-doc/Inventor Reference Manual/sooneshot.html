@@ -1,0 +1,86 @@
+<html>
+<body>
+SoOneShot
+<hr>
+<dl>
+<dt>NAME
+<dt>SoOneShot -- timer that runs for a pre-set amount of time 
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoOneShot
+
+<dt>DESCRIPTION
+<dd>This engine is a timer that runs for a pre-set amount of time and then stops. By default, the timeIn input is connected to the realTime global field. It can, however, by connected to any other time source.
+
+<p>The timer is started when the trigger input is touched. It then runs for the specified duration, and updates the timeOut output with the time that has elapsed. During that time, the ramp output is also updated. The ramp output starts at 0.0 at the beginning of the cycle, and linearly increases until it reaches 1.0 at the end of the cycle. You can disable the timer by setting the disable input to TRUE. The output valueremains 0.0 while the timer is disabled. If the timer is disabled in the middle of a cycle the output values will be set to 0.0. The flags input contains control flags. Using the flags you can set the timer to beretriggerable in the middle of a cycle, and set the output values to stay high after the cycle has been completed. By default, these flags are not set.
+
+<dt>INPUTS
+<dl>
+<dt>SoSFTime timeIn
+<dd>Running time.
+
+<dt>SoSFTime duration
+<dd>Duration of the active cycle.
+
+<dt>SoSFTrigger trigger
+<dd>Start the cycle. The trigger will be ignored if it is touched in the middle of a cycle and the RETRIGGERABLE flag is not set.
+
+<dt>SoSFBitMask flags
+<dd>Control flags.
+
+<dt>SoSFBool disable
+<dd>If TRUE, the timer is disabled.
+
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoSFTime) timeOut
+<dd>Elapsed time from the start.
+
+<dt>(SoSFBool) isActive
+<dd>Is TRUE during the active cycle.
+
+<dt>(SoSFFloat) ramp
+<dd>Ramps linearly from 0.0 to 1.0.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoOneShot()
+<dd>Constructor
+
+<dt>Methods from class SoEngine:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>OneShot {
+<dd>duration 1
+<dd>trigger flags ()
+<dd>disable FALSE
+<dd>timeIn &lt;current time&gt;
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/So.h&gt;
+
+<dl>
+<dt>enum Flags {
+<dd>SoOneShot::RETRIGGERABLE Can start over during the cycle
+<dd>SoOneShot::HOLD_FINAL Output values stay high after cycle
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soelapsedtime.html">SoElapsedTime</a>,  <a href="soengineoutput.html">SoEngineOutput</a>
+</body>
+</html>

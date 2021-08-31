@@ -1,0 +1,111 @@
+<html>
+<body>
+SSooTTaabbPPllaanneeDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoTabPlaneDragger -- object you can translate or scale within a plane by dragging
+
+with the mouse INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoInteractionKit &gt; SoDragger &gt;
+
+SoTabPlaneDragger DESCRIPTIONSoTabPlaneDragger is a dragger which allows the user to interactively translate and
+
+scale in a plane. It looks like a square white outline with smaller green squares (ortabs) set in the corners and along the center of each edge. Dragging a corner tab scales the dragger in 2D by scaling about the opposite corner. Dragging an edge tabperforms 1D scaling about the opposite edge. The rest of the dragger is invisible but pickable; selecting it initiates translation within the plane. The dragger tries to keep the small tabs a constant size in screen space. Every time adrag begins or ends, the size is recalculated based on the viewing and modeling matrix. When dragging the translator part, press the &lt;Shift&gt; key and you can constrainmotion to either the local x axis or the y axis. The direction is determined by your initial mouse gesture after pressing the key. Releasing the key removes theconstraint.
+
+When the translator part drags, the dragger updates its translation field. Thevarious scaling parts cause changes to both the scaleFactor and translation field, since scaling about a point other than the center adds translation to the center ofthe dragger. If you set the field, the dragger will move accordingly. You can also connect fields of other nodes or engines from this one to make them follow thedragger's motion.
+
+You can not change the shape used to draw the tabs. This part is kept privately andmay not be changed; the coordinates for the tabs are edited during adjustScaleTabSize(). The SoTabPlaneDragger class does contain three other parts you can change:tabPlaneTranslator, tabPlaneScaleTabMaterial and tabPlaneScaleTabHints.
+
+Each of these is set by default from a resource described in the Dragger Resourcessection of the online reference page for this class. You can change the parts in any instance of this dragger using setPart().
+
+624 Open Inventor C++ Reference Pages<hr>
+
+SSooTTaabbPPllaanneeDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh You can make your program use different default resources for the parts by copyingthe file /usr/share/data/draggerDefaults/tabPlaneDragger.iv into your own directory, editing the file, and then setting the environment variableSO_DRAGGER_DIR to be a path to that directory.
+
+FIELDS SoSFVec3f scaleFactor
+
+Scale factor affecting the dragger. SoSFVec3f translationPosition of the dragger.
+
+Fields from class SoDragger:
+
+isActive
+
+Fields from class SoInteractionKit:
+
+renderCaching, boundingBoxCaching, renderCulling, pickCulling
+
+PARTS Parts from class SoBaseKit:
+
+callbackList METHODS SoTabPlaneDragger()
+
+Constructor. void adjustScaleTabSize()Cause the scale tab sizes to be re-adjusted so that they remain a near
+
+constant screen space size. This happens automatically upon dragger finish.Call this to adjust the scale tab sizes at other times, for instance after the camera has changed in a viewer finish callback. static const SoNodekitCatalog *getClassNodekitCatalog() const
+
+Returns an SoNodekitCatalog for this class static SoType getClassTypeId()Returns type identifier for this class.
+
+625<hr>
+
+SSooTTaabbPPllaanneeDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+Methods from class SoDragger:
+
+addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback,
+
+addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+Methods from class SoInteractionKit:
+
+setPartAsPath
+
+Methods from class SoBaseKit:
+
+getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+MACROSMacros from class SoBaseKit:
+
+SO_GET_PART, SO_CHECK_PART CATALOG PARTSiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yestranslator Separator -- yes scaleTabMaterial Material -- yesscaleTabHints ShapeHints -- yes iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc
+
+cc
+
+cc cc cc
+
+cc cc
+
+cc cc cc
+
+626 Open Inventor C++ Reference Pages<hr>
+
+SSooTTaabbPPllaanneeDDrraaggggeerrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separatoriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiccc cc cc
+
+cc cc
+
+cc c
+
+FILE FORMAT/DEFAULTSTabPlaneDragger {
+
+renderCaching AUTOboundingBoxCaching AUTO renderCulling AUTOpickCulling AUTO isActive FALSEtranslation 0 0 0 scaleFactor 1 1 1}
+
+INCLUDE FILE#include &lt;Inventor/draggers/SoTabPlaneDragger.h&gt;
+
+SEE ALSOSoInteractionKit, SoDragger, SoCenterballDragger, SoDirectionalLightDragger,
+
+SoDragPointDragger, SoHandleBoxDragger, SoJackDragger, SoPointLightDragger,SoRotateCylindricalDragger, SoRotateDiscDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger,SoScaleUniformDragger, SoSpotLightDragger, SoTabBoxDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger, SoTranslate2Dragger
+</body>
+</html>

@@ -1,0 +1,86 @@
+<html>
+<body>
+    SoSpotLight
+    <hr />
+    <dl>
+        <dt>NAME
+        <dd>SoSpotLight -- node representing a spotlight source
+
+        <dt>INHERITS FROM
+        <dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="solight.html">SoLight</a> &gt; SoSpotLight
+
+        <dt>DESCRIPTION
+        <dd>This node defines a spotlight style light source. A spotlight is placed at a fixed location in 3-space and illuminates in a cone along a particular direction. Theintensity of the illumination drops off exponentially as a ray of light diverges from this direction toward the edges of the cone. The rate of drop-off and the angle of thecone are controlled by the dropOffRate and cutOffAngle fields.
+        <dt>FIELDS</dt>
+        <dd>
+            <dl>
+                <dt>SoSFVec3f location
+                <dd>Location of the source.
+
+                <dt>SoSFVec3f direction
+                <dd>Principal direction of illumination (center axis of cone).
+
+                <dt>SoSFFloat dropOffRate
+                <dd>Rate of intensity drop-off per change in angle from primary direction: 0 = constant intensity, 1 = very sharp drop-off
+
+                <dt>SoSFFloat cutOffAngle
+                <dd>Angle (in radians) outside of which intensity is zero, measured from the center axis of the cone to an edge.
+
+                <dt>Fields from class SoLight:
+                <dd>on, intensity, color
+            </dl>
+        </dd>
+
+        <dt>METHODS</dt>
+        <dd>
+            <dl>
+                <dt><b>SoSpotLight</b>()
+                <dd>Creates a spotlight source node with default settings.
+
+                <dt>static SoType <b>getClassTypeId</b>()
+                <dd>Returns type identifier for this class.
+
+                <dt><b>Methods from class SoNode</b>:
+                <dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+                <dt><b>Methods from class SoFieldContainer</b>:
+                <dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+                <dt><b>Methods from class SoBase</b>:
+                <dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+            </dl>
+        </dd>
+
+        <dt>ACTION BEHAVIOR</dt>
+        <dd>
+            <dl>
+                <dt>SoGLRenderAction
+                <dd>Activates this light (if so specified) during traversal. All shape nodes thatcome after this light in the scene graph are illuminated by this light. The light's location is affected by the current transformation.
+            </dl>
+        </dd>
+
+        <dt>FILE FORMAT/DEFAULTS</dt>
+        <dd>
+            <pre>
+SpotLight {
+    on TRUE
+    intensity 1
+    color 1 1 1
+    location 0 0 1
+    direction 0 0 -1
+    dropOffRate 0
+    cutOffAngle 0.785398
+}
+                    </pre>
+
+
+        </dd>
+
+        <dt>INCLUDE FILE</dt>
+        <dd>#include &lt;Inventor/nodes/SoSpotLight.h&gt;
+
+        <dt>SEE ALSO</dt>
+        <dd><a href="sodirectionallight.html">SoDirectionalLight</a>, <a href="sopointlight.html">SoPointLight</a>
+    </dl>
+</body>
+</html>

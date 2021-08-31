@@ -1,0 +1,47 @@
+<html>
+<body>
+SoSFEnum
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSFEnum -- field containing an enumerated value
+
+<dt>INHERITS FROM
+<dd><a href="sofield.html">SoField</a> &gt; <a href="sosfield.html">SoSField</a> &gt; SoSFEnum
+
+<dt>DESCRIPTION
+<dl>
+<dd>A single-value field that contains an enumerated type value, stored as an integer.
+
+<dd>Nodes that use this field class define mnemonic names for the values. These namesshould be used when setting or testing the values of the field, even though the values are treated as integers in the methods. SoSFEnums are written to file as a mnemonic enumerated type name. The namediffers among uses of this field in various node or engine classes. See the man pages for specific nodes or engines for the names (e.g. SoDrawStyle).
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>void setValue(const SbName &name)
+<dd>Sets this field to contain the given mnemonic name, passed in as a name orstring.
+
+<dt>static SoType getClassTypeId()
+<dt>virtual void getTypeId() const
+<dd>Returns the type for this class or a particular object of this class.
+
+<dt>int getValue() const
+<dd>Returns this field's value.
+
+<dt>int operator =(int newValue)
+<dt>void setValue(int newValue)
+<dd>Sets this field to newValue.
+
+<dt>int operator ==(const SoSFEnum &f) const
+<dt>int operator !=(const SoSFEnum &f) const
+<dd>Returns TRUE if f is of the same type and has the same value as this field.
+
+<dt>Methods from class SoField:
+<dd>setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField, getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</dl>
+
+<dt>SEE ALSO
+<dd>SoField, SoSField, SoMFEnum
+</dl>
+</body>
+</html>

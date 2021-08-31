@@ -1,0 +1,57 @@
+<html>
+<body>
+SoTypeList
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTypeList -- maintains a list of SoTypes
+
+<dt>INHERITS FROM
+<dd><a href="sbplist.html">SbPList</a> &gt; SoTypeList
+
+<dt>DESCRIPTION
+<dd>This subclass of SbPList holds lists of SoType type identifiers.
+
+<dt>METHODS
+<dl>
+
+<dt><b>SoTypeList</b>()
+<dd>Constructor.
+
+<dt><b>SoTypeList</b>(int size)
+<dd>Constructor that pre-allocates storage for size types.
+
+<dt><b>SoTypeList</b>(const SoTypeList &l)
+<dd>Constructor that copies the contents of another list.
+
+<dt><b>~SoTypeList</b>()
+<dd>Destructor.
+
+<dt>void <b>append</b>(SoType type)
+<dd>Adds a type to the end of the list.
+
+<dt>void <b>insert</b>(SoType *type, int addBefore)
+<dd>Inserts given type in list before type with given index.
+
+<dt>void <b>set</b>(int i, SoType *type)
+<dd>Sets an element of a list.
+
+<dt>int <b>find</b>(SoType typeId) const
+<dd>Returns index of given type in list, or -1 if not found.
+
+<dt>SoType <b>operator [ ]</b>(int i) const
+<dd>Accesses an element of a list.
+
+<dt><b>Methods from class SbPList</b>:
+<dd>remove, getLength, truncate, copy, operator =, operator ==, operator !=
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoLists.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotype.html">SoType</a>
+
+</dl>
+</body>
+</html>

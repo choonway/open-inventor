@@ -1,0 +1,28 @@
+<html>
+<body>
+SoInteraction
+<hr>
+<dl>
+<dt>NAME
+<dd>SoInteraction -- initializes Inventor interaction classes
+
+<dt>INHERITS FROM
+<dd>SoInteraction
+
+<dt>DESCRIPTION
+<dd>SoInteraction consists of one static function which initializes all Inventor interaction classes, as well as nodekits and the database. Note thatSoInteraction::init() is already called by SoXt::init().
+
+<dt>METHODS
+<dl>
+<dt>static void <b>init</b>()
+<dd>This calls SoDB::init() and SoNodeKit::init(), calls initClasses() on SoDragger, and calls initClass() on the following classes: SoAntiSquish, SoBoxHighlightRenderAction, SoCenterballManip, SoDirectionalLightManip, SoHandleBoxManip, SoInteractionKit, SoJackManip, SoLineHighlightRenderAction, SoPointLightManip,SoSelection, SoSpotLightManip, SoSurroundScale, SoTabBoxManip, SoTrackballManip, SoTransformBoxManip, and SoTransformManip.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoInteraction.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodb.html">SoDB</a>, <a href="sonodekit.html">SoNodeKit</a>, <a href="soxt.html">SoXt</a>
+</dl>
+</body>
+</html>

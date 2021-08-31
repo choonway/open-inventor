@@ -1,0 +1,45 @@
+<html>
+<body>
+SoLineDetail
+<hr>
+<dl>
+<dt>NAME
+<dd>SoLineDetail -- stores detail information about vertex-based shapes made of line segments
+<dt>INHERITS FROM
+<dd><a href="sodetail.html">SoDetail</a> &gt; SoLineDetail
+
+<dt>DESCRIPTION
+<dd>This class contains detail information about a point on a line segment in a vertexbased shape made of line segments. The information includes the points at the endsof the segment, and the index of the segment within the shape.
+
+<dt>METHODS
+<dl>
+<dt><b>SoLineDetail</b>()
+<dt>virtual ~<b>SoLineDetail</b>()
+<dd>Constructor and destructor.
+
+<dt>const SoPointDetail *<b>getPoint0</b>() const
+<dt>const SoPointDetail *<b>getPoint1</b>() const
+<dd>These return information about the two points forming the end vertices ofthe line segment, represented as an SoPointDetail.
+
+<dt>long <b>getLineIndex</b>() const
+<dd>Returns the index of the line the segment is part of within a shape, such as the third line within an SoLineSet.
+
+<dt>long <b>getPartIndex</b>() const
+<dd>Returns the index of the part containing the line segment within the shape.
+
+<dd>Usually, the part index is the same as the line segment index, such as thefifth segment overall within an SoLineSet.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoDetail</b>:
+<dd>copy, getTypeId, isOfType
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/details/SoLineDetail.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodetail.html">SoDetail</a>, <a href="sopickedpoint.html">SoPickedPoint</a>, <a href="soprimitivevertex.html">SoPrimitiveVertex</a>, <a href="sovertexshape.html">SoVertexShape</a>
+</body>
+</html>

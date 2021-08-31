@@ -1,0 +1,31 @@
+<html>
+<body>
+SSooSSFFMMaattrriixxhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSFMatrix -- field containing a 4x4 matrix INHERITS FROMSoField &gt; SoSField &gt; SoSFMatrix DESCRIPTIONA field containing a transformation matrix (an SbMatrix).
+
+SoSFMatrices are written to file as 16 floating point numbers separated bywhitespace. For example, an identity matrix is written as:
+
+1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+
+METHODSvoid setValue(float a11, float a12, float a13, float a14, float a21, float
+
+a22, float a23, float a24, float a31, float a32, float a33, floata34, float a41, float a42, float a43, float a44) Sets this field to contain the matrix given by the 16 values. For a translationmatrix, the x, y and z translations should be in the a41, a42, and a43 arguments. static SoType getClassTypeId()virtual void getTypeId() const
+
+Returns the type for this class or a particular object of this class. const SbMatrix & getValue() const
+
+Returns this field's value. const SbMatrix & operator =(const SbMatrix & newValue) void setValue(const SbMatrix & newValue)Sets this field to newValue.
+
+int operator ==(const SoSFMatrix &f) constint operator !=(const SoSFMatrix &f) const
+
+Returns TRUE if f is of the same type and has the same value as this field. Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,
+
+567<hr>
+
+SSooSSFFMMaattrriixxhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+enableConnection, isConnectionEnabled, getForwardConnections,getContainer INCLUDE FILE#include &lt;Inventor/fields/SoSFMatrix.h&gt; SEE ALSOSoField, SoSField, SoMFMatrix, SbMatrix
+</body>
+</html>

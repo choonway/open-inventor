@@ -1,0 +1,31 @@
+<html>
+<body>
+SSooSSFFNNooddeehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSFNode -- field containing a pointer to a node INHERITS FROMSoField &gt; SoSField &gt; SoSFNode DESCRIPTIONThis field maintains a pointer to an SoNode instance, correctly maintaining its
+
+reference count. SoSFNodes are written to file as the node they are pointing to. For example:
+
+mySoSFNodeField Cube {} is an SoSFNode field named 'mySoSFNodeField', pointing to an SoCube node. If thenode is used elsewhere, the regular DEF/USE instancing mechanism applies:
+
+anotherSoSFNodeField USE topSeparator is an SoSFNode field that points to a node named 'topSeparator' that was DEF'edearlier in the scene.
+
+METHODSstatic SoType getClassTypeId()
+
+virtual void getTypeId() constReturns the type for this class or a particular object of this class.
+
+SoNode * getValue() constReturns this field's value. SoNode * operator =(SoNode * newValue)void setValue(SoNode * newValue)
+
+Sets this field to newValue. int operator ==(const SoSFNode &f) constint operator !=(const SoSFNode &f) const
+
+Returns TRUE if f is of the same type and has the same value as this field. Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+
+571<hr>
+
+SSooSSFFNNooddeehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh INCLUDE FILE#include &lt;Inventor/fields/SoSFNode.h&gt;
+
+SEE ALSOSoField, SoSField, SoMFNode, SoNode
+</body>
+</html>

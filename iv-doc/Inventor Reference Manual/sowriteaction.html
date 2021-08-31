@@ -1,0 +1,36 @@
+<html>
+<body>
+SoWriteAction
+<hr>
+<dl>
+<dt>NAME
+<dd>SoWriteAction -- Writes a scene graph to a file
+
+<dt>INHERITS FROM
+<dd><a href="soaction.html">SoAction</a> &gt; SoWriteAction
+
+<dt>DESCRIPTION
+<dd>This class is used for writing scene graphs to files. It contains an SoOutput instance that by default writes to the standard output. Methods on the SoOutput can becalled to specify what file or memory buffer to write to.
+
+<dt>METHODS
+<dl>
+<dt><b>SoWriteAction</b>()
+<dd>Constructor.
+
+<dt><b>SoWriteAction</b>(SoOutput *out)
+<dd>Constructor that takes an SoOutput to use for output.
+
+<dt>SoOutput * <b>getOutput</b>() const
+<dd>Returns pointer to SoOutput instance in action.
+
+<dt><b>Methods from class SoAction</b>:
+<dd>apply, apply, apply, getClassTypeId, getTypeId, isOfType, invalidateState
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/actions/SoWriteAction.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sooutput.html">SoOutput</a>
+</body>
+</html>

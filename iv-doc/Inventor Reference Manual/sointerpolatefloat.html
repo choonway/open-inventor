@@ -1,0 +1,62 @@
+<html>
+<body>
+SoInterpolateFloat
+<hr>
+<dl>
+<dt>NAME
+<dd>SoInterpolateFloat -- interpolates floating-point values
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; <a href="sointerpolate.html">SoInterpolate</a> &gt; SoInterpolateFloat
+
+<dt>DESCRIPTION
+<dd>This engine linearly interpolates between two floating-point values, based on the alpha input value. The alpha value should be between 0.0 and 1.0. The input fields can have multiple values, allowing the engine to interpolate several objects in parallel. One of the inputs may have more values than the other. In that case, the last value of the shorter input will be repeated as necessary.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFFloat input0
+<dt>SoMFFloat input1
+<dd>The engine linearly interpolates from input0 to input1.
+
+<dt>Inputs from class SoInterpolate:
+<dd>alpha
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>Outputs from class SoInterpolate:
+<dd>output
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoInterpolateFloat</b>()
+<dd>Constructor.
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>InterpolateFloat {
+<dd>alpha 0
+<dd>input0 0
+<dd>input1 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoInterpolate.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>, <a href="sointerpolaterotation.html">SoInterpolateRotation</a>, <a href="sointerpolatevec2f.html">SoInterpolateVec2f</a>, <a href="sointerpolatevec3f.html">SoInterpolateVec3f</a>, <a href="sointerpolatevec4f.html">SoInterpolateVec4f</a>
+</dl>
+</body>
+</html>

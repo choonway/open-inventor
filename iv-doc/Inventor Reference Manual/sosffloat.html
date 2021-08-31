@@ -1,0 +1,43 @@
+<html>
+<body>
+SoSFFloat
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSFFloat -- field containing a floating-point value
+
+<dt>INHERITS FROM
+<dd>SoField &gt; SoSField &gt; SoSFFloat
+
+<dt>DESCRIPTION
+<dd>A field that contains one single-precision floating point number. SoSFFloats are written to file in standard scientific notation.
+
+<dt>METHODS
+<dl>
+<dt>static SoType getClassTypeId()
+<dt>virtual void getTypeId() const
+<dd>Returns the type for this class or a particular object of this class.
+
+<dt>float getValue() const
+<dd>Returns this field's value.
+
+<dt>float operator =(float newValue)
+<dt>void setValue(float newValue)
+<dd>Sets this field to newValue.
+
+<dt>int operator ==(const SoSFFloat &f) const
+<dt>int operator !=(const SoSFFloat &f) const
+<dd>Returns TRUE if f is of the same type and has the same value as this field.
+
+<dt>Methods from class SoField:
+<dd>setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField, getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoSFFloat.h&gt;
+
+<dt>SEE ALSO
+<dd>SoField, SoSField, SoMFFloat
+</dl>
+</body>
+</html>

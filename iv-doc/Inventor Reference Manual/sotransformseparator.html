@@ -1,0 +1,41 @@
+<html>
+<body>
+SSooTTrraannssffoorrmmSSeeppaarraattoorrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoTransformSeparator -- group node that saves and restores transformation state INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoGroup &gt; SoTransformSeparator DESCRIPTIONThis group node is similar to the SoSeparator node in that it saves state before
+
+traversing its children and restores it afterwards. However, it saves only the currenttransformation; all other state is left as is. This node can be useful for positioning a camera, since the transformations to the camera will not affect the rest of the scene,even through the camera will view the scene. Similarly, this node can be used to isolate transformations to light sources or other objects. METHODS SoTransformSeparator()
+
+Creates a transform separator node with default settings.
+
+SoTransformSeparator(int nChildren)Constructor that takes approximate number of children.
+
+static SoType getClassTypeId()Returns type identifier for this class. Methods from class SoGroup:
+
+addChild, insertChild, getChild, findChild, getNumChildren, removeChild,removeChild, removeAllChildren, replaceChild, replaceChild
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+ACTION BEHAVIORSoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+
+SoGetMatrixAction, SoRayPickActionSaves the current transformation state, traverses all children, and restores
+
+the previous transformation state.
+
+682 Open Inventor C++ Reference Pages<hr>
+
+SSooTTrraannssffoorrmmSSeeppaarraattoorrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh FILE FORMAT/DEFAULTSTransformSeparator {
+
+} INCLUDE FILE#include &lt;Inventor/nodes/SoTransformSeparator.h&gt;
+
+SEE ALSOSoResetTransform, SoTransformation
+</body>
+</html>

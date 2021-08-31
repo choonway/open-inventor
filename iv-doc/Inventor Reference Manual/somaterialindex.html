@@ -1,0 +1,51 @@
+<html>
+<body>
+SSooMMaatteerriiaallIInnddeexxhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoMaterialIndex -- surface material node for color index mode INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoMaterialIndex DESCRIPTIONThis node is used to define surface materials for scenes to be rendered in OpenGL's
+
+color index mode (as opposed to RGB mode). The fields of this node set up indicesinto the current color map for OpenGL lighting. Refer to the OpenGL manuals for lighting information. The application is responsible for setting up a color map thatwill work for lighting.
+
+The index fields have multiple values, and are bound to shapes in the same manneras are the fields of the SoMaterial node. Note that the three index fields should contain the same number of values. When using both SoMaterialIndex and SoMaterial, fields common to the twonodes (that is, shininess and transparency are overridden, but other fields are not. Therefore, it is possible to use both nodes in the same graph. FIELDS SoMFLong ambientIndex
+
+Ambient index(ices) of the surface. SoMFLong diffuseIndexDiffuse index(ices) of the surface.
+
+SoMFLong specularIndexSpecular index(ices) of the surface. SoMFFloat shininessShininess coefficient(s) of the surface. Values can range from 0.0 for no
+
+shininess (a diffuse surface) to 1.0 for maximum shininess (a highly polishedsurface).
+
+SoMFFloat transparencyTransparency value(s) of the surface. Values can range from 0.0 for opaque
+
+surfaces to 1.0 for completely transparent surfaces.
+
+METHODS SoMaterialIndex()
+
+Creates a material index node with default settings.
+
+352 Open Inventor C++ Reference Pages<hr>
+
+SSooMMaatteerriiaallIInnddeexxhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh static SoType getClassTypeId()Returns type identifier for this class. Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+ACTION BEHAVIORSoGLRenderAction, SoCallbackAction
+
+Sets the ambient index, the diffuse index, the specular index, the theshininess, and the transparency of the current material.
+
+FILE FORMAT/DEFAULTSMaterialIndex {
+
+ambientIndex 1diffuseIndex 2 specularIndex 3shininess 0.2 transparency 0}
+
+INCLUDE FILE#include &lt;Inventor/nodes/SoMaterialIndex.h&gt;
+
+SEE ALSOSoColorIndex, SoMaterial, SoMaterialBinding, SoXtRenderArea
+
+353<hr>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<html>
+<body>
+SSooMMFFMMaattrriixxhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoMFMatrix -- multiple-value field containing any number of 4x4 matrices INHERITS FROMSoField &gt; SoMField &gt; SoMFMatrix DESCRIPTIONA multiple-value field that contains any number of 4x4 matrices.
+
+SoMFMatrices are written to file as sets of 16 floating point numbers separated bywhitespace. When more than one value is present, all of the values are enclosed in square brackets and separated by commas; for example, two identity matrices mightbe written as:
+
+[ 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1,1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 ]
+
+METHODSvoid setValue(float a11, float a12, float a13, float a14, float a21, float
+
+a22, float a23, float a24, float a31, float a32, float a33, floata34, float a41, float a42, float a43, float a44) Makes this field contain one and only one value, which is the matrix givenby the 16 values.
+
+static SoType getClassTypeId()virtual void getTypeId() const
+
+Returns the type for this class or a particular object of this class. const SbMatrix & operator [ ](int i) const
+
+Returns the i'th value of the field. Indexing past the end of the field (passingin i greater than getNum()) will return garbage.
+
+const SbMatrix * getValues(int start) constReturns a pointer into the array of values in the field, starting at index start.
+
+The values are read-only; see the startEditing()/finishEditing() methods fora way of modifying values in place.
+
+int find(const SbMatrix & targetValue, SbBool addIfNotFound =FALSE)
+
+Finds the given value in the array and returns the index of that value in thearray. If the value is not found, -1 is returned. If addIfNotFound is set, then targetValue is added to the end of the array (but -1 is still returned).
+
+374 Open Inventor C++ Reference Pages<hr>
+
+SSooMMFFMMaattrriixxhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh void setValues(int start, int num, const SbMatrix *newValues)Sets num values starting at index start to the values in newValues. The array
+
+will be automatically be made larger to accomodate the new values, ifnecessary.
+
+void set1Value(int index, const SbMatrix & newValue)Sets the index'th value in the array to newValue. The array will be
+
+automatically expanded, if necessary. const SbMatrix & operator =(const SbMatrix & newValue) void setValue(const SbMatrix & newValue)Sets the first value in the array to newValue, and deletes the second and
+
+subsequent values. int operator ==(const SoMFMatrix &f) constint operator !=(const SoMFMatrix &f) const
+
+Returns TRUE if all of the values of this field equal (do not equal) those ofthe given field. If the fields are different types FALSE will always be returned (even if one field is an SoMFFloat with one value of 1.0 and the other is anSoMFInt with a value of 1, for example).
+
+SbMatrix * startEditing()void finishEditing()
+
+startEditing() returns a pointer to the internally-maintained array that canbe modified. The values in the array may be changed, but values cannot be added or removed. It is illegal to call any other editing methods betweenstartEditing() and finishEditing() (e.g. set1Value(), setValue(), etc).
+
+Fields, engines or sensors connected to this field and sensors are not notifiedthat this field has changed until finishEditing() is called. Calling finishEditing() always sets the isDefault() flag to FALSE and informsengines and sensors that the field changed, even if none of the values actually were changed. Methods from class SoMField:
+
+getNum, setNum, deleteValues, insertSpace, set1, get1
+
+375<hr>
+
+SSooMMFFMMaattrriixxhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer INCLUDE FILE#include &lt;Inventor/fields/SoMFMatrix.h&gt;
+</body>
+</html>

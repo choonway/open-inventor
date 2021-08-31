@@ -1,0 +1,44 @@
+<html>
+<body>
+<p>SbCylinderSheetProjector
+<hr>
+<dl>
+<dt>NAME
+<dd>SbCylinderSheetProjector -- cylinder-sheet projector
+
+<dt>INHERITS FROM
+<dd><a href="sbprojector.html">SbProjector</a> &gt; <a href="sbcylinderprojector.html">SbCylinderProjector</a> &gt; SbCylinderSheetProjector
+
+<dt>DESCRIPTION
+<dd>SbCylinderSheetProjector projects a window space point (usually based on the mouse location) onto the surface of a cylinder with a hyperbolic sheet draped overit. This allows smooth transitions onto and off of the cylinder. Two projected points can produce a rotation along the cylinder's axis. When the mouse position projectson to the sheet, the rotations will be as if the sheet is being dragged, causing the cylinder to roll beneath it. Incremental changes (delta rotation) can be computed during interactive sessions.Cylinder projectors are typically used to write interactive 3D manipulators and viewers.
+
+<dt>METHODS
+<dl>
+<dt><b>SbCylinderSheetProjector</b>(SbBool orientToEye = TRUE)
+<dt><b>SbCylinderSheetProjector</b>(const SbCylinder &amp;cyl, SbBoolorientToEye = TRUE)
+<dd>Constructors. The first uses a default cylinder aligned with the Y axis withradius 1.0; the cylinder is supplied in the second. The orientToEye parameter determines whether the sheet is perpendicular to the eye, orperpendicular to the cylinder's Z axis. Setting that parameter to TRUE (the default) specifies that the plane be perpendicular to the eye, which is mostoften the desired behavior.
+
+<dd>The default view volume is undefined, and the working space is identity.
+
+<dt>~<b>SbCylinderSheetProjector</b>()
+<dd>Destructor.
+
+<dt><b>Methods from class SbCylinderProjector</b>:
+
+<dd>projectAndGetRotation, getRotation, setCylinder, getCylinder,setOrientToEye, isOrientToEye, setFront, isFront, isPointInFront
+
+<dt><b>Methods from class SbProjector</b>:
+
+<dd>project, setViewVolume, getViewVolume, setWorkingSpace,getWorkingSpace, copy
+
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/projectors/SbCylinderSheetProjector.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbcylindersectionprojector.html">SbCylinderSectionProjector</a>, <a href="sbcylinderplaneprojector.html">SbCylinderPlaneProjector</a>, <a href="sblineprojector.html">SbLineProjector</a>, <a href="sbplaneprojector.html">SbPlaneProjector</a>, <a href="sbsphereplaneprojector.html">SbSpherePlaneProjector</a>, <a href="sbsphereprojector.html">SbSphereProjector</a>, <a href="sbspheresectionprojector.html">SbSphereSectionProjector</a>, <a href="sbspheresheetprojector.html">SbSphereSheetProjector</a>
+</dl>
+
+</body>
+</html>

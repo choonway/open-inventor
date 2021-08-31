@@ -1,0 +1,21 @@
+<html>
+<body>
+SSooFFiieellddLLiisstthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoFieldList -- maintains a list of pointers to fields INHERITS FROMSbPList &gt; SoFieldList DESCRIPTIONThis subclass of SbPList holds lists of pointers to instances of classes derived from
+
+SoField. METHODS SoFieldList()
+
+Constructor.
+
+SoFieldList(int size)Constructor that pre-allocates storage for size pointers.
+
+SoFieldList(const SoFieldList &l)Constructor that copies the contents of another list. ~SoFieldList()Destructor. void append(SoField *ptr)Adds a pointer to the end of the list. void insert(SoField *ptr, int addBefore)Inserts given pointer in list before pointer with given index. SoField * operator [ ](int i) constAccesses an element of a list. void set(int i, SoField *field)Sets an element of a list. Methods from class SbPList:
+
+find, remove, getLength, truncate, copy, operator =, operator ==, operator !=
+
+INCLUDE FILE#include &lt;Inventor/SoLists.h&gt;
+
+SEE ALSOSoField
+
+257<hr>
+</body>
+</html>

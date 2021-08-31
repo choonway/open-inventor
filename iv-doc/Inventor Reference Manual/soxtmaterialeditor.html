@@ -1,0 +1,43 @@
+<html>
+<body>
+SSooXXttMMaatteerriiaallEEddiittoorrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoXtMaterialEditor -- Component which lets you edit a material interactively INHERITS FROMSoXtComponent &gt; SoXtMaterialEditor DESCRIPTIONThis class is used to edit the material properties of an SoMaterial node. The editor
+
+can also directly be used using callbacks instead of attaching it to a node. Thecomponent consists of a render area displaying a test sphere, some sliders, a set of radio buttons, and a menu. The sphere displays the current material being edited.There is one slider for each material coefficient. Those fields are ambient, diffuse, specular, emissive (all of which are colors); and transparency and shininess (whichare scalar values). A color editor can be opened to edit the color slider base color. A material list displays palettes of predefined materials from which to choose. The editor can currently be attached to only one material at a time. Attaching twodifferent materials will automatically detach the first one before attaching the second. METHODS SoXtMaterialEditor(Widget parent = NULL, const char *name
+
+= NULL, SbBool buildInsideParent = TRUE)~SoXtMaterialEditor() Constructor and destructor. void attach(SoMaterial *material, int index = 0)void detach()
+
+Attach/detach the editor to a material node and edit the material of thegiven index.
+
+SbBool isAttached()Returns TRUE if the editor is attached. void addMaterialChangedCallback(SoXtMaterialEditorCB *f, void*userData = NULL) void removeMaterialChangedCallback(SoXtMaterialEditorCB *f,void *userData = NULL)
+
+Additional way of using the material editor, by registering a callback whichwill be called whenever the material changes (check the UpdateFrequency to find when the callbacks will be called).
+
+737<hr>
+
+SSooXXttMMaatteerriiaallEEddiittoorrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+void setUpdateFrequency(SoXtMaterialEditor::UpdateFrequencyfreq) SoXtMaterialEditor::UpdateFrequencygetUpdateFrequency()
+
+Sets/gets the update frequency. See the UpdateFrequency enum declaration. void setMaterial(const SoMaterial &mtl)const SoMaterial &
+
+getMaterial() constSet a new material value, and get the current material value.
+
+Methods from class SoXtComponent:
+
+show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle,
+
+getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+
+INCLUDE FILE#include &lt;Inventor/Xt/SoXtMaterialEditor.h&gt;
+
+typedef void SoXtMaterialEditorCB(void *userData, const SoMaterial *mtl) enum UpdateFrequency {SoXtMaterialEditor::CONTINUOUS
+
+send updates with every mouse motionSoXtMaterialEditor::AFTER_ACCEPT only send updates after user hits accept button}
+
+RESOURCES *SoXtMaterialEditor.tile1Color: #4c4c4c (color name or hex value)
+
+*SoXtMaterialEditor.tile2Color: #999999 (color name or hex value)*SoXtMaterialEditor.light1Color: white (color name or hex value) *SoXtMaterialEditor.light2Color: white (color name or hex value)*SoXtMaterialEditor.updateFrequency: continuous (continuous | manual)
+
+SEE ALSOSoXtComponent, SoXtMaterialList, SoXtDirLightEditor, SoMaterial
+</body>
+</html>

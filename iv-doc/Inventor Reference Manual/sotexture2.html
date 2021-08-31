@@ -1,0 +1,89 @@
+<html>
+<body>
+SoTexture2
+<hr>
+<dl>
+<dt>NAME
+<dd>SoTexture2 -- texture mapping node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoTexture2
+
+<dt>DESCRIPTION
+<dd>This property node defines a texture map and parameters for that map. This map is used to apply texture to subsequent shapes as they are rendered. The texture can be read from the file specified by the filename field. Once the texture has been read, the image field contains the texture data. However, this field is marked so the image is not written out when the texture node is written to a file.To turn off texturing, set the filename field to an empty string (&quot;&quot;).
+
+<p>Textures can also be specified in memory by setting the image field to contain the texture data. Doing so resets the filename to the empty string. The quality of the texturing is affected by the textureQuality field of theSoComplexity node. The textureQuality field affects what kind of filtering is done to the texture when it must be minified or magnified. If the texture image's width or height is not a power of 2, then the image will beautomatically scaled to the next higher power of 2 before being given to OpenGL, since OpenGL only handles images with dimensions that are powers of 2. This automatic scaling can cause suprising results, especially for small images, since the pixels are linearly interpolated to produce the larger image.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFString filename
+<dd>Names file from which to read texture image. Currently only SGI .rgb files are supported. If the filename is not an absolute path name, the list of directories maintained by SoInput is searched. If the texture is not found inany of those directories, then the file is searched for relative to the directory from which the SoTexture2 node was read. For example, if an SoTexture2node with a filename of &quot;../tofu.rgb&quot; is read from /usr/people/bob/models/food.iv, then /usr/people/bob/tofu.rgb will be read(assuming tofu.rgb isn't found in the directories maintained by SoInput).
+
+<dt>SoSFImage image
+<dd>Contains an in-memory representation of the texture map. It is either the contents of the file read from filename, an image read directly from anInventor file, or an image set programmatically using the methods provided by SoSFImage.
+
+<dt>SoSFEnum wrapS
+<dt>SoSFEnum wrapT
+<dd>Indicates what to do when texture coordinates in the S (horizontal) or T(vertical) direction lie outside the range 0-1.
+
+<dt>SoSFEnum model
+<dd>Specifies how to map texture onto surface.
+
+<dt>SoSFColor blendColor
+<dd>Color used for BLEND model.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoTexture2</b>()
+<dd>Creates a texture node with default settings. static SoType getClassTypeId()Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction
+<dd>Sets current texture in state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Texture2 {
+<dd>filename &quot;&quot;
+<dd>image 0 0 0
+<dd>wrapS REPEAT
+<dd>wrapT REPEAT
+<dd>model MODULATE
+<dd>blendColor 0 0 0 
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoTexture2.h&gt;
+
+<dl>
+<dt>enum Model {
+<dd>SoTexture2::MODULATE The texture color is multiplied by the surface color
+<dd>SoTexture2::DECAL The texture color replaces the surface color
+<dd>SoTexture2::BLEND Blends between the surface color and a specified blend color
+<dt>}
+
+<dt>enum Wrap {
+<dd>SoTexture2::REPEAT Repeats texture outside 0-1 texture coordinate range
+<dd>SoTexture2::CLAMP Clamps texture coordinates to lie within 0-1 range
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="socomplexity.html">SoComplexity</a>, <a href="somaterial.html">SoMaterial</a>, <a href="sotexture2transform.html">SoTexture2Transform</a>, <a href="sotexturecoordinate2">SoTextureCoordinate2</a>, <a href="sotexturecoordinatebinding.html">SoTextureCoordinateBinding</a>, <a href="sotexturecoordinatefunction.html">SoTextureCoordinateFunction</a>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<html>
+<body>
+<h2>SoMultipleCopy</h2>
+<hr>
+
+<dl>
+<dt>NAME
+<dd>SoMultipleCopy -- group node that traverses multiple times, applying matrices
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoGroup &gt; SoMultipleCopy
+
+<dt>DESCRIPTION
+<dd>This group node traverses its children, in order, several times, applying a different 
+
+matrix each time. The matrices are stored in the multiple-value matrix field. Each matrix is concatenated to the current transformation matrix, and all of the children are traversed. This allows the user to put multiple copies of the same data indifferent locations easily and efficiently. 
+
+Traversing the Nth child sets the current switch value to N, for use with inherited switch values (see SoSwitch).
+
+<dt>FIELDS
+<dl>
+<dt>SoMFMatrix matrix
+<dd>
+
+Set of matrices to apply to children.
+</dl>
+
+
+<dt>METHODS
+<dl>
+<dt>SoMultipleCopy()
+<dd>
+
+Creates a multiple copy node with default settings.
+
+<dt>static SoType getClassTypeId()
+<dd>Returns type identifier for this class.
+
+
+<dt>
+Methods from class SoGroup:
+
+<dd>
+addChild, insertChild, getChild, findChild, getNumChildren, removeChild,removeChild, removeAllChildren, replaceChild, replaceChild
+
+
+
+<dt>Methods from class SoNode:
+
+<dd>
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+
+
+<dt>Methods from class SoFieldContainer:
+
+
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>
+
+Methods from class SoBase:
+
+<dd>
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+
+SoRayPickAction
+<dd>Traverses all children for each matrix, saving and restoring state before and 
+
+after each traversal.
+<dt>SoSearchAction
+<dd>Traverses all children once, setting the inherited switch value to
+
+ SO_SWITCH_ALL first.
+</dl>
+
+<dt>
+
+FILE FORMAT/DEFAULTS
+<dl>
+<dt>MultipleCopy {
+
+
+<dd>matrix
+<DD>1 0 0 0
+<dd>0 1 0 0
+
+
+<dd>0 0 1 0
+<dd>0 0 0 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoMultipleCopy.h&gt;
+
+
+<dt>SEE ALSO
+<dd><a href="soarray.html">SoArray</a>, <a href="soswitch.html">SoSwitch</a>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<html>
+<body>
+SoEnvironment
+<hr>
+<dl>
+<dt>NAME
+<dd>SoEnvironment -- global environment node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoEnvironment
+
+<dt>DESCRIPTION
+<dd>This node describes global environmental attributes such as ambient lighting, light attenuation, and fog. Ambient lighting is the amount of extra light impinging on each surface point when the lighting model is Phong (see SoLightModel).
+
+<p>Light attenuation affects all subsequent lights in a scene (see SoLight). It is aquadratic function of distance from a light source to a surface point. The three coefficients are specified in the attenuation field. Attenuation works only for lightsources with a fixed location, such as point and spot lights.
+
+<p>Fog has one of four types, each of which blends each surface point with thespecified fog color. Each type interprets the visibility field to be the distance at which fog totally obscures objects. A visibility value of 0 (the default) causes theSoEnvironment node to set up fog so that the visibility is the distance to the far clipping plane of the current camera. Note that this node has effect only during rendering, and that it does not inheritfield values from other SoEnvironment nodes.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFFloat ambientIntensity
+<dt>SoSFColor ambientColor
+<dd>Intensity and RGB color of ambient lighting (for Phong lighting).
+
+<dt>SoSFVec3f attenuation
+<dd>Squared, linear, and constant light attenuation coefficients (in that order) with respect to distance of light from surface (for Phong lighting).
+
+<dt>SoSFEnum fogType
+<dt>SoSFColor fogColor
+<dt>SoSFFloat fogVisibility
+<dd>Type of fog, color of fog, and visibility distance, which is the distance atwhich fog totally obscures objects.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoEnvironment</b>()
+<dd>Creates an environment node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Sets the current environment parameters to those specified with this node.Successive geometries will be rendered using this environment.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Environment {
+<dd>ambientIntensity 0.2
+<dd>ambientColor 1 1 1
+<dd>attenuation 0 0 1
+<dd>fogType NONE
+<dd>fogColor 1 1 1
+<dd>fogVisibility 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE#include &lt;Inventor/nodes/SoEnvironment.h&gt;
+
+<dl>enum FogType {
+<dt>SoEnvironment::NONE No fog
+<dt>SoEnvironment::HAZE Linear increase in opacity with distance
+<dt>SoEnvironment::FOG Exponential increase in opacity
+<dt>SoEnvironment::SMOKE Exponential squared increase in opacity
+</dl>}
+
+<dt>SEE ALSO
+<dd><a href="solight.html">SoLight</a>, <a href="solightmodel.html">SoLightModel</a>
+
+</body>
+</html>

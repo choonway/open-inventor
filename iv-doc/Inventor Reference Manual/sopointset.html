@@ -1,0 +1,82 @@
+<html>
+<body>
+SoPointSet
+<hr>
+<dl>
+<dt>NAME
+<dd>SoPointSet -- point set shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; <a href="sovertexshape.html">SoVertexShape</a> &gt; <a href="sononindexedshape.html">SoNonIndexedShape</a> &gt; SoPointSet
+
+<dt>DESCRIPTION
+<dd>This node represents a set of points located at the current coordinates. SoPointSet uses the current coordinates in order, starting at the index specified by thestartIndex field. The number of points in the set is specified by the numPoints field. A value of SO_POINT_SET_USE_REST_OF_POINTS (-1) for this field indicatesthat all remaining values in the current coordinates are to be used as points.
+
+<p>The coordinates of the point set are transformed by the current cumulativetransformation. The points are drawn with the current light model and drawing style (drawing styles FILLED and LINES are treated as POINTS). Treatment of the current material and normal binding is as follows:
+<dl>
+<dd>PER_PART, PER_FACE, and PER_VERTEX bindings bind one material or normal to each point.
+<dd>The DEFAULT material binding is equal to OVERALL.
+<dd>The DEFAULT normal bindingis equal to PER_VERTEX.
+</dl>
+
+<p>The startIndex is also used for materials, normals, or texture coordinates when the binding indicates that they should be used per vertex. If the current complexity value is less than 0.5, some points will be skipped during rendering.
+</dl>
+
+<dt>FIELDS
+<dl>
+<dt>SoSFLong numPoints
+<dd>Number of points.
+
+<dt>Fields from class SoNonIndexedShape:
+<dd>startIndex
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoPointSet</b>()
+<dd>Creates a point set node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws points based on the current coordinates, normals, materials, drawingstyle, and so on.
+
+<dt>SoRayPickAction
+<dd>Picks points based on the current coordinates and transformation. Details about the intersection are returned in an SoPointDetail.
+
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses all points in the set with the current transformation applied to them. Sets the center to the average of the coordinates of all points.
+
+<dt>SoCallbackAction
+<dd>If any point callbacks are registered with the action, they will be invoked for each point in the set.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>PointSet {
+<dd>startIndex 0
+<dd>numPoints -1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoPointSet.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socoordinate3.html">SoCoordinate3</a>, <a href="sodrawstyle.html">SoDrawStyle</a>, <a href="soindexedpointset.html">SoIndexedPointSet</a>, <a href="sopointdetail.html">SoPointDetail</a>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<html>
+<body>
+SoDecomposeVec3f
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDecomposeVec3f -- decomposes 3D vectors into floating-point values
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoDecomposeVec3f
+
+<dt>DESCRIPTION
+<dd>This engine takes as input a 3D vector, and decomposes it into three single floatingpoint values. The input can have multiple values, allowing the engine to decompose severalvectors in parallel.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFVec3f vector
+<dd>Vector to be decomposed.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFFloat) x
+<dd>First component of the vector.
+<dt>SoMFFloat) y
+<dd>Second component of the vector.
+<dt>(SoMFFloat) z
+<dd>Third component of the vector.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoDecomposeVec3f()
+<dd>Constructor
+
+<dt>Methods from class SoEngine:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>DecomposeVec3f {
+<dd>vector 0 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCompose.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socomposevec3f.html">SoComposeVec3f</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+
+</body>
+</html>

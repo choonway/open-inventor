@@ -1,0 +1,41 @@
+<html>
+<body>
+SSooIInntteerrppoollaatteeVVeecc33ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoInterpolateVec3f -- interpolates 3D floating-point vectors INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoInterpolate &gt; SoInterpolateVec3f DESCRIPTIONThis engine linearly interpolates between two 3D vectors, based on the alpha input
+
+value. The alpha value should be between 0.0 and 1.0. The input fields can have multiple vectors, allowing the engine to interpolateseveral objects in parallel. One of the inputs may have more values than the other. In that case, the last value of the shorter input will be repeated as necessary. INPUTS SoMFVec3f input0
+
+SoMFVec3f input1The engine linearly interpolates from input0 to input1.
+
+Inputs from class SoInterpolate:
+
+alpha
+
+OUTPUTSOutputs from class SoInterpolate:
+
+output METHODS SoInterpolateVec3f()
+
+Constructor. Methods from class SoEngine:
+
+getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+315<hr>
+
+SSooIInntteerrppoollaatteeVVeecc33ffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh FILE FORMAT/DEFAULTSInterpolateVec3f {
+
+alpha 0input0 0 0 0 input1 0 0 0}
+
+INCLUDE FILE#include &lt;Inventor/engines/SoInterpolate.h&gt;
+
+SEE ALSOSoEngineOutput, SoInterpolateFloat, SoInterpolateRotation, SoInterpolateVec2f,
+
+SoInterpolateVec4f
+</body>
+</html>

@@ -1,0 +1,84 @@
+<html>
+<body>
+<p>SoText2
+<hr>
+<dl>
+<dt>NAME
+<dd>SoText2 -- screen-aligned 2D text shape node
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soshape.html">SoShape</a> &gt; SoText2
+
+<dt>DESCRIPTION
+<dd>This node defines one or more strings of 2D text. The text is always aligned horizontally with the screen and does not change size with distance in a perspectiveprojection. The text origin is at (0,0,0) after applying the current transformation. Rotations and scales have no effect on the orientation or size of 2D text, just thelocation.
+
+<p>SoText2 uses the current font to determine the typeface and size. The text is alwaysdrawn with the diffuse color of the current material; it is not lit, regardless of the lighting model. Furthermore, 2D text can not be textured, and it ignores the currentdrawing style and complexity.
+
+<p>Because 2D text is screen-aligned, it has some unusual characteristics. For example,the 3D bounding box surrounding a 2D text string depends on the current camera and the current viewport size, since changing the field of view or the mapping ontothe window changes the relative size of the text with respect to the rest of the scene. This has implications for caching as well, since a render cache in an SoSeparatorthat contains an SoText2 node depends on the current camera.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFString string
+<dd>The text string(s) to display. Each string will appear on its own line.
+
+<dt>SoSFFloat spacing
+<dd>Defines the distance (in the negative y direction) between the base points of successive strings, measured with respect to the current font height. A valueof 1 indicates single spacing, a value of 2 indicates double spacing, and so on.
+
+<dt>SoSFEnum justification
+<dd>Indicates placement and alignment of strings. With LEFT justification, the left edge of the first line is at the (transformed) origin, and all left edges arealigned. RIGHT justification is similar. CENTER justification places the center of the first string at the (transformed) origin, with the centers of all remaining strings aligned under it.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoText2</b>()
+<dd>Creates a 2D text node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction
+<dd>Draws text based on the current font, at a location based on the currenttransformation.
+<dt>SoRayPickAction
+<dd>Performs a pick on the text. Text will be picked if the picking ray intersects the bounding box of the strings. The string index and character position are available from the SoTextDetail.
+<dt>SoGetBoundingBoxAction
+<dd>Computes the bounding box that encloses the text.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Text2 {
+<dd>string &quot;&quot;
+<dd>spacing 1
+<dd>justification LEFT
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoText2.h&gt;
+
+<dl>
+<dt>enum Justification {
+<dd>SoText2::LEFT Left edges of all strings are aligned
+<dd>SoText2::RIGHT Right edges of all strings are aligned
+<dd>SoText2::CENTER Centers of all strings are aligned
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="sofont.html">SoFont</a>, <a href="sotext3.html">SoText3</a>, <a href="sotextdetail.html">SoTextDetail</a>
+</dl>
+
+</body>
+</html>

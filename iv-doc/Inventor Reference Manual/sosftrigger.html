@@ -1,0 +1,46 @@
+<html>
+<body>
+SoSFTrigger
+<hr>
+<dl>
+<dt>NAME SoSFTrigger -- field used to trigger engines or connection networks
+
+<dt>INHERITS FROMSoField &gt; SoSField &gt; SoSFTrigger
+
+<dt>DESCRIPTION
+<dd>This class can be used to start or to synchronize a network of field connections. It is the &quot;null&quot; field -- a field with no values. It is typically used as the &quot;start button&quot; forengines that change over time.<br>
+
+Triggers can be connected from any other type of field, and will notify any enginesor nodes they are part of (or any other triggers they are connected to) whenever the value of the field changes or the field is touch()'ed. Since they have no value, SoSFTriggers are not written to file. A node or enginecontaining an SoSFTrigger field will write only the field's name.
+
+<dt>METHODS
+<dl>
+<dt>void setValue()
+<dd>Starts the notification process; this is equivalent to calling touch().
+
+<dt>void getValue()
+<dd>Forces any connected engines or fields to evaluate themselves.
+
+<dt>int operator ==(const SoSFTrigger &t) const
+<dt>int operator !=(const SoSFTrigger &t) const
+<dd>All trigger fields are equal; these methods always return TRUE and FALSE,respectively.
+
+<dt>Methods from class SoSField:
+
+<dd>getClassTypeId
+
+<dt>Methods from class SoField:
+
+<dd>setIgnored, isIgnored, isDefault, getTypeId, isOfType, set, get, touch,connectFrom, connectFrom, disconnect, isConnected,
+
+isConnectedFromField, getConnectedField, isConnectedFromEngine,getConnectedEngine, enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoSFTrigger.h&gt;
+
+<dt>SEE ALSO
+<dd>SoSFBool, SoMFBool
+</dl>
+
+</body>
+</html>

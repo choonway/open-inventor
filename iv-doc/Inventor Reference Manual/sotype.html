@@ -1,0 +1,64 @@
+<html>
+<body>
+SoType
+<hr>
+<dl>
+<dt>NAME
+<dd>SoType -- stores runtime type information
+
+<dt>INHERITS FROM
+<dd>SoType
+
+<dt>DESCRIPTION
+<dd>The SoType class keeps track of runtime type information in Inventor. Each type is associated with a given name, so lookup is possible in either direction. Many Inventor classes request a unique SoType when they are initialized. This typecan then be used to find out the actual class of an instance when only its base class is known, or to obtain an instance of a particular class given its type or name. Note that the names associated with types of Inventor classes do not contain the&quot;So&quot; prefix.
+
+<dt>METHODS
+<dl>
+<dt>static SoType <b>fromName</b>(SbName name)
+<dd>Returns the type associated with the given name.
+
+<dt>SbName <b>getName</b>() const
+<dd>Returns the name associated with a type.
+
+<dt>SoType <b>getParent</b>() const
+<dd>Returns the type of the parent class.
+
+<dt>static SoType <b>badType</b>()
+<dd>Returns an always-illegal type. Useful for returning errors.
+
+<dt>SbBool isBad() const
+<dd>Returns TRUE if the type is a bad type.
+
+<dt>SbBool <b>isDerivedFrom</b>(SoType t) const
+<dd>Returns TRUE if the type is derived from type t.
+
+<dt>static int <b>getAllDerivedFrom</b>(SoType type, SoTypeList &list)
+<dd>Adds all types derived from the given type to the given type list. Returns the number of types added.
+
+<dt>SbBool <b>canCreateInstance</b>() const
+<dd>Some types are able to create instances; for example, most nodes and engines (those which are not abstract classes) can be created this way. Thismethod returns TRUE if the type supports such creation.
+
+<dt>void * <b>createInstance</b>() const
+<dd>Creates and returns a pointer to an instance of the type. Returns NULL if an instance could not be created for some reason. The pointer is returned as ageneric pointer, but can be cast to the appropriate type.
+<dl>
+<dt>For example:
+<dd>SoCube *c = (SoCube *) SoCube::getClassTypeId().createInstance();
+<dt>is a convoluted way of creating a new instance of an SoCube.
+</dl>
+
+<dt>int <b>operator ==</b>(const SoType t) const
+<dt>int <b>operator !=</b>(const SoType t) const
+<dd>Returns TRUE if this type is the same as or not the same as the given type. 
+<dt>int <b>operator &lt;</b>(const SoType t) const
+<dd>Less-than comparison operator that can be used to sort types. This is pretty useless otherwise.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SoType.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soaction.html">SoAction</a>, <a href="sobase.html">SoBase</a>, <a href="sodetail.html">SoDetail</a>, <a href="soerror.html">SoError</a>, <a href="soevent.html">SoEvent</a>, <a href="sofield.html">SoField</a>
+</dl>
+
+</body>
+</html>

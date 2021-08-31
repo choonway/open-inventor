@@ -1,0 +1,2 @@
+SoNurbs.cxx
+SoAddPrefix.h ???

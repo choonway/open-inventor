@@ -1,0 +1,91 @@
+<html>
+<body>
+SoWrapperKit
+<hr>
+<dl>
+<dt>NAME
+<dd>SoWrapperKit -- wrapper nodekit class
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoSeparatorKit &gt; SoWrapperKit 
+
+<dt>DESCRIPTION
+<dd>SoWrapperKit is derived from SoSeparatorKit. It adds the capability to wrap an arbitrary scene graph, (non-nodekit), within an SoSeparatorKit, so that it may beused along with other shape kits in a hierarchy. There are two additional parts included in SoWrapperKit: localTransform and contents. The part contents is an SoSeparator node beneath which any arbitrary scene graphcan be added. This is especially useful for importing scene graphs of unknown structure (non-nodekits) into nodekit format. Since an SoWrapperKit is a class descended from SoSeparatorKit, it may be putinto another SoSeparatorKit's childList.
+
+FIELDS Fields from class SoSeparatorKit:
+
+renderCaching, boundingBoxCaching, renderCulling, pickCulling PARTS (SoTransform) localTransform
+
+This part is an SoTransform node that is used to affect the scene graphdefined in contents part. This part is NULL by default and is automatically created if requested. (SoSeparator) contentsThis part is an SoSeparator node that contains a user-supplied scene graph.
+
+This scene graph can contain any nodes. This part is NULL by default and anSoSeparatoir is automatically created if the user asks the nodekit to build the part. Parts from class SoSeparatorKit:
+
+pickStyle, appearance, units, transform, texture2Transform, childList
+
+Parts from class SoBaseKit:
+
+callbackList
+
+706 Open Inventor C++ Reference Pages<hr>
+
+SSooWWrraappppeerrKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh METHODS SoWrapperKit()
+
+Constructor. static const SoNodekitCatalog *getClassNodekitCatalog() const
+
+Returns an SoNodekitCatalog for the class SoWrapperKit. static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoBaseKit:
+
+getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+MACROSMacros from class SoBaseKit:
+
+SO_GET_PART, SO_CHECK_PART
+
+707<hr>
+
+SSooWWrraappppeerrKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh CATALOG PARTSiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yespickStyle PickStyle -- yes appearance AppearanceKit -- yesunits Units -- yes transform Transform -- yestexture2Transform Texture2Transform -- yes childList NodeKitListPart -- yeslocalTransform Transform -- yes contents Separator -- yesiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc cc cc cc cc
+
+cc cc
+
+cc cc cc cc cc cc
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separator ShapeKit, SeparatorKitchildList Separatoriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc
+
+cc cc
+
+cc cc
+
+FILE FORMAT/DEFAULTSWrapperKit {
+
+renderCaching AUTOboundingBoxCaching AUTO renderCulling AUTOpickCulling AUTO } INCLUDE FILE#include &lt;Inventor/nodekits/SoWrapperKit.h&gt;
+
+SEE ALSOSoAppearanceKit, SoBaseKit, SoCameraKit, SoLightKit, SoNodeKit, SoNodeKitDetail,
+
+SoNodeKitListPart, SoNodeKitPath, SoNodekitCatalog, SoSceneKit, SoSeparatorKit,SoShapeKit
+</body>
+</html>

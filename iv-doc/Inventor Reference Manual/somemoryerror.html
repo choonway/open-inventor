@@ -1,0 +1,34 @@
+<html>
+<body>
+SoMemoryError
+<hr>
+<dl>
+<dt>NAME
+<dd>SoMemoryError -- memory error handling
+
+<dt>INHERITS FROM
+<dd><a href="soerror.html">SoError</a> &gt; SoMemoryError
+
+<dt>DESCRIPTION
+<dd>SoMemoryError is used for errors reported due to lack of memory.
+
+<dt>METHODS
+
+<dt>static void <b>setHandlerCallback</b>(SoErrorCB *cb, void *data)
+<dt>static SoErrorCB * <b>getHandlerCallback</b>()
+<dt>static void * <b>getHandlerData</b>()
+<dd>Sets/returns handler callback for SoMemoryError class.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for SoMemoryError class.
+
+<dt><b>Methods from class SoError</b>:
+<dd>getDebugString, getTypeId, isOfType
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/errors/SoMemoryError.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodebugerror.html">SoDebugError</a>, <a href="soreaderror.html">SoReadError</a>
+</body>
+</html>

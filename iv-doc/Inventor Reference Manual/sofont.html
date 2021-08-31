@@ -1,0 +1,62 @@
+<html>
+<body>
+<p>SoFont
+<hr>
+<dl>
+<dt>NAME
+<dd>SoFont -- node that defines font type and size for text
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; SoFont
+
+<dt>DESCRIPTION
+<dd>This node defines the current font type and point size for all subsequent text shapes in the scene graph. Fonts are specified with PostScript names, except for the defaultfont. The default font is called &quot;defaultFont&quot; and is the standard SGI graphics font for 2D text. &quot;Utopia&quot; is the standard Inventor font for 3D text.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFName name
+<dd>This field defines the font name as a PostScript name. For example, TimesRoman would be specified as Times-Roman.
+
+<dt>SoSFFloat size
+<dd>This field defines the font size. The value is in points for 2D text and is in the current units for 3D text.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoFont</b>()
+<dd>Creates a font node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Sets the font name and size in the current traversal state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Font {
+<dd>name &quot;defaultFont&quot;
+<dd>size 10
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoFont.h&gt;
+
+<dt>SEE ALSO
+<dd> <a href="sotext2.html">SoText2</a>, <a href="sotext3.html">SoText3</a>
+</body>
+</html>

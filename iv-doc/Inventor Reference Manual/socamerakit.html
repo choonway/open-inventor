@@ -1,0 +1,87 @@
+<html>
+<body>
+SSooCCaammeerraaKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoCameraKit -- camera nodekit class INHERITS FROMSoBase &gt; SoFieldContainer &gt; SoNode &gt; SoBaseKit &gt; SoCameraKit DESCRIPTIONThis nodekit class is used to create camera nodes that have a local transformation.
+
+SoCameraKit adds two public parts to the basic nodekit: transform and camera. The camera part is created by default as an SoPerspectiveCamera node, but maylater be changed to any subclass of SoCamera.
+
+You can move the camera relative to the rest of the scene by creating and editingthe transform part. SoCameraKit also adds a private part, transformGroup, which is of typeSoTransformSeparator. The kit uses this part to contain the effect of transform to move only the camera, while allowing the camera to affect the rest of the scene. SoCameraKit is derived from SoBaseKit and thus also includes a callbackList part foradding callback nodes.
+
+PARTS (SoTransform) transform
+
+A transform that positions and orients the camera relative to the rest of thescene. Private parts keep the effect of the transform part localized. This part is NULL by default, but may be set to any subclass of SoTransform (SoCamera) cameraThe camera node for this nodekit. The camera part is created by default as an
+
+SoPerspectiveCamera node, but may later be changed to any subclass ofSoCamera. (e.g., SoPerspectiveCamera, SoOrthographicCamera).
+
+Parts from class SoBaseKit:
+
+callbackList
+
+METHODS SoCameraKit()
+
+Constructor.
+
+136 Open Inventor C++ Reference Pages<hr>
+
+SSooCCaammeerraaKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh static const SoNodekitCatalog *getClassNodekitCatalog() const
+
+Returns an SoNodekitCatalog for the class SoCameraKit. static SoType getClassTypeId()Returns type identifier for this class.
+
+Methods from class SoBaseKit:
+
+getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+Methods from class SoNode:
+
+setOverride, isOverride, copy, affectsState, getByName, getByName
+
+Methods from class SoFieldContainer:
+
+setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+Methods from class SoBase:
+
+ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+MACROSMacros from class SoBaseKit:
+
+SO_GET_PART, SO_CHECK_PART CATALOG PARTSiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiAll parts
+
+NULL byPart Name Part Type Default Type Default
+
+callbackList NodeKitListPart -- yestransform Transform -- yes camera Camera PerspectiveCamera no iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc
+
+cc
+
+cc cc cc
+
+cc cc
+
+cc cc cc
+
+137<hr>
+
+SSooCCaammeerraaKKiitthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiExtra information for list parts from above table
+
+Part Name Container Type Permissible Types
+
+Callback, EventCallbackcallbackList Separator iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiicc cc
+
+cc cc
+
+cc cc
+
+cc cc
+
+FILE FORMAT/DEFAULTSCameraKit {
+
+} INCLUDE FILE#include &lt;Inventor/nodekits/SoCameraKit.h&gt;
+
+SEE ALSOSoAppearanceKit, SoBaseKit, SoLightKit, SoNodeKit, SoNodeKitDetail,
+
+SoNodeKitListPart, SoNodeKitPath, SoNodekitCatalog, SoSceneKit, SoSeparatorKit,SoShapeKit, SoWrapperKit
+
+138 Open Inventor C++ Reference Pages<hr>
+</body>
+</html>

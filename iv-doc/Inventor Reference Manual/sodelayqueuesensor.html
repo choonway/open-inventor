@@ -1,0 +1,49 @@
+<html>
+<body>
+SoDelayQueueSensor
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDelayQueueSensor -- abstract base class for sensors not dependent on time
+
+<dt>INHERITS FROM
+<dd><a href="sosensor.html">SoSensor</a> &gt; SoDelayQueueSensor
+
+<dt>DESCRIPTION
+<dd>Delay queue sensors are separate from timer queue sensors (see SoTimerQueueSensor) and provide methods for setting the relative priorities of the sensors in the delay queue (sensors with higher priorities will be triggered first).
+
+<dd>Sensors with non-zero priorities are added to the delay queue when scheduled, and are all processed once, in order, when the delay queue is processed, which normally happens as part of your program's main loop (see SoXt::mainLoop() orSoDB::doSelect()). Typically, the delay queue is processed whenever there are no events waiting to be distributed and there are no timer queue sensors waiting to be triggered. The delay queue also has a timeout to ensure that delay queue sensors are triggered even if there are always events or timer sensors waiting; seeSoDB::setDelaySensorTimeout().
+
+<dd>Sensors with priority 0 are treated specially. Priority 0 sensors are triggered almost immediately after they are scheduled, before the program returns to the main loop. Priority 0 sensors are not necessarily triggered immediately when they are scheduled, however; if they are scheduled as part of the evaluation of a field connection network they may not be triggered until the evaluation of the network is complete. Also, if a priority 0 sensor is scheduled within the callback method of another priority 0 sensor, it will not be triggered until the callback method iscomplete (also note that if more than one priority 0 sensor is scheduled, the order in which they fire is undefined).
+
+<dt>METHODS
+<dl>
+<dt>void <b>setPriority</b>(unsigned long pri)
+<dt>unsigned long <b>getPriority()</b>
+<dd>Sets/gets the priority of the sensor. Priorities can be changed at any time; if the priority is changed to zero and it is already scheduled, the sensor is immediately triggered and removed from the queue.
+
+<dt>static unsigned long <b>getDefaultPriority</b>()
+<dd>Returns the default delay queue sensor priority, which is 100.
+
+<dt>virtual void <b>schedule</b>()
+<dd>If this sensor's priority is non-zero, adds this sensor to the list of delay queue sensors ready to be triggered. This is a way of making a sensor fire without changing the thing it is sensing.
+<dd>Calling schedule() within the callback function causes the sensor to be called repeatedly. Because sensors are processed only once every time the delay queue is processed (even if they reschedule themselves), timers and events will still be processed. This should not be done with a priority zero sensor because an infinite loop will result.
+
+<dt>virtual void <b>unschedule</b>()If this sensor is scheduled, removes it from the delay queue so that it will not be triggered.
+
+<dt>virtual SbBool <b>isScheduled</b>()
+<dd>Returns TRUE if this sensor has been scheduled and is waiting in the delay queue to be triggered. Sensors are removed from the queue before their callback function is triggered.
+
+<dt><b>Methods from class SoSensor</b>:
+<dd>setFunction, getFunction, setData, getData
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/sensors/SoDelayQueueSensor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotimerqueuesensor.html">SoTimerQueueSensor</a>, <a href="sodatasensor.html">SoDataSensor</a>, <a href="sofieldsensor.html">SoFieldSensor</a>, <a href="soidlesensor.html">SoIdleSensor</a>, <a href="sooneshotsensor.html">SoOneShotSensor</a>, <a href="sonodesensor.html">SoNodeSensor</a>, <a href="sopathsensor.html">SoPathSensor</a>, <a href="sosensormanager.html">SoSensorManager</a>
+</dl>
+
+</body>
+</html>

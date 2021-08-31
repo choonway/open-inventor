@@ -1,0 +1,21 @@
+<html>
+<body>
+SSooSSFFPPllaanneehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSFPlane -- field containing a plane equation INHERITS FROMSoField &gt; SoSField &gt; SoSFPlane DESCRIPTIONA field containing a plane equation (an SbPlane).
+
+SoSFPlanes are written to file as four floating point values separated by whitespace.The first three are the normal direction of the plane, the fourth is the distance of the plane from the origin (in the direction of the normal). METHODSstatic SoType getClassTypeId()
+
+virtual void getTypeId() constReturns the type for this class or a particular object of this class.
+
+const SbPlane & getValue() constReturns this field's value. const SbPlane & operator =(const SbPlane & newValue)void setValue(const SbPlane & newValue)
+
+Sets this field to newValue. int operator ==(const SoSFPlane &f) constint operator !=(const SoSFPlane &f) const
+
+Returns TRUE if f is of the same type and has the same value as this field. Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer INCLUDE FILE#include &lt;Inventor/fields/SoSFPlane.h&gt;
+
+SEE ALSOSbPlane, SoField, SoSField, SoMFPlane
+</body>
+</html>

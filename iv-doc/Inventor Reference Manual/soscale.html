@@ -1,0 +1,63 @@
+<html>
+<body>
+SoScale
+<hr>
+<dl>
+<dt>NAME
+<dd>SoScale -- node representing a 3D geometric scaling
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sotransformation.html">SoTransformation</a> &gt; SoScale
+
+<dt>DESCRIPTION
+<dd>This node defines a 3D scaling about the origin. If the components of the scaling vector are not all the same, this produces a non-uniform scale.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFVec3f scaleFactor
+<dd>The scaling factors in the x, y, and z dimensions. Non-positive values maycause undesirable results.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoScale</b>()
+<dd>Creates a scale node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>
+<dd>()Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction
+<dd>Accumulates scaling transformation into the current transformation.
+
+<dt>SoGetMatrixAction
+<dd>Returns the matrix corresponding to the scaling.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Scale {
+<dd>scaleFactor 1 1 1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoScale.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sotransform.html">SoTransform</a>, <a href="sounits.html">SoUnits</a>
+</dl>
+
+</body>
+</html>

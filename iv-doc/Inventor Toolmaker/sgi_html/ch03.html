@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Chapter 3. Creating a Field</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"><meta name="generator" content="SGI XSL DocBook Customization Stylesheets V1.0"><link rel="home" href="index.html" title="The Inventor Toolmaker"><link rel="up" href="index.html" title="The Inventor Toolmaker"><link rel="previous" href="ch02.html" title="Chapter 2. Creating a Node"><link rel="next" href="ch04.html" title="Chapter 4. Creating an Action"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. Creating a Field</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr></table><hr></div><!--CONTENT_BEGIN--><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="id5451559"></a>Chapter 3. <a name="id11499"></a>Creating a<a name="id54200"></a> Field</h2></div></div>
+<p>If the set of field classes supported by Inventor does not suit your needs when defining a node or engine class, you may have to create your own field subclass. This chapter describes creating single-value and multiple-value fields. If you create a new field and you need automatic type conversion so that it can be connected to a field of a different type, you can build an engine that is a subclass of <a name="idch031"></a><span class="bold"><b>SoFieldConverter</b></span>. Creating new field converters is explained in Chapter 6.</p>
+<p>The chapter examples show creating two field classes:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>A single-value field called <span class="bold"><b>SFDouble</b></span></p>
+</li>
+<li><p>A multiple-value field called <span class="bold"><b>MFDouble</b></span></p>
+</li>
+</ul></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5451627"></a>Overview</h2></div></div>
+<p>The file SoSubField.h contains the macros for defining new field classes. If you do create a field class, you will probably need to use only a few of these macros. The more commonly used ones are documented in this chapter.<a name="idch032"></a><a name="idch033"></a></p>
+<p>Creating a new field requires these steps:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new field class, determine whether it is derived from <span class="bold"><b>SoSField</b></span> or <span class="bold"><b>SoMField</b></span> (or a subclass), and determine the type of the field value (for example, <span class="bold"><b>float</b></span>, <span class="bold"><b>SbVec3f</b></span>).</p>
+</li>
+<li><p>Define an <span class="bold"><b>initClass()</b></span> method to initialize type information. This step is required for both single-value and multiple-value fields (see <a href="ch03.html#id31963">&#8220;Initializing the Field Class&#8221;</a>).</p>
+</li>
+<li><p>Implement the reading and writing methods for the field.</p>
+<p>a.  For single-value fields, implement <span class="bold"><b>readValue()</b></span> and <span class="bold"><b>writeValue()<br>
+</b></span>     methods (see <a href="ch03.html#id53971">&#8220;Creating a Single-Value Field&#8221;</a>).</p>
+<p>b.  For multiple-value fields, implement <span class="bold"><b>read1Value()</b></span> and<br>
+     <span class="bold"><b>write1Value()</b></span> methods.  You may also want to implement a<br>
+     <span class="bold"><b>getNumValuesPerLine()</b></span> method for a multiple-value field. This<br>
+     method is used by the ASCII file format and tells how many values<br>
+     fit on one line when the field is written out <br>
+     (see <a href="ch03.html#id93836">&#8220;Creating a Multiple-Value Field&#8221;</a>).</p>
+</li>
+<li><p>If it is useful, you can optionally define other methods for setting and accessing values in the field.  For example, <span class="bold"><b>SoSFVec3f</b></span> allows you to set the value from three floats or from an array of three floats, and so on.</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5451901"></a><a name="id31963"></a>Initializing the Field Class</h2></div></div>
+<p>The <a name="idch034"></a><span class="bold"><b>initClass()</b></span> method in the source file sets up runtime type information for the field class. For single-value fields, use the SO_SFIELD_INIT() macro. For multiple-value fields, use SO_MFIELD_INIT(). See Chapter 1 for a brief description of runtime type-checking in Open Inventor.<a name="idch035"></a><a name="idch036"></a></p>
+</div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5451938"></a><a name="id53971"></a>Creating a Single-Value Field</h2></div></div>
+<p>This section shows how to create a single-value field class, <a name="idch037"></a><span class="bold"><b>SFDouble</b></span>, that contains a double-precision real number.</p>
+<p>The header file for this class uses the SO_SFIELD_HEADER() macro to declare all required member variables and functions for a single-value field. This macro declares the methods and variables for field classes that are derived from <a name="idch038"></a><span class="bold"><b>SoSField</b></span>. The first argument to the macro is the name of the new field. The second argument is the type of the value stored in the field, and the third is the type that can be passed to or returned from a function. For <span class="bold"><b>double</b></span>, a primitive type, these two arguments are identical. For more</p>
+<p>complicated field types, this last type is typically a reference to the field value; for example, </p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+const SbVec3f &amp;
+</pre></td></tr></table><p>for a field holding an <span class="bold"><b>SbVec3f</b></span>.</p>
+<p>If your new field class is derived from another single-value field (rather than from an abstract class), use the SO_SFIELD_DERIVED_HEADER() macro.<a name="idch039"></a></p>
+<p>Example 3-1 shows the header file for the <span class="bold"><b>SFDouble</b></span> class.</p>
+<div class="example"><p><a name="id5452062"></a><b>Example 3-1. SFDouble.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/fields/SoSubField.h&gt;
+
+class SFDouble : public SoSField {
+
+   // Declares all required member variables and functions for a
+   // single-value field
+   SO_SFIELD_HEADER(SFDouble, double, double);
+
+ public:
+   // Initializes field class, setting up runtime type info
+   static void    initClass();
+};
+</pre></td></tr></table><p>The source file for the <span class="bold"><b>SFDouble</b></span> field class uses the SO_SFIELD_SOURCE() macro to define all required member variables and functions for the single-value field. It uses the SO_SFIELD_INIT() macro to initialize the field class and set up runtime type information.<a name="idch0310"></a><a name="idch0311"></a></p>
+<p>SO_SFIELD_SOURCE() defines all methods that are declared in SO_SFIELD_HEADER(). SO_SFIELD_DERIVED_SOURCE() defines all methods that are declared in SO_SFIELD_DERIVED_HEADER(). (Even if you did not use the standard macros in your class header because you wanted to implement methods differently, you may still be able to use these macros in your source file. See SoSubField.h for details.)<a name="idch0312"></a><a name="idch0313"></a><a name="idch0314"></a></p>
+<p>Two methods for reading and writing the new field are also included. The <a name="idch0315"></a><span class="bold"><b>SoInput<a name="idch0316"></a></b></span> class defines several <span class="bold"><b>read()</b></span> methods that read a primitive type from the current input. One of these methods reads a number of type <span class="bold"><b>double</b></span>, so we can use that method here to read into the <span class="bold"><b>value</b></span> member variable defined in SO_SFIELD_HEADER(). The <a name="idch0317"></a><span class="bold"><b>read()</b></span> methods return FALSE on error, which is just what we want. Similarly, the <a name="idch0318"></a><span class="bold"><b>SoOutput</b></span> class has several <a name="idch0319"></a><span class="bold"><b>write()</b></span> methods.  The new class uses the one that writes out a <span class="bold"><b>double</b></span>.</p>
+<p>Example 3-2 shows the source file for the <a name="idch0320"></a><a name="idch0321"></a><span class="bold"><b>SFDouble</b></span> class.</p>
+<div class="example"><p><a name="id5452293"></a><b>Example 3-2. SFDouble.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &quot;SFDouble.h&quot;
+
+// Defines all required member variables and functions for a
+// single-value field
+SO_SFIELD_SOURCE(SFDouble, double, double);
+
+// Initializes the class, setting up runtime type info.
+
+void
+SFDouble::initClass()
+{
+   // This macro takes the name of the class and the name of the
+   // parent class
+   SO_SFIELD_INIT_CLASS(SFDouble, SoSField);
+}
+
+
+// This reads the value of a double-precision field from a
+// file. It returns FALSE if the value could not be read
+// successfully.
+
+
+SbBool
+SFDouble::readValue(SoInput *in)
+{
+   // Read a double from the input
+   return in-&gt;read(value);
+}
+
+
+// This writes the value of a double-precision field to a
+// file.
+
+void
+SFDouble::writeValue(SoOutput *out) const
+{
+   // Write a double
+   out-&gt;write(value);
+}
+</pre></td></tr></table><p>For more complex field-value types, you must be careful when writing values; you have to see if the output format is binary before writing spaces or other ASCII formatting. For example, the method to write the value of an <span class="bold"><b>SoSFVec3f</b></span> field looks like this:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+SoSFVec3f::writeValue(SoOutput *out) const
+{
+   // Write first component of vector
+   out-&gt;write(value[0]);
+
+   // If not writing binary format, output a space between
+   // values
+   if (! out-&gt;isBinary())
+      out-&gt;write(' ');
+
+   // Repeat for other components of vector
+   out-&gt;write(value[1]);
+   if (! out-&gt;isBinary())
+      out-&gt;write(' ');
+   out-&gt;write(value[2]);
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5452368"></a><a name="id93836"></a>Creating a Multiple-Value Field</h2></div></div>
+<p>This section shows how to create a multiple-value field class, <a name="idch0322"></a><span class="bold"><b>MFDouble</b></span>, that contains any number of double-precision real numbers.</p>
+<p>Example 3-3 shows the header file for the <span class="bold"><b>MFDouble</b></span> class. It uses the SO_MFIELD_HEADER() macro, which is typically the only macro you need to use in an <a name="idch0323"></a><span class="bold"><b>SoMField</b></span> subclass header, unless you wish to change value handling or construction/destruction.</p>
+<p>Use the SO_MFIELD_DERIVED_HEADER() macro to declare the methods and variables for fields that are derived from other multiple-value fields (rather than from an abstract class). <a name="idch0324"></a><a name="idch0325"></a></p>
+<div class="example"><p><a name="id5452484"></a><b>Example 3-3. <a name="idch0326"></a>MFDouble.h </b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/fields/SoSubField.h&gt;
+
+class MFDouble : public SoMField {
+
+   // This macro is just like the one for single-value fields.
+   SO_MFIELD_HEADER(MFDouble, double, double);
+
+ public:
+   static void    initClass();
+
+ private:
+   // This returns the number of ASCII values to write per
+   // output line. It can be used to produce more compact
+   // output files for fields containing small value types.
+   virtual int    getNumValuesPerLine() const;
+};
+</pre></td></tr></table><p>The SO_MFIELD_SOURCE() macro defines all methods that are declared in SO_MFIELD_HEADER(). This macro includes several other macros that you may find useful even if you don't want to use all of them.<a name="idch0327"></a><a name="idch0328"></a></p>
+<p>SO_MFIELD_SOURCE_MALLOC(), used in <a name="idch0329"></a><a href="ch03.html#id93661">Example 3-4</a>, is an alternate version of SO_MFIELD_SOURCE(). The difference is that this macro implements value storage management using <a name="idch0330"></a><span class="bold"><b>malloc()</b></span>, <a name="idch0331"></a><span class="bold"><b>realloc()</b></span>, and <span class="bold"><b>free()<a name="idch0332"></a></b></span>, while SO_MFIELD_SOURCE() uses the <span class="bold"><b>new</b></span> and <span class="bold"><b>delete</b></span> operators. While SO_MFIELD_SOURCE_MALLOC() produces faster and more efficient code than the other source macro, it should be used only for field classes whose values have no constructors or destructors (since they would never be called). For example, the <span class="bold"><b>SoMFShort</b></span> class uses this macro, since values of type <span class="bold"><b>short</b></span> are not C++ instances, and therefore do not have any constructors or destructors. The <span class="bold"><b>MFDouble</b></span> field contains a basic type (a <span class="bold"><b>double</b></span>) that does not need a constructor, so we are free to use this alternate (and more efficient) macro. </p>
+<p>SO_MFIELD_DERIVED_SOURCE() defines all methods that are declared in SO_MFIELD_DERIVED_HEADER(). Use these macros if you are deriving a field from another field.<a name="idch0333"></a><a name="idch0334"></a></p>
+<p>Example 3-4 shows the source file for the <span class="bold"><b>MFDouble</b></span> class.</p>
+<div class="example"><p><a name="id5452690"></a><b>Example 3-4. <a name="id93661"></a>MFDouble.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &quot;MFDouble.h&quot;
+
+// Defines all required member variables and functions for a
+// multiple-value field. We use the version that allocates field
+// value storage with malloc(), since there is no constructor to
+// call for our values.
+SO_MFIELD_SOURCE_MALLOC(MFDouble, double, double);
+
+// Initializes the class, setting up runtime type info.
+
+void
+MFDouble::initClass()
+{
+   // This macro takes the name of the class and the name of the
+   // parent class
+   SO_MFIELD_INIT_CLASS(MFDouble, SoMField);
+}
+
+// This reads one value of the double-precision field from a
+// file. It is passed the index of the value to read; we can
+// assume that the field already contains enough room to hold
+// this value. It returns FALSE if the value could not be read
+// successfully.
+
+SbBool
+MFDouble::read1Value(SoInput *in, int index)
+{
+   // Read a double from the input
+   return in-&gt;read(values[index]);
+}
+
+// This writes one value of a double-precision field to a
+// file.
+
+void
+MFDouble::write1Value(SoOutput *out, int index) const
+{
+   // Write a double
+   out-&gt;write(values[index]);
+}
+
+// Returns number of ASCII values to write out per line.
+
+int
+MFDouble::getNumValuesPerLine() const
+{
+   // We can probably fit 4 doubles per line pretty easily.
+   return 4;
+}
+</pre></td></tr></table><br></div></div><!--CONTENT_END--><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Table of Contents</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 2. Creating a Node </td><td width="20%" align="center"> </td><td width="40%" align="right">Chapter 4. Creating an Action </td></tr></table></div></body></html>

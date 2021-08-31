@@ -1,0 +1,141 @@
+<html>
+<body>
+<p>SbMatrix
+<hr>
+<dl>
+<dt>NAME
+<dd>SbMatrix -- 4x4 matrix class
+
+<dt>INHERITS FROM
+<dd>SbMatrix
+
+<dt>DESCRIPTION
+<dd>4x4 matrix class/datatype used by many Inventor node and action classes. The matrices are stored in row-major order.
+
+<dt>METHODS
+<dl>
+<dt>SbMatrix()
+<dt>SbMatrix(float a11, float a12, float a13, float a14, float a21,float a22, float a23, float a24, float a31, float a32, float a33, float a34, float a41, float a42, float a43, float a44)
+<dt>SbMatrix(const SbMat &amp;m)
+<dd>Constructors.
+
+<dt>void <b>setValue</b>(const SbMat &amp;m)
+<dd>Sets value from 4x4 array of elements.
+
+<dt>void <b>getValue</b>(SbMat &amp;m) const
+<dt>const SbMat &amp; <b>getValue</b>() const
+
+<dd>Returns 4x4 array of elements.
+
+<dt>void <b>makeIdentity</b>()
+<dd>Sets matrix to be identity.
+
+<dt>static SbMatrix <b>identity</b>()
+<dd>Returns an identity matrix.
+
+<dt>void <b>setRotate</b>(const SbRotation &amp;q)
+<dd>Sets matrix to rotate by given rotation.
+
+<dt>void <b>setScale</b>(float s)
+<dd>Sets matrix to scale by given uniform factor.
+
+<dt>void <b>setScale</b>(const SbVec3f &amp;s)
+<dd>Sets matrix to scale by given vector.
+
+<dt>void <b>setTranslate</b>(const SbVec3f &amp;t)
+<dd>Sets matrix to translate by given vector.
+
+<dt>void <b>setTransform</b>(const SbVec3f &amp;t, const SbRotation &amp;r, constSbVec3f &amp;s)
+<dt>void <b>setTransform</b>(const SbVec3f &amp;t, const SbRotation &amp;r, constSbVec3f &amp;s, const SbRotation &amp;so)
+<dt>void <b>setTransform</b>(const SbVec3f &amp;translation, const SbRotation&amp;rotation, const SbVec3f &amp;scaleFactor, const SbRotation &amp;scaleOrientation, const SbVec3f &amp;center)
+<dd>Composes the matrix based on a translation, rotation, scale, orientation for scale, and center. The center is the center point for scaling and rotation. ThescaleOrientation chooses the primary axes for the scale.
+
+<dt>void <b>getTransform</b>(SbVec3f &amp;t, SbRotation &amp;r, SbVec3f &amp;s,SbRotation &amp;so) const
+<dd>Return translation, rotation, scale, and scale orientation components of thematrix.
+
+<dt>float <b>det3</b>(int r1, int r2, int r3, int c1, int c2, int c3) const
+<dd>Returns determinant of 3x3 submatrix composed of given row and column indices (0-3 for each).
+
+<dt>float <b>det3</b>() const
+<dd>Returns determinant of upper-left 3x3 submatrix.
+
+<dt>float <b>det4</b>() const
+<dd>Returns determinant of entire matrix.
+
+<dt>SbBool <b>factor</b>(SbMatrix &amp;r, SbVec3f &amp;s, SbMatrix &amp;u, SbVec3f &amp;t,SbMatrix &amp;proj) const
+
+<dd>Factors a matrix m into 5 pieces: m = r s r^ u t, where r^ means transpose ofr, and r and u are rotations, s is a scale, and t is a translation. Any projection information is returned in proj. SbMatrix inverse() constReturns inverse of matrix. Results are undefined for singular matrices. Uses LU decomposition.
+
+<dt>SbBool <b>LUDecomposition</b>(int index[4], float &amp;d)
+<dd>Perform in-place LU decomposition of matrix. index is index of rows in matrix. d is the parity of row swaps. Returns FALSE if singular.
+
+<dt>void <b>LUBackSubstitution</b>(int index[4], float b[4]) const
+<dd>Perform back-substitution on LU-decomposed matrix. Index is permutation of rows from original matrix.
+
+<dt>SbMatrix <b>transpose</b>() const
+<dd>Returns transpose of matrix. SbMatrix &amp; multRight(const SbMatrix &amp;m)
+
+<dt>SbMatrix &amp; <b>multLeft</b>(const SbMatrix &amp;m)
+
+<dd>Multiplies matrix by given matrix on right or left.
+
+<dt>void <b>multMatrixVec</b>(const SbVec3f &amp;src, SbVec3f &amp;dst) const
+<dd>Multiplies matrix by given column vector, giving vector result.
+
+<dt>void <b>multVecMatrix</b>(const SbVec3f &amp;src, SbVec3f &amp;dst) const
+<dd>Multiplies given row vector by matrix, giving vector result.
+
+<dt>void <b>multDirMatrix</b>(const SbVec3f &amp;src, SbVec3f &amp;dst) const
+<dd>Multiplies given row vector by matrix, giving vector result. src is assumed to be a direction vector, so translation part of matrix is ignored.
+
+<dt>void <b>multLineMatrix</b>(const SbLine &amp;src, SbLine &amp;dst) const
+<dd>Multiplies the given line's origin by the matrix, and the line's direction by the rotation portion of the matrix.
+
+<dt>void <b>print</b>(FILE *fp) const
+<dd>Prints a formatted version of the matrix to the given file pointer.
+
+<dt>float * <b>operator float *</b>()
+<dd>Cast: returns pointer to storage of first element.
+
+<dt>SbMat <b>operator SbMat &amp;</b>()
+<dd>Cast: returns reference to 4x4 array.
+
+<dt>float * <b>operator [ ]</b>(int i)
+<dt>const float * operator [ ](int i) const
+
+<dd>Make it look like a usual matrix (so you can do m[3][2]).
+
+<dt>SbMatrix &amp; <b>operator =</b>(const SbMat &amp;m)
+<dd>Sets value from 4x4 array of elements.
+
+<dt>SbMatrix &amp; <b>operator =</b>(const SbMatrix &amp;m)
+<dd>Set the matrix from another SbMatrix.
+
+<dt>SbMatrix &amp; <b>operator =</b>(const SbRotation &amp;q)
+<dd>Set the matrix from an SbRotation.
+
+<dt>SbMatrix &amp; <b>operator *=</b>(const SbMatrix &amp;m)
+<dd>Performs right multiplication with another matrix.
+
+<dt>SbMatrix <b>operator *</b>(const SbMatrix &amp;m1, const SbMatrix &amp;m2)
+<dd>Binary multiplication of matrices.
+
+<dt>int <b>operator ==</b>(const SbMatrix &amp;m1, const SbMatrix &amp;m2)
+<dt>int <b>operator !=</b>(const SbMatrix &amp;m1, const SbMatrix &amp;m2)
+
+<dd>Equality comparison operators.
+
+<dt>SbBool <b>equals</b>(const SbMatrix &amp;m, float tolerance) const
+<dd>Equality comparison within given tolerance, for each component.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbLinear.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbvec3f.html">SbVec3f</a>, <a href="sbrotation.html">SbRotation</a>
+
+</dl>
+
+</body>
+</html>

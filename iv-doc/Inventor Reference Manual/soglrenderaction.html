@@ -1,0 +1,86 @@
+<html>
+<body>
+<p>SoGLRenderAction
+<hr>
+<dl>
+<dt>NAME
+<dd>SoGLRenderAction -- renders a scene graph using OpenGL
+
+<dt>INHERITS FROM
+<dd><a href="soaction.html">SoAction</a> &gt; SoGLRenderAction
+
+<dt>DESCRIPTION
+<dd>This class traverses a scene graph and renders it using the OpenGL graphics library.
+
+<p>It assumes that a valid window has been created and initialized for proper OpenGLrendering. The SoXtRenderArea class or any of its subclasses may be used to create such a window.
+
+<dt>METHODS
+<dl>
+<dt><b>SoGLRenderAction</b>(const SbViewportRegion &viewportRegion, SbBool useCurrentGLValues = FALSE)
+<dd>Constructor. The first parameter defines the viewport region into which rendering will take place. The second parameter specifies whether current OpenGL state values (material, line width, etc.) are to be inherited for rendering. If this is FALSE (the default), Inventor will set up its own reasonable default values.
+
+<dt>void <b>setViewportRegion</b>(const SbViewportRegion &newRegion)
+<dt>const SbViewportRegion & <b>getViewportRegion</b>() const
+<dd>Changes/returns viewport region to use for rendering.
+
+<dt>void <b>setUpdateArea</b>(const SbVec2f &origin, const SbVec2f &size)
+<dt>void <b>getUpdateArea</b>(SbVec2f &origin, SbVec2f &size) const
+<dd>Sets/returns the current update area, which is the rectangular area of theviewport region that will actually be rendered into. This can be used for partial updates in applications that can manage them. The update area isspecified in normalized viewport coordinates, where (0,0) is the lower left corner of the viewport and (1,1) is the upper right corner. The area is specified or returned as an origin and a size.
+
+<dt>void <b>setAbortCallback</b>(SoGLRenderAbortCB *func, void *userData)
+<dd>Sets callback to call during rendering to test for an abort condition. It will be called for each node that is traversed. This allows applications to terminaterendering prematurely if some condition occurs. The callback function should return TRUE if rendering should abort.
+
+<dt>void <b>setTransparencyType</b>(TransparencyType type)
+<dt>TransparencyType <b>getTransparencyType</b>() const
+<dd>Sets/returns transparency quality level to use when rendering. The default is SCREEN_DOOR. (Note that SCREEN_DOOR transparency does not work inthe case where transparency values are specified for each vertex of a shape. If this is the case, use one of the other transparency types.)
+
+<dt>void <b>setSmoothing</b>(SbBool smooth)
+<dt>SbBool <b>isSmoothing</b>() const
+
+<dd>Sets/returns smoothing flag. When on, smoothing uses OpenGL's line- andpoint-smoothing features to provide cheap antialiasing of lines and points. The default is FALSE.
+
+<dt>void <b>setNumPasses</b>(int num)
+<dt>int <b>getNumPasses</b>() const
+
+<dd>Sets/returns number of rendering passes for multipass rendering. Specifying more than one pass will result in antialiasing of the rendered scene, using OpenGL's accumulation buffer. (Camera nodes typically move theirviewpoints a little bit for each pass to achieve the antialiasing.) Each additional pass provides better antialiasing, but requires more renderingtime The default is 1 pass.
+
+<dt>void <b>setPassUpdate</b>(SbBool flag)
+<dt>SbBool <b>isPassUpdate</b>() const
+
+<dd>Sets/returns a flag indicating whether intermediate results are displayed aftereach antialiasing pass for progressive improvement (default is FALSE).
+
+<dt>void <b>setPassCallback</b>(SoGLRenderPassCB *func, void *userData)
+<dd>Sets a callback function to invoke between passes when antialiasing. Passing NULL (which is the default state) will cause a clear of the color and depthbuffers to be performed.
+
+<dt>void <b>setCacheContext</b>(unsigned long context)
+<dt>unsigned long <b>getCacheContext</b>() const
+<dd>Sets/returns the OpenGL cache context. A cache context is just an integeridentifying when OpenGL display lists (which are used for render caching) can be shared between render actions; for example, see the documentationon GLX contexts for information on when OpenGL display lists can be shared between GLX windows.
+
+<dt><b>Methods from class SoAction</b>:
+<dd>apply, apply, apply, getClassTypeId, getTypeId, isOfType, invalidateState
+
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/actions/SoGLRenderAction.h&gt;
+
+<dl>
+<dt>typedef SbBool SoGLRenderAbortCB(void *userData)
+<dt>typedef void SoGLRenderPassCB(void *userData)
+<dt>enum TransparencyType {
+<dd>SoGLRenderAction::SCREEN_DOOR Uses stipple patterns for screen-door transparency
+<dd>SoGLRenderAction::ADD Uses additive alpha blending
+<dd>SoGLRenderAction::DELAYED_ADD Uses additive blending, rendering all transparent objects after opaque ones
+<dd>SoGLRenderAction::SORTED_OBJECT_ADD
+<dd>Same as DELAYED_ADD, but sorts transparent objects by distances of bounding boxes from camera
+<dd>SoGLRenderAction::BLEND Uses multiplicative alpha blending
+<dd>SoGLRenderAction::DELAYED_BLEND Uses multiplicative alpha blending, rendering all transparent objects after opaque ones
+<dd>SoGLRenderAction::SORTED_OBJECT_BLEND Same as DELAYED_BLEND, but sorts transparent objects by distances of bounding boxes from camera
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soseparator.html">SoSeparator</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>
+
+</body>
+</html>

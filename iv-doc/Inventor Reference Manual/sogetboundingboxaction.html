@@ -1,0 +1,52 @@
+<html>
+<body>
+SSooGGeettBBoouunnddiinnggBBooxxAAccttiioonnhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoGetBoundingBoxAction -- computes bounding box of a scene INHERITS FROMSoAction &gt; SoGetBoundingBoxAction DESCRIPTIONThis class is used to compute a 3D bounding box enclosing objects defined by a
+
+scene graph. The box is a rectangular prism. The action also computes the centerpoint, which is defined differently for different objects. (For example, the center of an SoFaceSet is the average of its vertices' coordinates.) For a group, the center pointis defined as the average of the centers of all shapes in it.
+
+Each bounding box is calculated as a SbXfBox3f, where the transformation matrixis defined so that the bounding box can be stored in the object space of the SoShape. When two bounding boxes are combined by a group node, thecombination is performed so as to produce the smaller untransformed box. The result of the calculation by the action can be returned as an SbXfBox3f or as aworld-space-aligned SbBox3f.
+
+To calculate the bounding box of a subgraph bounded by two paths, specify the leftedge of the subgraph with setResetPath(), and apply the action to the path that defines the right edge of the subgraph. The accumulated bounding box andtransformation will be reset when the tail of the reset path is traversed.
+
+If the subgraph being traversed does not contain any shapes, the returned boundingbox will be empty (that is, box.isEmpty() will return TRUE). METHODS SoGetBoundingBoxAction(const SbViewportRegion
+
+&viewportRegion)Constructor takes viewport region to use for picking. Even though the bounding box computation may not involve a window per se, some nodesneed this information to determine their size and placement.
+
+void setViewportRegion(const SbViewportRegion &newRegion)const SbViewportRegion &
+
+getViewportRegion() constSets/returns current viewport region to use for action.
+
+SbBox3f getBoundingBox() constReturns computed bounding box in world space.
+
+265<hr>
+
+SSooGGeettBBoouunnddiinnggBBooxxAAccttiioonnhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+SbXfBox3f & getXfBoundingBox()Returns computed bounding box before transformation into world space. const SbVec3f & getCenter() constReturns computed center point in world space. void setInCameraSpace(SbBool flag)Set this flag to TRUE if you want the returned bounding box to be in the
+
+space of whatever camera is in the graph. Camera space is defined to havethe viewpoint at the origin, with the direction of view along the negative z axis. This space can be used to determine distances of objects from thecamera.
+
+SbBool isInCameraSpace() constReturns camera space flag. void setResetPath(const SoPath *path, SbBool resetBefore = TRUE,ResetType what = ALL)
+
+If a non-NULL path is specified, the action will reset the computedbounding box to be empty and/or the current transformation to identity. The resetBefore flag indicates whether to perform the reset before or after thetail node of the path is traversed.
+
+const SoPath * getResetPath() constReturns the current reset path, or NULL. SbBool isResetPath() constReturns TRUE if the current reset path is not NULL. SbBool isResetBefore() constReturns TRUE if the resetBefore flag was specified for the reset path. SoGetBoundingBoxAction::ResetTypegetWhatReset() const
+
+Returns what flags were specified to be reset for the reset path. Methods from class SoAction:
+
+apply, apply, apply, getClassTypeId, getTypeId, isOfType, invalidateState
+
+266 Open Inventor C++ Reference Pages<hr>
+
+SSooGGeettBBoouunnddiinnggBBooxxAAccttiioonnhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh INCLUDE FILE#include &lt;Inventor/actions/SoGetBoundingBoxAction.h&gt;
+
+enum ResetType {SoGetBoundingBoxAction::TRANSFORM
+
+TransformationSoGetBoundingBoxAction::BBOX Bounding BoxSoGetBoundingBoxAction::ALL Both Transform and Bounding Box}
+
+SEE ALSOSbBox3f, SbXfBox3f, SoGetMatrixAction
+
+267<hr>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<html>
+<body>
+<p>SbCylinderProjector
+<hr>
+<dl>
+<dt>NAME
+<dd>SbCylinderProjector -- cylinder projector
+<dt>INHERITS FROM
+<dd><a href="sbprojector.html">SbProjector</a> &gt; SbCylinderProjector
+<dt>DESCRIPTION
+<dd>SbCylinderProjector is an abstract base class for projectors that use a cylinder in their projection. The getRotation() method for an SbCylinderProjector will always return a rotation that is about the axis of the cylinder. Cylinder projectors are typically used to write interactive 3D manipulators and viewers.
+
+<dt>METHODS
+<dl>
+<dt>~<b>SbCylinderProjector</b>()
+<dd>Destructor.
+
+<dt>SbVec3f <b>projectAndGetRotation</b>(const SbVec2f &point, SbRotation&rot)
+<dd>Apply the projector using the given point, returning the point in three dimensions that it projects to. This also returns in rot a rotation about the axis of the cylinder from the last projected point to this one. The passedpoint should be normalized (i.e. lie in the range [0.0,1.0]), with (0,0) at the lower-left.
+
+<dt>virtual SbRotation <b>getRotation</b>(const SbVec3f &point1, const SbVec3f &point2)<dd>Get a rotation given two points on this cylinder projector. The rotation willbe about the axis of the cylinder.
+
+<dt>void <b>setCylinder</b>(const SbCylinder &cyl)const
+<dt>SbCylinder & getCylinder() const
+<dd>Set and get the cylinder on which to project points. The default cylinder is aligned with the Y axis and has radius 1.0.
+
+<dt>void <b>setOrientToEye</b>(SbBool orientToEye)
+<dt>SbBool isOrientToEye() const
+<dd>Set and get whether the projector should always be oriented towards the eye.Set to FALSE if the tolerance should be evaluated in working space.
+
+<dt>void <b>setFront</b>(SbBool isFront)SbBool isFront() const
+<dt>SbBool isPointInFront(const SbVec3f &point) const
+<dd>Set and get whether the projector should intersect the half of the cylinder that faces the eye. Set to FALSE if the projector should intersect with the rearhalf.
+
+<dt><b>Methods from class SbProjector</b>:
+<dd>project, setViewVolume, getViewVolume, setWorkingSpace,getWorkingSpace, copy</dl>
+
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/projectors/SbCylinderProjector.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbcylinderplaneprojector.html">SbCylinderPlaneProjector</a>, <a href="sbcylindersectionprojector.html">SbCylinderSectionProjector</a>, <a href="sbcylindersheetprojector.html">SbCylinderSheetProjector</a>, <a href="sblineprojector.html">SbLineProjector</a>, <a href="sbplaneprojector.html">SbPlaneProjector</a>, <a href="sbsphereplaneprojector.html">SbSpherePlaneProjector</a>, <a href="sbsphereprojector.html">SbSphereProjector</a>, <a href="sbspheresectionprojector.html">SbSphereSectionProjector</a>, <a href="sbspheresheetprojector.html">SbSphereSheetProjector</a>
+</dl>
+</body>
+</html>

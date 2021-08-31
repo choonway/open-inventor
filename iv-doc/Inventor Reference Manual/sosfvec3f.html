@@ -1,0 +1,50 @@
+<html>
+<body>
+SoSFVec3f
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSFVec3f -- field containing a three-dimensional vector
+
+<dt>INHERITS FROM
+<dd><a href="sofield.html">SoField</a> &gt; <a href="sosfield.html">SoSField</a> &gt; SoSFVec3f
+
+<dt>DESCRIPTION
+<dd>Field containing a three-dimensional vector.
+
+<p>SoSFVec3fs are written to file as three floating point values separated by whitespace.
+
+<dt>METHODS
+<dl>
+<dt>void <b>setValue</b>(float x, float y, float z)
+<dt>void <b>setValue</b>(const float xyz[3])
+<dd>Sets the field to the given value.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dt>virtual void <b>getTypeId</b>() const
+<dd>Returns the type for this class or a particular object of this class.
+
+<dt>const SbVec3f & <b>getValue</b>() const
+<dd>Returns this field's value.
+
+<dt>const SbVec3f & operator <b>=</b>(const SbVec3f & newValue)
+<dt>void <b>setValue</b>(const SbVec3f & newValue)
+<dd>Sets this field to newValue.
+
+<dt>int operator <b>==</b>(const SoSFVec3f &f) const
+<dt>int operator <b>!=</b>(const SoSFVec3f &f) const
+<dd>Returns TRUE if f is of the same type and has the same value as this field.
+</dl>
+
+<dt><b>Methods from class SoField</b>:
+<dd>setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField, getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoSFVec3f.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sofield.html">SoField</a>, <a href="sosfield.html">SoSField</a>, <a href="somfvec3f.html">SoMFVec3f</a>
+</dl>
+
+</body>
+</html>

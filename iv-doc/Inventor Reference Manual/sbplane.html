@@ -1,0 +1,52 @@
+<html>
+<body>
+SbPlane
+<hr>
+<dl>
+<dt>NAME
+<dd>SbPlane -- oriented plane in 3D
+
+<dt>INHERITS FROM
+<dd>SbPlane
+
+<dt>DESCRIPTION
+<dd>Represents an oriented plane in 3D. This is a lightweight class/datatype that is used for arguments to some Inventor objects.
+
+<dt>METHODS
+<dl>
+<dt><b>SbPlane</b>()
+<dt><b>SbPlane</b>(const SbVec3f &p0, const SbVec3f &p1, const SbVec3f&p2)
+<dt><b>SbPlane</b>(const SbVec3f &normal, float distance)
+<dt><b>SbPlane</b>(const SbVec3f &normal, const SbVec3f &point)
+<dd>Constructors. p0, p1, and p2 represent three points in the plane. normal is anormal vector, distance is distance from origin to plane along normal vector, and point is a point in 3-space for the plane to pass through.
+
+<dt>void <b>offset</b>(float d)
+<dd>Offset a plane by a given distance.
+
+<dt>SbBool <b>intersect</b>(const SbLine &l, SbVec3f &intersection) const
+<dd>Intersect line and plane, returning TRUE if there is an intersection, FALSE if line is parallel to plane.
+
+<dt>void <b>transform</b>(const SbMatrix &matrix)
+<dd>Transforms the plane by the given matrix.
+
+<dt>SbBool <b>isInHalfSpace</b>(const SbVec3f &point) const
+<dd>Returns TRUE if the given point is within the half-space defined by the plane.
+
+<dt>const SbVec3f & <b>getNormal</b>() const
+<dd>Returns normal vector to plane.
+
+<dt>float <b>getDistanceFromOrigin</b>() const
+<dd>Returns distance from origin to plane.
+
+<dt>int <b>operator ==</b>(const SbPlane &p1, const SbPlane &p2)
+<dt>int <b>operator !=</b>(const SbPlane &p1, const SbPlane &p2)
+<dd>Equality/inequality comparison operators.
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/SbLinear.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sbvec3f.html">SbVec3f</a>, <a href="sbline.html">SbLine</a>
+</body>
+</html>

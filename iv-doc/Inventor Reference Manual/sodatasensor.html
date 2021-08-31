@@ -1,0 +1,43 @@
+<html>
+<body>
+SoDataSensor
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDataSensor -- abstract base class for sensors attached to parts of a scene
+<dt>INHERITS FROM
+<dd><a href="sosensor.html">SoSensor</a> &gt; <a href="sodelayqueuesensor.html">SoDelayQueueSensor</a> &gt; SoDataSensor
+
+<dt>DESCRIPTION
+<dd>Data sensors detect changes to scene graph objects (paths, nodes, or fields) and trigger their callback function when the object changes. Data sensors provide a delete callback that is called just before the object the data sensor is attached to is deleted; note that the callback should not attempt to modify the object in any way, or core dumps may result. Priority zero data sensors also provide methods that can be called in the callback function to determine exactly which node, field, or path caused the sensor to be triggered.
+
+<dt>METHODS
+<dl>
+<dt>void <b>setDeleteCallback</b>(SoSensorCB *function, void *data)
+<dd>Sets a callback that will be called when the object the sensor is sensing isdeleted.
+
+<dt>SoNode * <b>getTriggerNode</b>() const
+<dt>SoField * <b>getTriggerField</b>() const
+<dd>If this is a priority 0 data sensor, returns the node/field that was modified that caused this sensor to trigger. Returns NULL if the sensor was not triggered because a node/field changed (for example, if schedule() is called on the sensor) or if this sensor is not a priority 0 sensor. Note that because one change to the scene graph may cause multiple nodes or fields to be modified (because of field-to-field connections), the node or field returned may not be the only one that changed.
+
+<dt>SoPath * <b>getTriggerPath</b>() const
+<dt>void <b>setTriggerPathFlag</b>(SbBool flag)
+<dt>SbBool <b>getTriggerPathFlag</b>() const
+<dd>If this is a priority 0 data sensor, returns a path to the node that caused this sensor to trigger. Because recreating the path to the node that changed is relatively expensive, setTriggerPathFlag(TRUE) must be called before the sensor is scheduled. If it is not called, or if the sensor wasn't triggered because a node changed, this returns NULL. NULL is also returned if this is not a priority 0 sensor.
+
+<dt><b>Methods from class SoDelayQueueSensor</b>:
+<dd>setPriority, getPriority, getDefaultPriority, schedule, unschedule, isScheduled
+
+<dt><b>Methods from class SoSensor</b>:
+<dd>setFunction, getFunction, setData, getData
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/sensors/SoDataSensor.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sonodesensor.html">SoNodeSensor</a>, <a href="sopathsensor.html">SoPathSensor</a>, <a href="sofieldsensor.html">SoFieldSensor</a>, <a href="sodelayqueuesensor.html">SoDelayQueueSensor</a>
+</dl>
+
+</body>
+</html>

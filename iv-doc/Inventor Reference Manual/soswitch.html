@@ -1,0 +1,70 @@
+<html>
+<body>
+SoSwitch
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSwitch -- group node that traverse one chosen child
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sogroup.html">SoGroup</a> &gt; SoSwitch
+
+<dt>DESCRIPTION
+<dd>This group node usually traverses only one or none of its children. It implements an operation similar to the switch statement in C. One can use this node to switch onand off the effects of some properties or to switch between different properties.
+
+<p>The whichChild field specifies the index of the child to traverse, where the firstchild has index 0. A value of SO_SWITCH_NONE (-1, the default) means do not traverse any children.A value of SO_SWITCH_INHERIT (-2) allows the index to be inherited from a previously-encountered SoSwitch node or from certain other nodes (such asSoArray or SoMultipleCopy) that set the switch value. A value of SO_SWITCH_ALL (-3) traverses all children, making the switch behave exactly like a regular SoGroup.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFLong whichChild
+<dd>Index of the child to traverse, or one of SO_SWITCH_NONE,SO_SWITCH_INHERIT, or SO_SWITCH_ALL.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoSwitch</b>()
+<dd>Creates a switch node with default settings.
+
+<dt><b>SoSwitch</b>(int nChildren)
+<dd>Constructor that takes approximate number of children.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoGroup</b>:
+<dd>addChild, insertChild, getChild, findChild, getNumChildren, removeChild,removeChild, removeAllChildren, replaceChild, replaceChild
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoGetMatrixAction, SoHandleEventAction, SoRayPickAction
+<dd>Traverses the chosen child or children.
+
+<dt>SoSearchAction
+<dd>If the action's Searching-All flag is set, always traverses all children. Otherwise, traverses just the chosen child or children.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Switch {
+<dd>whichChild -1
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoSwitch.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soarray.html">SoArray</a>, <a href="solevelofdetail.html">SoLevelOfDetail</a>, <a href="somultiplecopy.html">SoMultipleCopy</a>, <a href="sopathswitch.html">SoPathSwitch</a>
+</dl>
+</body>
+</html>

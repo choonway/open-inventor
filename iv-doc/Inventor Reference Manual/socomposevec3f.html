@@ -1,0 +1,68 @@
+<html>
+<body>
+SoComposeVec3f
+<hr>
+<dl>
+<dt>NAME
+<dd>SoComposeVec3f -- composes 3D vectors from floating-point values
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoComposeVec3f
+
+<dt>DESCRIPTION
+<dd><p>This engine takes three floating-point inputs and composes a 3D vector.
+
+<p>The input fields can have multiple values, allowing the engine to compose severalvectors in parallel. Some inputs may have more values than others. In such cases, the last value of the shorter inputs will be repeated as necessary.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFFloat x
+<dd>The x component
+
+<dt>SoMFFloat y
+<dd>The y component
+
+<dt>SoMFFloat z
+<dd>The z component.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFVec3f) vector
+<dd>Vector composed of x, y, and z.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoComposeVec3f()
+<dd>Constructor
+
+<dt>Methods from class SoEngine:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+
+<dl>
+<dt>ComposeVec3f {
+<dd>x 0
+<dd>y 0
+<dd>z 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCompose.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodecomposevec3f.html">SoDecomposeVec3f</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+
+</body>
+</html>

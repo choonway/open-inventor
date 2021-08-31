@@ -1,0 +1,2066 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Chapter 8. Creating Draggers and Manipulators</title><meta name="generator" content="DocBook XSL Stylesheets V1.49"><meta name="generator" content="SGI XSL DocBook Customization Stylesheets V1.0"><link rel="home" href="index.html" title="The Inventor Toolmaker"><link rel="up" href="index.html" title="The Inventor Toolmaker"><link rel="previous" href="ch07.html" title="Chapter 7. Creating a Node Kit"><link rel="next" href="ch09.html" title="Chapter 9. Creating a Selection Highlight Style"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 8. Creating Draggers and Manipulators</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch09.html">Next</a></td></tr></table><hr></div><!--CONTENT_BEGIN--><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="id5466668"></a>Chapter 8. Creating Draggers<a name="id23016"></a> and Manipulators</h2></div></div>
+<p>This chapter shows how to create new draggers and manipulators. The first half of the chapter deals with creating new draggers, which are a special type of node kit with a user interface. The second half of the chapter describes creating new manipulators, which are nodes that employ draggers.</p>
+<p>Before reading this chapter, you should first read and thoroughly understand Chapter 15 in <a name="idch081"></a><i>The Inventor Mentor</i>.  Also, because draggers are node kits, you should be familiar with Chapter 14 in <i>The Inventor Mentor</i> and Chapter 7 in this book. If you want to create a new manipulator that uses existing draggers, you can skip directly to <a href="ch08.html#id35716">&#8220;Creating a Manipulator&#8221;</a>.</p>
+<p>The chapter examples show how to create four new classes:</p>
+<div class="itemizedlist"><ul type="disc"><li><p>A simple dragger, <span class="bold"><b>TranslateRadialDragger</b></span>, which allows translation along a line</p>
+</li>
+<li><p>A compound dragger, <span class="bold"><b>RotTransDragger</b></span>, which allows independent rotation in the <i>x</i>, <i>y</i>, and <i>z</i> directions as well as translation along a line</p>
+</li>
+<li><p>A transform manipulator, <span class="bold"><b>RotTransManip</b></span>, which uses a <span class="bold"><b>RotTransDragger</b></span> for editing its transform fields</p>
+</li>
+<li><p>A manipulator, <span class="bold"><b>Coord3Manip</b></span>, which is derived from <span class="bold"><b>SoCoordinate3</b></span> and which uses an <span class="bold"><b>SoDragPointDragger</b></span> for editing its <span class="bold"><b>point</b></span> field</p>
+</li>
+</ul></div><p>The first two classes created in this chapter are derived from the <span class="bold"><b>SoDragger</b></span> class. The first class, <span class="bold"><b>TranslateRadialDragger</b></span>, shows how to create a<i> simple</i> dragger, which typically performs only one operation such as scaling or translating. The second class, <span class="bold"><b>RotTransDragger</b></span>, shows how to combine simple draggers into a <i>compound</i> dragger that can perform more than one operation. The third class, <span class="bold"><b>RotTransManip</b></span>, shows how to create a new manipulator that is a subclass of <span class="bold"><b>SoTransformManip</b></span>.  The last class, <span class="bold"><b>Coord3Manip</b></span>, shows how to create a manipulator that is subclassed from <span class="bold"><b>SoCoordinate3</b></span> and uses an existing dragger, the <span class="bold"><b>SoDragPointDragger</b></span>.</p>
+<div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5466965"></a><a name="id41806"></a>Creating a Simple Dragger</h2></div></div>
+<p>This section describes the design and implementation of a simple dragger. Simple draggers perform one operation, such as rotating, translating, or scaling, and have a fixed user interface. Although simple draggers can be useful by themselves, they are often combined to make a compound dragger or a manipulator, as described in later sections.<a name="idch082"></a></p>
+<p>The <span class="bold"><b>TranslateRadialDragger</b></span> allows the user to translate the dragger along a line. The direction of the line is determined by the center of the dragger and the point on the dragger that the user first hits. By default, the dragger  geometry is a sphere. When the user begins manipulating, an arrow appears in the direction of motion. (Changing the default geometry for a dragger without writing a new dragger is discussed in Chapter 15 of <a name="idch083"></a><i>The Inventor Mentor</i>. With this technique, any user can replace the arrow with a line or a bolt of lightning, for example.)</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5467057"></a>Overview</h3></div></div>
+<p>The <a name="idch084"></a><span class="bold"><b>SoDragger</b></span> class, a node kit, constructs the nodes shown in <a href="ch08.html#id17006">Figure 8-1</a>. The motion matrix for a simple dragger is typically a translation or a rotation matrix. This matrix is updated by the dragger as it responds to mouse motion.  Changes in the motion matrix cause the dragger geometry to move on the screen. In the case of the <a name="idch085"></a><a name="idch086"></a><span class="bold"><b>TranslateRadialDragger</b></span>, the motion matrix is a translation matrix.  When this matrix is updated, it moves the dragger along its line in response to the user's dragging the mouse. </p>
+<p>Each dragger has a field that reflects its state. The <a name="idch087"></a><span class="bold"><b>TranslateRadialDragger</b></span> performs translations, so it has a <span class="bold"><b>translation</b></span> field. The value of this field must be in sync with the value of the motion matrix. When you construct the dragger, you set it up so that whenever the motion matrix is updated, the dragger's translation field is updated, and vice versa. To update the translation field when the dragger moves, you use a value-changed callback.  (This is the typical case.) To update the motion matrix when the translation field changes, you attach a field sensor to the <a name="idch088"></a><a name="idch089"></a><span class="bold"><b>translation</b></span> field. (This case is less typical.)</p>
+<p><div class="figure"><p><a name="id5467174"></a><b>Figure 8-1. <a name="id17006"></a><a name="idch0810"></a>Structure of SoDragger</b></p>
+<div class="mediaobject"><img src="figures/fig8.1new.gif"></div></div><br>
+</p>
+<p>This discussion of draggers and manipulators uses the terms <a name="idch0811"></a><i>world space</i> and <i>local space</i>. World space is the transformation space at the top of the scene graph. Local space (for the dragger) is the space after the motion matrix.  This is typically where you perform calculations for positioning and moving the dragger. When draggers perform projections, they typically need to know the matrix to convert from local space to world space.  The <span class="bold"><b>getLocalToWorldMatrix()<a name="idch0812"></a></b></span> method on <span class="bold"><b>SoDragger</b></span> is a convenience method for transforming between these two spaces. Other convenience methods are</p>
+<div class="itemizedlist"><ul type="disc"><li><p>getWorldToLocalMatrix()</p>
+</li>
+<li><p>transformMatrixLocalToWorld()</p>
+</li>
+<li><p>transformMatrixWorldToLocal()</p>
+</li>
+</ul></div><p>The <a name="idch0813"></a><span class="bold"><b>geomSeparator</b></span> node also plays an important part in the functioning<br>
+of the dragger. To facilitate caching, its children should not change during manipulation. (They can, however, change at the start or finish of user manipulation.)</p>
+<p>Before you begin writing code for the new class, answer the following questions:<a name="idch0814"></a></p>
+<div class="itemizedlist"><ul type="disc"><li><p>What should the dragger look like?</p>
+</li>
+<li><p>How should the dragger move?</p>
+</li>
+<li><p>How do you want to interpret the dragger's motion?</p>
+</li>
+</ul></div><p>The file SoSubkit.h contains the macros for defining new node-kit classes. Since <span class="bold"><b>SoDragger</b></span> is a node kit, you'll be using macros from this file. (Also, because you are deriving a class from a node kit class, you do not need to include this file.) The SO_KIT_HEADER() macro declares type identifier and naming variables and methods that all node kit classes must support. The SO_KIT_SOURCE() macro defines the static variables and methods declared in the SO_KIT_HEADER() macro. Creating a new dragger follows the same general pattern as creating any new node kit, but with some additional steps, as follows:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new dragger class and decide what class it is derived from. (It will usually be derived from <span class="bold"><b>SoDragger</b></span>.)</p>
+</li>
+<li><p>Determine what kind of motion the dragger will perform and add the appropriate field (for a simple dragger) or fields (for a complex dragger). Examples of fields added to the dragger are <span class="bold"><b>translation</b></span>, <span class="bold"><b>rotation</b></span>, and <span class="bold"><b>scaleFactor</b></span> (see <a href="ch08.html#id86051">&#8220;Creating the Field&#8221;</a>).</p>
+</li>
+<li><p>Design each part in the catalog. Use the SO_KIT_CATALOG_-<br>
+ENTRY_HEADER() macro in the header file and SO_KIT_ADD_CATALOG_ENTRY() macro in the source file (see <a href="ch08.html#id73060">&#8220;Designing the Parts&#8221;</a>).</p>
+</li>
+<li><p>For the parts in the catalog that determine the user interface:</p>
+<p>a.  Define a unique resource name.</p>
+<p>b.  Create a default geometry file<br>
+     (see <a href="ch08.html#id79271">&#8220;Creating the Default Geometry File&#8221;</a>).</p>
+<p>c.  Create the compiled-in geometry using the special utility program<br>
+     provided (see <a href="ch08.html#id81115">&#8220;Creating the Compiled-in Default Geometry&#8221;</a>).</p>
+</li>
+<li><p>Define an <span class="bold"><b>initClass()</b></span> method to initialize the type information (see <a href="ch08.html#id28504">&#8220;Initializing the Dragger Class&#8221;</a>). </p>
+</li>
+<li><p>Determine what kind of projector models your interpretation of the mouse motion. For example, if your dragger moves along a line, use a line projector. It if moves in a plane, use a plane projector. If it rotates about an axis, use a cylinder projector. If it moves along the surface of a sphere, use a sphere projector. (The projector is declared in the .h file, created in the constructor, and used in the drag methods.) See <a name="idch0815"></a><a href="ch08.html#id78258">&#8220;Creating the Projector&#8221;</a>.</p>
+</li>
+<li><p>Define a constructor (see <a href="ch08.html#id23751">&#8220;Constructor&#8221;</a>).</p>
+</li>
+<li><p>Implement <span class="bold"><b>dragStart()</b></span>, <span class="bold"><b>drag()</b></span>, and <span class="bold"><b>dragFinish()</b></span> methods. These routines perform the dragging (see <a href="ch08.html#id20304">&#8220;Dragging Callback Functions&#8221;</a>).</p>
+</li>
+<li><p>Implement the value-changed callback function.  This function updates the dragger's field to reflect the dragger's current position.</p>
+</li>
+<li><p>Implement the field sensor callback function. This function causes the dragger to reposition itself whenever changes are made to its field.</p>
+</li>
+<li><p>Implement the <span class="bold"><b>setUpConnections()</b></span> method, which attaches and detaches field sensors.</p>
+</li>
+<li><p>Define a destructor (see <a href="ch08.html#id22900">&#8220;Destructor&#8221;</a>).</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5467744"></a><a name="id73060"></a>Designing the Parts</h3></div></div>
+<p>Our <a name="idch0816"></a><span class="bold"><b>TranslateRadialDragger</b></span> has four public parts and three internal parts. The first two parts, the <span class="bold"><b>translator</b></span> part and the <span class="bold"><b>translatorActive</b></span> part, are the geometry the user actually interacts with. The second two parts, the <a name="idch0817"></a><span class="bold"><b>feedback</b></span> part and the <span class="bold"><b>feedbackActive</b></span> part, are passive parts that indicate the direction of translation. In general, users cannot interact with feedback parts; often, these parts do not appear until after manipulation has begun. The internal parts are the switch nodes that switch between the active and inactive pairs of parts and the <a name="idch0818"></a><span class="bold"><b>feedbackRotate</b></span> part, which orients the feedback geometry.</p>
+<p>The subclass <span class="bold"><b>TranslateRadialDragger</b></span> adds additional nodes to the base class, as shown in <a href="ch08.html#id28672">Figure 8-2</a>.</p>
+<div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5467889"></a><a name="id79271"></a>Creating the Default Geometry File<a name="idch0819"></a></h4></div></div>
+<p>Once we've identified our parts, we need to design the geometry for them. The golden rule here is to <a name="idch0820"></a><i>start simple</i>. For now, use easy primitive shapes for your part geometry; there will be plenty of time to tweak them later. Example 8-1 shows the default geometry file for the <span class="bold"><b>TranslateRadialDragger</b></span> (see Chapter 11 in <a name="idch0821"></a><i>The Inventor Mentor</i> for more information on the Inventor file format).</p>
+<div class="example"><p><a name="id5467936"></a><b>Example 8-1. <a name="id57669"></a>translateRadialDragger.iv</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#Inventor V2.0 ascii
+
+# Geometry resource file for the TranslateRadialDragger
+
+DEF translateRadialTranslator Separator {
+   Material { diffuseColor .6 .6 .6 }
+   DrawStyle { style LINES }
+   Sphere { radius 1.732 }
+}
+DEF translateRadialTranslatorActive Separator {
+   Material { diffuseColor .6 .6 0 }
+   DrawStyle { style LINES }
+   Sphere { radius 1.732 }
+}
+
+# Don't show anything for feedback during inactive state
+DEF translateRadialFeedback Separator { }
+
+DEF translateRadialFeedbackActive Separator {
+   Material { diffuseColor .5  .9 .9 }
+   # An arrow aligned with the x axis.
+
+   RotationXYZ {
+      axis Z
+      angle 1.57079
+   }
+   Separator {
+
+      #stick
+      Cylinder { height 4.0 radius 0.05 }
+
+      #left arrowhead
+      Translation { translation 0 2.2 0 }
+      Cone { height 0.4 bottomRadius 0.2 }
+
+      #right arrowhead
+      Translation { translation 0 -4.4 0 }
+      RotationXYZ { axis Z angle 3.14159 }
+      Cone { height 0.4 bottomRadius 0.2 }
+   }
+}
+</pre></td></tr></table><p><div class="figure"><p><a name="id5467975"></a><b>Figure 8-2. <a name="id28672"></a>Structure of TranslateRadialDragger</b></p>
+<div class="mediaobject"><img src="figures/fig8.2new.gif"></div></div><br>
+</p>
+<p>In general, follow these conventions when designing the parts of your dragger:<a name="idch0822"></a></p>
+<div class="itemizedlist"><ul type="disc"><li><p>Give the default geometry file the same name as the dragger. In this case, it is translateRadialDragger.iv.</p>
+</li>
+<li><p>In the node-kit catalog, give parts active names like &#8220;translator&#8221; and &#8220;rotator.&#8221; Don't name them &#8220;cube&#8221; and &#8220;arrow&#8221;; the user may change the cube geometry to be a sphere, or the arrow geometry to a be poodle.</p>
+</li>
+<li><p>Prefix the resource name (that is, the name used in the default geometry file and the global dictionary) with the base name of the dragger. (Lots of draggers could have a part named &#8220;rotator.&#8221;) Also, if the geometry is for the active portion of a part, suffix it with <span class="bold"><b>Active</b></span>. For example, we have <span class="bold"><b>translateRadialTranslatorActive</b></span>.</p>
+</li>
+</ul></div></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5468075"></a><a name="id81115"></a>Creating the Compiled-in Default Geometry<a name="idch0823"></a></h4></div></div>
+<p>It's a harsh, cruel world. The reality of end-user environments is that sometimes resource files, such as a dragger's default geometry file, are accidentally lost or deleted. If the dragger is to continue to operate in this situation, we need to compile in a copy of the default geometry with the dragger.<a name="idch0824"></a></p>
+<p>To compile the default geometry along with the dragger, follow these steps:<a name="idch0825"></a></p>
+<div class="orderedlist"><ol type="1"><li><p>Use the special utility program provided with Inventor, <span class="bold"><b>ivToIncludeFile<a name="idch0826"></a></b></span>, which translates an .iv file (such as the one shown in <a href="ch08.html#id57669">Example 8-1</a>) into binary and then writes the binary version as an array of hexadecimal numbers.  Once created, you can read this memory buffer directly into Inventor.</p>
+<p>For example, to create the geometry buffer for the translate radial dragger, the command is</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+ivToIncludeFile TranslateRadialDragger::geomBuffer 
+        &lt; translateRadialDragger.iv 
+        &gt; TranslateRadialDraggerGeom.h
+</pre></td></tr></table><p>This utility, provided with Inventor, creates a file called TranslateRadialDraggerGeom.h that looks like this:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+char TranslateRadialDragger::geomBuffer[]= { ... }
+</pre></td></tr></table><p>The braces contain the hexadecimal version of the binary format for the .iv scene graph file. By convention, the name of the file containing the geometry is the name of the manipulator, followed by Geom.h.</p>
+</li>
+<li><p>In the include file, within the class definition of the dragger, declare the static variable <i>geomBuffer</i>:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+static const char geomBuffer[];
+</pre></td></tr></table><br></li>
+<li><p>In the source file, include the compiled-in version:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include  &quot;geom/TranslateRadialDraggerGeom.h&quot;
+</pre></td></tr></table><br></li>
+</ol></div><p>After you've created the dragger, you can modify the resource file (TranslateRadialDragger.iv). See Chapter 15 in <a name="idch0827"></a><i>The Inventor Mentor</i> for information on how to change the resource file without recompiling. When you are finished modifying the resource file, run the translation program and recompile the dragger; the geometry becomes a permanent part of your dragger.</p>
+</div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5468348"></a><a name="id28504"></a>Initializing the Dragger Class<a name="idch0828"></a></h3></div></div>
+<p>Define the <a name="idch0829"></a><span class="bold"><b>initClass()</b></span> method using the SO_KIT_INIT_CLASS() macro. Note that for existing Inventor draggers, <span class="bold"><b>initClass()</b></span> is called by</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoInteraction::init()
+
+</pre></td></tr></table><p>For any draggers or manipulators that you add to the system, you will need to call <span class="bold"><b>yourDragger::initClass()</b></span> from the application after the call to <span class="bold"><b>SoInteraction::init()</b></span>, or after anything that calls <span class="bold"><b>SoInteraction::init()</b></span>, such as <span class="bold"><b>SoXt::init()</b></span>.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5468428"></a><a name="id23751"></a>Constructor<a name="idch0830"></a><a name="idch0831"></a></h3></div></div>
+<p>Every simple dragger should declare a constructor that causes the default geometry for this dragger to be used. Let's briefly examine each step in the constructor:</p>
+<p>a.  Use SO_KIT_CONSTRUCTOR() to set up the internal variables for<br>
+     the class.<a name="idch0832"></a></p>
+<p>b.  Define the catalog entries for the new dragger (a node kit).</p>
+<p>c.  Put the default parts into the global dictionary.</p>
+<p>d.  Create the parts list and the parts that are created by default in this<br>
+      dragger using SO_KIT_INIT_INSTANCE().<a name="idch0833"></a></p>
+<p>e.  Create the appropriate field for the dragger&#8212;in this case,<br>
+     <span class="bold"><b>translation</b></span>.</p>
+<p>f.  Create the parts for the dragger.</p>
+<p>g.  Set the switches to inactive (if your dragger uses active/inactive pairs<br>
+     of parts).</p>
+<p>h.  Create the projector.</p>
+<p>i.  Add the dragger callback functions.</p>
+<p>j.  Add the value-changed callback function.</p>
+<p>k.  Put a sensor on the field.</p>
+<p>l.  Call the <span class="bold"><b>setUpConnections()</b></span> method to attach the field sensors.</p>
+<p>Steps a through e and step f are standard procedure for new node kits.  Step g is the recommended convention if your dragger uses active/inactive pairs of parts, but it is not required. The others are required steps for draggers. Here are a few more details about some of these steps.</p>
+<div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5468600"></a>Defining New Dragger Catalog Entries</h4></div></div>
+<p>As for any node kit, use the SO_KIT_ADD_CATALOG_ENTRY() macro to create the catalog entries for the dragger. This example places the switch nodes and the <a name="idch0834"></a><span class="bold"><b>feedbackRotate</b></span> node below the <span class="bold"><b>geomSeparator</b></span> part for improved caching behavior.<a name="idch0835"></a></p>
+</div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5468633"></a>Putting Default Parts into the Global Dictionary</h4></div></div>
+<p>When the first instance of the dragger is created, the default scene graph for each part needs to be read and installed in the global dictionary. Use the <a name="idch0836"></a><span class="bold"><b>readDefaultParts()<a name="idch0837"></a></b></span> method to read the geometry. It takes as arguments the name of the user-changeable resource .iv file, the compiled-in <span class="bold"><b>geomBuffer</b></span>, and the size of the <span class="bold"><b>geomBuffer</b></span>.</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+if (SO_KIT_IS_FIRST_INSTANCE())
+	   readDefaultParts
+          (&quot;translateRadialDragger.iv&quot;,  	// default geom file
+	    		       geomBuffer,                   // compiled-in defaults
+	    		       sizeof(geomBuffer));          // size of buffer
+	
+<a name="idch0838"></a></pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5468722"></a><a name="id86051"></a>Creating the Field</h4></div></div>
+<p>Every dragger has a field (or fields) reflecting its state. This dragger performs translations, so you create a <span class="bold"><b>translation</b></span> field.</p>
+</div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5468745"></a>Creating the Parts</h4></div></div>
+<p>Creating the parts is again standard node-kit procedure.  Use <span class="bold"><b>setPartAsDefault()<a name="idch0839"></a></b></span> to look up the part in the global dictionary and install the default geometry from the resource file:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+setPartAsDefault(&quot;translator&quot;, &quot;translateRadialTranslator&quot;);
+</pre></td></tr></table><p>The method <span class="bold"><b>setPartAsDefault()</b></span> differs from <span class="bold"><b>setPart()</b></span>. If <span class="bold"><b>setPartAsDefault()</b></span> is used, then the given subgraph will not be written to file unless it is changed later. If <a name="idch0840"></a><span class="bold"><b>setPart()</b></span> were used, then every subgraph of every part would appear in the file, resulting in lengthy files. Also, when reading the dragger back into Inventor, the geometry written to file would always replace the default. Hence, writing a dragger to file would fix its look forever, even if the default were redesigned.<a name="idch0841"></a></p>
+</div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5468858"></a>Setting the Switches</h4></div></div>
+<p>Although the draggers provided with the standard Inventor library use pairs of active and inactive parts, this is not a requirement for your new dragger.  However, if you do use similar pairs of parts, the constructor should set the switches to the inactive part to start with:<a name="idch0842"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SoSwitch *sw;
+sw = SO_GET_ANY_PART(this, &quot;translatorSwitch&quot;, SoSwitch);
+setSwitchValue(sw, 0);
+sw = SO_GET_ANY_PART(this, &quot;feedbackSwitch&quot;, SoSwitch);
+setSwitchValue(sw, 0);
+</pre></td></tr></table><p>The <a name="idch0843"></a><span class="bold"><b>setSwitchValue()</b></span> method is a convenience routine that checks that the given value is a change before setting it. It also checks whether the switch is NULL.</p>
+</div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5468909"></a><a name="id78258"></a>Creating the Projector</h4></div></div>
+<p>The most common way of turning 2D mouse input into direct 3D interaction is to project the 2D cursor position into a 3D line directed from the eye into the scene and intersect that line with some shape. The classes derived from<span class="bold"><b> SbProjector<a name="idch0844"></a></b></span> are designed to do just that, as well as to simplify the task of interpreting the result of the projection as a translation, rotation, and so on.  For more information on <span class="bold"><b>SbProjectors</b></span>, see the <a name="idch0845"></a><i>Open Inventor C++ Reference Manual</i>.</p>
+<p>In the case of the <span class="bold"><b>TranslateRadialDragger</b></span>, we wish the user to be able to translate the dragger along a line. To turn the 2D mouse position into a translation in three dimensions along a line, we make use of an <a name="idch0846"></a><span class="bold"><b>SbLineProjector<a name="idch0847"></a></b></span>. For now, we just construct an instance of the projector and save a pointer to it. Later, we need to update the projector with the current transform space, the current view volume, and so on. Then, every time the mouse moves, we find out what the mouse position projects to in three dimensions, and how far it moved from the previous position.</p>
+<p>To create the projector, the constructor includes the following line:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+    lineProj = new SbLineProjector();
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5469027"></a>Defining the Callback Functions</h4></div></div>
+<p>During construction, the dragger class must also register a set of callback functions that are invoked by the base class when some event or change in state occurs. For the <a name="idch0848"></a><span class="bold"><b>TranslateRadialDragger</b></span> (and most other simple draggers), we need to know these things:<a name="idch0849"></a><a name="idch0850"></a></p>
+<div class="itemizedlist"><ul type="disc"><li><p><i>When the user initiates dragging</i> this happens when the primary mouse button is pressed and a hit occurs on the dragger geometry.</p>
+</li>
+<li><p><i>When the user drags the mouse</i>-this happens when the mouse moves, provided dragging has already been initiated and the primary mouse button is still down.</p>
+</li>
+<li><p><i>When the user completes dragging</i>-this happens when the primary mouse button is released, provided dragging was already in progress.</p>
+</li>
+</ul></div></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5469124"></a>Adding a Value-Changed Callback</h4></div></div>
+<p>Whenever the <a name="idch0851"></a><span class="bold"><b>motionMatrix</b></span> changes (for example, as a result of interaction or copying), we must update the <span class="bold"><b>translation</b></span> field to correctly reflect this new state (see <a href="ch08.html#id56448">Figure 8-3</a>). Use a value-changed callback function to update the <span class="bold"><b>translation</b></span> field.</p>
+</div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5469190"></a>Adding a Field Sensor<a name="idch0852"></a></h4></div></div>
+<p>If the <span class="bold"><b>translation</b></span> field changes, the <span class="bold"><b>motionMatrix</b></span> must be changed so that the dragger moves to that new position (again, see <a href="ch08.html#id56448">Figure 8-3</a>).  (The dragger's field could change if it is set by the user, by a field-to-field connection, by an engine, or by a value from file.) Put a sensor on the <span class="bold"><b>translation</b></span> field to detect and communicate these changes.</p>
+</div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5469240"></a><a name="id22900"></a>Destructor</h3></div></div>
+<p>As with all classes, it is necessary to free any memory that was allocated during construction. Since draggers are a type of node, they are not explicitly deleted; instead, they are automatically deleted when their reference count falls to 0. When this happens, the child nodes of the dragger also have their reference counts decremented and are deleted automatically.<a name="idch0853"></a></p>
+<p>The only things that were created with <span class="bold"><b>new</b></span> in the constructor were the projector and the sensor. We explicitly delete the projector and the sensor. </p>
+<p><div class="figure"><p><a name="id5469278"></a><b>Figure 8-3. <a name="id56448"></a>Maintaining Consistency Between the Field and the Motion Matrix</b></p>
+<div class="mediaobject"><img src="figures/fig8.2Anew.gif"></div></div><br>
+</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5469300"></a><a name="id20304"></a>Dragging Callback Functions</h3></div></div>
+<p>The source file needs to implement the routines that are called as a result of user interaction: <a name="idch0854"></a><span class="bold"><b>dragStart()</b></span>, <span class="bold"><b>drag()</b></span>, and <span class="bold"><b>dragFinish()</b></span>. The functions are actually called by small static callback functions (usually called <i>callback stubs</i>). Those callback stubs are the functions that we registered in the constructor with the <span class="bold"><b>addCallback</b></span> methods on <span class="bold"><b>SoDragger</b></span>. (Recall that we need to use callback stubs because there is no notion of the implicit <span class="bold"><b>this</b></span> pointer when the callback is invoked.)</p>
+<p>Now, we'll look at the functions that do the real work.</p>
+<div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5469393"></a>Begin Dragging<a name="idch0855"></a></h4></div></div>
+<p>When the user presses the primary mouse button and causes a hit on the dragger, dragging begins. When this happens, several things must be done by the dragger to prepare for the ensuing dragging by the user:<a name="idch0856"></a><a name="idch0857"></a></p>
+<p>a.  Find out where on the dragger the hit occurred using the<br>
+     <span class="bold"><b>getLocalStartingPoint()<a name="idch0858"></a></b></span> method on <a name="idch0859"></a><span class="bold"><b>SoDragger</b></span>. This is often used to<br>
+     determine a direction of manipulation, or to save an initial point that<br>
+     is used as a marker for successive movements.</p>
+<p>b.  Set up the projector being used. Projectors need to be initialized,<br>
+      typically with some parameters to set their size and position, a<br>
+      transformation space to work in, and the view volume to use for<br>
+      projecting the mouse position into three dimensions. The projector<br>
+      geometry is usually determined by the dragger based on the initial<br>
+      hit position. The transformation space and the view volume are<br>
+      obtained from methods on <a name="idch0860"></a><span class="bold"><b>SoDragger</b></span> (using<br>
+      <span class="bold"><b>getLocalToWorldMatrix()<a name="idch0861"></a></b></span> and <a name="idch0862"></a><span class="bold"><b>getViewVolume()</b></span>).</p>
+<p>c.  Set up any feedback geometry that may exist.</p>
+<p>d. Set any appropriate switches to display parts as active.<a name="idch0863"></a></p>
+<p>The <span class="bold"><b>TranslateRadialDragger::dragStart()</b></span> method accomplishes each of these things. The references to <a name="idch0864"></a><i>local</i> space imply the transformation space that the parts of the manipulator exist in. <a href="ch08.html#id61631">Example 8-3</a> includes the code for <span class="bold"><b>dragStart()</b></span>.</p>
+<p>In the case of the <a name="idch0865"></a><span class="bold"><b>TranslateRadialDragger</b></span>, a special method, <span class="bold"><b>orientFeedbackGeometry()</b></span>, is called by <span class="bold"><b>dragStart()</b></span> to align the feedback geometry (an arrow) with the direction of translation. This special method is specific to the sample class and is not a requirement for draggers in general.</p>
+</div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5469721"></a>Continue Dragging</h4></div></div>
+<p>Once dragging has begun, and for as long as the primary mouse button is held down, successive movements of the mouse cause the motion callbacks to be invoked. When motion is detected, the dragger typically does these things:<a name="idch0866"></a></p>
+<p>a.  Update the view volume used by any projectors. This is necessary<br>
+      because it is possible for the camera's view volume to change<br>
+      between renderings, either because of viewport cropping or if some<br>
+     external force, such as a viewer, is editing the camera.<a name="idch0867"></a></p>
+<p>b.  Update the projector's workspace matrix.  </p>
+<p>c.  Using the current mouse position, project to a new position on the<br>
+     projector. Then using the new position, and perhaps some<br>
+     previously saved positions, determine what kind of motion (scale,<br>
+     rotate, translate) the dragger will perform, in local space.</p>
+<p>d. Turn this motion into a matrix and append that matrix to the motion<br>
+     matrix.  This results in movement of the dragger.<a name="idch0868"></a></p>
+<p>Here is the code for <span class="bold"><b>TranslateRadialDragger::drag()</b></span>. Recall that it is called by <span class="bold"><b>TranslateRadialDragger::motionCB()</b></span>, which in turn is invoked by <span class="bold"><b>SoDragger</b></span> whenever the mouse moves during dragging.</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+TranslateRadialDragger::drag()
+{
+   // Things can change between renderings. To be safe, update 
+   // the projector with the current values.
+   lineProj-&gt;setViewVolume(getViewVolume());    
+   lineProj-&gt;setWorkingSpace(getLocalToWorldMatrix());
+
+   // Find the new intersection on the projector.
+   SbVec3f newHitPt 
+     = lineProj-&gt;project(getNormalizedLocaterPosition()); 
+
+   // Get initial point expressed in our current local space.
+   SbVec3f startHitPt = getLocalStartingPoint();
+
+   // Motion in local space is difference between old and
+   // new positions.
+   SbVec3f motion = newHitPt - startHitPt;
+
+   // Append this to the startMotionMatrix, which was saved
+   // automatically at the beginning of the drag, to find 
+   // the current motion matrix.
+   setMotionMatrix(
+     appendTranslation(getStartMotionMatrix(), motion));
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5469848"></a>Finish Dragging<a name="idch0869"></a></h4></div></div>
+<p>The last thing a dragger needs to do is reset the state of its geometry when dragging is completed. <a href="ch08.html#id61631">Example 8-3</a> includes the code for <span class="bold"><b>dragFinish()</b></span>.</p>
+</div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5469901"></a><a name="id64114"></a>Value-Changed Callback</h3></div></div>
+<p>The value-changed callback function updates the dragger's <a name="idch0870"></a><span class="bold"><b>translation</b></span> field when the motion matrix changes. Here is the code for the <span class="bold"><b>TranslateRadialDragger</b></span>'s value-changed callback function.</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+void
+TranslateRadialDragger::valueChangedCB(void *, 
+   SoDragger *inDragger)
+{
+   TranslateRadialDragger *myself 
+     = (TranslateRadialDragger *) inDragger;
+
+   // Get translation by decomposing motionMatrix.
+   SbMatrix motMat = myself-&gt;getMotionMatrix();
+   SbVec3f trans, scale;
+   SbRotation rot, scaleOrient;
+   motMat.getTransform(trans, rot, scale, scaleOrient);
+
+   // Set &quot;translation&quot;, disconnecting sensor while doing so.
+   myself-&gt;fieldSensor-&gt;detach();
+   if (myself-&gt;translation.getValue() != trans)
+     myself-&gt;translation = trans;
+   myself-&gt;fieldSensor-&gt;attach(&amp;(myself-&gt;translation));
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5469962"></a>Field Sensor</h3></div></div>
+<p>If the dragger's <a name="idch0871"></a><span class="bold"><b>translation</b></span> field changes, the motion matrix must be updated to reflect that change. The callback function for the field sensor performs this task, as follows:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+// If the &quot;translation&quot; field is set from outside, update
+// motionMatrix accordingly.
+void
+TranslateRadialDragger::fieldSensorCB(void *inDragger, 
+                                      SoSensor *)
+{
+   TranslateRadialDragger *myself 
+     = (TranslateRadialDragger *) inDragger;
+
+   SbMatrix motMat = myself-&gt;getMotionMatrix();
+   myself-&gt;workFieldsIntoTransform(motMat);
+
+   myself-&gt;setMotionMatrix(motMat);
+}
+</pre></td></tr></table><p>Note that <span class="bold"><b>workFieldsIntoTransform()</b></span> is a special method that changes only the parts of the matrix for which the dragger has fields. In this case, the translation in the matrix changes, but any rotation or scale in the matrix remains undisturbed.</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5470050"></a>The setUpConnections() Method</h3></div></div>
+<p>When a dragger is read from file or when a copy of a dragger is made, you do not want any of the dragger's sensors to fire. Implement a <a name="idch0872"></a><span class="bold"><b>setUpConnections()<a name="idch0873"></a></b></span> method to detach and attach the sensors so that draggers can be copied and read correctly. The <span class="bold"><b>SoDragger::copy()<a name="idch0874"></a></b></span> and <span class="bold"><b>SoDragger::readInstance()<a name="idch0875"></a></b></span> methods call <span class="bold"><b>setUpConnections(FALSE)</b></span> at the beginning and <span class="bold"><b>setUpConnections(TRUE)</b></span> at the end. The constructor also calls <span class="bold"><b>setUpConnections()</b></span>. <a href="ch08.html#id61631">Example 8-3</a> shows <span class="bold"><b>setUpConnections()</b></span> for the <span class="bold"><b>TranslateRadialDragger</b></span> class.</p>
+<p><a href="ch08.html#id72872">Example 8-2</a> shows the include file for the <span class="bold"><b>TranslateRadialDragger</b></span> class.</p>
+<div class="example"><p><a name="id5470183"></a><b>Example 8-2. <a name="id72872"></a><a name="idch0876"></a>TranslateRadialDragger.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+//  Resource names and part names for this dragger are:
+//      Resource Name:                        Part Name:
+//      translateRadialTranslator             translator
+//      translateRadialTranslatorActive       translatorActive
+//      translateRadialFeedback               feedback
+//      translateRadialFeedbackActive         feedbackActive
+
+#include &lt;Inventor/draggers/SoDragger.h&gt;
+#include &lt;Inventor/fields/SoSFVec3f.h&gt;
+#include &lt;Inventor/sensors/SoFieldSensor.h&gt;
+
+class SbLineProjector;
+
+class TranslateRadialDragger : public SoDragger {
+   SO_KIT_HEADER(TranslateRadialDragger);
+
+   // Catalog entries for new parts added by this class.
+   SO_KIT_CATALOG_ENTRY_HEADER(translatorSwitch);
+   SO_KIT_CATALOG_ENTRY_HEADER(translator);
+   SO_KIT_CATALOG_ENTRY_HEADER(translatorActive);
+   SO_KIT_CATALOG_ENTRY_HEADER(feedbackRotate);
+   SO_KIT_CATALOG_ENTRY_HEADER(feedbackSwitch);
+   SO_KIT_CATALOG_ENTRY_HEADER(feedback);
+   SO_KIT_CATALOG_ENTRY_HEADER(feedbackActive);
+
+  public:
+  
+   // Constructor
+   TranslateRadialDragger();
+
+   // Field that will always contain the dragger's position.
+   SoSFVec3f translation;
+
+   // Initialize the class. This should be called once
+   // after SoInteraction::init().
+   static void initClass();
+
+  protected:
+
+   void orientFeedbackGeometry(const SbVec3f &amp;localDir);
+
+   // Projector used for calculating motion along a line.
+   SbLineProjector *lineProj;
+
+   // Static callback functions invoked by SoDragger when the 
+   // mouse button goes down over this dragger, when the
+   // mouse drags, and when the button is released.
+   static void startCB(void *, SoDragger *);
+   static void motionCB(void *, SoDragger *);
+   static void finishCB(void *, SoDragger *);
+
+   // These functions, invoked by the static callback 
+   // functions, do all the work of moving the dragger.
+   void dragStart();
+   void drag();
+   void dragFinish();
+
+   // This sensor watches for changes to the translation field.
+   SoFieldSensor *fieldSensor;
+   static void fieldSensorCB(void *, SoSensor *);
+
+   // This callback updates the translation field when 
+   // the dragger is moved.
+   static void valueChangedCB(void *, SoDragger *);
+
+   // This will detach/attach the fieldSensor.
+   // It is called at the end of the constructor (to attach).
+   // and at the start/end of SoBaseKit::readInstance()
+   // and on the new copy at the start/end of SoBaseKit::copy().
+   // Returns the state of the node when this was called.
+   virtual SbBool setUpConnections(SbBool onOff, 
+                                   SbBool doItAlways = FALSE);
+
+  private:
+
+   static const char geomBuffer[];
+
+   // Destructor.
+   ~TranslateRadialDragger();
+};    
+</pre></td></tr></table><p><a href="ch08.html#id61631">Example 8-3</a> shows the source code for the <span class="bold"><b>TranslateRadialDragger</b></span> class.</p>
+<div class="example"><p><a name="id5470370"></a><b>Example 8-3. <a name="id61631"></a>TranslateRadialDragger.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/nodes/SoRotation.h&gt;
+#include &lt;Inventor/nodes/SoSeparator.h&gt;
+#include &lt;Inventor/nodes/SoSwitch.h&gt;
+#include &lt;Inventor/projectors/SbLineProjector.h&gt;
+#include &lt;Inventor/sensors/SoFieldSensor.h&gt;
+#include &lt;Inventor/SoPath.h&gt;
+
+// Include file for our new class.
+#include &quot;TranslateRadialDragger.h&quot;
+
+// This file contains the variable 
+// TranslateRadialDragger::geomBuffer, which describes 
+// the default geometry resources for this dragger.
+#include &quot;TranslateRadialDraggerGeom.h&quot;
+
+SO_KIT_SOURCE(TranslateRadialDragger);
+
+//  Initializes the type ID for this dragger node. This
+//  should be called once after SoInteraction::init().
+void
+TranslateRadialDragger::initClass()
+{
+   SO_KIT_INIT_CLASS(TranslateRadialDragger, SoDragger,
+                     &quot;Dragger&quot;);
+}
+
+TranslateRadialDragger::TranslateRadialDragger()
+{
+   SO_KIT_CONSTRUCTOR(TranslateRadialDragger);
+
+   // Put this under geomSeparator so it draws efficiently.
+   SO_KIT_ADD_CATALOG_ENTRY(translatorSwitch, SoSwitch, TRUE,
+                            geomSeparator, , FALSE);
+   SO_KIT_ADD_CATALOG_ENTRY(translator, SoSeparator, TRUE,
+                            translatorSwitch, , TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(translatorActive,SoSeparator, TRUE,
+                            translatorSwitch, , TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(feedbackRotate, SoRotation, TRUE,
+                            geomSeparator, , TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(feedbackSwitch, SoSwitch, TRUE,
+                            geomSeparator, , FALSE);
+   SO_KIT_ADD_CATALOG_ENTRY(feedback, SoSeparator, TRUE,
+                            feedbackSwitch, , TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(feedbackActive, SoSeparator, TRUE,
+                            feedbackSwitch, , TRUE);
+
+   // Read geometry resources. Only do this the first time we 
+   // construct one.  'geomBuffer' contains our compiled in 
+   // defaults. The user can override these by specifying new 
+   // scene graphs in the file:
+   // $(SO_DRAGGER_DIR)/translateRadialDragger.iv
+   if (SO_KIT_IS_FIRST_INSTANCE())
+     readDefaultParts(&quot;translateRadialDragger.iv&quot;, geomBuffer,
+                      sizeof(geomBuffer));
+      
+   // Field that always shows current position of the dragger.
+   SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
+
+   // Creates the parts list for this node kit.
+   SO_KIT_INIT_INSTANCE();
+
+   // Create the parts of the dragger. This dragger has five 
+   // parts that we need to create: &quot;translator&quot;, 
+   // &quot;translatorActive&quot;, &quot;feedback,&quot; and &quot;feedbackActive&quot; will 
+   // be created using the resource mechanism. They are looked 
+   // up in the global dictionary.
+   // &quot;rotator,&quot; used to position the feedback so it points in 
+   // the direction selected by the user, will just be a plain 
+   // old SoRotation node.
+   // We call 'setPartAsDefault' because we are installing 
+   // default geometries from the resource files. By calling
+   // 'setPartAsDefault' instead of 'setPart', we ensure that 
+   // these parts will not write to file unless they are 
+   // changed later. 
+   setPartAsDefault(&quot;translator&quot;, 
+                    &quot;translateRadialTranslator&quot;);
+   setPartAsDefault(&quot;translatorActive&quot;, 
+                    &quot;translateRadialTranslatorActive&quot;);
+   setPartAsDefault(&quot;feedback&quot;, 
+                    &quot;translateRadialFeedback&quot;);
+   setPartAsDefault(&quot;feedbackActive&quot;, 
+                    &quot;translateRadialFeedbackActive&quot;);
+
+   // Set the switch parts to 0 to display the inactive parts.
+   // The parts &quot;translatorSwitch&quot; and &quot;feedbackSwitch&quot;
+   // are not public parts (i.e., when making the catalog, the 
+   // isPublic flag was set FALSE, so users cannot access them).
+   // To retrieve the parts we must use the SO_GET_ANY_PART 
+   // macro which calls the protected method getAnyPart().
+   SoSwitch *sw;
+   sw = SO_GET_ANY_PART(this, &quot;translatorSwitch&quot;, SoSwitch);
+   setSwitchValue(sw, 0);
+   sw = SO_GET_ANY_PART(this, &quot;feedbackSwitch&quot;, SoSwitch);
+   setSwitchValue(sw, 0);
+
+   // This dragger does motion along a line,
+   // so we create a line projector.
+   lineProj = new SbLineProjector();
+
+   // Add the callback functions that will be called when
+   // the user clicks, drags, and releases.
+   addStartCallback(&amp;TranslateRadialDragger::startCB);
+   addMotionCallback(&amp;TranslateRadialDragger::motionCB);
+   addFinishCallback(&amp;TranslateRadialDragger::finishCB);
+
+   // Updates the translation field when the dragger moves.
+   addValueChangedCallback(
+                   &amp;TranslateRadialDragger::valueChangedCB);
+   // Updates the motionMatrix (and thus moves the dragger 
+   // through space) to a new location whenever the translation
+   // field is changed from the outside.
+   fieldSensor = new SoFieldSensor(
+                  &amp;TranslateRadialDragger::fieldSensorCB, this);
+   fieldSensor-&gt;setPriority(0);
+
+   setUpConnections(TRUE, TRUE);
+}
+
+TranslateRadialDragger::~TranslateRadialDragger()
+{
+   // Delete what we created in the constructor.
+   delete lineProj;
+   if (fieldSensor!=NULL)
+     delete fieldSensor;
+}
+
+SbBool
+TranslateRadialDragger::setUpConnections(SbBool onOff, 
+                                         SbBool doItAlways)
+{
+   if (!doItAlways &amp;&amp; connectionsSetUp == onOff)
+     return onOff;
+
+   if (onOff) {
+     // We connect AFTER base class.
+     SoDragger::setUpConnections(onOff, doItAlways);
+
+     // Call the sensor CB to make things up-to-date.
+     fieldSensorCB(this, NULL);
+
+     // Connect the field sensor.
+     if (fieldSensor-&gt;getAttachedField() != &amp;translation)
+       fieldSensor-&gt;attach(&amp;translation);
+   }
+   else {
+     // We disconnect BEFORE base class.
+
+     // Disconnect the field sensor.
+     if (fieldSensor-&gt;getAttachedField()!=NULL)
+        fieldSensor-&gt;detach();
+
+     SoDragger::setUpConnections(onOff, doItAlways);
+   }
+   return !(connectionsSetUp = onOff);
+}
+
+//  Static callback functions called by SoDragger when the 
+//  mouse goes down (over this dragger), drags, and releases.
+void
+TranslateRadialDragger::startCB(void *, SoDragger *dragger)
+{
+   TranslateRadialDragger *myself = 
+            (TranslateRadialDragger *) dragger;
+   myself-&gt;dragStart();
+}
+void
+TranslateRadialDragger::motionCB(void *, SoDragger *dragger)
+{
+   TranslateRadialDragger *myself =
+            (TranslateRadialDragger *) dragger;
+   myself-&gt;drag();
+}
+void
+TranslateRadialDragger::finishCB(void *, SoDragger *dragger)
+{
+   TranslateRadialDragger *myself =
+            (TranslateRadialDragger *) dragger;
+   myself-&gt;dragFinish();
+}
+
+//  Called when user clicks down on this dragger. Sets up the 
+//  projector and switches parts to their &quot;active&quot; versions.
+void
+TranslateRadialDragger::dragStart()
+{
+   // Display the 'active' parts...
+   SoSwitch *sw;
+   sw = SO_GET_ANY_PART(this, &quot;translatorSwitch&quot;, SoSwitch);
+   setSwitchValue(sw, 1);
+   sw = SO_GET_ANY_PART(this, &quot;feedbackSwitch&quot;, SoSwitch);
+   setSwitchValue(sw, 1);
+
+   // Establish the projector line.
+   // The direction of translation goes from the center of the
+   // dragger toward the point that was hit, in local space. 
+   // For the center, use (0,0,0).
+   SbVec3f startLocalHitPt = getLocalStartingPoint();
+   lineProj-&gt;setLine(SbLine(SbVec3f(0,0,0), startLocalHitPt));
+   
+   // Orient the feedback geometry.
+   orientFeedbackGeometry(startLocalHitPt);
+}
+
+//  Sets the feedbackRotation node so that the feedback
+//  geometry will be aligned with the direction of motion in
+//  local space.
+void
+TranslateRadialDragger::orientFeedbackGeometry( 
+                               const SbVec3f &amp;localDir)
+{
+   // By default, feedback geometry aligns with the x axis.
+   // Rotate so that it points in the given direction.
+   SbRotation rotXToDir = SbRotation(SbVec3f(1,0,0), localDir);
+
+   // Give this rotation to the &quot;feedbackRotate&quot; part.
+   SoRotation *myPart = SO_GET_ANY_PART(this, &quot;feedbackRotate&quot;, 
+                                        SoRotation);
+   myPart-&gt;rotation.setValue(rotXToDir);
+}
+   
+//  Called when the mouse translates during dragging. Moves
+//  the dragger based on the mouse motion.
+void
+TranslateRadialDragger::drag()
+{
+   // Things can change between renderings. To be safe, update 
+   // the projector with the current values.
+   lineProj-&gt;setViewVolume(getViewVolume());    
+   lineProj-&gt;setWorkingSpace(getLocalToWorldMatrix());
+
+   // Find the new intersection on the projector.
+   SbVec3f newHitPt =
+            lineProj-&gt;project(getNormalizedLocaterPosition()); 
+
+   // Get initial point expressed in our current local space.
+   SbVec3f startHitPt = getLocalStartingPoint();
+
+   // Motion in local space is difference between old and
+   // new positions.
+   SbVec3f motion = newHitPt - startHitPt;
+
+   // Append this to the startMotionMatrix, which was saved
+   // automatically at the beginning of the drag, to find 
+   // the current motion matrix.
+   setMotionMatrix(
+     appendTranslation(getStartMotionMatrix(), motion));
+}
+
+//  Called when mouse button is released and drag is completed.
+void
+TranslateRadialDragger::dragFinish()
+{
+   // Display inactive versions of parts...
+   SoSwitch *sw;
+   sw = SO_GET_ANY_PART(this, &quot;translatorSwitch&quot;, SoSwitch);
+   setSwitchValue(sw, 0);
+   sw = SO_GET_ANY_PART(this, &quot;feedbackSwitch&quot;, SoSwitch);
+   setSwitchValue(sw, 0);
+
+   // Get rid of the &quot;feedbackRotate&quot; part.  We don't need
+   // it since we aren't showing the feedback any more.
+   setAnyPart(&quot;feedbackRotate&quot;, NULL);
+}    
+
+// Called when the motionMatrix changes. Sets the 'translation'
+// field based on the new motionMatrix.
+void
+TranslateRadialDragger::valueChangedCB(void *, 
+                                       SoDragger *inDragger)
+{
+   TranslateRadialDragger *myself =
+            (TranslateRadialDragger *) inDragger;
+
+   // Get translation by decomposing motionMatrix.
+   SbMatrix motMat = myself-&gt;getMotionMatrix();
+   SbVec3f trans, scale;
+   SbRotation rot, scaleOrient;
+   motMat.getTransform(trans, rot, scale, scaleOrient);
+
+   // Set &quot;translation&quot;, disconnecting sensor while doing so.
+   myself-&gt;fieldSensor-&gt;detach();
+   if (myself-&gt;translation.getValue() != trans)
+     myself-&gt;translation = trans;
+   myself-&gt;fieldSensor-&gt;attach(&amp;myself-&gt;translation);
+}
+
+// If the &quot;translation&quot; field is set from outside, update
+// motionMatrix accordingly.
+void
+TranslateRadialDragger::fieldSensorCB(void *inDragger, 
+                                      SoSensor *)
+{
+   TranslateRadialDragger *myself =
+            (TranslateRadialDragger *) inDragger;
+
+   SbMatrix motMat = myself-&gt;getMotionMatrix();
+   myself-&gt;workFieldsIntoTransform(motMat);
+
+   myself-&gt;setMotionMatrix(motMat);
+}
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5470648"></a><a name="id25693"></a>Creating a Compound Dragger</h2></div></div>
+<p>In this section, you will learn how simple draggers can be combined to make a more complex <a name="idch0877"></a><i>compound</i> dragger. Compound draggers can typically perform several different operations, such as scaling and translating. The <span class="bold"><b>SoCenterBallDragger<a name="idch0878"></a></b></span> and<span class="bold"><b> SoTransformBoxDragger<a name="idch0879"></a></b></span> are examples of compound draggers.</p>
+<p>Unlike simple draggers, which can perform only one operation, compound draggers can typically do many things. The operation the user performs is determined by the part of the compound dragger that is first clicked upon.</p>
+<p>The steps involved in creating a compound dragger are best illustrated through example. This section shows how to  create a <a name="idch0880"></a><span class="bold"><b>RotTransDragger</b></span>, which&#8212;as its name implies&#8212;allows both rotations and translations. The rotation parts of this compound dragger are made from a set of three <span class="bold"><b>SoRotateCylindricalDraggers<a name="idch0881"></a></b></span>, one for each axis we wish to allow the user to rotate about. The translation part of the dragger is an instance of the <span class="bold"><b>TranslateRadialDragger</b></span> that we created in the previous section.</p>
+<p>Two nodes are introduced in this section:  the <span class="bold"><b>SoAntiSquish</b></span> node and the <span class="bold"><b>SoSurroundScale</b></span> node. These nodes are often useful in compound draggers and in manipulators. The compound dragger created in this section uses an <span class="bold"><b>SoAntiSquish</b></span> node. Its catalog also contains an <span class="bold"><b>SoSurroundScale</b></span> node, which is not used by default. The <span class="bold"><b>RotTransManip</b></span> manipulator created at the end of this chapter uses a <span class="bold"><b>RotTransDragger</b></span> and turns on the <span class="bold"><b>SoSurroundScale</b></span> part. This enables the manipulator to have its dragger geometry surround the other objects that will move along with it. </p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5470840"></a>SoAntiSquish Node</h3></div></div>
+<p>The <a name="idch0882"></a><span class="bold"><b>SoAntiSquish<a name="idch0883"></a></b></span> node makes scaling uniform so that draggers and manipulators retain their shape even if the current transformation contains a nonuniform scale.  When an action is applied to this node, it decomposes the current transformation matrix into a rotation, a translation, and a scale.  If the scale is nonuniform, it replaces the current transformation matrix with a new one that uses the same rotation and translation, but a <i>uniform</i> scale.</p>
+<p>This node has one field, <span class="bold"><b>sizing</b></span>, which controls how to make the scale uniform. Possible values for this field are as follows:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term">AVERAGE_DIMENSION</span></td><td width="10"> </td><td><p><br>
+averages the x, y, and z scale value (default).</p>
+
+</td></tr><tr valign="top"><td><span class="term">BIGGEST_DIMENSION</span></td><td width="10"> </td><td><p><br>
+replaces all three scale values with the largest scale value. </p>
+
+</td></tr><tr valign="top"><td><span class="term">SMALLEST_DIMENSION</span></td><td width="10"> </td><td><p><br>
+replaces all three scale values with the smallest scale value.</p>
+
+</td></tr><tr valign="top"><td><span class="term">LONGEST_DIAGONAL</span></td><td width="10"> </td><td><p><br>
+constructs a unit cube at the origin and transforms it by the current transformation matrix. To do this, it finds the longest diagonal of that transformed cube.  Then, it sets the uniform scale to be half the length of this diagonal. (If the cube is being sheared, the LONGEST_DIAGONAL gives you the greatest distance from any point in the cube to the origin. With shearing, this distance could be greater than BIGGEST_DIMENSION.)</p>
+
+</td></tr></table></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5471017"></a>SoSurroundScale Node</h3></div></div>
+<p>The <a name="idch0884"></a><span class="bold"><b>SoSurroundScale</b></span> node is used to cause a dragger or manipulator to surround certain objects in the scene. This node is typically used when you create an <a name="idch0885"></a><span class="bold"><b>SoTransformManip</b></span> from a dragger. Although this part is included in the catalog for the <span class="bold"><b>RotTransDragger</b></span>, it is not actually constructed by the dragger and is left as NULL.</p>
+<p>This node examines what you want it to surround in the scene graph and determines how large the objects are.  It then adds a scale and a translation to the current transformation matrix so that it surrounds those objects.  For a manipulator, these are usually the objects affected by the movement of the manipulator.</p>
+<p><a href="ch08.html#id39464">Figure 8-4</a> shows a scene graph containing a transform manipulator and a cube.  The dragger within the manipulator includes a surround-scale node.  The top separator node is the <i>container</i> node.  In addition to the manipulator, it contains a cube, which the manipulator surrounds.  The transform manipulator is the <i>reset</i> node.  The manipulator surrounds everything below the container node and to the right of the reset node. </p>
+<p>The <span class="bold"><b>SoSurroundScale</b></span> node has two fields:</p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>numNodesUpToContainer</b></span>
+</span></td><td width="10"> </td><td><p><span class="bold"><b>
+
+
+<br>
+</b></span>number of nodes up the current path to the node that contains the objects to surround</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>numNodesUpToReset</b></span>
+</span></td><td width="10"> </td><td><p><span class="bold"><b>
+
+
+<br>
+</b></span>number of nodes up the chain to the reset node (that is, the node where the bounding box is emptied)</p>
+
+</td></tr></table></div><p>In <a href="ch08.html#id39464">Figure 8-4</a>, <span class="bold"><b>numNodesUpToContainer</b></span> equals 4 and <span class="bold"><b>numNodesUpToReset </b></span>equals 3.  (Note that <span class="bold"><b>numNodesUpToReset</b></span> must be smaller than <span class="bold"><b>numNodesUpToContainer</b></span>, or there will be no reset node.) The result is that the geometry of the dragger now surrounds the cube.<a name="idch0886"></a></p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5471262"></a>Defining the Parts<a name="idch0887"></a></h3></div></div>
+<p>Several operations must be completed when you are designing the parts of a compound dragger:</p>
+<div class="itemizedlist"><ul type="disc"><li><p><i>Define the desired operations of the dragger</i>&#8212;for this example, the operations are a rotation about each of the three axes, as well as arbitrary translation.</p>
+</li>
+<li><p><i>Choose the simple dragger to suit each operation</i>&#8212;for rotations about a fixed axis, you can use the <a name="idch0888"></a><span class="bold"><b>SoRotateCylindricalDragger</b></span>. (You could also use the<span class="bold"><b> SoRotateDiscDragger<a name="idch0889"></a></b></span>, which rotates about a fixed axis; however, its behavior is not well suited for this application, since it does not allow rotation when looking edge-on. It is better for dial-type draggers.) For the arbitrary translation part, you can use the <span class="bold"><b>TranslateRadialDragger </b></span>created in the previous section.</p>
+</li>
+<li><p><i>Get the resource names and correlate them to part names&#8212;</i>for example, the <span class="bold"><b>SoRotateCylindricalDragger</b></span> is the <span class="bold"><b>XRotator</b></span> part in the <span class="bold"><b>RotTransDragger</b></span>. The compound dragger needs to create its own resource name for each part of each simple dragger. By convention, Inventor concatenates the part name as follows: compound dragger name/simple dragger part name/name of the part within the simple dragger. In the <span class="bold"><b>RotTransDragger</b></span>, the three rotators share the same resources.  <a name="idch0890"></a></p>
+</li>
+<li><p><i>Determine the geometry of the parts</i>&#8212;by default, the simple draggers use their default part geometry. Typically, what gives compound draggers their flair is the way they redefine this default geometry in an interesting way. This redefinition is done in the Inventor file for the dragger. In the <span class="bold"><b>RotTransDragger</b></span>, the default cylinder of each <span class="bold"><b>SoRotateCylindricalDragger </b></span>is replaced by a thin ring (actually a thin cylinder with its top and bottom removed). The <span class="bold"><b>RotTransDragger</b></span> does not display any feedback for the <span class="bold"><b>SoRotateCylindricalDraggers </b></span>because the richer geometry of the compound dragger provides sufficient visual information for the user. (The feedback parts are set to be an empty separator.)<a name="idch0891"></a></p>
+<p><div class="figure"><p><a name="id5471493"></a><b>Figure 8-4. <a name="id39464"></a><a name="idch0892"></a>Using an SoSurroundScale Node in a Transform Manipulator</b></p>
+<div class="mediaobject"><img src="figures/fig8.4new.gif"></div></div><br>
+</p>
+</li>
+</ul></div><p>Once all of these things have been determined, you can create a default geometry file for the compound dragger. The following geometry file defines the geometry for all parts in the translator and rotators that make up the <span class="bold"><b>RotTransDragger</b></span>. It uses the same naming conventions used in the previous section describing the simple dragger. At this point, you also need to create a default include file for the compiled-in geometry. As described in the previous section, run the <a name="idch0893"></a><span class="bold"><b>ivToIncludeFile</b></span> utility to translate the .iv file into an array of hexadecimal numbers.</p>
+<p><a href="ch08.html#id41038">Example 8-4</a> shows the default geometry file for <a name="idch0894"></a><span class="bold"><b>RotTransDragger</b></span>. </p>
+<div class="example"><p><a name="id5471594"></a><b>Example 8-4. <a name="id41038"></a>rotTransDragger.iv</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#Inventor V2.0 ascii
+
+# Geometry resource file for the RotTransDragger
+
+# Geometry for the rotating parts.
+DEF rotTransRotatorRotator Separator {
+    Material { 
+       diffuseColor  .05 .18 .125
+       emissiveColor .05 .18 .125
+    }
+    DrawStyle { lineWidth 2 }
+    Cylinder {
+	       radius 1.85
+       	height .15
+	       parts SIDES
+    }
+}
+
+DEF rotTransRotatorRotatorActive Separator {
+    Material { 
+       	diffuseColor  .05 .2025 .18
+	       emissiveColor .05 .2025 .18
+    }
+    DrawStyle { lineWidth 2 }
+    Cylinder {
+	       radius 1.85
+	       height .15
+	       parts SIDES
+    }
+}
+
+# Do not display the axis feedback used
+# by the cylinder manips.
+DEF rotTransRotatorFeedback Separator { }
+DEF rotTransRotatorFeedbackActive Separator { }
+
+DEF rotTransTranslatorTranslator Separator {
+    Material { diffuseColor .6 .6 .6 }
+    DrawStyle { style LINES }
+    Sphere { radius 1.732 }
+}
+
+DEF rotTransTranslatorTranslatorActive Separator {
+    Material { diffuseColor .6 .6 0 }
+    DrawStyle { style LINES }
+    Sphere { radius 1.732 }
+}
+
+# Don't show anything for feedback during inactive state.
+DEF rotTransTranslatorFeedback Separator { }
+
+DEF rotTransTranslatorFeedbackActive Separator {
+    Material { diffuseColor .5  .9 .9 }
+    # An arrow aligned with the x-axis.
+    RotationXYZ {
+	       axis Z
+	       angle 1.57079
+    }
+    Separator {
+
+       	#stick
+       	Cylinder { height 4.0 radius 0.05 }
+
+       	#left arrowhead
+	       Translation { translation 0 2.2 0 }
+	       Cone { height 0.4 bottomRadius 0.2 }
+
+       	#right arrowhead
+       	Translation { translation 0 -4.4 0 }
+       	RotationXYZ { axis Z angle 3.14159 }
+	       Cone { height 0.4 bottomRadius 0.2 }
+   }
+}
+</pre></td></tr></table><p><a href="ch08.html#id35535">Figure 8-5</a> shows the scene graph for the <span class="bold"><b>RotTransDragger</b></span> class. <a href="ch08.html#id44684">Example 8-5</a> shows the header file for this class.  </p>
+<div class="example"><p><a name="id5471707"></a><b>Example 8-5. <a name="id44684"></a><a name="idch0895"></a>RotTransDragger.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+//  Geometry resources and part names for this dragger:
+
+//  Resource Names:                     Part Names:
+// rotTransTranslatorTranslator      translator.translator
+// rotTransTranslatorTranslatorActive
+//                                   translator.translatorActive
+// rotTransTranslatorFeedback        translator.feedback
+// rotTransTranslatorFeedbackActive  translator.feedbackActive
+
+// rotTransRotatorRotator             XRotator.rotator
+// rotTransRotatorRotatorActive       XRotator.rotatorActive
+// rotTransRotatorFeedback            XRotator.feedback
+// rotTransRotatorFeedbackActive      XRotator.feedbackActive
+// (and similarly for parts of the YRotator and ZRotator)
+
+#include &lt;Inventor/sensors/SoFieldSensor.h&gt;
+#include &lt;Inventor/draggers/SoDragger.h&gt;
+#include &lt;Inventor/fields/SoSFVec3f.h&gt;
+#include &lt;Inventor/fields/SoSFRotation.h&gt;
+
+class TranslateRadialDragger;
+class SoRotateCylindricalDragger;
+
+class RotTransDragger : public SoDragger
+{
+   SO_KIT_HEADER(RotTransDragger);
+
+   // Makes the dragger surround other objects
+   SO_KIT_CATALOG_ENTRY_HEADER(surroundScale);
+
+</pre></td></tr></table><p><div class="figure"><p><a name="id5471787"></a><b>Figure 8-5. <a name="id35535"></a>Structure of the RotTransDragger </b></p>
+<div class="mediaobject"><img src="figures/fig8.5new.gif"></div></div><br>
+</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+// Keeps the dragger evenly sized in all 3 dimensions
+   SO_KIT_CATALOG_ENTRY_HEADER(antiSquish);
+
+   // The translating dragger...
+   SO_KIT_CATALOG_ENTRY_HEADER(translator);
+
+   // The X and Z rotators need to be turned so as to orient 
+   // correctly. So create a separator part and put an 
+   // SoRotation node and the dragger underneath.
+   SO_KIT_CATALOG_ENTRY_HEADER(XRotatorSep);
+   SO_KIT_CATALOG_ENTRY_HEADER(XRotatorRot);
+   SO_KIT_CATALOG_ENTRY_HEADER(XRotator);
+
+   SO_KIT_CATALOG_ENTRY_HEADER(YRotator);
+
+   SO_KIT_CATALOG_ENTRY_HEADER(ZRotatorSep);
+   SO_KIT_CATALOG_ENTRY_HEADER(ZRotatorRot);
+   SO_KIT_CATALOG_ENTRY_HEADER(ZRotator);
+
+  public:
+  
+   // Constructor
+   RotTransDragger();
+
+   // These fields reflect state of the dragger at all times.
+   SoSFRotation rotation;
+   SoSFVec3f   translation;
+
+   // This should be called once after SoInteraction::init().
+   static void initClass();
+
+  protected:
+
+   // These sensors ensure that the motionMatrix is updated 
+   // when the fields are changed from outside.
+   SoFieldSensor *rotFieldSensor;
+   SoFieldSensor *translFieldSensor;
+   static void fieldSensorCB(void *, SoSensor *);
+
+   // This function is invoked by the child draggers when they 
+   // change their value.
+   static void valueChangedCB(void *, SoDragger *);
+
+   // Called at the beginning and end of each dragging motion.
+   // Tells the &quot;surroundScale&quot; part to recalculate.
+   static void invalidateSurroundScaleCB(void *, SoDragger *);
+
+   // This will detach/attach the fieldSensor.
+   // It is called at the end of the constructor (to attach).
+   // and at the start/end of SoBaseKit::readInstance()
+   // and on the new copy at the start/end of SoBaseKit::copy()
+   // Returns the state of the node when this was called.
+   virtual SbBool setUpConnections( SbBool onOff, 
+                        SbBool doItAlways = FALSE);
+
+   // This allows us to specify that certain parts do not
+   // write out. We'll use this on the antiSquish and
+   // surroundScale parts.
+   virtual void setDefaultOnNonWritingFields();
+
+  private:
+
+   static const char geomBuffer[];
+
+   // Destructor.
+   ~RotTransDragger();
+};   
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5471891"></a>Initializing the Compound Dragger</h3></div></div>
+<p>The complete source file for the <span class="bold"><b>RotTransDragger</b></span> is shown in  <a href="ch08.html#id18880">Example 8-6</a>. The process of initializing the compound dragger is identical to that of the simple dragger (see <a href="ch08.html#id28504">&#8220;Initializing the Dragger Class&#8221;</a>).</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5471928"></a>Constructor</h3></div></div>
+<p>Many of the steps for constructing the compound dragger are the same as those for a simple dragger.  This section describes the similarities and differences. The basic steps for constructing a dragger, described first in <a name="idch0896"></a><a href="ch08.html#id23751">&#8220;Constructor&#8221;</a>, are as follows:</p>
+<p>a.  Use SO_KIT_CONSTRUCTOR() to set up the internal variables for<br>
+     the class.<a name="idch0897"></a></p>
+<p>b.  Define the catalog entries for the new dragger.</p>
+<p>c.  Put the default parts into the global dictionary.</p>
+<p>d.  Create the parts list and the parts that are created by default in this<br>
+     dragger using SO_KIT_INIT_INSTANCE().</p>
+<p>e.  Create the special-interest field or fields for the dragger.</p>
+<p>f.  Create the parts for the dragger.</p>
+<p>g.  Set the switches to inactive (if your dragger uses active/inactive pairs<br>
+     of parts).</p>
+<p>h.  Create the projector.</p>
+<p>i.  Add the dragger callback functions.</p>
+<p>j.  Add the value-changed callback function.</p>
+<p>k.  Put a sensor on the special-interest field (or fields).</p>
+<p>l.  Call the <span class="bold"><b>setUpConnections()</b></span> method to attach the field sensors.</p>
+<div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5472048"></a>Steps a through e</h4></div></div>
+<p>Steps a through e are similar for simple and compound draggers.</p>
+<p>Step a, using SO_KIT_CONSTRUCTOR(), is the same for simple and compound draggers.<a name="idch0898"></a></p>
+<p>Step b is to define the catalog entries for the dragger, which is actually a node kit. Use the SO_KIT_ADD_CATALOG_ENTRY() macro to define the catalog entries. Arrange the simple draggers relative to each other, as shown earlier in <a name="idch0899"></a><a href="ch08.html#id35535">Figure 8-5</a>. Each simple dragger has its own separator, used for caching.  The simple draggers can use the cache at the <a name="idch08100"></a><span class="bold"><b>topSeparator</b></span> node if none of the draggers is changing. In compound draggers such as this one, the <span class="bold"><b>geomSeparator</b></span>, provided by the base <span class="bold"><b>SoDragger</b></span> class, is not used.</p>
+<p>Step c is to put the default parts into the global dictionary:<a name="idch08101"></a></p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+if (SO_KIT_IS_FIRST_INSTANCE())
+   readDefaultParts(&quot;rotTransDragger.iv&quot;, geomBuffer, 
+                     sizeof(geomBuffer));
+</pre></td></tr></table><p>Step d is to create the parts list and the default parts using the macro SO_KIT_INIT_INSTANCE().<a name="idch08102"></a></p>
+<p>Step e is to create the special-interest fields for this compound dragger:  a <span class="bold"><b>rotation</b></span> field and a <span class="bold"><b>translation</b></span> field:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+SO_KIT_ADD_FIELD(rotation, (0.0, 0.0, 0.0, 1.0));
+SO_KIT_ADD_FIELD(translation, (0.0, 0.0. 0.0);
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5472254"></a>Step f:  Creating the Parts</h4></div></div>
+<p>Step f is to create the parts for the node kit.  This step is more involved for a compound dragger than for a simple dragger.  At this point, you need to do the following things:</p>
+<div class="orderedlist"><ol type="1"><li><p>Construct the antisquish node. For the <a name="idch08103"></a><span class="bold"><b>RotTransDragger</b></span>, the sizing field of the <a name="idch08104"></a><span class="bold"><b>SoAntiSquish</b></span> node is set to BIGGEST_DIMENSION. As a result, the largest of the three scale values is used as the uniform scale value.</p>
+</li>
+<li><p>Create the simple draggers.</p>
+</li>
+<li><p>Create the rotation nodes in the <span class="bold"><b>XRotatorRot</b></span> and <span class="bold"><b>ZRotatorRot</b></span> parts.  The rotation node in the <span class="bold"><b>XRotatorRot</b></span> part aligns the cylindrical rotate dragger with the <i>x</i>-axis (in the default position, it rotates about the <i>y</i>-axis). The rotation node in the <span class="bold"><b>ZRotatorRot</b></span> part aligns the cylindrical rotate dragger with the <i>z</i>-axis.</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5472377"></a>Steps g through i</h4></div></div>
+<p>Steps g through i are all performed by the child draggers. The parent dragger class does not define these functions.</p>
+</div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5472388"></a>Step j:  Value-Changed Callback Function<a name="idch08105"></a></h4></div></div>
+<p>Step j is to update the <span class="bold"><b>rotation</b></span> and <span class="bold"><b>translation</b></span> fields in the dragger when the motion matrix changes (see <a name="idch08106"></a><a href="ch08.html#id64114">&#8220;Value-Changed Callback&#8221;</a>, where this step was performed for the simple dragger).</p>
+<p>The code for the <span class="bold"><b>RotTransDragger</b></span> is</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+addValueChangedCallback(&amp;RotTransDragger::valueChangedCB);
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5472507"></a>Step k:  Field Sensors</h4></div></div>
+<p>Conversely, you need to update the motion matrix when the <a name="idch08107"></a><span class="bold"><b>translation</b></span> or <span class="bold"><b>rotation</b></span> field changes.  This dragger places a sensor on the <span class="bold"><b>translation</b></span> field and another sensor on the <span class="bold"><b>rotation</b></span> field.  Both sensors use the same callback function, <span class="bold"><b>fieldSensorCB</b></span>, defined later in the source file.</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+// Updates motionMatrix when either field changes.
+rotFieldSensor = new SoFieldSensor(
+                     &amp;RotTransDragger::fieldSensorCB, this);
+rotFieldSensor-&gt;setPriority(0);
+translFieldSensor = new SoFieldSensor(
+                        &amp;RotTransDragger::fieldSensorCB,this);
+translFieldSensor-&gt;setPriority(0);
+
+setUpConnections(TRUE, TRUE);
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id5472628"></a>Step l:  Setting Up Connections</h4></div></div>
+<p>The <a name="idch08108"></a><span class="bold"><b>setUpConnections()</b></span> method is used to connect and disconnect the dragger's field connections, callback functions, and sensors. This method performs the following operations:</p>
+<div class="orderedlist"><ol type="1"><li><p>Calls the base class <span class="bold"><b>setUpConnections()</b></span> method.</p>
+</li>
+<li><p>Sets up the geometry of its child draggers.<a name="idch08109"></a></p>
+<p>For each child dragger in the compound dragger, the <span class="bold"><b>setUpConnections()</b></span> method calls <a name="idch08110"></a><span class="bold"><b>getAnyPart()</b></span> to build and return the dragger.</p>
+<p>Then it calls <a name="idch08111"></a><span class="bold"><b>setPartAsDefault()</b></span> after looking up the replacement parts in the global dictionary.</p>
+</li>
+<li><p>Adds the start and finish callback functions.</p>
+<p>The <a name="idch08112"></a><span class="bold"><b>SoSurroundScale</b></span> node does its bounding-box calculations when it is built and when its <a name="idch08113"></a><a name="idch08114"></a><span class="bold"><b>invalidate()</b></span> method is called.  For efficiency, the recalculation is performed only at the beginning and end of a drag.  In beween, the dragger continues to draw at the same size.  Register the <span class="bold"><b>invalidateSurroundScaleCB()<a name="idch08115"></a></b></span> callback function for each simple dragger.<a name="idch08116"></a></p>
+</li>
+<li><p>Registers the child draggers.</p>
+<p>It is worth describing in more detail what happens when you call the <span class="bold"><b>registerChildDragger()<a name="idch08117"></a></b></span> method for each simple dragger in the compound dragger. This method binds the child and parent draggers together to function as a unit in two main ways.  First, it causes the parent dragger's callback functions to be called after any of the child dragger's callback functions are called. Second, it causes all child draggers to move as a unit:  whenever the user clicks and drags on one child dragger, the other draggers move in unison with the first dragger. </p>
+<p>When you call <span class="bold"><b>registerChildDragger()</b></span>, the following things happen automatically. A value-changed callback function is added to monitor the motion in the child dragger. When the child dragger moves, the callback transforms that motion into the compound dragger's space, applying it to the compound dragger as a whole. It then zeros out the child dragger's motion so that the child is not moved relative to the whole.</p>
+<p>If you create a new dragger and for some reason you don't want the pieces of the compound dragger to move as a whole, you can use the <span class="bold"><b>registerChildDraggerCallbacksOnly()<a name="idch08118"></a></b></span> method, which doesn't transfer the child dragger's motion to the parent dragger.  (The spotlight dragger is an example of a dragger that uses this method. When the cone widens, the rest of the dragger remains unchanged.)</p>
+</li>
+<li><p>Attaches the field sensors (as for simple draggers).</p>
+</li>
+</ol></div></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5472908"></a>Destructor</h3></div></div>
+<p>Since the child draggers are nodes, they are destroyed automatically when the parent node is destroyed. There are no projectors to destroy as with the simple dragger, since no projectors were created here. The destructor merely needs to delete the sensor.<a name="idch08119"></a></p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5472926"></a>Callback Functions</h3></div></div>
+<p>The <span class="bold"><b>RotTransDragger</b></span> uses three callback functions, described above:<a name="idch08120"></a></p>
+<div class="variablelist"><table border="0" cellspacing="3"><tr valign="top"><td><span class="term"><span class="bold"><b>invalidateSurroundScaleCB()<a name="idch08121"></a></b></span>
+</span></td><td width="10"> </td><td><p>
+
+
+<br>
+called when dragging starts and finishes</p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>valueChangedCB()<a name="idch08122"></a></b></span>
+</span></td><td width="10"> </td><td><p>
+
+
+<br>
+called when the motion matrix changes<a name="idch08123"></a></p>
+
+</td></tr><tr valign="top"><td><span class="term"><span class="bold"><b>fieldSensorCB()<a name="idch08124"></a></b></span></span></td><td width="10"> </td><td><p>called when the special-interest field or fields change</p>
+
+</td></tr></table></div><p>The source file for the compound dragger must define each of these callback functions. </p>
+<p><a href="ch08.html#id18880">Example 8-6</a> shows the source code for <span class="bold"><b>RotTransDragger.c++</b></span>:</p>
+<div class="example"><p><a name="id5473100"></a><b>Example 8-6. <a name="id18880"></a>RotTransDragger.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/nodes/SoAntiSquish.h&gt;
+#include &lt;Inventor/nodes/SoRotation.h&gt;
+#include &lt;Inventor/nodes/SoSeparator.h&gt;
+#include &lt;Inventor/nodes/SoSurroundScale.h&gt;
+#include &lt;Inventor/nodes/SoTransform.h&gt;
+#include &lt;Inventor/sensors/SoFieldSensor.h&gt;
+
+// Include files for child dragger classes.
+#include &lt;Inventor/draggers/SoRotateCylindricalDragger.h&gt;
+#include &quot;TranslateRadialDragger.h&quot;
+
+// Include file for our new class.
+#include &quot;RotTransDragger.h&quot;
+
+// This file contains RotTransDragger::geomBuffer, which 
+// describes the default geometry resources for this class.
+#include &quot;RotTransDraggerGeom.h&quot;
+
+SO_KIT_SOURCE(RotTransDragger);
+
+
+//  Initializes the type ID for this dragger node. This
+//  should be called once after SoInteraction::init().
+void
+RotTransDragger::initClass()
+{
+   SO_KIT_INIT_CLASS(RotTransDragger, SoDragger, &quot;Dragger&quot;);    
+}
+
+RotTransDragger::RotTransDragger()
+{
+   SO_KIT_CONSTRUCTOR(RotTransDragger);
+
+   // Don't create &quot;surroundScale&quot; by default. It's only put 
+   // to use if this dragger is used within a manipulator.
+   SO_KIT_ADD_CATALOG_ENTRY(surroundScale, SoSurroundScale, TRUE,
+                            topSeparator, geomSeparator, TRUE);
+   // Create an anti-squish node by default.
+   SO_KIT_ADD_CATALOG_ENTRY(antiSquish, SoAntiSquish, FALSE,
+                            topSeparator, geomSeparator, TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(translator, TranslateRadialDragger,
+                            TRUE, topSeparator, geomSeparator,
+                            TRUE);
+   SO_KIT_ADD_CATALOG_ENTRY(XRotatorSep, SoSeparator, FALSE,
+                            topSeparator, geomSeparator, FALSE);
+   SO_KIT_ADD_CATALOG_ENTRY(XRotatorRot, SoRotation, TRUE,
+                            XRotatorSep, , FALSE);
+   SO_KIT_ADD_CATALOG_ENTRY(XRotator,SoRotateCylindricalDragger,
+                            TRUE, XRotatorSep, ,TRUE);
+
+   SO_KIT_ADD_CATALOG_ENTRY(YRotator, SoRotateCylindricalDragger,
+                            TRUE, topSeparator, geomSeparator, TRUE);
+
+   SO_KIT_ADD_CATALOG_ENTRY(ZRotatorSep, SoSeparator, FALSE,
+                            topSeparator, geomSeparator, FALSE);
+   SO_KIT_ADD_CATALOG_ENTRY(ZRotatorRot, SoRotation, TRUE,
+                            ZRotatorSep, ,FALSE);
+   SO_KIT_ADD_CATALOG_ENTRY(ZRotator, SoRotateCylindricalDragger,
+                            TRUE, ZRotatorSep, ,TRUE);
+
+   // Read geometry resources. Only do this the first time we
+   // construct one. 'geomBuffer' contains our compiled in
+   // defaults. The user can override these by specifying new
+   // scene graphs in the file:
+   // $(SO_DRAGGER_DIR)/rotTransDragger.iv&quot;
+   if (SO_KIT_IS_FIRST_INSTANCE())
+     readDefaultParts(&quot;rotTransDragger.iv&quot;, geomBuffer,
+                       sizeof(geomBuffer));
+
+   // Fields that always show current state of the dragger.
+   SO_KIT_ADD_FIELD(rotation, (0.0, 0.0, 0.0, 1.0));
+   SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
+
+   // Creates parts list and default parts for this nodekit.
+   SO_KIT_INIT_INSTANCE();
+
+   // Make the anti-squish node surround the biggest dimension
+   SoAntiSquish *myAntiSquish =
+            SO_GET_ANY_PART(this, &quot;antiSquish&quot;, SoAntiSquish);
+   myAntiSquish-&gt;sizing = SoAntiSquish::BIGGEST_DIMENSION;
+
+   // Create the simple draggers that comprise this dragger.
+   // This dragger has four simple pieces:  
+   //    1 TranslateRadialDragger
+   //    3 RotateCylindricalDraggers
+   // In the constructor, we just call SO_GET_ANY_PART to
+   // build each dragger.
+   // Within the setUpConnections() method, we will
+   // take care of giving these draggers new geometry and 
+   // establishing their callbacks.
+
+   // Create the translator dragger.    
+   SoDragger *tDragger = SO_GET_ANY_PART(this, &quot;translator&quot;, 
+                         TranslateRadialDragger);
+
+   // Create the XRotator dragger.    
+   SoDragger *XDragger = SO_GET_ANY_PART(this, &quot;XRotator&quot;, 
+                         SoRotateCylindricalDragger);
+
+   // Create the YRotator dragger.    
+   SoDragger *YDragger = SO_GET_ANY_PART(this, &quot;YRotator&quot;, 
+                         SoRotateCylindricalDragger);
+
+   // Create the ZRotator dragger.    
+   SoDragger *ZDragger = SO_GET_ANY_PART(this, &quot;ZRotator&quot;, 
+                         SoRotateCylindricalDragger);
+
+   // Set rotations in &quot;XRotatorRot&quot; and &quot;ZRotatorRot&quot; parts.
+   // These parts will orient the draggers from their default 
+   // (rotating about Y) to the desired configurations.
+   // By calling 'setAnyPartAsDefault' instead of 'setAnyPart'
+   // we ensure that they will not be written out, unless
+   // they are changed later on.
+   SoRotation *XRot = new SoRotation;
+   XRot-&gt;rotation.setValue(
+     SbRotation(SbVec3f(0,1,0), SbVec3f(1,0,0)));
+   setAnyPartAsDefault(&quot;XRotatorRot&quot;, XRot);
+
+   SoRotation *ZRot = new SoRotation;
+   ZRot-&gt;rotation.setValue(
+     SbRotation(SbVec3f(0,1,0), SbVec3f(0,0,1)));
+   setAnyPartAsDefault(&quot;ZRotatorRot&quot;, ZRot);
+
+   // Updates the fields when motionMatrix changes 
+   addValueChangedCallback(&amp;RotTransDragger::valueChangedCB);
+
+   // Updates motionMatrix when either field changes.
+   rotFieldSensor = new SoFieldSensor(
+                        &amp;RotTransDragger::fieldSensorCB, this);
+   rotFieldSensor-&gt;setPriority(0);
+   translFieldSensor = new SoFieldSensor(
+                           &amp;RotTransDragger::fieldSensorCB,this);
+   translFieldSensor-&gt;setPriority(0);
+
+   setUpConnections(TRUE, TRUE);
+}
+
+RotTransDragger::~RotTransDragger()
+{
+   if (rotFieldSensor!=NULL)
+     delete rotFieldSensor;
+   if (translFieldSensor!=NULL)
+     delete translFieldSensor;
+}
+
+SbBool
+RotTransDragger::setUpConnections(SbBool onOff, SbBool doItAlways)
+{
+   if (!doItAlways &amp;&amp; connectionsSetUp == onOff)
+     return onOff;
+
+   if (onOff) {
+     // We connect AFTER base class.
+     SoDragger::setUpConnections(onOff, doItAlways);
+
+     // For each of the simple draggers that compries this:
+     // [a]Call setPart after looking up our replacement parts 
+     //    in the global dictionary.
+     // [b]Add the invalidateSurroundScaleCB as a start and end
+     //    callback. When using a surroundScale node, these 
+     //    trigger it to recalculate a bounding box at the 
+     //    beginning and end of dragging.
+     // [c]Register the dragger as a 'childDragger' of this 
+     //    one. This has the following effects: 
+     //    [1] This dragger's callbacks will be invoked 
+     //        following the child manip's callbacks.  
+     //    [2] When the child is dragged, the child's motion 
+     //        will be transferred into motion of the entire 
+     //        dragger.
+      SoDragger *tD =
+               (SoDragger *) getAnyPart(&quot;translator&quot;, FALSE);
+      // [a] Set up the parts in the child dragger...
+      tD-&gt;setPartAsDefault(&quot;translator&quot;,
+                           &quot;rotTransTranslatorTranslator&quot;);
+      tD-&gt;setPartAsDefault(&quot;translatorActive&quot;,
+                           &quot;rotTransTranslatorTranslatorActive&quot;);
+      tD-&gt;setPartAsDefault(&quot;feedback&quot;,
+                           &quot;rotTransTranslatorFeedback&quot;);
+      tD-&gt;setPartAsDefault(&quot;feedbackActive&quot;,
+                           &quot;rotTransTranslatorFeedbackActive&quot;);
+      // [b] and [c] Add the callbacks and register the child
+      tD-&gt;addStartCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      tD-&gt;addFinishCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      registerChildDragger(tD);
+
+      SoDragger *XD =
+               (SoDragger *) getAnyPart(&quot;XRotator&quot;, FALSE);
+      // [a] Set up the parts in the child dragger...
+      XD-&gt;setPartAsDefault(&quot;rotator&quot;,
+                           &quot;rotTransRotatorRotator&quot;);
+      XD-&gt;setPartAsDefault(&quot;rotatorActive&quot;,
+                           &quot;rotTransRotatorRotatorActive&quot;);
+      XD-&gt;setPartAsDefault(&quot;feedback&quot;,
+                           &quot;rotTransRotatorFeedback&quot;);
+      XD-&gt;setPartAsDefault(&quot;feedbackActive&quot;,
+                           &quot;rotTransRotatorFeedbackActive&quot;);
+      // [b] and [c] Add the callbacks and register the child
+      XD-&gt;addStartCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      XD-&gt;addFinishCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      registerChildDragger(XD);
+
+      SoDragger *YD =
+               (SoDragger *) getAnyPart(&quot;YRotator&quot;, FALSE);
+      // [a] Set up the parts in the child dragger...
+      YD-&gt;setPartAsDefault(&quot;rotator&quot;,
+                           &quot;rotTransRotatorRotator&quot;);
+      YD-&gt;setPartAsDefault(&quot;rotatorActive&quot;,
+                           &quot;rotTransRotatorRotatorActive&quot;);
+      YD-&gt;setPartAsDefault(&quot;feedback&quot;,
+                           &quot;rotTransRotatorFeedback&quot;);
+      YD-&gt;setPartAsDefault(&quot;feedbackActive&quot;,
+                           &quot;rotTransRotatorFeedbackActive&quot;);
+      // [b] and [c] Add the callbacks and register the child
+      YD-&gt;addStartCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      YD-&gt;addFinishCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      registerChildDragger(YD);
+
+      SoDragger *ZD =
+               (SoDragger *) getAnyPart(&quot;ZRotator&quot;, FALSE);
+      // [a] Set up the parts in the child dragger...
+      ZD-&gt;setPartAsDefault(&quot;rotator&quot;,
+                           &quot;rotTransRotatorRotator&quot;);
+      ZD-&gt;setPartAsDefault(&quot;rotatorActive&quot;,
+                           &quot;rotTransRotatorRotatorActive&quot;);
+      ZD-&gt;setPartAsDefault(&quot;feedback&quot;,
+                           &quot;rotTransRotatorFeedback&quot;);
+      ZD-&gt;setPartAsDefault(&quot;feedbackActive&quot;,
+                           &quot;rotTransRotatorFeedbackActive&quot;);
+      // [b] and [c] Add the callbacks and register the child
+      ZD-&gt;addStartCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      ZD-&gt;addFinishCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      registerChildDragger(ZD);
+
+
+     // Call the sensor CB to make things up-to-date.
+     fieldSensorCB(this, NULL);
+
+     // Connect the field sensors
+     if (translFieldSensor-&gt;getAttachedField() != &amp;translation)
+        translFieldSensor-&gt;attach(&amp;translation);
+     if (rotFieldSensor-&gt;getAttachedField() != &amp;rotation)
+        rotFieldSensor-&gt;attach(&amp;rotation);
+   }
+   else {
+     // We disconnect BEFORE base class.
+
+     // Remove the callbacks from the child draggers,
+     // and unregister them as children.
+      SoDragger *tD =
+               (SoDragger *) getAnyPart(&quot;translator&quot;, FALSE);
+      tD-&gt;removeStartCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      tD-&gt;removeFinishCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      unregisterChildDragger(tD);
+
+      SoDragger *XD =
+               (SoDragger *) getAnyPart(&quot;XRotator&quot;, FALSE);
+      XD-&gt;removeStartCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      XD-&gt;removeFinishCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      unregisterChildDragger(XD);
+
+      SoDragger *YD =
+               (SoDragger *) getAnyPart(&quot;YRotator&quot;, FALSE);
+      YD-&gt;removeStartCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      YD-&gt;removeFinishCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      unregisterChildDragger(YD);
+
+      SoDragger *ZD =
+               (SoDragger *) getAnyPart(&quot;ZRotator&quot;, FALSE);
+      ZD-&gt;removeStartCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      ZD-&gt;removeFinishCallback(
+               &amp;RotTransDragger::invalidateSurroundScaleCB, this);
+      unregisterChildDragger(ZD);
+
+     // Disconnect the field sensors.
+     if (translFieldSensor-&gt;getAttachedField()!=NULL)
+        translFieldSensor-&gt;detach();
+     if (rotFieldSensor-&gt;getAttachedField()!=NULL)
+        rotFieldSensor-&gt;detach();
+
+     SoDragger::setUpConnections(onOff, doItAlways);
+   }
+
+   return !(connectionsSetUp = onOff);
+}
+
+// Called when the motionMatrix changes. Sets the &quot;translation&quot;
+// and &quot;rotation&quot; fields based on the new motionMatrix
+void
+RotTransDragger::valueChangedCB(void *, SoDragger *inDragger)
+{
+   RotTransDragger *myself = (RotTransDragger *) inDragger;
+
+   // Factor the motionMatrix into its parts
+   SbMatrix motMat = myself-&gt;getMotionMatrix();
+   SbVec3f   trans, scale;
+   SbRotation rot, scaleOrient;
+   motMat.getTransform(trans, rot, scale, scaleOrient);
+
+   // Set the fields. Disconnect the sensors while doing so.
+   myself-&gt;rotFieldSensor-&gt;detach();
+   myself-&gt;translFieldSensor-&gt;detach();
+   if (myself-&gt;rotation.getValue() != rot)
+     myself-&gt;rotation = rot;
+   if (myself-&gt;translation.getValue() != trans)
+     myself-&gt;translation = trans;
+   myself-&gt;rotFieldSensor-&gt;attach(&amp;myself-&gt;rotation);
+   myself-&gt;translFieldSensor-&gt;attach(&amp;myself-&gt;translation);
+}
+
+// If the &quot;translation&quot; or &quot;rotation&quot; field changes, changes
+// the motionMatrix accordingly.
+void
+RotTransDragger::fieldSensorCB(void *inDragger, SoSensor *)
+{
+   RotTransDragger *myself = (RotTransDragger *) inDragger;
+
+   SbMatrix motMat = myself-&gt;getMotionMatrix();
+   myself-&gt;workFieldsIntoTransform(motMat);
+
+   myself-&gt;setMotionMatrix(motMat);
+}
+
+// When any child dragger starts or ends a drag, tell the
+// &quot;surroundScale&quot; part (if it exists) to invalidate its 
+// current bounding box value.
+void 
+RotTransDragger::invalidateSurroundScaleCB(void *parent, SoDragger *)
+{
+   RotTransDragger *myParentDragger = (RotTransDragger *) parent;
+
+   // Invalidate the surroundScale, if it exists.
+   SoSurroundScale *mySS = SO_CHECK_PART(
+            myParentDragger, &quot;surroundScale&quot;, SoSurroundScale);
+   if (mySS != NULL)
+      mySS-&gt;invalidate();
+}
+
+void
+RotTransDragger::setDefaultOnNonWritingFields()
+{
+   // The nodes pointed to by these part-fields may 
+   // change after construction, but we
+   // don't want to write them out.
+   surroundScale.setDefault(TRUE);
+   antiSquish.setDefault(TRUE);
+
+   SoDragger::setDefaultOnNonWritingFields();
+}
+</pre></td></tr></table><br></div></div><div class="section"><div class="titlepage"><div><h2 class="title"><a name="id5473660"></a><a name="id35716"></a>Creating a Manipulator<a name="idch08125"></a></h2></div></div>
+<p>A manipulator is derived from another class of node, such as an <a name="idch08126"></a><span class="bold"><b>SoTransform</b></span>, <span class="bold"><b>SoLight</b></span>, or <span class="bold"><b>SoCamera</b></span>.  It employs a dragger to edit the fields of that node and adds the dragger to the node as a hidden child. For example, the <span class="bold"><b>SoPointLightManip<a name="idch08127"></a></b></span> is a subclass of <span class="bold"><b>SoPointLight</b></span>. It adds an <span class="bold"><b>SoPointLightDragger</b></span> as a hidden child of the point light. When this manipulator is rendered, it draws a point-light dragger and, because it is a subclass of <span class="bold"><b>SoPointLight</b></span>, it also executes the light commands. When an <span class="bold"><b>SoPointLightManip</b></span> is used, moving the dragger causes the light in the scene to move because the manipulator is responsible for maintaining the consistency between its own fields and the fields of its dragger.</p>
+<p>Creating a new manipulator involves two kinds of work:</p>
+<div class="orderedlist"><ol type="1"><li><p>First, you need to create a base class for the new kind of manipulator, if it does not already exist. The Inventor library provides four base classes for manipulators: <a name="idch08128"></a><span class="bold"><b>SoTransformManip</b></span>, <a name="idch08129"></a><span class="bold"><b>SoPointLightManip</b></span>, <span class="bold"><b>SoSpotLightManip<a name="idch08130"></a></b></span>, and <a name="idch08131"></a><span class="bold"><b>SoDirectionalLightManip</b></span>. This step requires more work than the following step.</p>
+</li>
+<li><p>Next, you need to derive a new manipulator from this base class to employ the new dragger. This step is easy.</p>
+</li>
+</ol></div><p>Examples 8-7 and 8-8 show the code to create <a name="idch08132"></a><span class="bold"><b>RotTransManip</b></span>, a subclass of <span class="bold"><b>SoTransformManip</b></span>, so you do not need to create the base manipulator class (that is, you can skip step 1). You may be asking why anyone would want to derive a new manipulator from one of the existing base classes.  The reason is that your new manipulator can use a different dragger, which creates a different look and feel for the user interface. For example, the handle box and trackball manipulators, which you're already familiar with, both edit the fields of an <a name="idch08133"></a><a name="idch08134"></a><span class="bold"><b>SoTransform</b></span>. But their user interfaces look and operate differently from each other.<a name="idch08135"></a></p>
+<p>All you need to do in such cases is to create a new class of node and set the dragger in the constructor (step 2). If you are creating a manipulator derived from <span class="bold"><b>SoTransformManip</b></span>, you also need to create the surround-scale part, since transform manipulators typically surround the things they affect (see <a name="idch08136"></a><a href="ch08.html#id25693">&#8220;Creating a Compound Dragger&#8221;</a>).</p>
+<div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5474017"></a>Deriving a Class from SoTransformManip</h3></div></div>
+<p>Examples 8-7 and 8-8 show the <a name="idch08137"></a><span class="bold"><b>RotTransManip</b></span> class, which employs a <span class="bold"><b>RotTransDragger</b></span> to edit an <span class="bold"><b>SoTransform</b></span> node. </p>
+<div class="example"><p><a name="id5474049"></a><b>Example 8-7. RotTransManip.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/manips/SoTransformManip.h&gt;
+
+class RotTransManip : public SoTransformManip
+{
+   SO_NODE_HEADER(RotTransManip);
+
+  public:
+   // Constructor
+   RotTransManip();
+
+   // Initialize the class. This should be called once
+   // after SoInteraction::init(),
+   // TranslateRadialDragger::init().
+   // and RotTransDragger::init().
+   static void initClass();
+
+  private:
+   // Destructor
+   ~RotTransManip();
+};    
+</pre></td></tr></table><br><div class="example"><p><a name="id5474083"></a><b>Example 8-8. RotTransManip.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/nodes/SoSurroundScale.h&gt;
+
+SO_NODE_SOURCE(RotTransManip);
+
+//  Initialize the type ID for this manipulator node. This
+//  should be called once after SoInteraction::init(),
+//  TranslateRadialDragger::initClass()
+//  and RotTransDragger::initClass()
+void
+RotTransManip::initClass()
+{
+   SO_NODE_INIT_CLASS(RotTransManip, SoTransformManip,
+                      &quot;TransformManip&quot;);
+}
+
+RotTransManip::RotTransManip()
+{
+   SO_NODE_CONSTRUCTOR(RotTransManip);
+
+   // Create a new dragger and call setDragger(), 
+   // a method inherited from SoTransformManip.
+   RotTransDragger *myDrag = new RotTransDragger;
+   setDragger(myDrag);
+
+   // We want this manipulator to surround the objects it
+   // affects when we put it in a scene. So create the
+   // surroundScale node.
+   SoSurroundScale *mySS = (SoSurroundScale *) 
+     myDrag-&gt;getPart(&quot;surroundScale&quot;,TRUE);
+   mySS-&gt;numNodesUpToContainer = 4;
+   mySS-&gt;numNodesUpToReset = 3;
+}
+
+RotTransManip::~RotTransManip()
+{
+}
+</pre></td></tr></table><br></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5474134"></a>Overview</h3></div></div>
+<p>Examples 8-9 and 8-10 create the <a name="idch08138"></a><span class="bold"><b>Coord3Manip</b></span> class, which requires more work than the <span class="bold"><b>RotTransManip</b></span>. Use the SO_NODE_HEADER() and SO_NODE_SOURCE() macros found in SoSubNode.h. Follow the same basic steps required for any node class, plus some additional ones, as follows:</p>
+<div class="orderedlist"><ol type="1"><li><p>Select a name for the new manipulator class and determine what class it is derived from. The new manipulator will be a subclass of the kind of node you want to provide a user interface for. For example,  <span class="bold"><b>Coord3Manip</b></span> is a subclass of <a name="idch08139"></a><span class="bold"><b>SoCoordinate3</b></span> because it provides a user interface for editing the <span class="bold"><b>SoCoordinate3</b></span> node.</p>
+</li>
+<li><p>Define an <span class="bold"><b>initClass()</b></span> method to initialize type information for the manipulator. Use the SO_NODE_INIT_CLASS() macro.<a name="idch08140"></a></p>
+</li>
+<li><p>Define a constructor for the manipulator. The constructor defines and names any new fields required by the manipulator using the SO_NODE_ADD_FIELD() macro. It also creates the field sensor (see step 7) and uses the <a name="idch08141"></a><a name="idch08142"></a><span class="bold"><b>setDragger()</b></span> method to add the correct dragger as a child of this manipulator. </p>
+</li>
+<li><p>Define a destructor for the manipulator. If the manipulator created a field sensor in the constructor, it will need to delete it in the destructor.</p>
+</li>
+<li><p>Write the routines for replacing the &#8220;regular&#8221; node in the scene graph with the editable manipulator node and for putting it back (<a name="idch08143"></a><span class="bold"><b>replaceNode()</b></span> and <a name="idch08144"></a><span class="bold"><b>replaceManip()</b></span>).</p>
+</li>
+<li><p>Write the value-changed callback on the dragger to update the manipulator's field if the dragger's location changes.</p>
+</li>
+<li><p>Write the field sensor callback on the manipulator to update the dragger if the field in the manipulator changes.</p>
+</li>
+<li><p>Implement a <span class="bold"><b>setDragger()</b></span> method to allow the dragger to be replaced by another dragger.</p>
+</li>
+<li><p>Implement a <span class="bold"><b>copy()</b></span> method. The <span class="bold"><b>copy()</b></span> method first copies the manipulator node and its field data.  Then it copies the manipulator's children.</p>
+</li>
+<li><p>Implement the actions supported by the manipulator.  See <a href="ch08.html#id64282">&#8220;Implementing Actions for the Manipulator&#8221;</a>.</p>
+</li>
+</ol></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5474417"></a><a name="id64282"></a>Implementing Actions for the Manipulator</h3></div></div>
+<p><a href="ch08.html#id14456">Example 8-10</a> provides a typical model for how most manipulators implement actions. The <a name="idch08145"></a><span class="bold"><b>doAction()</b></span> method for this new manipulator is similar to that for a group:  it simply traverses the manipulator's children.<a name="idch08146"></a></p>
+<p>For most other actions, the manipulator first traverses its children (including the dragger) using <span class="bold"><b>doAction()</b></span> and then calls the method on the base class. See the <span class="bold"><b>callback()</b></span>, <span class="bold"><b>GLRender()</b></span>, <span class="bold"><b>handleEvent()</b></span>, and <span class="bold"><b>pick()</b></span> methods in <a href="ch08.html#id14456">Example 8-10</a>.</p>
+<p>Exceptions are the <span class="bold"><b>getMatrix()</b></span> and <span class="bold"><b>getBoundingBox()</b></span> methods. The <span class="bold"><b>getMatrix()</b></span> method does not use <span class="bold"><b>doAction()</b></span> because it doesn't need to traverse all the children. It performs the same tests as <span class="bold"><b>SoGroup::getMatrix()</b></span> (see Chapter 2).</p>
+<p>The <span class="bold"><b>getBoundingBox()</b></span> method first traverses the children, but it does some extra work to determine the center of the group. Then it traverses the base class (in the example, &#8220;this&#8221; is <span class="bold"><b>SoCoordinate3</b></span>).</p>
+</div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id5474642"></a>Deriving a Class from SoCoordinate3</h3></div></div>
+<p><a href="ch08.html#id90106">Example 8-9</a> shows the header file for the <a name="idch08147"></a><span class="bold"><b>Coord3Manip</b></span> class. <a href="ch08.html#id14456">Example 8-10</a> shows the source code for this new class. Although these methods are quite lengthy, they are almost identical for all manipulator base classes. The only difference is the class name used. Also, in the <span class="bold"><b>replaceNode()</b></span> and <span class="bold"><b>replaceManip()</b></span> methods, the appropriate fields must be transferred from the old node to the new one. In this case, the field, <span class="bold"><b>point</b></span>, is the only one copied.</p>
+<p>The <span class="bold"><b>replaceNode()</b></span> method must take care of the case where the child is owned by a node kit as well as the case where the child is simply a member of the group. To replace a node that is a part within a node kit, you must set the part by name:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+pointFieldSensor-&gt;detach();
+point = oldPart-&gt;point;
+Coordinate3Manip::fieldSensorCB(this, NULL);
+pointFieldSensor-&gt;attach(&amp;point);
+
+lastKit-&gt;setPart(partName, this);
+</pre></td></tr></table><p>To replace a node that is not contained in a node kit, you simply call <span class="bold"><b>replaceChild()</b></span>:</p>
+<table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+pointFieldSensor-&gt;detach();
+point = ((SoCoordinate3 *)myFullPTail)-&gt;point;
+Coordinate3Manip::fieldSensorCB(this, NULL);
+pointFieldSensor-&gt;attach(&amp;point);
+
+((SoGroup *)parent)-&gt;replaceChild(myFullPTail, this);
+</pre></td></tr></table><p>Similarly, <span class="bold"><b>replaceManip()</b></span> must deal separately with nodes that are owned by node kits and nodes that are not.</p>
+<div class="example"><p><a name="id5474776"></a><b>Example 8-9. <a name="id90106"></a>Coord3Manip.h</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/draggers/SoDragger.h&gt;
+#include &lt;Inventor/fields/SoSFLong.h&gt;
+#include &lt;Inventor/nodes/SoCoordinate3.h&gt;
+#include &lt;Inventor/sensors/SoFieldSensor.h&gt;
+
+class Coordinate3Manip : public SoCoordinate3
+{
+   SO_NODE_HEADER(Coordinate3Manip);
+
+  public:
+   // Constructor
+   Coordinate3Manip();
+
+   // The index of the 'point' field that will be edited 
+   // by our child-dragger.
+   SoSFLong editIndex;
+
+   // Returns the dragger node being employed by this manip.
+   SoDragger *getDragger();
+
+   virtual SoNode *copy(SbBool copyConnections = FALSE) const;
+
+   // For replacing a regular SoCoordinate3 node with this
+   // manipulator.
+   SbBool replaceNode(SoPath *p);
+
+   // For replacing this manipulator with a regular 
+   // SoCoordinate3 node.
+   SbBool replaceManip(SoPath *p, SoCoordinate3 *newOne) const;
+
+   // These functions implement all actions for this manip.
+   // They first traverse the children, then use the 
+   // SoCoordinate3 version of the actions. They traverse first 
+   // so that the SoCoordinate3 will affect objects which 
+   // follow it in the tree, but not the dragger-child.
+   virtual void doAction(SoAction *action);
+   virtual void callback(SoCallbackAction *action);
+   virtual void GLRender(SoGLRenderAction *action);
+   virtual void getBoundingBox(SoGetBoundingBoxAction *action);
+   virtual void getMatrix(SoGetMatrixAction *action);
+   virtual void handleEvent(SoHandleEventAction *action);
+   virtual void pick(SoPickAction *action);
+   virtual void search(SoSearchAction *action);
+
+   // call this after SoInteraction::init();
+   static void initClass();
+
+   virtual SoChildList *getChildren() const;
+
+  protected:
+
+   // When the dragger moves, this interprets the translation 
+   // field of the dragger and sets the point field of this 
+   // node accordingly.
+   static void valueChangedCB(void *,SoDragger *);
+
+   // When the point field of this node changes, moves the
+   // child-dragger to a new location, if necessary.
+   SoFieldSensor *pointFieldSensor;
+   static void fieldSensorCB(void *, SoSensor *);
+
+   // Establishes the given dragger as the new child-dragger
+   void setDragger(SoDragger *newDragger);
+
+   // The hidden children.
+   SoChildList *children;
+
+  private:
+
+   // Destructor
+   ~Coordinate3Manip();
+
+   int getNumChildren() const 
+{ return (children-&gt;getLength()); }
+};    
+
+</pre></td></tr></table><br><div class="example"><p><a name="id5474909"></a><b>Example 8-10. <a name="id14456"></a>  Coord3Manip.c++</b></p>
+</div><br><table bgcolor="#E0E0E0" width="90%" border="1" cellpadding="10"><tr><td><pre class="literallayout">
+#include &lt;Inventor/actions/SoCallbackAction.h&gt;
+#include &lt;Inventor/actions/SoGLRenderAction.h&gt;
+#include &lt;Inventor/actions/SoGetBoundingBoxAction.h&gt;
+#include &lt;Inventor/actions/SoGetMatrixAction.h&gt;
+#include &lt;Inventor/actions/SoHandleEventAction.h&gt;
+#include &lt;Inventor/actions/SoPickAction.h&gt;
+#include &lt;Inventor/actions/SoSearchAction.h&gt;
+#include &lt;Inventor/draggers/SoDragPointDragger.h&gt;
+#include &lt;Inventor/errors/SoDebugError.h&gt;
+#include &lt;Inventor/fields/SoSFLong.h&gt;
+#include &lt;Inventor/nodes/SoGroup.h&gt;
+
+// Include file for our new class
+#include &quot;Coordinate3Manip.h&quot;
+
+SO_NODE_SOURCE(Coordinate3Manip);
+
+//  Initializes the type ID for this manipulator node. This
+//  should be called once after SoInteraction::init().
+void
+Coordinate3Manip::initClass()
+{
+   SO_NODE_INIT_CLASS(Coordinate3Manip, SoCoordinate3,
+                      &quot;Coordinate3&quot;);
+}
+
+
+Coordinate3Manip::Coordinate3Manip()
+{
+   children = new SoChildList(this);
+
+   SO_NODE_CONSTRUCTOR(Coordinate3Manip);
+
+   // Create the new 'editIndex' field
+   SO_NODE_ADD_FIELD(editIndex, (0));
+
+   // Create the field sensor
+   pointFieldSensor = new SoFieldSensor(
+            &amp;Coordinate3Manip::fieldSensorCB, this);
+   pointFieldSensor-&gt;setPriority(0);
+   pointFieldSensor-&gt;attach(&amp;point);
+
+   // Create a new SoDragPointDragger and use
+   // it for our child-dragger.
+   setDragger(new SoDragPointDragger);
+}
+
+Coordinate3Manip::~Coordinate3Manip()
+{
+   // Important to do this because dragger may have callbacks
+   // to this node.
+   setDragger(NULL);
+
+   if (pointFieldSensor!=NULL)
+     delete pointFieldSensor;
+   delete children;
+}
+
+// Sets the dragger to be the given node...
+// Adds it as a child and adds a valueChangedCallback  
+// on the child to tell this node when the dragger moves.
+void
+Coordinate3Manip::setDragger(SoDragger *newDragger)
+{
+   SoDragger *oldDragger = getDragger();
+   if (oldDragger) {
+     oldDragger-&gt;removeValueChangedCallback(
+              &amp;Coordinate3Manip::valueChangedCB,this);
+     children-&gt;remove(0);
+   }
+      
+   if (newDragger!=NULL) {
+     if (children-&gt;getLength() &gt; 0)
+       children-&gt;set(0, newDragger);
+     else
+       children-&gt;append(newDragger);
+     // Call the fieldSensorCB to transfer our values 
+     // into the new dragger.
+     Coordinate3Manip::fieldSensorCB(this, NULL);
+     newDragger-&gt;addValueChangedCallback(
+              &amp;Coordinate3Manip::valueChangedCB,this);
+   }
+}
+
+// Returns value of the current dragger.
+SoDragger *
+Coordinate3Manip::getDragger()
+{
+   if (children-&gt;getLength() &gt; 0) {
+     SoNode *n = (*children)[0];
+     if (n-&gt;isOfType(SoDragger::getClassTypeId()))
+       return ((SoDragger *) n);
+     else {
+#ifdef DEBUG
+       SoDebugError::post(&quot;Coordinate3Manip::getDragger&quot;,
+                          &quot;Child is not a dragger!&quot;);
+#endif
+     }
+   }
+   return NULL;
+}
+
+// Description:
+//    Replaces the tail of the path with this manipulator.
+//
+//    [1] Tail of fullpath must be correct type, or we return.
+//    [2] If path has a nodekit, we try to use setPart() to 
+//        insert manip. otherwise:
+//    [3] Path must be long enough, or we return without 
+//    [4] replacing.Second to last node must be a group, or we //        return without replacing.
+//    [5] Copy values from node we are replacing into this manip
+//    [6] Replace this manip as the child.
+//    [7] Do not ref or unref anything. Assume that the user 
+//        knows what he's doing.
+//    [8] Do not fiddle with either node's field connections. 
+//        Assume that the user knows what he's doing.
+//
+SbBool
+Coordinate3Manip::replaceNode(SoPath *inPath)
+{
+   SoFullPath *myFullPath = (SoFullPath *) inPath;
+
+   SoNode     *myFullPTail = myFullPath-&gt;getTail();
+   if (!myFullPTail-&gt;isOfType (Coordinate3Manip::getClassTypeId())) {
+#ifdef DEBUG
+     SoDebugError::post(&quot;Coordinate3Manip::replaceNode&quot;, 
+                        &quot;End of path is not a Coordinate3Manip&quot;);
+#endif
+     return FALSE;
+   }
+
+   SoNode *pTail = inPath-&gt;getTail();
+   if (pTail-&gt;isOfType(SoBaseKit::getClassTypeId())) {
+
+     // Okay, we've got a nodekit here! Let's do this right...
+     // If myFullPTail is a part in the kit, then we've got to 
+     // follow protocol and let the kit set the part itself.
+     SoBaseKit *lastKit = 
+                (SoBaseKit*)((SoNodeKitPath*)inPath)-&gt;getTail();
+     SbString partName = lastKit-&gt;getPartString(inPath);
+     if (partName != &quot;&quot;) {
+       SoCoordinate3 *oldPart =
+                (SoCoordinate3 *) lastKit-&gt;getPart(partName, TRUE); 
+       if (oldPart != NULL) {
+
+         // Detach the sensor while copying the values.
+         pointFieldSensor-&gt;detach();
+         point = oldPart-&gt;point;
+         Coordinate3Manip::fieldSensorCB(this, NULL);
+         pointFieldSensor-&gt;attach(&amp;point);
+
+         lastKit-&gt;setPart(partName, this);
+         return TRUE;
+       }
+       else {
+         // Although the part's there, we couldn't get at it.
+         // Some kind of problem going on
+         return FALSE;
+       }
+     }
+     // If it's not a part, that means it's contained within a 
+     // subgraph underneath a part. For example, it's within 
+     // the 'contents' separator of an SoWrapperKit. In that 
+     // case, the nodekit doesn't care and we just continue on
+     // through...
+   }
+
+   if (myFullPath-&gt;getLength() &lt; 2) {
+#ifdef DEBUG
+     SoDebugError::post(&quot;Coordinate3Manip::replaceNode&quot;,
+                       &quot;Path is too short!&quot;);
+#endif
+     return FALSE;
+   }
+
+   SoNode      *parent = myFullPath-&gt;getNodeFromTail(1);
+   if (!parent-&gt;isOfType( SoGroup::getClassTypeId() )) {
+#ifdef DEBUG
+     SoDebugError::post(&quot;Coordinate3Manip::replaceNode&quot;,
+                        &quot;Parent node is not a group.!&quot;);
+#endif
+     return FALSE;
+   }
+
+   ref();
+
+   // Detach the sensor while copying the values.
+   pointFieldSensor-&gt;detach();
+   point = ((SoCoordinate3 *) myFullPTail)-&gt;point;
+   Coordinate3Manip::fieldSensorCB(this, NULL);
+   pointFieldSensor-&gt;attach(&amp;point);
+
+   ((SoGroup *) parent)-&gt;replaceChild(myFullPTail, this);
+
+   unrefNoDelete();
+   return TRUE;
+}
+
+// Replaces tail of path (which should be this manipulator)
+// with the given SoCoordinate3 node.
+//
+//    [1] Tail of fullpath must be this node, or we return.
+//    [2] If path has a nodekit, we try to use setPart() to 
+//        insert new node. otherwise:
+//    [3] Path must be long enough, or we return without 
+//    [4] replacing. Second to last node must be a group, or we
+//        return without replacing.
+//    [5] Copy values from node we are replacing into this manip
+//    [6] Replace this manip as the child.
+//    [7] Do not ref or unref anything. Assume that the user 
+//        knows what he's doing.
+//    [8] Do not fiddle with either node's field connections. 
+//        Assume that the user knows what he's doing.
+//
+SbBool
+Coordinate3Manip::replaceManip(SoPath *path, SoCoordinate3 
+                               *newOne) const
+{
+   SoFullPath *myFullPath = (SoFullPath *) path;
+
+   SoNode     *myFullPTail = myFullPath-&gt;getTail();
+   if (myFullPTail != this) {
+#ifdef DEBUG
+     SoDebugError::post(&quot;Coordinate3Manip::replaceManip&quot;,
+                        &quot;Child to replace is not this manip!&quot;);
+#endif
+     return FALSE;
+   }
+
+   SoNode *pTail = path-&gt;getTail();
+   if (pTail-&gt;isOfType(SoBaseKit::getClassTypeId())) {
+
+     // Okay, we've got a nodekit here! Let's do this right...
+     // If myFullPTail is a part in the kit, then we've got to 
+     // follow protocol and let the kit set the part itself.
+     SoBaseKit *lastKit = (SoBaseKit *) 
+                         ((SoNodeKitPath*) path)-&gt;getTail();
+     SbString partName = lastKit-&gt;getPartString(path);
+     if (partName != &quot;&quot;) {
+   
+       if (newOne != NULL)
+         newOne-&gt;point = point;
+     
+         lastKit-&gt;setPart(partName, newOne);
+         return TRUE;
+     }
+     // If it's not a part, that means it's contained within a
+     // subgraph underneath a part. For example, it's within the 
+     // 'contents' separator of an SoWrapperKit. In that case, 
+     // the node kit doesn't care and we just continue on
+     // through...
+   }
+
+   if (myFullPath-&gt;getLength() &lt; 2) {
+#ifdef DEBUG
+     SoDebugError::post(&quot;Coordinate3Manip::replaceManip&quot;, 
+                        &quot;Path is too short!&quot;);
+#endif
+     return FALSE;
+   }
+   SoNode      *parent = myFullPath-&gt;getNodeFromTail(1);
+   if (! parent-&gt;isOfType(SoGroup::getClassTypeId())) {
+#ifdef DEBUG
+     SoDebugError::post(&quot;Coordinate3Manip::replaceManip&quot;,
+                        &quot;Parent node is not a group.!&quot;);
+#endif
+     return FALSE;
+   }
+
+   if (newOne == NULL)
+     newOne = new SoCoordinate3;
+   newOne-&gt;ref();
+   newOne-&gt;point = point;
+   ((SoGroup *) parent)-&gt;replaceChild((Coordinate3Manip *) this,
+                                      newOne);
+   newOne-&gt;unrefNoDelete();
+
+   return TRUE;
+}
+//    Creates and returns an exact copy...
+SoNode *
+Coordinate3Manip::copy(SbBool copyConnections) const
+{
+   // Create a copy of the node and fieldData
+   Coordinate3Manip *newManip = (Coordinate3Manip *) 
+     SoCoordinate3::copy(copyConnections);
+
+   // Copy the children
+   for (int i = 0; i &lt; children-&gt;getLength(); i++)
+     newManip-&gt;children-&gt;append(
+       (*children)[i]-&gt;copy(copyConnections));
+
+   return newManip;
+}
+
+//    Returns the child list...
+SoChildList *
+Coordinate3Manip::getChildren() const
+{
+   return children;
+}
+
+void 
+Coordinate3Manip::doAction(SoAction *action)
+{
+   int         numIndices;
+   const int   *indices;
+
+   if (action-&gt;getPathCode(numIndices, indices) 
+     == SoAction::IN_PATH)
+     children-&gt;traverse(action, 0, indices[numIndices - 1]);
+   else
+     children-&gt;traverse(action);
+}
+
+// These functions implement all actions for Coordinate3Manip.
+void
+Coordinate3Manip::getMatrix(SoGetMatrixAction *action)
+{
+   int         numIndices;
+   const int   *indices;
+
+   switch (action-&gt;getPathCode(numIndices, indices)) {
+     case SoAction::NO_PATH:
+       break;
+     case SoAction::IN_PATH:
+       children-&gt;traverse(action, 0,indices[numIndices - 1]);
+       break;
+     case SoAction::BELOW_PATH:
+       break;
+     case SoAction::OFF_PATH:
+       children-&gt;traverse(action);
+       break;
+   }
+}
+
+void 
+Coordinate3Manip::callback(SoCallbackAction *action)
+{ 
+   Coordinate3Manip::doAction(action);
+   SoCoordinate3::callback(action);
+}
+
+void 
+Coordinate3Manip::getBoundingBox(
+   SoGetBoundingBoxAction *action)
+{ 
+   SbVec3f     totalCenter(0,0,0);
+   int         numCenters = 0;
+   int         numIndices;
+   const int   *indices;
+   int         lastChild;
+
+   if (action-&gt;getPathCode(numIndices, indices) 
+     == SoAction::IN_PATH)
+     lastChild = indices[numIndices - 1];
+   else
+     lastChild = getNumChildren() - 1;
+
+   // Traverse the children
+   for (int i = 0; i &lt;= lastChild; i++) {
+     children-&gt;traverse(action, i, i);
+     if (action-&gt;isCenterSet()) {
+       totalCenter += action-&gt;getCenter();
+       numCenters++;
+       action-&gt;resetCenter();
+     }
+   }
+
+   // Traverse this as an SoCoordinate3
+   SoCoordinate3::getBoundingBox(action);
+   if (action-&gt;isCenterSet()) {
+     totalCenter += action-&gt;getCenter();
+     numCenters++;
+     action-&gt;resetCenter();
+   }
+
+   // Now, set the center to be the average:
+   if (numCenters != 0)
+     action-&gt;setCenter(totalCenter / numCenters, FALSE);
+}
+
+void 
+Coordinate3Manip::GLRender(SoGLRenderAction *action)
+{
+   Coordinate3Manip::doAction(action); 
+   SoCoordinate3::GLRender(action);
+}
+
+void 
+Coordinate3Manip::handleEvent(SoHandleEventAction *action)
+{ 
+   Coordinate3Manip::doAction(action); 
+   SoCoordinate3::handleEvent(action);
+}
+
+void 
+Coordinate3Manip::pick(SoPickAction *action)
+{ 
+  Coordinate3Manip::doAction(action); 
+  SoCoordinate3::pick(action);
+}
+
+void
+Coordinate3Manip::valueChangedCB(void *inManip, 
+   SoDragger *inDragger)
+{
+   Coordinate3Manip *manip = (Coordinate3Manip *) inManip;
+
+   SbMatrix motMat = inDragger-&gt;getMotionMatrix();
+   SbVec3f location = motMat[3];
+
+   // Disconnect the field sensor
+   manip-&gt;pointFieldSensor-&gt;detach();
+
+   int ind = (int) manip-&gt;editIndex.getValue();
+
+   // Set value of the point if it's different.
+   if (ind &lt; manip-&gt;point.getNum()) {
+     if (manip-&gt;point[ind] != location)
+       manip-&gt;point.set1Value(ind,location);
+   }
+
+   // Reconnect the field sensors
+   manip-&gt;pointFieldSensor-&gt;attach(&amp;manip-&gt;point);
+}
+
+void
+Coordinate3Manip::fieldSensorCB(void *inManip, SoSensor *)
+{
+   Coordinate3Manip *manip = (Coordinate3Manip *) inManip;
+
+   int ind = manip-&gt;editIndex.getValue();
+
+   // Set value of the point if it's different.
+   if (ind &lt; manip-&gt;point.getNum()) {
+
+     SoDragger *dragger = manip-&gt;getDragger();
+
+     if (dragger!=NULL) {
+       SbVec3f location = manip-&gt;point[ind];
+       SbMatrix newMat = dragger-&gt;getMotionMatrix();
+       newMat[3][0] = location[0];
+       newMat[3][1] = location[1];
+       newMat[3][2] = location[2];
+
+       dragger-&gt;setMotionMatrix(newMat);
+     }
+   }
+}
+
+</pre></td></tr></table><br></div></div></div><!--CONTENT_END--><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Table of Contents</a></td><td width="40%" align="right"> <a accesskey="n" href="ch09.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 7. Creating a Node Kit </td><td width="20%" align="center"> </td><td width="40%" align="right">Chapter 9. Creating a Selection Highlight Style </td></tr></table></div></body></html>

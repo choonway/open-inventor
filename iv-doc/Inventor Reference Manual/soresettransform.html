@@ -1,0 +1,68 @@
+<html>
+<body>
+SoResetTransform
+<hr>
+<dl>
+<dt>NAME
+<dd>SoResetTransform -- node that resets the current transformation to identity
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sotransformation.html">SoTransformation</a> &gt; SoResetTransform
+
+<dt>DESCRIPTION
+<dd>This node resets the current transformation to identity. It can be used to apply an absolute world space transformation afterwards, such as translating to a specific point from within a hierarchy. An SoResetTransform node should probably be used under an SoSeparator or SoTransformSeparator so it won't change transformations for the rest of the scene graph. An SoResetTransform node can also be used to reset the current bounding box to empty during traversal of an SoGetBoundingBoxAction, if the whatToReset field has the BBOX bit set.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFBitMask whatToReset
+<dd>Specifies which items to reset when the node is traversed.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoResetTransform</b>()
+<dd>Creates a reset transformation node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoRayPickAction
+<dd>If specified, resets current transformation matrix to identity. SoGetBoundingBoxActionIf specified, resets current transformation matrix to identity and current computed bounding box to be empty.
+
+<dt>SoGetMatrixAction
+<dd>Returns identity matrix.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>ResetTransform {
+<dd>whatToReset TRANSFORM
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoResetTransform.h&gt;
+
+<dl>
+<dt>enum ResetType{
+<dd>SoResetTransform::TRANSFORM Reset the current transformation to identity
+<dd>SoResetTransform::BBOX Reset the bounding box to empty
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="sotransform.html">SoTransform</a>
+</body>
+</html>

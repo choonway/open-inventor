@@ -1,0 +1,97 @@
+<html>
+<body>
+SbRotation
+<hr>
+<dl>
+<dt>NAME
+<dd>SbRotation -- class for representing a rotation
+
+<dt>INHERITS FROM
+<dd>SbRotation
+<dt>DESCRIPTION
+<dd>Object that stores a rotation. There are several ways to specify a rotation: quaternion (4 floats), 4x4 rotation matrix, or axis and angle. All angles are in radians and all rotations are right-handed.
+
+<dt>METHODS
+<dl>
+<dt><b>SbRotation</b>()
+<dt><b>SbRotation</b>(const float v[4])
+<dt><b>SbRotation</b>(float q0, float q1, float q2, float q3)
+<dt><b>SbRotation</b>(const SbMatrix &m)
+<dt><b>SbRotation</b>(const SbVec3f &axis, float radians)
+<dt><b>SbRotation</b>(const SbVec3f &rotateFrom, const SbVec3f&rotateTo)
+
+<dd>Constructors for rotation. Matrix constructor requires a valid rotation matrix. Rotation constructor defines rotation that rotates from one vector into another. The rotateFrom and rotateTo vectors are normalized by the constructor before calculating the rotation.
+
+<dt>const float * <b>getValue</b>() const
+<dd>Returns pointer to array of 4 components defining quaternion.
+
+<dt>void <b>getValue</b>(float &q0, float &q1, float &q2, float &q3) const
+<dd>Returns 4 individual components of rotation quaternion.
+
+<dt>SbRotation & <b>setValue</b>(float q0, float q1, float q2, float q3)
+<dd>Sets value of rotation from 4 individual components of a quaternion.
+
+<dt>void <b>getValue</b>(SbVec3f &axis, float &radians) const
+<dd>Returns corresponding 3D rotation axis vector and angle in radians.
+
+<dt>void <b>getValue</b>(SbMatrix &matrix) const
+<dd>Returns corresponding 4x4 rotation matrix.
+
+<dt>SbRotation & <b>invert</b>()
+<dd>Changes a rotation to be its inverse.
+
+<dt>SbRotation <b>inverse</b>() const
+<dd>Returns the inverse of a rotation.
+
+<dt>SbRotation & <b>setValue</b>(const float q[4])
+<dd>Sets value of rotation from array of 4 components of a quaternion.
+
+<dt>SbRotation & <b>setValue</b>(const SbMatrix &m)
+<dd>Sets value of rotation from a rotation matrix.
+
+<dt>SbRotation & <b>setValue</b>(const SbVec3f &axis, float radians)
+<dd>Sets value of vector from 3D rotation axis vector and angle in radians.
+
+<dt>SbRotation & <b>setValue</b>(const SbVec3f &rotateFrom, const SbVec3f &rotateTo)
+<dd>Sets rotation to rotate one direction vector to another. The rotateFrom and rotateTo arguments are normalized before the rotation is calculated.
+
+<dt>SbRotation & <b>operator *=</b>(const SbRotation &q)
+<dd>Multiplies by another rotation; results in product of rotations.
+
+<dt>int <b>operator ==</b>(const SbRotation &q1, const SbRotation &q2)
+<dt>int <b>operator !=</b>(const SbRotation &q1, const SbRotation &q2)
+
+<dd>Equality comparison operators.
+
+<dt>SbBool <b>equals</b>(const SbRotation &r, float tolerance) const
+<dd>Equality comparison within given tolerance -- the square of the length of the maximum distance between the two quaternion vectors.
+
+<dt>SbRotation <b>operator *</b>(const SbRotation &q1, const SbRotation &q2)
+<dd>Multiplication of two rotations; results in product of rotations.
+
+<dt>void <b>multVec</b>(const SbVec3f &src, SbVec3f &dst) const
+<dd>Multiplies the given vector by the matrix of this rotation.
+
+<dt>void <b>scaleAngle</b>(float scaleFactor)
+<dd>Keep the axis the same. Multiply the angle of rotation by the amount scaleFactor.
+
+<dt>static SbRotation <b>slerp</b>(const SbRotation &rot0, const SbRotation &rot1, float t)
+<dd>Spherical linear interpolation: as t goes from 0 to 1, returned value goes from rot0 to rot1.
+
+<dt>static SbRotation <b>identity</b>()
+<dd>Returns a null rotation.
+
+</dl>
+
+<dt> INCLUDE FILE
+<dd>#include &lt;Inventor/SbLinear.h&gt;
+
+<dt>NOTES
+<dd>Rotations are stored internally as quaternions.
+
+<dt>SEE ALSO
+<dd><a href="sbvec3f.html">SbVec3f</a>, <a href="sbmatrix.html">SbMatrix</a>
+</dl>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<html>
+<body>
+SoSFImage
+<dl>
+<dt>NAME
+<dd>SoSFImage -- Field containing a 2D image
+
+<dt>INHERITS FROM
+<dd><a href="sofield.html">SoField</a> &gt; <a href="sosfield.html">SoSField</a> &gt; SoSFImage
+
+<dt>DESCRIPTION
+<dd>A field containing a two-dimensional image. Images can be greyscale (intensity), greyscale with transparency information, RGB, or RGB with transparency. Each component of the image (intensity, red, green, blue or transparency (alpha)) can have an unsigned one-byte value from 0 to 255. Values are returned as arrays of unsigned chars. The image is stored in this array starting at the bottom left corner of the image with the intensity or red component of that pixel, followed by either the alpha, the green and blue, or the green, blue and alpha components (depending on the number of components in the image). The next value is the first component of the next pixel to the right. SoSFImages are written to file as three integers representing the width, height and number of components in the image, followed by width*height hexadecimal values representing the pixels in the image, separated by whitespace. A one-component image will have one-byte hexadecimal values representing the intensity of the image. For example, 0xFF is full intensity, 0x00 is no intensity. A two-component image puts the intensity in the first (high) byte and the transparency in the second (low) byte. Pixels in a three-component image have the red component in the first(high) byte, followed by the green and blue components (so 0xFF0000 is red). Four component images put the transparency byte after red/green/blue (so 0x0000FF80 is semi-transparent blue). Note: each pixel is actually read as a single unsigned number, so a 3-component pixel with value &quot;0x0000FF&quot; can also be written as &quot;0xFF&quot;or &quot;255&quot; (decimal).
+
+<dl>
+<dt>For example,
+
+<dd>1 2 1 0xFF 0x00 is a 1 pixel wide by 2 pixel high greyscale image, with the bottom pixel white and the top pixel black. And:
+
+<dd>2 4 3 0xFF0000 0xFF00 0 0 0 0 0xFFFFFF 0xFFFF00 is a 2 pixel wide by 4 pixel high RGB image, with the bottom left pixel red, the bottom right pixel green, the two middle rows of pixels black, the top left pixel white, and the top right pixel yellow.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>const unsigned char * <b>getValue</b>(SbVec2s &size, int &nc) const
+<dd>Returns the pixels in the image as an array of unsigned chars. The size and nc arguments are filled in with the dimensions of the image and the number ofcomponents in the image; the number of bytes in the array returned will be size[0]*size[1]*nc.
+
+<dt>void <b>setValue</b>(const SbVec2s &size, int nc, const unsigned char*bytes)<dd>Sets the value of this field to be an image of the given size, with the givennumber of components, and with the given pixel values. size[0]*size[1]*nc bytes from the given array will be copied into internal storage maintained bythe SoSFImage field.
+
+<dt>unsigned char * <b>startEditing</b>(SbVec2s &size, int &nc)
+<dt>void <b>finishEditing</b>()
+<dd>These methods can be used to efficiently edit the values in an image field.startEditing() returns the size of the image in the size and nc arguments; writing past the end of the array returned is a good way to cause hard-to-find core dumps.
+
+<dt><b>Methods from class SoSField</b>:
+<dd>getClassTypeId
+
+<dt><b>Methods from class SoField</b>:
+<dd>setIgnored, isIgnored, isDefault, getTypeId, isOfType, set, get, operator ==,operator !=, touch, connectFrom, connectFrom, disconnect, isConnected, isConnectedFromField, getConnectedField, isConnectedFromEngine,getConnectedEngine, enableConnection, isConnectionEnabled, getForwardConnections, getContainer
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/fields/SoSFImage.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sofield.html">SoField</a>, <a href="sosfield.html">SoSField</a>
+</dl>
+</body>
+</html>

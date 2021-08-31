@@ -1,0 +1,37 @@
+<html>
+<body>
+SoXtInputFocus
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtInputFocus -- reports input focus change events
+
+<dt>INHERITS FROM
+<dd><a href="soxtdevice.html">SoXtDevice</a> &gt; SoXtInputFocus
+
+<dt>DESCRIPTION
+<dd>This class reports input focus change events (i.e. when the cursor crosses into or out of the window). There are no input focus events in Inventor, so this always returns NULL when asked to translate events. When this class is registered on a render area, the render area will receive X input focus change events. (This class is extensively employed by the viewer classes.)
+
+<dt>METHODS
+<dl>
+<dt><b>SoXtInputFocus</b>(EventMask mask = SO_XT_ALL_FOCUS_EVENTS)
+<dt>~<b>SoXtInputFocus</b>()
+<dd>Constructor and destructor. To the constructor, pass which input focusevents you are interested in as a bitwise OR of the following values:
+<dl>
+<dd>EnterWindowMask -- Input focus entered the window
+<dd>LeaveWindowMask -- Input focus left the window
+</dl>
+<dd>Or simply pass the defined value SO_XT_ALL_FOCUS_EVENTS for all inputfocus events.
+
+<dt><b>Methods from class SoXtDevice</b>:
+<dd>enable, disable, translateEvent, setWindowSize, getWindowSize
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/devices/SoXtInputFocus.h&gt;
+<dd>#define SO_XT_ALL_FOCUS_EVENTS (EnterWindowMask | LeaveWindowMask)
+
+<dt>SEE ALSO
+<dd><a href="soxtdevice.html">SoXtDevice</a>
+</body>
+</html>

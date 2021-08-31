@@ -1,0 +1,36 @@
+<html>
+<body>
+SoReadError
+<hr>
+<dl>
+<dt>NAME
+<dd>SoReadError -- read error handling
+
+<dt>INHERITS FROM
+<dd><a href="soerror.html">SoError</a> &gt; SoReadError
+
+<dt>DESCRIPTION
+<dd>SoReadError is used for errors reported while reading Inventor data files.
+
+<dt>METHODS
+<dl>
+<dt>static void <b>setHandlerCallback</b>(SoErrorCB *cb, void *data)
+<dt>static SoErrorCB * <b>getHandlerCallback</b>()
+<dt>static void * <b>getHandlerData</b>()
+<dd>Sets/returns handler callback for SoReadError class.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for SoReadError class.
+
+<dt><b>Methods from class SoError</b>:
+<dd>getDebugString, getTypeId, isOfType
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/errors/SoReadError.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="sodebugerror.html">SoDebugError</a>, <a href="somemoryerror.html">SoMemoryError</a>
+</dl>
+</body>
+</html>

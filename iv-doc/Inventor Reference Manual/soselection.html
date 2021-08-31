@@ -1,0 +1,149 @@
+<html>
+<body>
+<p>SoSelection
+<hr>
+<dl>
+<dt>NAME
+<dd>SoSelection -- manages a list of selected objects
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sogroup.html">SoGroup</a> &gt; <a href="soseparator.html">SoSeparator</a> &gt; SoSelection
+
+<dt>DESCRIPTION
+<dd>SoSelection defines a node which can be inserted into a scene graph and will generate and manage a selection list from picks on any node in the subgraph belowit. Nodes are selected based on a current selection policy. Callback functions report back to the application when a path has been selected or deselected. The selectionlist can also be managed programatically.
+
+<p>When handling events, SoSelection makes sure that the mouse release event wasover the same object as the mouse press event before changing the list of selected objects. This allows users to mouse down on an object, change their mind and movethe cursor off the object, then release the mouse button without altering the selection. The selection can be highlighted automatically through the SoXtRenderArea, orthe application can provide custom highlights. Please see the chapter &quot;Creating a Selection Highlight Style&quot; in the Inventor Toolmaker.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFEnum policy
+<dd>Selection policy that is followed in response to user interaction. This can beset to SoSelection::SINGLE, SoSelection::TOGGLE, or SoSelection::SHIFT.
+
+<dt>Fields from class SoSeparator:
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoSelection</b>()
+<dd><b>SoSelection</b>(int nChildren)
+<dd>Constructor. The second constructor allows the programmer to pass in the approximate number of children to the node.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Return the type id for the SoSelection class.
+
+<dt>void <b>select</b>(const SoPath *path)
+<dd>Select the passed path by adding it to the selection list. The selection node must lie in the path. The path is copied and truncated such that theselection node is the head of the path. If the selection node does not lie in the path, the selection list remains unchanged. This method ignores thecurrent selection policy.
+
+<dt>void <b>select</b>(SoNode *node)
+<dd>Select the passed node by creating a path to it, and adding the path to the selection list by calling select(path). If there is more than one instance of node beneath the selection node, the created path will be the first instance found.
+
+<dt>void <b>deselect</b>(const SoPath *path)
+<dd>Deselect the passed path by removing it from the selection list.
+
+<dt>void <b>deselect</b>(int which)
+<dd>Deselect a path by removing it from the selection list. The argument which specifies which path in the list to be removed.
+
+<dt>void <b>deselect</b>(SoNode *node)
+<dd>Deselect the passed node by creating a path to it, and removing the node from the selection list by calling deselect(path). If there is more than one instance of node beneath the selection node, the created path will be the first instance found.
+
+<dt>void <b>toggle</b>(const SoPath *path)
+<dd>Toggle the selection status of the passed path -- if the path is in the selection list, it is removed; if not in the list, it is added. void toggle(SoNode *node)Toggle the selection status of the passed node by creating a path to it, then calling toggle(path). If there is more than one instance of node beneath theselection node, the created path will be the first instance found.
+
+<dt>SbBool <b>isSelected</b>(const SoPath *path) const
+<dd>Returns TRUE if the passed path is selected, that is, if it is in the selection list.
+
+<dt>SbBool <b>isSelected</b>(SoNode *node) const
+<dd>Returns TRUE if the passed node is selected by creating a path to it, then calling isSelected(). If there is more than one instance of node beneath theselection node, the created path will be the first instance found.
+
+<dt>void <b>deselectAll</b>()
+<dd>Deselect all paths in the selection list, that is, clear the list.
+
+<dt>int <b>getNumSelected</b>() const
+<dd>Return the number of paths in the selection list.
+
+<dt>const SoPathList * <b>getList</b>() const
+<dd>Return the list of selected paths.
+
+<dt>SoPath * <b>getPath</b>(int index) const
+<dt>SoPath * <b>operator</b> [ ](int i) const
+<dd>Return the ith path in the selection list.
+
+<dt>void <b>addSelectionCallback</b>(SoSelectionPathCB *f, void *userData =NULL)
+<dt>void <b>removeSelectionCallback</b>(SoSelectionPathCB *f, void*userData = NULL)
+<dd>The selection callbacks are invoked every time an object is selected, whetherit be from user interaction or from method call. The callbacks are invoked after the object has been added to the selection list.
+
+<dt>void <b>addDeselectionCallback</b>(SoSelectionPathCB *f, void *userData= NULL)
+<dt>void <b>removeDeselectionCallback</b>(SoSelectionPathCB *f, void*userData = NULL)
+<dd>The deselection callbacks are invoked every time an object is deselected,whether it be from user interaction or from method call. This is invoked after the object has been removed from the selection list.
+
+<dt>void <b>addStartCallback</b>(SoSelectionClassCB *f, void *userData =NULL)
+<dt>void <b>removeStartCallback</b>(SoSelectionClassCB *f, void *userData =NULL)
+<dd>The start callbacks are invoked when the user has initiated an interactivechange to the selection list (by picking objects). This will be followed by invocations of the select and/or deselect callbacks, finally followed by eachfinish callback. A start callback can be used, for instance, to save the current selection for later restoration (e.g. undo/redo). The start callbacks are notcalled when the selection list is changed programatically.
+
+<dt>void <b>addFinishCallback</b>(SoSelectionClassCB *f, void *userData =NULL)
+<dt>void <b>removeFinishCallback</b>(SoSelectionClassCB *f, void *userData =NULL)
+<dd>The finish callbacks are invoked when the user has finished interactivelychanging the selection list (by picking objects). This was preceeded by an invocation of each start callback, and invocations of the select and/ordeselect callbacks. The finish callbacks are not called when the selection list is changed programatically.
+
+<dt>void <b>setPickFilterCallback</b>(SoSelectionPickCB *f, void *userData =NULL, SbBool callOnlyIfSelectable = TRUE)
+<dd>The pick filter callback is invoked when a pick has occurred and theselection node is about to change the selection list. The callback function returns the path that the selection node should use when selecting anddeselecting. If no pick callback is registered (the default), the selection node will use the path returned by SoPickedPoint::getPath() on the picked pointassociated with the event being processed. The returned path should not be ref'd - selection will ref() and unref() it. (See SoPath::unrefNoDelete().) Note that a picked object may or may not be a child of the selection node. Aselection node will only select paths that pass through it. Possible return values from the callback:
+
+<p>[a] NULL -- selection behaves as if nothing was picked (i.e. for SINGLE andSHIFT policies, this clears the selection list). Handle event action traversal halts.
+<p>[b] Path -- this path will be selected/deselected according to the selectionpolicy (it must lie under the selection node). Handle event action traversal halts.
+
+<p>[c] Path containing only the selection node -- apply the selection policy as ifnothing was picked. Handle event action traversal continues.
+
+<p>[d] Path not passing through the selection node -- selection ignores this pickevent and no change is made to the selection list. Handle event action traversal continues. A simple way to tell selection to ignore the pick is to return an SoPath withno nodes in it. (i.e. return new SoPath;) Selection will always ref the path returned by the callback, make a copy of the path, then unref the path.
+
+<p>The callOnlyIfSelectable argument, when set to TRUE, means the pick callbackfunction will only be invoked on picks which pass through the selection node. When FALSE, all picks will be passed to the callback whether they passthrough the selection or not.
+
+<dt>void <b>setPickMatching</b>(SbBool pickTwice)
+<dt>SbBool <b>getPickMatching</b>() const
+
+<dd>SoSelection will pick once on mouse down and once on mouse up, andmake sure the picks match before changing the selection list. This allows the user to pick down on an object, change their mind and drag off the object,release the mouse button and not affect the selection. Pass TRUE to enable this behavior. Pass FALSE to disable this, meaning whatever is picked on amouse release is added to/removed from the selection list. Default is pickmatching on.
+
+<dt><b>Methods from class SoSeparator</b>:
+<dd>setNumRenderCaches, getNumRenderCaches
+
+<dt><b>Methods from class SoGroup</b>:
+<dd>addChild, insertChild, getChild, findChild, getNumChildren, removeChild,removeChild, removeAllChildren, replaceChild, replaceChild
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Selection {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO
+<dd>policy SHIFT
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoSelection.h&gt;
+<dl>
+<dt>typedef void SoSelectionPathCB(void *userData, SoPath *path)
+<dt>typedef void SoSelectionClassCB(void *userData, SoSelection *sel)
+<dt>typedef SoPath * SoSelectionPickCB(void *userData, const SoPickedPoint *pick)
+<dt>enum Policy {
+<dd>SoSelection::SINGLE Left mouse pick on object clears selection, then selects object. Left mouse pick on nothing clears selection. Only one object may be selected at a time.
+<dd>SoSelection::TOGGLE Left mouse pick on object toggles its selection status. Leftmouse pick on nothing does nothing. Multiple objects may be selected.
+<dd>SoSelection::SHIFT When shift key is down, selection policy is TOGGLE. When shift key is up, selection policy is SINGLE. Multiple objectsmay be selected.
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soeventcallback.html">SoEventCallback</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>, <a href="soboxhighlightrenderaction.html">SoBoxHighlightRenderAction</a>, <a href="solinehighlightrenderaction.html">SoLineHighlightRenderAction</a>
+</body>
+</html>

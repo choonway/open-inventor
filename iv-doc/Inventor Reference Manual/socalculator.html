@@ -1,0 +1,156 @@
+<html>
+<body>
+SoCalculator
+<hr>
+<dl>
+<dt>NAME
+<dd>SoCalculator -- a general-purpose calculator
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="soengine.html">SoEngine</a> &gt; SoCalculator
+
+<dt>DESCRIPTION
+<dl>
+<dt>This engine is a general-purpose calculator. The calculator operates on floating-point values and 3D floating-point vectors. The engine takes up to eight inputs of each type (SoMFFloat and SoMFVec3f), and produces up to four outputs of each type.
+
+<dt>Each input field (a-h, A-H) can have multiple values, allowing the engine to evaluate the expression with different values in parallel. Some inputs may have more values than others. In such cases, the last value of the shorter inputs will be repeated as necessary.
+
+<dt>The expression input string specifies the expression to be evaluated. An expressioncan consist of multiple subexpressions. Several subexpressions can be specified in one string, separated by semicolons (;). Alternatively, the subexpressions can bestored in separate strings in the multiple-valued input field.
+
+<dt>Each subexpression is of the form:
+
+<dd>&lt;lhs&gt; = &lt;rhs&gt; The &lt;lhs&gt; can be any one of the outputs or a temporary variable. The engine provides 8 temporary floating-point variables (ta, tb, tc, td, te, tf, tg, and th), and 8 temporary vector variables (tA, tB, tC, tD, tE, tF, tG, and tH). You can assign a valueto one component of a vector output (A-H) or a vector variable (tA-tH) by using the [ ] operator. For example, oA[0] = &lt;rhs&gt;, will evaluate the right hand side and assignthe value to the first component of the output vector oA.
+
+<dt>The &lt;rhs&gt; supports arithmetic, logical and conditional operators. They are:
+
+<dd>(unary) !, -(binary) +, -, *, /, %, &lt;, &gt; &lt;=, &gt;=, ==, !=, &&, || (ternary) ? : The ternary operator is a conditional operator. For example, a ? b : c evaluates to b ifa != 0, and to c if a==0.
+
+<dt>Valid operands for the &lt;rhs&gt; include the inputs, outputs, temporary variables, andtheir components (e.g. oA[0]). Operands can also be numeric constants (e.g. 1.0), pre-defined named constants, or pre-defined functions.
+
+<dt>The named constants are:
+
+<dd>MAXFLOAT
+<dd>MINFLOAT
+<dd>M_E
+<dd>M_LOG2E
+<dd>M_LOG10E
+<dd>M_LN2
+<dd>M_LN10
+<dd>M_PI
+<dd>M_SQRT2 = sqrt(2)
+<dd>M_SQRT1_2 = sqrt(1/2)
+
+<dt>Most of the pre-defined functions come from the math library:
+
+<dd>cos, sin, tan,
+<dd>acos, asin, atan, atan2,
+<dd>cosh, sinh, tanh,
+<dd>sqrt, pow, exp, log, log10,
+<dd>ceil, floor, fabs, fmod.
+
+<dt>Other functions are defined by SoCalculator. They are:
+<dd>rand(f) - Random number generator
+<dd>cross(v1, v2) - Vector cross product
+<dd>dot(v1, v2) - Vector dot product
+<dd>length(v) - Vector length
+<dd>normalize(v) - Normalize vector
+<dd>vec3f(f1, f2, f3) - Generate a vector from 3 floats
+
+<dt>The subexpressions are evaluated in order, so a variable set in the &lt;lhs&gt; of an earlier expression may be used in the &lt;rhs&gt; of a later expression. Note, when the input has multiple values, all the subexpressions specified in the expression are applied to all the multiple input values. This is unlike the SoBoolOperation engine, where each operation is applied only to the corresponding entries of the input data. Note also, that even though the inputs and outputs can have multiple values the [ ] operator is only for indexing into the value sof a single vector. It does not index into the multiple values of a field. For example, if the floating-point input field a has two values: 1.0, and 2.0, then the expression
+
+<dd>&quot;oA[0]=a; oA[1]=a; oA[2]=0.0&quot;
+
+<dt>will produce two output vectors in oA: (1.0, 1.0, 0.0) and (2.0, 2.0, 0.0).
+
+<dt>Examples of expressions:
+
+<dd>&quot;ta = oA[0]*floor(a)&quot;
+<dd>&quot;tb = (a+b)*sin(M_PI)&quot;
+<dd>&quot;oA = vec3f(ta, tb, ta+tb)&quot;
+<dd>&quot;oB = normalize(oA)&quot;
+<dd>&quot;ta = a; tb = sin(ta); oA = vec3f(ta, tb, 0)&quot;
+</dl>
+
+<dt>INPUTS
+<dl>
+<dt>SoMFFloat a
+<dt>SoMFFloat b
+<dt>SoMFFloat c
+<dt>SoMFFloat d
+<dt>SoMFFloat e
+<dt>SoMFFloat f
+<dt>SoMFFloat g
+<dt>SoMFFloat h
+<dd>Inputs a-h are the floating-point values.
+<dt>SoMFVec3f A
+<dt>SoMFVec3f B
+<dt>SoMFVec3f C
+<dt>SoMFVec3f D
+<dt>SoMFVec3f E
+<dt>SoMFVec3f F
+<dt>SoMFVec3f G
+<dt>SoMFVec3f H
+<dd>Inputs A-H are the vectors.
+<dt>SoMFString expression
+<dd>The expression to be evaluated.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFFloat) oa
+<dt>(SoMFFloat) ob
+<dt>(SoMFFloat) oc
+<dt>(SoMFFloat) od
+<dd>Outputs oa-od are the floating-point values.
+<dt>(SoMFVec3f) oA
+<dt>(SoMFVec3f) oB
+<dt>(SoMFVec3f) oC
+<dt>(SoMFVec3f) oD
+<dd>Outputs oA-oD are the vectors.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoCalculator</b>()
+<dd>Constructor
+
+<dt><b>Methods from class SoEngine</b>:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>Calculator {
+<dd>a 0
+<dd>b 0
+<dd>c 0
+<dd>d 0
+<dd>e 0
+<dd>f 0
+<dd>g 0
+<dd>h 0
+<dd>A 0 0 0
+<dd>B 0 0 0
+<dd>C 0 0 0
+<dd>D 0 0 0
+<dd>E 0 0 0
+<dd>F 0 0 0
+<dd>G 0 0 0
+<dd>H 0 0 0
+<dd>expression &quot;&quot;
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCalculator.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="soengineoutput.html">SoEngineOutput</a>, <a href="sobooloperation.html">SoBoolOperation</a>
+</dl>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<html>
+<body>
+SoAppearanceKit
+</hr>
+<dl>
+<dt>NAME
+<dd>SoAppearanceKit -- appearance nodekit class
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sobasekit.html">SoBaseKit</a> &gt; SoAppearanceKit
+
+<dt>DESCRIPTION
+<dd>The SoAppearanceKit is used to create a group of property nodes that will be used to affect subsequent shape nodes or nodekits in the scene graph. This nodekit defines seven new parts: lightModel, environment, drawStyle, material,complexity, texture2, and font. Note that it does not include binding nodes such as SoMaterialBinding. SoAppearanceKit is derived from SoBaseKit and thus also includes a callbackListpart for adding callback nodes.
+
+<dt>PARTS
+<dl>
+<dt>(SoLightModel) <b>lightModel</b>
+<dd>An SoLightModel node that affects any shapes that follow this nodekit inthe scene graph. This part is NULL by default.
+
+<dt>(SoEnvironment) <b>environment</b>
+<dd>An SoEnvironment node that affects any nodes that follow this nodekit inthe scene graph. This part is NULL by default.
+
+<dt>(SoDrawStyle) <b>drawStyle</b>
+<dd>An SoDrawStyle node that affects any shapes that follow this nodekit in the scene graph. This part is NULL by default.
+
+<dt>(SoMaterial) <b>material</b>
+<dd>An SoMaterial node that affects any shapes that follow this nodekit in the scene graph. This part is NULL by default.
+
+<dt>(SoComplexity) <b>complexity</b>
+<dd>An SoComplexity node that affects any shapes that follow this nodekit in the scene graph. This part is NULL by default.
+
+<dt>(SoTexture2) <b>texture2</b>
+<dd>An SoTexture2 node that affects any shapes that follow this nodekit in the scene graph. This part is NULL by default.
+
+<dt>(SoFont) <b>font</b>
+<dd>An SoFont node that affects any text nodes that follow this nodekit in the scene graph. This part is NULL by default.
+
+<dt><b>Parts from class SoBaseKit</b>:
+<dd>callbackList
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoAppearanceKit</b>()
+<dd>Constructor.
+
+<dt>static const SoNodekitCatalog *<b>getClassNodekitCatalog</b>() const
+<dd>Returns the SoNodekitCatalog for this class static
+
+<dt>SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoBaseKit</b>:
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+<dd>SO_GET_PART, SO_CHECK_PART
+</dl>
+
+<dt>CATALOG PARTS
+<table>
+<tr>
+<td All parts
+</tr>
+
+<tr>
+<td>Part Name
+<td>Part Type
+<td>Default Type
+<td>NULL by Default
+</tr>
+
+<tr>
+<td>callbackList
+<td>NodeKitListPart
+<td>--
+<td>yes
+</tr>
+
+<tr>
+<td>lightModel
+<td>LightModel
+<td>--
+<td>yes</tr>
+
+<tr>
+<td>environment
+<td>Environment
+<td>--
+<td>yes</tr>
+
+<tr>
+<td>drawStyle
+<td>DrawStyle
+<td>--
+<td>yes</tr>
+
+<tr>
+<td>material
+<td>Material
+<td>--
+<td>yes</tr>
+
+<tr>
+<td>complexity
+<td>Complexity
+<td>--
+<td>yes</tr>
+
+<tr>
+<td>texture2
+<td>Texture2
+<td>--
+<td>yes</tr>
+
+<tr>
+<td>font
+<td>Font
+<td>--
+<td>yes
+</tr>
+
+</table>
+
+<table>
+<tr><td>Extra information for list parts from above table</td>
+<tr>
+<td>Part Name
+<td>Container Type
+<td>Permissible Types
+</tr>
+
+<tr>
+<td>callbackList
+<td>Separator
+<td>Callback, EventCallback
+</tr>
+
+</table>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>AppearanceKit {
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodekits/SoAppearanceKit.h&gt;
+
+<dt>NOTE
+<dd>Note that SoSeparatorKit includes an SoAppearanceKit as a part.
+
+<dt>SEE ALSO
+<dd><a href="sobasekit.html">SoBaseKit</a>, <a href="socamerakit.html">SoCameraKit</a>, <a href="solightkit.html">SoLightKit</a>, <a href="sonodekit.html">SoNodeKit</a>, <a href="sonodekitdetail.html">SoNodeKitDetail</a>, <a href="sonodekitlistpart.html">SoNodeKitListPart</a>, <a href="sonodekitpath.html">SoNodeKitPath</a>, <a href="sonodekitcatalog.html">SoNodekitCatalog</a>, <a href="soscenekit.html">SoSceneKit</a>, <a href="soseparatorkit.html">SoSeparatorKit</a>, <a href="soshapekit.html">SoShapeKit</a>, <a href="sowrapperkit.html">SoWrapperKit</a>
+</dl>
+
+</body>
+</html>

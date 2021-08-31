@@ -1,0 +1,76 @@
+<html>
+<body>
+SoDecomposeMatrix
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDecomposeMatrix -- decomposes transformation matrices into values for translation, rotation, and scale
+
+<dt>INHERITS FROM
+<dd>SoBase &gt; SoFieldContainer &gt; SoEngine &gt; SoDecomposeMatrix
+
+<dt>DESCRIPTION
+<dd><p>This engine takes as input a transformation matrix and a center of transformation.
+
+<p>As output the engine produces the translation, rotation and scale values derivedfrom the matrix.
+
+<p>The input fields can have multiple values, allowing the engine to decompose severalmatrices in parallel. One of the inputs may have more values than the other. In that case, the last value of the shorter input will be repeated as necessary.
+
+<dt>INPUTS
+<dl>
+<dt>SoMFMatrix matrix
+<dd>The 4x4 transformation matrix.
+
+<dt>SoMFVec3f center
+<dd>The center of transformations.
+</dl>
+
+<dt>OUTPUTS
+<dl>
+<dt>(SoMFVec3f) translation
+<dd>Derived translation in x, y, and z.
+
+<dt>(SoMFRotation) rotation
+<dd>Derived rotation.
+
+<dt>(SoMFVec3f) scaleFactor
+<dd>Derived scale values in x, y, and z.
+
+<dt>(SoMFRotation) scaleOrientation
+<dd>Derived rotational space for scaling.
+</dl>
+
+<dt>METHODS
+<dl>
+<dt>SoDecomposeMatrix()
+<dd>Constructor
+
+<dt>Methods from class SoEngine:
+<dd>getClassTypeId, getOutputs, getOutput, getOutputName, copy, getByName,getByName
+
+<dt>Methods from class SoFieldContainer:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt>Methods from class SoBase:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>DecomposeMatrix {
+<dd>matrix 1 0 0 0
+<dd>0 1 0 0
+<dd>0 0 1 0
+<dd>0 0 0 1
+<dd>center 0 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/engines/SoCompose.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="socomposematrix.html">SoComposeMatrix</a>, <a href="soengineoutput.html">SoEngineOutput</a>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<html>
+<body>
+SSooSSFFBBiittMMaasskkhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoSFBitMask -- single-value field containing a set of bit flags INHERITS FROMSoField &gt; SoSField &gt; SoSFEnum &gt; SoSFBitMask DESCRIPTIONA single-value field that contains a mask of bit flags, stored as an integer. Nodes that
+
+use this field class define mnemonic names for the bit flags. These names should beused when setting or testing the values of the field, even though the values are treated as integers in the methods. The bit-wise &quot;&&quot; and &quot;|&quot; operators should be used when testing and setting flags in amask. For example, to turn on the sides of a 3D text node and turn off the back you would write:
+
+text3-&gt;parts = text3-&gt;parts.getValue() | SoText3::SIDES;text3-&gt;parts = text3-&gt;parts.getValue() & ~SoText3::BACK;
+
+SoSFBitMasks are written to file as one or more mnemonic enumerated typenames, in this format:
+
+( flag1 | flag2 | ... ) If only one flag is used in a mask, the parentheses are optional. These names differamong uses of this field in various node or engine classes. See their man pages for the names. The field values may also be represented as integers, but this is not guaranteed to beportable.
+
+METHODSstatic SoType getClassTypeId()
+
+virtual void getTypeId() constReturns the type for this class or a particular object of this class.
+
+int getValue() constReturns this field's value. void setValue(int newValue)int operator =(int newValue)
+
+Sets this field to newValue.
+
+557<hr>
+
+SSooSSFFBBiittMMaasskkhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+int operator ==(const SoSFBitMask &f) constint operator !=(const SoSFBitMask &f) const
+
+Returns TRUE if f is of the same type and has the same value as this field. Methods from class SoField:
+
+setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+
+getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer INCLUDE FILE#include &lt;Inventor/fields/SoSFBitMask.h&gt;
+
+SEE ALSOSoField, SoSField, SoMFBitMask
+</body>
+</html>

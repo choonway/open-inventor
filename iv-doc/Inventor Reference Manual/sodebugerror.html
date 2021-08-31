@@ -1,0 +1,46 @@
+<html>
+<body>
+SoDebugError
+<hr>
+<dl>
+<dt>NAME
+<dd>SoDebugError -- debug error handling
+
+<dt>INHERITS FROM
+<dd><a href="soerror.html">SoError</a> &gt; SoDebugError
+
+<dt>DESCRIPTION
+<dd>SoDebugError is used for all errors reported from the debugging version of the Inventor library. These errors are typically programmer errors, such as passing a NULL pointer or an out-of-range index. The post() method takes the name of the Inventor method that detected the error, to aid the programmer in debugging.
+<dt>METHODS
+<dl>
+<dt>static void <b>setHandlerCallback</b>(SoErrorCB *cb, void *data)
+<dt>static SoErrorCB * <b>getHandlerCallback</b>()
+<dt>static void * <b>getHandlerData</b>()
+<dd>Sets/returns handler callback for SoDebugError class.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for SoDebugError class.
+
+<dt>SoDebugError::<b>SeveritygetSeverity</b>() const
+<dd>Returns severity of error (for use by handlers).
+
+<dt><b>Methods from class SoError</b>:
+<dd>getDebugString, getTypeId, isOfType
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/errors/SoDebugError.h&gt;
+
+<dl>
+<dt>enum Severity {
+<dd>SoDebugError::ERROR Error
+<dd>SoDebugError::WARNING Just a warning
+<dd>SoDebugError::INFO No error, just information
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="somemoryerror.html">SoMemoryError</a>, <a href="soreaderror.html">SoReadError</a>
+</dl>
+</body>
+</html>

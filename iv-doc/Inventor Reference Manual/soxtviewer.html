@@ -1,0 +1,146 @@
+<html>
+<body>
+<p>SoXtViewer
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtViewer -- viewer component lowest base class
+<dt>INHERITS FROM
+<dd>SoXtComponent &gt; <a href="soxtglwidget.html">SoXtGLWidget</a> &gt; <a href="soxtrenderarea.html">SoXtRenderArea</a> &gt; SoXtViewer
+
+<dt>DESCRIPTION
+<dd>This is the lowest base class for viewer components. This class adds the notion of a camera to the SoXtRenderArea class. Whenever a new scene is specified withsetSceneGraph(), the first camera encountered will be by default used as the edited camera. If no camera is found in the scene, the viewer will automatically create one.If the viewer type is SoXtViewer::BROWSER then the camera is told to view the supplied scene graph but is not added beneath that scene graph root. If the viewertype is SoXtViewer::EDITOR then the camera is added beneath the supplied scene graph root. In addition to automatically creating a camera if needed, this base class also createsa headlight (directional light which is made to follow the camera), enables the user to change drawing styles (like wireframe or move wireframe), and buffering types.This base class also provides a convenient way to have the camera near and far clipping planes be automatically adjusted to minimize the clipping of objects in thescene.
+
+<p>Viewers allow the application to shadow event processing. When the applicationregisters an event processing callback by calling setEventCallback() the viewer will invoke this callback for every X event it receives. However, unlike the render area,the viewer ignores the return value of this callback, and processes the event as usual. This allows the application to expand viewing capabilities without breaking theviewing paradigm. It is an easy way to hook up other devices, like the spaceball, to an existing viewer.
+
+<dt>METHODS
+<dl>
+<dt>virtual void <b>setCamera</b>(SoCamera *cam)
+<dt>SoCamera * <b>getCamera</b>()
+<dd>Set and get the edited camera. Setting the camera is only needed if the first camera found in the scene when setting the scene graph isn't the one theuser really wants to edit.
+
+<dt>virtual void <b>setCameraType</b>(SoType type)
+<dt>SoType <b>getCameraType</b>()
+<dd>Set and get the camera type that will be created by the viewer if no camerasare found in the scene graph (see SoPerspectiveCamera and SoOrthographicCamera). By default an SoPerspectiveCamera will be created if no camera are found.
+
+<p>Note: the set method will only take effect next time a scene graph is specified (and if no camera are found).
+
+<dt>virtual void <b>viewAll</b>()
+<dd>Changes the camera position to view the entire scene (the camera zoom or orientation isn't changed).
+
+<dt>virtual void <b>saveHomePosition</b>()
+<dt>virtual void <b>resetToHomePosition</b>()
+<dd>Saves and restores the camera values.
+
+<dt>void <b>setHeadlight</b>(SbBool onOrOff)
+<dt>SbBool <b>isHeadlight</b>()
+<dt>SoDirectionalLight *<b>getHeadlight</b>()
+<dd>Turns the headlight on/off (default on) and return the headlight node.
+
+<dt>void <b>setDrawStyle</b>(SoXtViewer::DrawType type,SoXtViewer::DrawStyle style)
+<dt>SoXtViewer::DrawStyle <b>getDrawStyle</b>(SoXtViewer::DrawType type)
+<dd>Sets/gets the current drawing style in the main view -- The user can specifythe INTERACTIVE draw style (draw style used when the scene changes) independently from the STILL style (default VIEW_AS_IS for both STILL andINTERACTIVE). Possible draw styles are:
+
+<p>VIEW_AS_IS -- Leaves the objects unchanged. VIEW_HIDDEN_LINE -- Renders the object as wireframe, but only show theobject front faces. This is accomplished using a two pass rendering. In the first pass, the objects are rendered as FILLED using the backgroundBASE_COLOR (this sets up the wanted z-buffer values). The second pass then renders the objects as LINES, while adjusting the z-buffer range to limitoverlapping polygons problems.
+
+<p>VIEW_NO_TEXTURE -- Renders the objects withought any textures. This isdone by setting the override flag on an empty SoTexture2 node. VIEW_LOW_COMPLEXITY -- Renders the objects withought any texturesand with a low complexity. This is done by setting the override flag on an empty SoTexture2 node, and by setting a low complexity value on anSoComplexity node with override set to TRUE.
+
+<p>VIEW_LINE -- Renders the objects as LINES with lighting model set toBASE_COLOR.
+
+<p>VIEW_POINT -- Renders the objects as POINTS with lighting model set toBASE_COLOR. VIEW_BBOX -- Renders the objects with complexity BOUNDING_BOX,lighting model set to BASE_COLOR and drawing style LINES.
+
+<dt> void <b>setBufferingType</b>(SoXtViewer::BufferType type)
+<dt>SoXtViewer::BufferType <b>getBufferingType</b>()
+<dd>Sets/gets the current buffering type in the main view (default SoXtViewer::BUFFER_DOUBLE).
+
+<dt>virtual void <b>setViewing</b>(SbBool onOrOff)
+<dt>SbBool <b>isViewing</b>() const
+<dd>Set/get whether the viewer is turned on or off. When turned on, events areconsumed by the viewer. When viewing is off, events are processed by the viewers render area. This means events will be sent down to the scene graphfor processing (i.e. picking can occur). Note that if the application has registered an event callback, it will be invoked on every event, whetherviewing is turned on or not. However, the return value of this callback (which specifies whether the callback handled the event or not) is ignoredwhen viewing is on. That is, the viewer will process the event even if the callback already did. This is to ensure that the viewing paradigm is notbroken (default viewing is on).
+
+<dt>void <b>setAutoClipping</b>(SbBool onOrOff)
+<dt>SbBool <b>isAutoClipping</b>() const
+<dd>Set and get the auto clipping plane. When auto clipping is ON, the cameranear and far planes are dynamically adjusted to be as tight as possible around the objects being viewed. When OFF, the user is expected tomanually set those planes within the preference sheet (default is on).
+
+<dt>virtual void <b>setStereoViewing</b>(SbBool onOrOff)
+<dt>virtual SbBool <b>isStereoViewing</b>()
+<dt>void <b>setStereoOffset</b>(float dist)
+<dt>float <b>getStereoOffset</b>()
+<dd>Turns stereo viewing on/off on the viewer (default off). When in stereomode, which may not work on all machines, the scene is rendered twice (in the left and right buffers) with an offset between the two views to simulatestereo viewing. Stereo glasses have to be used to see the effect and /usr/gfx/setmon needs to be called to set the monitor in stereo mode. The user can also specify what the offset between the two views should be.
+
+<dt>void <b>setDetailSeek</b>(SbBool onOrOff)
+<dt>SbBool <b>isDetailSeek</b>()
+
+<dd>When the viewer is in seek mode, left mouse clicks initiate a pick, and theviewer changes its orientation and position to look at the picked object. This routine tells the seeking viewer whether to orient the camera towards thepicked point (detail on), or the center of the object's bounding box (detail off). Default is detail on.
+
+<dt>void <b>setSeekTime</b>(float seconds)
+<dt>float <b>getSeekTime</b>()
+<dd>Set the time a seek takes to change to the new camera location. A value ofzero seeks directly to the point without any animation. Default value is 2 seconds.
+
+<dt>void <b>addStartCallback</b>(SoXtViewerCB *f, void *userData = NULL)
+<dt>void <b>addFinishCallback</b>(SoXtViewerCB *f, void *userData = NULL)
+<dt>void <b>removeStartCallback</b>(SoXtViewerCB *f, void *userData =NULL)
+<dt>void <b>removeFinishCallback</b>(SoXtViewerCB *f, void *userData =NULL)
+
+<dd>Add/remove start and finish callback routines on the viewer. Start callbacksare called whenever the user starts doing interactive viewing (for example, mouse down), and finish callbacks are called when user is done doinginteractive work (for example, mouse up).
+
+<p>Note: The viewer &quot;this&quot; pointer is passed as callback data.
+
+<dt>void <b>copyView</b>(Time eventTime)
+<dt>void <b>pasteView</b>(Time eventTime)
+
+<dd>Copy/paste the view. eventTime should be the time of the X event which initiated the copy or paste (e.g. if copy/paste is initiated from a keystroke, eventTime should be the time in the X KeyPress event.)
+
+<dt><b>Methods from class SoXtRenderArea</b>:
+<dd>setSceneGraph, getSceneGraph, setOverlaySceneGraph,getOverlaySceneGraph, registerDevice, unregisterDevice, setBackgroundColor, getBackgroundColor, setBackgroundIndex,getBackgroundIndex, setOverlayBackgroundIndex, getOverlayBackgroundIndex, setColorMap, setOverlayColorMap,setViewportRegion, getViewportRegion, setTransparencyType, getTransparencyType, setAntialiasing, getAntialiasing, setClearBeforeRender,isClearBeforeRender, setClearBe foreOverlayRender, isClearBeforeOverlayRender, setAutoRedraw, isAutoRedraw,setRedrawPriority, getRedrawPriority, getDefaultRedrawPriority, render, renderOverlay, scheduleRedraw, scheduleOverlayRedraw,redrawOnSelectionChange, redrawOverlayOnSelectionChange, setEventCallback, setGLRenderAction, getGLRenderAction,setOverlayGLRenderAction, getOverlayGLRenderAction, setSceneManager, getSceneManager, setOverlaySceneManager, getOverlaySceneManager
+
+<dt><b>Methods from class SoXtGLWidget</b>:
+<dd>setBorder, isBorder, setDoubleBuffer, isDoubleBuffer, getNormalWindow,getOverlayWindow, getNormalContext, getOverlayContext, getNormalWidget, getOverlayWidget, setNormalVisual, getNormalVisual,setOverlayVisual, getOverlayVisual
+
+<dt><b>Methods from class SoXtComponent</b>:
+<dd>show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle, getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/viewers/SoXtViewer.h&gt;
+
+<dd>typedef void SoXtViewerCB(void *userData, SoXtViewer *viewer)
+<dl>
+<dt>enum Type {
+<dd>SoXtViewer::BROWSER camera views scene, but is not added to scene
+<dd>SoXtViewer::EDITOR camera is added to user's scene
+<dt>}
+</dl>
+
+<dl>
+<dt>enum DrawStyle {
+<dd>SoXtViewer::VIEW_AS_IS unchanged
+<dd>SoXtViewer::VIEW_HIDDEN_LINE render only the front most lines
+<dd>SoXtViewer::VIEW_NO_TEXTURE render withought textures
+<dd>SoXtViewer::VIEW_LOW_COMPLEXITY render low complexity and no texture
+<dd>SoXtViewer::VIEW_LINE wireframe draw style
+<dd>SoXtViewer::VIEW_POINT point draw style
+<dd>SoXtViewer::VIEW_BBOX bounding box draw style
+<dt>}
+</dl>
+
+<dl>
+<dt>enum DrawType {
+<dd>SoXtViewer::STILL applies to static rendering
+<dd>SoXtViewer::INTERACTIVE applies to rendering while interactive viewing
+<dt>}
+</dl>
+
+<dl>
+<dt>enum BufferType {
+<dd>SoXtViewer::BUFFER_SINGLE single buffer
+<dd>SoXtViewer::BUFFER_DOUBLE double buffer
+<dd>SoXtViewer::BUFFER_INTERACTIVE double buffer while interactive viewing
+<dt>}
+</dl>
+
+<dt>SEE ALSO
+<dd><a href="soxtcomponent.html">SoXtComponent</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>, <a href="soxtexaminerviewer.html">SoXtExaminerViewer</a>, <a href="soxtwalkviewer.html">SoXtWalkViewer</a>, <a href="soxtflyviewer.html">SoXtFlyViewer</a>, <a href="soxtplaneviewer.html">SoXtPlaneViewer</a>
+</dl>
+
+</body>
+</html>

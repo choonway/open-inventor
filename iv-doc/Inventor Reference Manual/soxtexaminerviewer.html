@@ -1,0 +1,85 @@
+<html>
+<body>
+<p>SoXtExaminerViewer
+<hr>
+<dl>
+<dt>NAME
+<dd>SoXtExaminerViewer -- viewer component which uses a virtual trackball to view the data 
+<dt>INHERITS FROM
+<dd><a href="soxtcomponent.html">SoXtComponent</a> &gt; <a href="soxtglwidget.html">SoXtGLWidget</a> &gt; <a href="soxtrenderarea.html">SoXtRenderArea</a> &gt; <a href="soxtviewer.html">SoXtViewer</a> &gt; <a href="soxtfullviewer.html">SoXtFullViewer</a> &gt; SoXtExaminerViewer
+
+<dt>DESCRIPTION
+<dd>The Examiner viewer component allows you to rotate the view around a point of interest using a virtual trackball. The viewer uses the camera focalDistance field tofigure out the point of rotation, which is usually set to be at the center of the scene. In addition to allowing you to rotate the camera around the point of interest, thisviewer also allows you to translate the camera in the viewer plane, as well as dolly (move forward and backward) to get closer to or further away from the point ofinterest. The viewer also supports seek to quickly move the camera to a desired object or point.
+
+<dt>METHODS
+<dl>
+<dt><b>SoXtExaminerViewer</b>(Widget parent = NULL, const char* name = NULL, SbBool buildInsideParent = TRUE,SoXtFullViewer::BuildFlag flag = BUILD_ALL, SoXtViewer::Type type = BROWSER)
+<dt>~<b>SoXtExaminerViewer</b>()
+<dd>Constructor and destructor which specifies the viewer type. Please refer tothe SoXtViewer reference page for a description of the viewer types.
+
+<dt>void <b>setFeedbackVisibility</b>(SbBool onOrOff)
+<dt>SbBool <b>isFeedbackVisible</b>() const
+<dd>Show/Hide the point of rotation feedback, which only appears while inviewing mode (default in off).
+
+<dt>void <b>setFeedbackSize</b>(int newSize)
+<dt>int <b>getFeedbackSize</b>() const
+<dd>Set/get the point of rotation feedback size in pixels (default 20 pix).
+
+<dt>void <b>setAnimationEnabled</b>(SbBool onOrOff)
+<dt>SbBool <b>isAnimationEnabled</b>()
+<dd>Enable/disable the spinning animation feature of the viewer (enabled bydefault).
+
+<dt>void <b>stopAnimating</b>()
+<dt>SbBool <b>isAnimating</b>()
+<dd>Stop animation, if it is occurring, and query if the viewer is currently animating.
+
+<dt><b>Methods from class SoXtFullViewer</b>:
+<dd>setDecoration, isDecoration, setPopupMenuEnabled, isPopupMenuEnabled,getAppPushButtonParent, addAppPushButton, insertAppPushButton, removeAppPushButton, findAppPushButton, lengthAppPushButton,getRenderAreaWidget
+
+<dt><b>Methods from class SoXtViewer</b>:
+<dd>setCamera, getCamera, setCameraType, getCameraType, viewAll,saveHomePosition, resetToHomePosition, setHeadlight, isHeadlight, getHeadlight, setDrawStyle, getDrawStyle, setBufferingType,getBufferingType, setViewing, isViewing, setAutoClipping, isAutoClipping, setStereoViewing, isStereoViewing, setStereoOffset, getStereoOffset,setDetailSeek, isDetailSeek, setSeekTime, getSeekTime, addStartCallback, addFinishCallback, re moveStartCallback, removeFinishCallback, copyView,pasteView
+
+<dt><b>Methods from class SoXtRenderArea</b>:
+<dd>setSceneGraph, getSceneGraph, setOverlaySceneGraph,getOverlaySceneGraph, registerDevice, unregisterDevice, setBackgroundColor, getBackgroundColor, setBackgroundIndex,getBackgroundIndex, setOverlayBackgroundIndex, getOverlayBackgroundIndex, setColorMap, setOverlayColorMap,setViewportRegion, getViewportRegion, setTransparencyType, getTransparencyType, setAntialiasing, getAntialiasing, setClearBeforeRender,isClearBeforeRender, setClearBe foreOverlayRender, isClearBeforeOverlayRender, setAutoRedraw, isAutoRedraw,setRedrawPriority, getRedrawPriority, getDefaultRedrawPriority, render, renderOverlay, scheduleRedraw, scheduleOverlayRedraw,redrawOnSelectionChange, redrawOverlayOnSelectionChange, setEventCallback, setGLRenderAction, getGLRenderAction,setOverlayGLRenderAction, getOverlayGLRenderAction, setSceneManager, getSceneManager, setOverlaySceneManager, getOverlaySceneManager
+
+<dt><b>Methods from class SoXtGLWidget</b>:
+
+<dd>setBorder, isBorder, setDoubleBuffer, isDoubleBuffer, getNormalWindow,getOverlayWindow, getNormalContext, getOverlayContext, getNormalWidget, getOverlayWidget, setNormalVisual, getNormalVisual,setOverlayVisual, getOverlayVisual
+
+<dt><b>Methods from class SoXtComponent</b>:
+<dd>show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle, getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+
+</dl>
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/Xt/viewers/SoXtExaminerViewer.h&gt;
+
+<dt>RESOURCES
+
+<dd>*SoXtExaminerViewer.spinAnimation: on (on | off)
+<dd>*SoXtExaminerViewer.pointOfRotationAxes: off (on | off)
+<dd>*SoXtExaminerViewer.axesSize: 20 (short, pixels if axes is on)
+<dd>*SoXtExaminerViewer.decoration: on (on | off)
+<dd>*SoXtExaminerViewer.seekAnimationTime: 2.0 (float)
+<dd>*SoXtExaminerViewer.seekTo: point (point | object)
+<dd>*SoXtExaminerViewer.seekDistanceUsage: percentage (percentage | absolute)
+<dd>*SoXtExaminerViewer.zoomMin: 1.0 (float)
+<dd>*SoXtExaminerViewer.zoomMax: 179.0 (float)
+<dd>*SoXtExaminerViewer.autoClipping: on (on | off)
+<dd>*SoXtExaminerViewer.nearDistance: 2.4 (float, when autoClipping is off)
+<dd>*SoXtExaminerViewer.farDistance: 2.8 (float, when autoClipping is off)
+<dd>*SoXtExaminerViewer*BackgroundColor: black (color name or hex value)
+
+<dt>USAGE
+
+<dd>Left Mouse: Rotate the virtual trackball.
+<dd>Ctrl + Left Mouse: Used for roll action (rotates around the viewer forwarddirection).
+<dd>&lt;s&gt; + Left Mouse: Alternative to the Seek button. Press (but do not hold down) the&lt;s&gt; key, then click on a target object.
+<dd>Middle Mouse: Translate up, down, left and right.
+<dd>Left + Middle Mouse: Dolly in and out (gets closer to and further away from theobject).<dd>Right Mouse: Open the popup menu.
+
+<dt>SEE ALSO
+
+<dd><a href="soxtfullviewer.html">SoXtFullViewer</a>, <a href="soxtviewer.html">SoXtViewer</a>, <a href="soxtcomponent.html">SoXtComponent</a>, <a href="soxtrenderarea.html">SoXtRenderArea</a>, <a href="soxtwalkviewer.html">SoXtWalkViewer</a>, <a href="soxtflyviewer.html">SoXtFlyViewer</a>, <a href="soxtplaneviewer.html">SoXtPlaneViewer</a>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<html>
+<body>
+SoCenterballDragger
+<hr>
+<dl>
+<dt>NAME
+<dd>SoCenterballDragger -- striped ball you rotate and re-center by dragging with the mouse
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="sobasekit.html">SoBaseKit</a> &gt; <a href="sointeractionkit.html">SoInteractionKit</a> &gt; <a href="sodragger.html">SoDragger</a> &gt; SoCenterballDragger
+
+<dt>DESCRIPTION
+<dd>SoCenterballDragger is a composite dragger. Its shape is a sphere defined by three intersecting circles. Where the circles intersect (at the ends of the x, y and z axes)there are sets of small green crosshairs. Dragging a pair of crosshairs translates the entire centerball within the plane of the crosshairs. The interface of the sphere andcircles is just like SoTrackballDragger. Dragging a circle rotates about a constrained axis and dragging the areas between them rotates the sphere freely about the center.An invisible but pickable sphere initiates the free-rotation dragging.
+
+<dd>When you drag the crosshairs, the center field is updated; there is no translationfield. Dragging other parts of the centerball updates the rotation field. As with all draggers, if you change the fields the dragger moves in response. The draggers used for the crosshair parts are SoTranslate2Draggers, so pressing the&lt;Shift&gt; key allows you to constrain motion to slide along either the local x axis or y axis of that crosshair.. The direction is determined by your initial mouse gestureafter pressing the key. Releasing the key removes the constraint.
+
+<dd>Remember: This is not an SoTransform! If you want to move other objects with thisdragger, you can either: [a] Use an SoCenterballManip, which is subclassed from SoTransform. Themanipulator creates one of these draggers and uses it as the interface to edit the manipulator's fields. (See the SoCenterballManip man page.) [b] Use field-to-field connections to connect the fields of this dragger to those of anySoTransformation node.
+
+<dd>You can change the parts in any instance of this dragger using setPart(). The defaultpart geometries are defined as resources for this SoCenterballDragger class. They are detailed in the Dragger Resources section of the online reference page for this class.You can make your program use different default resources for the parts by copying the file /usr/share/data/draggerDefaults/centerballDragger.iv into your owndirectory, editing the file, and then setting the environment variable SO_DRAGGER_DIR to be a path to that directory.
+
+<dt>FIELDS
+<dl>
+<dt>SoSFRotation rotation
+<dd>Orientation of the centerball dragger.
+
+<dt>SoSFVec3f center
+<dd>Center of rotation and scale of the centerball dragger.
+
+<dt>Fields from class SoDragger:
+
+<dd>isActive
+
+<dt>Fields from class SoInteractionKit:
+
+<dd>renderCaching, boundingBoxCaching, renderCulling, pickCulling
+</dl>
+
+<dt>PARTS
+<dl>
+<dt>Parts from class SoBaseKit:
+<dd>callbackList
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoCenterballDragger</b>()
+<dd>Constructor.
+
+<dt>static const SoNodekitCatalog *<b>getClassNodekitCatalog</b>() const
+<dd>Returns an SoNodekitCatalog for this class.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoDragger</b>:
+
+<dd>addStartCallback, removeStartCallback, addMotionCallback,removeMotionCallback, addFinishCallback, removeFinishCallback, addValueChangedCallback, removeValueChangedCallback, setMinGesture,getMinGesture, setMinScale, getMinScale
+
+<dt><b>Methods from class SoInteractionKit</b>:
+<dd>setPartAsPath
+
+<dt><b>Methods from class SoBaseKit</b>:
+<dd>getNodekitCatalog, getPart, getPartString, createPathToPart, setPart, set, set,isSearchingChildren, setSearchingChildren
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>MACROS
+<dl>
+<dt>Macros from class SoBaseKit:
+<dd>SO_GET_PART, SO_CHECK_PART
+</dl>
+
+<dt>CATALOG PARTS
+<dd>
+
+<table border=1>
+<tr><td colspan=4 align=center>All parts</td>
+
+<tr><td>Part Name <td>Part Type <td>Default Type <td>NULL by Default
+
+<tr><td>callbackList <td>NodeKitListPart <td>-- <td>yes
+<tr><td>surroundScale <td>SurroundScale <td>-- <td>yes 
+<tr><td>antiSquish <td>AntiSquish <td>-- <td>no
+<tr><td>translateToCenter <td>MatrixTransform <td>-- <td>yes 
+<tr><td>lightModel <td>LightModel <td>-- <td>yes
+<tr><td>XAxis <td>Separator <td>-- <td>yes
+<tr><td>YAxis <td>Separator <td>-- <td>yes
+<tr><td>ZAxis <td>Separator <td>-- <td>yes 
+<tr><td>rotator <td>RotateSphericalDragger <td>-- <td>yes
+<tr><td>YRotator <td>RotateCylindricalDragger <td>-- <td>yes
+<tr><td>ZCenterChanger <td>Translate2Dragger <td>-- <td>yes
+<tr><td>ZRotator <td>RotateCylindricalDragger <td>-- <td>yes 
+<tr><td>YCenterChanger <td>Translate2Dragger <td>-- <td>yes
+<tr><td>XCenterChanger <td>Translate2Dragger <td>-- <td>yes 
+<tr><td>XRotator <td>RotateCylindricalDragger <td>-- <td>yes 
+</table>
+
+<table border=1>
+<tr><td colspan=3>Extra information for list parts from above table
+<tr><td>Part Name <td>Container Type <td>Permissible Types
+<tr><td>callbackList <td>Separator <td>Callback, EventCallback
+</table>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>CenterballDragger {
+<dd>renderCaching AUTO
+<dd>boundingBoxCaching AUTO
+<dd>renderCulling AUTO
+<dd>pickCulling AUTO
+<dd>isActive FALSE
+<dd>rotation 0 0 1 0
+<dd>center 0 0 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/draggers/SoCenterballDragger.h&gt;
+
+<dt>SEE ALSO
+<dd>SoInteractionKit, SoDragger, SoDirectionalLightDragger, SoDragPointDragger, SoHandleBoxDragger, SoJackDragger, SoPointLightDragger,SoRotateCylindricalDragger, SoRotateDiscDragger, SoRotateSphericalDragger, SoScale1Dragger, SoScale2Dragger, SoScale2UniformDragger,SoScaleUniformDragger, SoSpotLightDragger, SoTabBoxDragger, SoTabPlaneDragger, SoTrackballDragger, SoTransformBoxDragger, SoTranslate1Dragger,SoTranslate2Dragger
+</dl>
+</body>
+</html>

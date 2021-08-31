@@ -1,0 +1,37 @@
+<html>
+<body>
+<p> SoSFBool</p>
+<p>NAME</p>
+<p>SoSFBool -- field containing a single boolean value</p>
+<p>INHERITS FROM</p>
+<p>SoField &gt; SoSField &gt; SoSFBool</p>
+<p>DESCRIPTION</p>
+<p>A field containing a single boolean (true or false) value.
+  
+  SoSFBools may be written to file as &quot;0&quot; (representing FALSE), &quot;1&quot;, &quot;TRUE&quot;, or&quot;FALSE&quot;.</p>
+<p>METHODS</p>
+<p>static SoType getClassTypeId()<br>
+  virtual void getTypeId() const</p>
+<blockquote>
+  <p>Returns the type for this class or a particular object of this class.</p>
+</blockquote>
+<p>SbBool getValue() const</p>
+<blockquote>
+  <p> Returns this field's value.</p>
+</blockquote>
+<p>SbBool operator =(SbBool newValue)</p>
+<p>void setValue(SbBool newValue)</p>
+<p>Sets this field to newValue.</p>
+<p>int operator ==(const SoSFBool &amp;f) const<br>
+  int operator !=(const SoSFBool &amp;f) const</p>
+<p>Returns TRUE if f is of the same type and has the same value as this field.</p>
+<p>Methods from class SoField:</p>
+<p>setIgnored, isIgnored, isDefault, isOfType, set, get, touch, connectFrom,connectFrom, disconnect, isConnected, isConnectedFromField,
+  
+  getConnectedField, isConnectedFromEngine, getConnectedEngine,enableConnection, isConnectionEnabled, getForwardConnections, getContainer</p>
+<p>INCLUDE FILE</p>
+<p>#include &lt;Inventor/fields/SoSFBool.h&gt;</p>
+<p>SEE ALSO</p>
+<p><a href="sofield.html">SoField</a>, <a href="sosfield.html">SoSField</a>, <a href="somfbool.html">SoMFBool</a> </p>
+</body>
+</html>

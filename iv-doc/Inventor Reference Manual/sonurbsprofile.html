@@ -1,0 +1,65 @@
+<html>
+<body>
+SoNurbsProfile
+<hr>
+<dl>
+<dt>NAME
+<dd>SoNurbsProfile -- NURBS profile curve
+
+<dt>INHERITS FROM
+<dd><a href="sobase.html">SoBase</a> &gt; <a href="sofieldcontainer.html">SoFieldContainer</a> &gt; <a href="sonode.html">SoNode</a> &gt; <a href="soprofile.html">SoProfile</a> &gt; SoNurbsProfile
+
+<dt>DESCRIPTION
+<dd>This node specifies a NURBS curve that is used as a profile. The curve is defined in the same way as a standard SoNurbsCurve, except that the control points are constructed from the current set of profile coordinates, using the index field.
+
+<dt>FIELDS
+<dl>
+<dt>SoMFFloat knotVector
+<dd>The knot vector for the NURBS curve. It must be a list of non-decreasing floating point values.
+
+<dt>Fields from class SoProfile:
+<dd>index, linkage
+</dl>
+
+<dt>METHODS
+<dl>
+<dt><b>SoNurbsProfile</b>()
+<dd>Creates a NURBS profile curve node with default settings.
+
+<dt>static SoType <b>getClassTypeId</b>()
+<dd>Returns type identifier for this class.
+
+<dt><b>Methods from class SoNode</b>:
+<dd>setOverride, isOverride, copy, affectsState, getByName, getByName
+
+<dt><b>Methods from class SoFieldContainer</b>:
+<dd>setToDefaults, hasDefaultValues, fieldsAreEqual, copyFieldValues, set, get,getFields, getField, getFieldName, enableNotify, isNotifyEnabled
+
+<dt><b>Methods from class SoBase</b>:
+<dd>ref, unref, unrefNoDelete, touch, getTypeId, isOfType, setName, getName
+</dl>
+
+<dt>ACTION BEHAVIOR
+<dl>
+<dt>SoGLRenderAction, SoCallbackAction, SoRayPickAction
+<dd>Adds a profile to the current traversal state.
+</dl>
+
+<dt>FILE FORMAT/DEFAULTS
+<dl>
+<dt>NurbsProfile {
+<dd>index 0
+<dd>linkage START_FIRST
+<dd>knotVector 0
+<dt>}
+</dl>
+
+<dt>INCLUDE FILE
+<dd>#include &lt;Inventor/nodes/SoNurbsProfile.h&gt;
+
+<dt>SEE ALSO
+<dd><a href="solinearprofile.html">SoLinearProfile</a>, <a href="sonurbscurve.html">SoNurbsCurve</a>, <a href="soprofilecoordinate2.html">SoProfileCoordinate2</a>, <a href="soprofilecoordinate3.html">SoProfileCoordinate3</a>
+</dl>
+
+</body>
+</html>

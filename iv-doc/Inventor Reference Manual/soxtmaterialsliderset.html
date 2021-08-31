@@ -1,0 +1,21 @@
+<html>
+<body>
+SSooXXttMMaatteerriiaallSSlliiddeerrSSeetthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh NAME SoXtMaterialSliderSet -- component with Motif sliders for editing SoMaterial nodes INHERITS FROMSoXtComponent &gt; SoXtSliderSetBase &gt; SoXtSliderSet &gt; SoXtMaterialSliderSet DESCRIPTIONThis class defines an editor that uses Motif Sliders to edit the fields in an SoMaterial
+
+node. There are sliders for editing the RGB values of ambientColor, diffuseColor,specularColor and emissiveColor, as well as for editing the transparency and shininess values. METHODS SoXtMaterialSliderSet(Widget parent = NULL, const char
+
+*name = NULL, SbBool buildInsideParent = TRUE, SoNode*newEditNode = NULL ) ~SoXtMaterialSliderSet()Constructor and destructor. At construction time the material node to edit can be supplied. Methods from class SoXtSliderSetBase:
+
+setNode, getNode
+
+Methods from class SoXtComponent:
+
+show, hide, isVisible, getWidget, isTopLevelShell, getShellWidget,getParentWidget, setSize, getSize, getDisplay, setTitle, getTitle, setIconTitle,
+
+getIconTitle, setWindowCloseCallback, getComponent, getWidgetName,getClassName
+
+INCLUDE FILE#include &lt;Inventor/Xt/SoXtMaterialSliderSet.h&gt; SEE ALSOSoXtMaterialEditor, SoXtSliderSet, SoXtSliderSetBase, SoXtComponent, SoMaterial,
+
+SoNode
+</body>
+</html>
